@@ -1,17 +1,16 @@
-# Carousel
+# react-image-gallery
 
-> Image gallery, slideshow, carousel
+Responsive image gallery, slideshow, carousel
 
 ## Install
 
 ```sh
-npm install react-iamge-gallery
+npm install react-image-gallery
 ```
 
 ## Demo & Examples
 
-
-Live demo: soon
+Live demo: [`linxtion.com`](http://linxtion.com)
 
 To build the examples locally, run:
 
@@ -37,14 +36,10 @@ Then open [`localhost:8001`](http://localhost:8001) in a browser.
 <link rel="stylesheet" href="/image-gallery.css"/>
 ```
 
-
-
-```css
-
-```
+### JS
 
 ```js
-var ImageGallery = require('react-iamge-gallery');
+var ImageGallery = require('react-image-gallery');
 
 var images = [
   {
