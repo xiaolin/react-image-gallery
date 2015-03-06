@@ -90,6 +90,7 @@ var ImageGallery = React.createClass({
   },
 
   play: function() {
+    if (this._intervalId) return;
     this._intervalId = window.setInterval(function() {
       if (!this.state.hovering) {
         this.slideToIndex(this.state.currentIndex + 1);
