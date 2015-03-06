@@ -56,9 +56,17 @@ var images = [
   }
 ];
 
+handleSlide: function(index) {
+  console.log('Slid to ' + index);
+},
+
 render: function() {
   return (
-    <ImageGallery items={images}/>
+    <ImageGallery
+      items={images}
+      autoPlay={true}
+      slideInterval={2000}
+      onSlide={this.handleSlide}/>
   );
 }
 
@@ -66,10 +74,23 @@ render: function() {
 
 # Props
 
-* `items`: Array of images,
-* `showThumbnails`: Boolean, default true
-* `showBullets`: Boolean, default false
+* `items`: (required) Array of images,
+* `showThumbnails`: Boolean, default `true`
+* `showBullets`: Boolean, default `false`
+* `autoPlay`: Boolean, default `false`
+* `slideInterval`: Integer, default `4000`
+* `onSlide`: Function, `callback`
 
+
+# functions
+
+* `play()`: continuous plays if image is not hovered.
+* `pause()`: pauses the slides.
+* `slideToIndex()`: slide to a specific index.
+
+# Notes
+
+* Feel free to contribute and or provide feedback!
 
 # License
 

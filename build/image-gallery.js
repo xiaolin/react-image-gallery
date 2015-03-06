@@ -1,25 +1,29 @@
 (function(f){if(typeof exports==="object"&&typeof module!=="undefined"){module.exports=f()}else if(typeof define==="function"&&define.amd){define([],f)}else{var g;if(typeof window!=="undefined"){g=window}else if(typeof global!=="undefined"){g=global}else if(typeof self!=="undefined"){g=self}else{g=this}g.ImageGallery = f()}})(function(){var define,module,exports;return (function e(t,n,r){function s(o,u){if(!n[o]){if(!t[o]){var a=typeof require=="function"&&require;if(!u&&a)return a(o,!0);if(i)return i(o,!0);var f=new Error("Cannot find module '"+o+"'");throw f.code="MODULE_NOT_FOUND",f}var l=n[o]={exports:{}};t[o][0].call(l.exports,function(e){var n=t[o][1][e];return s(n?n:e)},l,l.exports,e,t,n,r)}return n[o].exports}var i=typeof require=="function"&&require;for(var o=0;o<r.length;o++)s(r[o]);return s})({1:[function(require,module,exports){
 'use strict';
 
-var React = require('react');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+var React = require('react/addons');
 
 var ImageGallery = React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [React.addons.PureRenderMixin],
 
   displayName: 'ImageGallery',
 
   propTypes: {
     items: React.PropTypes.array.isRequired,
     showThumbnails: React.PropTypes.bool,
-    showBullets: React.PropTypes.bool
+    showBullets: React.PropTypes.bool,
+    autoPlay: React.PropTypes.bool,
+    slideInterval: React.PropTypes.number,
+    onSlide: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
       showThumbnails: true,
-      showBullets: false
+      showBullets: false,
+      autoPlay: false,
+      slideInterval: 4000
     }
   },
 
@@ -45,6 +49,9 @@ var ImageGallery = React.createClass({
     }
 
     if (prevState.currentIndex != this.state.currentIndex) {
+      if (this.props.onSlide) {
+        this.props.onSlide(this.state.currentIndex);
+      }
       var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
       var scrollX = this._getScrollX(indexDifference);
       if (scrollX > 0) {
@@ -60,11 +67,14 @@ var ImageGallery = React.createClass({
 
   componentDidMount: function() {
     this.setState({containerWidth: this.getDOMNode().offsetWidth});
-    window.addEventListener("resize", this._handleResize);
+    if (this.props.autoPlay) {
+      this.play();
+    }
+    window.addEventListener('resize', this._handleResize);
   },
 
   componentWillUnmount: function() {
-    window.removeEventListener("resize", this._handleResize);
+    window.removeEventListener('resize', this._handleResize);
   },
 
   slideToIndex: function(index) {
@@ -76,6 +86,21 @@ var ImageGallery = React.createClass({
       this.setState({currentIndex: 0});
     } else {
       this.setState({currentIndex: index});
+    }
+  },
+
+  play: function() {
+    this._intervalId = window.setInterval(function() {
+      if (!this.state.hovering) {
+        this.slideToIndex(this.state.currentIndex + 1);
+      }
+    }.bind(this), this.props.slideInterval);
+  },
+
+  pause: function() {
+    if (this._intervalId) {
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
     }
   },
 
@@ -101,6 +126,14 @@ var ImageGallery = React.createClass({
     }
   },
 
+  _handleMouseOver: function() {
+    this.setState({hovering: true});
+  },
+
+  _handleMouseLeave: function() {
+    this.setState({hovering: false});
+  },
+
   render: function() {
     var currentIndex = this.state.currentIndex;
     var ThumbnailStyle = {
@@ -113,7 +146,10 @@ var ImageGallery = React.createClass({
 
     return (
       React.createElement("section", {className: "ImageGallery"}, 
-        React.createElement("div", {className: "ImageGallery_content"}, 
+        React.createElement("div", {
+          onMouseOver: this._handleMouseOver, 
+          onMouseLeave: this._handleMouseLeave, 
+          className: "ImageGallery_content"}, 
 
           React.createElement("a", {className: "ImageGallery_content_left_nav", 
             onClick: this.slideToIndex.bind(this, currentIndex - 1)}), 
@@ -204,5 +240,5 @@ var ImageGallery = React.createClass({
 module.exports = ImageGallery;
 
 
-},{"react":"react","react/addons":"react/addons"}]},{},[1])(1)
+},{"react/addons":"react/addons"}]},{},[1])(1)
 });

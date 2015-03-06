@@ -1,24 +1,28 @@
 'use strict';
 
-var React = require('react');
-var PureRenderMixin = require('react/addons').addons.PureRenderMixin;
+var React = require('react/addons');
 
 var ImageGallery = React.createClass({
 
-  mixins: [PureRenderMixin],
+  mixins: [React.addons.PureRenderMixin],
 
   displayName: 'ImageGallery',
 
   propTypes: {
     items: React.PropTypes.array.isRequired,
     showThumbnails: React.PropTypes.bool,
-    showBullets: React.PropTypes.bool
+    showBullets: React.PropTypes.bool,
+    autoPlay: React.PropTypes.bool,
+    slideInterval: React.PropTypes.number,
+    onSlide: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
       showThumbnails: true,
-      showBullets: false
+      showBullets: false,
+      autoPlay: false,
+      slideInterval: 4000
     }
   },
 
@@ -44,6 +48,9 @@ var ImageGallery = React.createClass({
     }
 
     if (prevState.currentIndex != this.state.currentIndex) {
+      if (this.props.onSlide) {
+        this.props.onSlide(this.state.currentIndex);
+      }
       var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
       var scrollX = this._getScrollX(indexDifference);
       if (scrollX > 0) {
@@ -59,11 +66,14 @@ var ImageGallery = React.createClass({
 
   componentDidMount: function() {
     this.setState({containerWidth: this.getDOMNode().offsetWidth});
-    window.addEventListener("resize", this._handleResize);
+    if (this.props.autoPlay) {
+      this.play();
+    }
+    window.addEventListener('resize', this._handleResize);
   },
 
   componentWillUnmount: function() {
-    window.removeEventListener("resize", this._handleResize);
+    window.removeEventListener('resize', this._handleResize);
   },
 
   slideToIndex: function(index) {
@@ -75,6 +85,21 @@ var ImageGallery = React.createClass({
       this.setState({currentIndex: 0});
     } else {
       this.setState({currentIndex: index});
+    }
+  },
+
+  play: function() {
+    this._intervalId = window.setInterval(function() {
+      if (!this.state.hovering) {
+        this.slideToIndex(this.state.currentIndex + 1);
+      }
+    }.bind(this), this.props.slideInterval);
+  },
+
+  pause: function() {
+    if (this._intervalId) {
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
     }
   },
 
@@ -100,6 +125,14 @@ var ImageGallery = React.createClass({
     }
   },
 
+  _handleMouseOver: function() {
+    this.setState({hovering: true});
+  },
+
+  _handleMouseLeave: function() {
+    this.setState({hovering: false});
+  },
+
   render: function() {
     var currentIndex = this.state.currentIndex;
     var ThumbnailStyle = {
@@ -112,7 +145,10 @@ var ImageGallery = React.createClass({
 
     return (
       <section className='ImageGallery'>
-        <div className='ImageGallery_content'>
+        <div
+          onMouseOver={this._handleMouseOver}
+          onMouseLeave={this._handleMouseLeave}
+          className='ImageGallery_content'>
 
           <a className='ImageGallery_content_left_nav'
             onClick={this.slideToIndex.bind(this, currentIndex - 1)}/>

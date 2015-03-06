@@ -1,0 +1,49 @@
+ul, li {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+li {
+  display: inline-block;
+}
+
+li + li {
+  margin-left: 10px;
+}
+
+.App {
+  font-family: "Arial Narrow", Arial, sans-serif;
+}
+
+.App .ImageGallery {
+  width: 70%;
+  margin: 0 auto;
+}
+
+.App_sandbox {
+  margin-top: 20px;
+  border-top: 4px solid #eee;
+  padding: 20px;
+}
+
+.App_button {
+  color: #222;
+  display: inline-block;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  cursor: pointer;
+  padding: 10px 20px;
+  background: #fff;
+}
+
+.App_button.active {
+  background: #5cb85c;
+  border: 1px solid #4cae4c;
+  color: #fff;
+}
+
+.App_button:hover {
+  border: 1px solid #222;
+  transition: border .4s ease-in;
+}

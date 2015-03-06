@@ -51,7 +51,7 @@ gulp.task('build', function() {
     transform: [reactify],
     standalone: 'ImageGallery'
   })
-    .external(['react', 'react/addons'])
+    .external('react/addons')
     .bundle()
     .on('error', swallowError)
     .pipe(source('image-gallery.js'))
