@@ -152,6 +152,32 @@ var ImageGallery = React.createClass({
     this.setState({hovering: false});
   },
 
+  _getAlignment: function(index) {
+    var currentIndex = this.state.currentIndex;
+    var alignment = '';
+    switch (index) {
+      case (currentIndex - 1):
+        alignment = 'left';
+        break;
+      case (currentIndex):
+        alignment = 'center';
+        break;
+      case (currentIndex + 1):
+        alignment = 'right';
+        break;
+    }
+
+    if (index === 0 && currentIndex === this.props.items.length - 1) {
+      // set first slide as right slide if were sliding right from last slide
+      alignment = 'right';
+    } else if (index === this.props.items.length - 1 && currentIndex === 0) {
+      // set last slide as left slide if were sliding left from first slide
+      alignment = 'left';
+    }
+
+    return alignment;
+  },
+
   render: function() {
     var currentIndex = this.state.currentIndex;
     var ThumbnailStyle = {
@@ -181,22 +207,7 @@ var ImageGallery = React.createClass({
           React.createElement("div", {className: "ImageGallery_content_slides"}, 
             
               this.props.items.map(function(item, index) {
-
-              var alignment = '';
-              switch (index) {
-                case (currentIndex - 1):
-                  alignment = 'left';
-                  break;
-
-                case (currentIndex):
-                  alignment = 'center';
-                  break;
-
-                case (currentIndex + 1):
-                  alignment = 'right';
-                  break;
-              }
-
+                var alignment = this._getAlignment(index);
                 return (
                   React.createElement("div", {
                     key: index, 
