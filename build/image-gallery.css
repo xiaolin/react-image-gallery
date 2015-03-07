@@ -25,12 +25,14 @@
         transform: scale(1.4);
         color: #337ab7; }
     .ImageGallery .ImageGallery_content .ImageGallery_content_left_nav {
-      left: 15px; }
+      left: 0; }
       .ImageGallery .ImageGallery_content .ImageGallery_content_left_nav:before {
+        padding: 50px 15px;
         content: '‹'; }
     .ImageGallery .ImageGallery_content .ImageGallery_content_right_nav {
-      right: 15px; }
+      right: 0; }
       .ImageGallery .ImageGallery_content .ImageGallery_content_right_nav:before {
+        padding: 50px 15px;
         content: '›'; }
     .ImageGallery .ImageGallery_content .ImageGallery_content_slides {
       overflow: hidden;

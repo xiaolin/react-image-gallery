@@ -36,15 +36,17 @@ $ig-blue: #337ab7;
     }
 
     .ImageGallery_content_left_nav {
-      left: 15px;
+      left: 0;
       &:before {
+        padding: 50px 15px;
         content: '‹';
       }
     }
 
     .ImageGallery_content_right_nav {
-      right: 15px;
+      right: 0;
       &:before {
+        padding: 50px 15px;
         content: '›';
       }
     }
