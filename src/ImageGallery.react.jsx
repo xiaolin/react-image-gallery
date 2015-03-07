@@ -35,7 +35,8 @@ var ImageGallery = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    if (prevState.containerWidth != this.state.containerWidth) {
+    if (prevState.containerWidth != this.state.containerWidth ||
+        prevProps.showThumbnails != this.props.showThumbnails) {
       // indexDifference should always be 1 unless its the initial index
       var indexDifference = this.state.currentIndex > 0 ? 1 : 0;
 
@@ -48,16 +49,24 @@ var ImageGallery = React.createClass({
     }
 
     if (prevState.currentIndex != this.state.currentIndex) {
+
+      // call back function if provided
       if (this.props.onSlide) {
         this.props.onSlide(this.state.currentIndex);
       }
-      var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
-      var scrollX = this._getScrollX(indexDifference);
-      if (scrollX > 0) {
-        if (prevState.currentIndex < this.state.currentIndex) {
-          this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX - scrollX});
-        } else if (prevState.currentIndex > this.state.currentIndex) {
-          this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX + scrollX});
+
+      // calculates thumbnail container position
+      if (this.state.currentIndex === 0) {
+        this.setState({thumbnailTranslateX: 0});
+      } else {
+        var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
+        var scrollX = this._getScrollX(indexDifference);
+        if (scrollX > 0) {
+          if (prevState.currentIndex < this.state.currentIndex) {
+            this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX - scrollX});
+          } else if (prevState.currentIndex > this.state.currentIndex) {
+            this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX + scrollX});
+          }
         }
       }
     }
