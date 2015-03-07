@@ -65,7 +65,7 @@ render: function() {
     <ImageGallery
       items={images}
       autoPlay={true}
-      slideInterval={2000}
+      slideInterval={4000}
       onSlide={this.handleSlide}/>
   );
 }
@@ -79,14 +79,14 @@ render: function() {
 * `showBullets`: Boolean, default `false`
 * `autoPlay`: Boolean, default `false`
 * `slideInterval`: Integer, default `4000`
-* `onSlide`: Function, `callback`
+* `onSlide`: Function, `callback(index)`
 
 
 # functions
 
 * `play()`: continuous plays if image is not hovered.
 * `pause()`: pauses the slides.
-* `slideToIndex()`: slide to a specific index.
+* `slideToIndex(index)`: slide to a specific index.
 
 # Notes
 
