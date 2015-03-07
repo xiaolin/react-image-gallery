@@ -12,7 +12,7 @@ npm install react-image-gallery
 
 Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
-To build the examples locally, run:
+To build the example locally, run:
 
 ```
 npm install
