@@ -15,7 +15,7 @@
       line-height: 0;
       z-index: 1;
       font-size: 6em;
-      text-shadow: 0 1px 0 #222222;
+      text-shadow: 0 2px 2px #222222;
       transition: all .2s ease-out;
       color: #ffffff; }
       @media (max-width: 768px) {
