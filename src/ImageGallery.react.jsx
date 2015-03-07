@@ -85,7 +85,7 @@ var ImageGallery = React.createClass({
     window.removeEventListener('resize', this._handleResize);
   },
 
-  slideToIndex: function(index) {
+  slideToIndex: function(index, event) {
     var slideCount = this.props.items.length - 1;
 
     if (index < 0) {
@@ -94,6 +94,14 @@ var ImageGallery = React.createClass({
       this.setState({currentIndex: 0});
     } else {
       this.setState({currentIndex: index});
+    }
+    if (event) {
+      if (this._intervalId) {
+        // user event, reset interval
+        this.pause();
+        this.play();
+      }
+      event.preventDefault();
     }
   },
 
@@ -161,10 +169,12 @@ var ImageGallery = React.createClass({
           className='ImageGallery_content'>
 
           <a className='ImageGallery_content_left_nav'
+            onTouchStart={this.slideToIndex.bind(this, currentIndex - 1)}
             onClick={this.slideToIndex.bind(this, currentIndex - 1)}/>
 
 
           <a className='ImageGallery_content_right_nav'
+            onTouchStart={this.slideToIndex.bind(this, currentIndex + 1)}
             onClick={this.slideToIndex.bind(this, currentIndex + 1)}/>
 
           <div className='ImageGallery_content_slides'>
@@ -207,6 +217,7 @@ var ImageGallery = React.createClass({
                         <li
                           key={index}
                           className={'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : '')}
+                          onTouchStart={this.slideToIndex.bind(this, index)}
                           onClick={this.slideToIndex.bind(this, index)}>
                         </li>
                       );
@@ -230,6 +241,7 @@ var ImageGallery = React.createClass({
                       <a
                         key={index}
                         className={'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : '')}
+                        onTouchStart={this.slideToIndex.bind(this, index)}
                         onClick={this.slideToIndex.bind(this, index)}>
                         <img src={item.thumbnail}/>
                       </a>
