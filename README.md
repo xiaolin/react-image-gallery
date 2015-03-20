@@ -16,7 +16,15 @@ To build the example locally, run:
 
 ```
 npm install
+```
+```
 gulp dev
+```
+
+You might need to run the following command if you do not have gulp installed globally.
+
+```
+npm install --global gulp
 ```
 
 Then open [`localhost:8001`](http://localhost:8001) in a browser.

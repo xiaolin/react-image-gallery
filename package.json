@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "description": "Image gallery component for React.JS",
   "main": "./build/image-gallery",
   "scripts": {
@@ -24,11 +24,9 @@
   "bugs": {
     "url": "https://github.com/linxtion/react-image-gallery/issues"
   },
-  "peerDependencies": {
-    "react": "^0.12.2"
-  },
   "homepage": "https://github.com/linxtion/react-image-gallery",
   "devDependencies": {
+    "react": "^0.12.2",
     "browserify": "^9.0.3",
     "gulp": "^3.8.11",
     "gulp-connect": "^2.2.0",
