@@ -193,6 +193,44 @@ var ImageGallery = React.createClass({
       transform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)'
     };
 
+    var slides = [];
+    var thumbnails = [];
+    var bullets = [];
+
+    this.props.items.map(function(item, index) {
+      var alignment = this._getAlignment(index);
+      slides.push(
+        React.createElement("div", {
+          key: index, 
+          className: 'ImageGallery_content_slides_slide ' + alignment}, 
+          React.createElement("img", {src: item.original})
+        )
+      );
+
+      if (this.props.showThumbnails) {
+        thumbnails.push(
+          React.createElement("a", {
+            key: index, 
+            className: 'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : ''), 
+            onTouchStart: this.slideToIndex.bind(this, index), 
+            onClick: this.slideToIndex.bind(this, index)}, 
+            React.createElement("img", {src: item.thumbnail})
+          )
+        );
+      }
+
+      if (this.props.showBullets) {
+        bullets.push(
+          React.createElement("li", {
+            key: index, 
+            className: 'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : ''), 
+            onTouchStart: this.slideToIndex.bind(this, index), 
+            onClick: this.slideToIndex.bind(this, index)}
+          )
+        );
+      }
+    }.bind(this));
+
     return (
       React.createElement("section", {className: "ImageGallery"}, 
         React.createElement("div", {
@@ -210,36 +248,14 @@ var ImageGallery = React.createClass({
             onClick: this.slideToIndex.bind(this, currentIndex + 1)}), 
 
           React.createElement("div", {className: "ImageGallery_content_slides"}, 
-            
-              this.props.items.map(function(item, index) {
-                var alignment = this._getAlignment(index);
-                return (
-                  React.createElement("div", {
-                    key: index, 
-                    className: 'ImageGallery_content_slides_slide ' + alignment}, 
-                    React.createElement("img", {src: item.original})
-                  )
-                );
-              }, this)
-            
+            slides
           ), 
 
           
             this.props.showBullets &&
               React.createElement("div", {className: "ImageGallery_bullet_container"}, 
                 React.createElement("ul", {className: "ImageGallery_bullet_container_bullets"}, 
-                  
-                    this.props.items.map(function(item, index) {
-                      return (
-                        React.createElement("li", {
-                          key: index, 
-                          className: 'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : ''), 
-                          onTouchStart: this.slideToIndex.bind(this, index), 
-                          onClick: this.slideToIndex.bind(this, index)}
-                        )
-                      );
-                    }, this)
-                  
+                  bullets
                 )
               )
           
@@ -252,19 +268,7 @@ var ImageGallery = React.createClass({
                 ref: "thumbnails", 
                 className: "ImageGallery_thumbnail_container_thumbnails", 
                 style: ThumbnailStyle}, 
-                
-                  this.props.items.map(function(item, index) {
-                    return (
-                      React.createElement("a", {
-                        key: index, 
-                        className: 'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : ''), 
-                        onTouchStart: this.slideToIndex.bind(this, index), 
-                        onClick: this.slideToIndex.bind(this, index)}, 
-                        React.createElement("img", {src: item.thumbnail})
-                      )
-                    );
-                  }, this)
-                
+                thumbnails
               )
             )
         

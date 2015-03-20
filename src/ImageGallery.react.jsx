@@ -192,6 +192,44 @@ var ImageGallery = React.createClass({
       transform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)'
     };
 
+    var slides = [];
+    var thumbnails = [];
+    var bullets = [];
+
+    this.props.items.map(function(item, index) {
+      var alignment = this._getAlignment(index);
+      slides.push(
+        <div
+          key={index}
+          className={'ImageGallery_content_slides_slide ' + alignment}>
+          <img src={item.original}/>
+        </div>
+      );
+
+      if (this.props.showThumbnails) {
+        thumbnails.push(
+          <a
+            key={index}
+            className={'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : '')}
+            onTouchStart={this.slideToIndex.bind(this, index)}
+            onClick={this.slideToIndex.bind(this, index)}>
+            <img src={item.thumbnail}/>
+          </a>
+        );
+      }
+
+      if (this.props.showBullets) {
+        bullets.push(
+          <li
+            key={index}
+            className={'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : '')}
+            onTouchStart={this.slideToIndex.bind(this, index)}
+            onClick={this.slideToIndex.bind(this, index)}>
+          </li>
+        );
+      }
+    }.bind(this));
+
     return (
       <section className='ImageGallery'>
         <div
@@ -209,36 +247,14 @@ var ImageGallery = React.createClass({
             onClick={this.slideToIndex.bind(this, currentIndex + 1)}/>
 
           <div className='ImageGallery_content_slides'>
-            {
-              this.props.items.map(function(item, index) {
-                var alignment = this._getAlignment(index);
-                return (
-                  <div
-                    key={index}
-                    className={'ImageGallery_content_slides_slide ' + alignment}>
-                    <img src={item.original}/>
-                  </div>
-                );
-              }, this)
-            }
+            {slides}
           </div>
 
           {
             this.props.showBullets &&
               <div className='ImageGallery_bullet_container'>
                 <ul className='ImageGallery_bullet_container_bullets'>
-                  {
-                    this.props.items.map(function(item, index) {
-                      return (
-                        <li
-                          key={index}
-                          className={'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : '')}
-                          onTouchStart={this.slideToIndex.bind(this, index)}
-                          onClick={this.slideToIndex.bind(this, index)}>
-                        </li>
-                      );
-                    }, this)
-                  }
+                  {bullets}
                 </ul>
               </div>
           }
@@ -251,19 +267,7 @@ var ImageGallery = React.createClass({
                 ref='thumbnails'
                 className='ImageGallery_thumbnail_container_thumbnails'
                 style={ThumbnailStyle}>
-                {
-                  this.props.items.map(function(item, index) {
-                    return (
-                      <a
-                        key={index}
-                        className={'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : '')}
-                        onTouchStart={this.slideToIndex.bind(this, index)}
-                        onClick={this.slideToIndex.bind(this, index)}>
-                        <img src={item.thumbnail}/>
-                      </a>
-                    );
-                  }, this)
-                }
+                {thumbnails}
               </div>
             </div>
         }
