@@ -9,8 +9,7 @@ var App = React.createClass({
 
   getInitialState: function() {
     return {
-      isPaused: false,
-      isPlaying: true,
+      isPlaying: false,
       slideInterval: 4000,
       showThumbnails: true,
       showBullets: true,
@@ -19,7 +18,7 @@ var App = React.createClass({
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    if (this.state.slideInterval != prevState.slideInterval) {
+    if (this.state.slideInterval !== prevState.slideInterval) {
       // refresh setInterval
       this._pauseSlider();
       this._playSlider();
@@ -29,14 +28,14 @@ var App = React.createClass({
   _pauseSlider: function() {
     if (this.refs.imageGallery) {
       this.refs.imageGallery.pause();
-      this.setState({isPaused: true, isPlaying: false});
+      this.setState({isPlaying: false});
     }
   },
 
   _playSlider: function() {
     if (this.refs.imageGallery) {
       this.refs.imageGallery.play();
-      this.setState({isPaused: false, isPlaying: true});
+      this.setState({isPlaying: true});
     }
   },
 
@@ -73,37 +72,37 @@ var App = React.createClass({
       {
         original: 'http://lorempixel.com/1000/600/nature/7/',
         thumbnail: 'http://lorempixel.com/250/150/nature/7/'
-      },
+      }
     ];
 
     return (
 
-      <section className='App'>
+      <section className='app'>
         <ImageGallery
           ref='imageGallery'
           items={images}
           showBullets={this.state.showBullets}
           showThumbnails={this.state.showThumbnails}
           slideInterval={parseInt(this.state.slideInterval)}
-          autoPlay={true}
+          autoPlay={this.state.isPlaying}
           onSlide={this._handleSlide}
         />
 
-        <div className='App_sandbox'>
+        <div className='app-sandbox'>
 
           <h2> Playground </h2>
 
           <ul>
             <li>
               <a
-                className={'App_button ' + (this.state.isPlaying ? 'active' : '')}
+                className={'app-button ' + (this.state.isPlaying ? 'active' : '')}
                 onClick={this._playSlider}>
                 Play
               </a>
             </li>
             <li>
-            <a 
-              className={'App_button ' + (this.state.isPaused ? 'active' : '')}
+            <a
+              className={'app-button ' + (!this.state.isPlaying ? 'active' : '')}
               onClick={this._pauseSlider}>
               Pause
             </a>
