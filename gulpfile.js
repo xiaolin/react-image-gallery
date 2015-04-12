@@ -60,7 +60,7 @@ gulp.task('build', function() {
 
 gulp.task('watch', function() {
   livereload.listen();
-  gulp.watch(['src/*.scss',], ['sass']);
+  gulp.watch(['src/*.scss'], ['sass']);
   gulp.watch(['src/*.jsx', 'example/app.js'], ['scripts']);
 });
 

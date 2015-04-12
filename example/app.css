@@ -17,28 +17,28 @@ li + li {
   margin-left: 10px;
 }
 
-.App {
+.app {
   font-family: "Arial Narrow", Arial, sans-serif;
 }
 
-.App .ImageGallery {
+.app .image-gallery {
   width: 70%;
   margin: 0 auto;
 }
 
 @media (max-width: 500px) {
-  .App .ImageGallery {
+  .app .image-gallery {
     width: 100%;
   }
 }
 
-.App_sandbox {
+.app-sandbox {
   margin-top: 20px;
   border-top: 4px solid #eee;
   padding: 20px;
 }
 
-.App_button {
+.app-button {
   color: #222;
   display: inline-block;
   border: 1px solid #ccc;
@@ -48,13 +48,13 @@ li + li {
   background: #fff;
 }
 
-.App_button.active {
+.app-button.active {
   background: #5cb85c;
   border: 1px solid #4cae4c;
   color: #fff;
 }
 
-.App_button:hover {
+.app-button:hover {
   border: 1px solid #222;
   transition: border .4s ease-in;
 }

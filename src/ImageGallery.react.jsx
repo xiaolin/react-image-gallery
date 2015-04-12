@@ -23,32 +23,33 @@ var ImageGallery = React.createClass({
       showBullets: false,
       autoPlay: false,
       slideInterval: 4000
-    }
+    };
   },
 
   getInitialState: function() {
     return {
       currentIndex: 0,
-      thumbnailTranslateX: 0,
+      thumbnailsTranslateX: 0,
       containerWidth: 0
     };
   },
 
   componentDidUpdate: function(prevProps, prevState) {
-    if (prevState.containerWidth != this.state.containerWidth ||
-        prevProps.showThumbnails != this.props.showThumbnails) {
-      // indexDifference should always be 1 unless its the initial index
-      var indexDifference = this.state.currentIndex > 0 ? 1 : 0;
+    if (prevState.containerWidth !== this.state.containerWidth ||
+        prevProps.showThumbnails !== this.props.showThumbnails) {
 
-      // when the container resizes, thumbnailTranslateX
+      // adjust thumbnail container when window width is adjusted
+      // when the container resizes, thumbnailsTranslateX
       // should always be negative (moving right),
       // if container fits all thumbnails its set to 0
-      this.setState({
-        thumbnailTranslateX: -this._getScrollX(indexDifference) * this.state.currentIndex
-      });
+
+      this._setThumbnailsTranslateX(
+        -this._getScrollX(this.state.currentIndex > 0 ? 1 : 0) *
+        this.state.currentIndex);
+
     }
 
-    if (prevState.currentIndex != this.state.currentIndex) {
+    if (prevState.currentIndex !== this.state.currentIndex) {
 
       // call back function if provided
       if (this.props.onSlide) {
@@ -57,15 +58,18 @@ var ImageGallery = React.createClass({
 
       // calculates thumbnail container position
       if (this.state.currentIndex === 0) {
-        this.setState({thumbnailTranslateX: 0});
+        this._setThumbnailsTranslateX(0);
       } else {
-        var indexDifference = Math.abs(prevState.currentIndex - this.state.currentIndex);
+        var indexDifference = Math.abs(
+          prevState.currentIndex - this.state.currentIndex);
         var scrollX = this._getScrollX(indexDifference);
         if (scrollX > 0) {
           if (prevState.currentIndex < this.state.currentIndex) {
-            this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX - scrollX});
+            this._setThumbnailsTranslateX(
+              this.state.thumbnailsTranslateX - scrollX);
           } else if (prevState.currentIndex > this.state.currentIndex) {
-            this.setState({thumbnailTranslateX: this.state.thumbnailTranslateX + scrollX});
+            this._setThumbnailsTranslateX(
+              this.state.thumbnailsTranslateX + scrollX);
           }
         }
       }
@@ -74,7 +78,7 @@ var ImageGallery = React.createClass({
   },
 
   componentDidMount: function() {
-    this.setState({containerWidth: this.getDOMNode().offsetWidth});
+    this._handleResize();
     if (this.props.autoPlay) {
       this.play();
     }
@@ -106,7 +110,9 @@ var ImageGallery = React.createClass({
   },
 
   play: function() {
-    if (this._intervalId) return;
+    if (this._intervalId) {
+      return;
+    }
     this._intervalId = window.setInterval(function() {
       if (!this.state.hovering) {
         this.slideToIndex(this.state.currentIndex + 1);
@@ -119,6 +125,10 @@ var ImageGallery = React.createClass({
       window.clearInterval(this._intervalId);
       this._intervalId = null;
     }
+  },
+
+  _setThumbnailsTranslateX: function(x) {
+    this.setState({thumbnailsTranslateX: x});
   },
 
   _handleResize: function() {
@@ -160,9 +170,6 @@ var ImageGallery = React.createClass({
         break;
       case (currentIndex):
         alignment = 'center';
-        if (this.props.items.length <= 3) {
-          alignment += ' relative';
-        }
         break;
       case (currentIndex + 1):
         alignment = 'right';
@@ -184,12 +191,12 @@ var ImageGallery = React.createClass({
 
   render: function() {
     var currentIndex = this.state.currentIndex;
-    var ThumbnailStyle = {
-      MozTransform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)',
-      WebkitTransform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)',
-      OTransform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)',
-      msTransform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)',
-      transform: 'translate3d(' + this.state.thumbnailTranslateX + 'px, 0, 0)'
+    var thumbnailStyle = {
+      MozTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
+      WebkitTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
+      OTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
+      msTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
+      transform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)'
     };
 
     var slides = [];
@@ -198,21 +205,27 @@ var ImageGallery = React.createClass({
 
     this.props.items.map(function(item, index) {
       var alignment = this._getAlignment(index);
-      slides.push(
-        <div
-          key={index}
-          className={'ImageGallery_content_slides_slide ' + alignment}>
-          <img src={item.original}/>
-        </div>
-      );
+      if (alignment) {
+        slides.push(
+          <div
+            key={index}
+            className={'image-gallery-slide ' + alignment}>
+            <img src={item.original}/>
+          </div>
+        );
+      }
 
       if (this.props.showThumbnails) {
         thumbnails.push(
           <a
             key={index}
-            className={'ImageGallery_thumbnail_container_thumbnails_thumbnail ' + (currentIndex === index ? 'active' : '')}
+            className={
+              'image-gallery-thumbnail ' + (
+                currentIndex === index ? 'active' : '')}
+
             onTouchStart={this.slideToIndex.bind(this, index)}
             onClick={this.slideToIndex.bind(this, index)}>
+
             <img src={item.thumbnail}/>
           </a>
         );
@@ -222,7 +235,10 @@ var ImageGallery = React.createClass({
         bullets.push(
           <li
             key={index}
-            className={'ImageGallery_bullet_container_bullets_bullet ' + (currentIndex === index ? 'active' : '')}
+            className={
+              'image-gallery-bullet ' + (
+                currentIndex === index ? 'active' : '')}
+
             onTouchStart={this.slideToIndex.bind(this, index)}
             onClick={this.slideToIndex.bind(this, index)}>
           </li>
@@ -231,29 +247,29 @@ var ImageGallery = React.createClass({
     }.bind(this));
 
     return (
-      <section className='ImageGallery'>
+      <section className='image-gallery'>
         <div
           onMouseOver={this._handleMouseOver}
           onMouseLeave={this._handleMouseLeave}
-          className='ImageGallery_content'>
+          className='image-gallery-content'>
 
-          <a className='ImageGallery_content_left_nav'
+          <a className='image-gallery-left-nav'
             onTouchStart={this.slideToIndex.bind(this, currentIndex - 1)}
             onClick={this.slideToIndex.bind(this, currentIndex - 1)}/>
 
 
-          <a className='ImageGallery_content_right_nav'
+          <a className='image-gallery-right-nav'
             onTouchStart={this.slideToIndex.bind(this, currentIndex + 1)}
             onClick={this.slideToIndex.bind(this, currentIndex + 1)}/>
 
-          <div className='ImageGallery_content_slides'>
+          <div className='image-gallery-slides'>
             {slides}
           </div>
 
           {
             this.props.showBullets &&
-              <div className='ImageGallery_bullet_container'>
-                <ul className='ImageGallery_bullet_container_bullets'>
+              <div className='image-gallery-bullets'>
+                <ul className='image-gallery-bullets-container'>
                   {bullets}
                 </ul>
               </div>
@@ -262,11 +278,11 @@ var ImageGallery = React.createClass({
 
         {
           this.props.showThumbnails &&
-            <div className='ImageGallery_thumbnail_container'>
+            <div className='image-gallery-thumbnails'>
               <div
                 ref='thumbnails'
-                className='ImageGallery_thumbnail_container_thumbnails'
-                style={ThumbnailStyle}>
+                className='image-gallery-thumbnails-container'
+                style={thumbnailStyle}>
                 {thumbnails}
               </div>
             </div>
