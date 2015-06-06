@@ -30,11 +30,13 @@ $ig-blue: #337ab7;
     z-index: 1;
 
     @media (max-width: $ig-screen-sm-min) {
-      font-size: 4em;
+      font-size: 3.4em;
     }
 
-    &:hover {
-      color: $ig-blue;
+    @media (min-width: $ig-screen-sm-min) {
+      &:hover {
+        color: $ig-blue;
+      }
     }
   }
 
@@ -66,7 +68,6 @@ $ig-blue: #337ab7;
 }
 
 .image-gallery-slide {
-  display: inline-block;
   opacity: 0;
   position: absolute;
   transition: all .45s ease-out;

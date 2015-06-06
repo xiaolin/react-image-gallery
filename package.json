@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Image gallery component for React.JS",
   "main": "./build/image-gallery",
   "scripts": {
@@ -36,5 +36,8 @@
     "reactify": "^1.1.1",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.4.0"
+  },
+  "dependencies": {
+    "react-swipeable": "^3.0.2"
   }
 }

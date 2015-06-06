@@ -1,6 +1,7 @@
 'use strict';
 
 var React = require('react/addons');
+var Swipeable = require('react-swipeable');
 
 var ImageGallery = React.createClass({
 
@@ -274,9 +275,13 @@ var ImageGallery = React.createClass({
             onTouchStart={this.slideToIndex.bind(this, currentIndex + 1)}
             onClick={this.slideToIndex.bind(this, currentIndex + 1)}/>
 
-          <div className='image-gallery-slides'>
-            {slides}
-          </div>
+          <Swipeable
+            onSwipedLeft={this.slideToIndex.bind(this, currentIndex + 1)}
+            onSwipedRight={this.slideToIndex.bind(this, currentIndex - 1)}>
+              <div className='image-gallery-slides'>
+                {slides}
+              </div>
+          </Swipeable>
 
           {
             this.props.showBullets &&
