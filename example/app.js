@@ -81,6 +81,7 @@ var App = React.createClass({
         <ImageGallery
           ref='imageGallery'
           items={images}
+          lazyLoad={false}
           showBullets={this.state.showBullets}
           showThumbnails={this.state.showThumbnails}
           slideInterval={parseInt(this.state.slideInterval)}

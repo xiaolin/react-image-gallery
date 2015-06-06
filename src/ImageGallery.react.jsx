@@ -13,12 +13,14 @@ var ImageGallery = React.createClass({
     showThumbnails: React.PropTypes.bool,
     showBullets: React.PropTypes.bool,
     autoPlay: React.PropTypes.bool,
+    lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
     onSlide: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
+      lazyLoad: true,
       showThumbnails: true,
       showBullets: false,
       autoPlay: false,
@@ -205,7 +207,17 @@ var ImageGallery = React.createClass({
 
     this.props.items.map(function(item, index) {
       var alignment = this._getAlignment(index);
-      if (alignment) {
+      if (this.props.lazyLoad) {
+        if (alignment) {
+          slides.push(
+            <div
+              key={index}
+              className={'image-gallery-slide ' + alignment}>
+              <img src={item.original}/>
+            </div>
+          );
+        }
+      } else {
         slides.push(
           <div
             key={index}

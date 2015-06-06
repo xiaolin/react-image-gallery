@@ -83,6 +83,7 @@ render: function() {
 # Props
 
 * `items`: (required) Array of images,
+* `lazyLoad`: Boolean, default `true`
 * `showThumbnails`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `autoPlay`: Boolean, default `false`
