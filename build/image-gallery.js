@@ -2,6 +2,7 @@
 'use strict';
 
 var React = require('react/addons');
+var Swipeable = require('react-swipeable');
 
 var ImageGallery = React.createClass({
 
@@ -14,12 +15,14 @@ var ImageGallery = React.createClass({
     showThumbnails: React.PropTypes.bool,
     showBullets: React.PropTypes.bool,
     autoPlay: React.PropTypes.bool,
+    lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
     onSlide: React.PropTypes.func
   },
 
   getDefaultProps: function() {
     return {
+      lazyLoad: true,
       showThumbnails: true,
       showBullets: false,
       autoPlay: false,
@@ -206,7 +209,17 @@ var ImageGallery = React.createClass({
 
     this.props.items.map(function(item, index) {
       var alignment = this._getAlignment(index);
-      if (alignment) {
+      if (this.props.lazyLoad) {
+        if (alignment) {
+          slides.push(
+            React.createElement("div", {
+              key: index, 
+              className: 'image-gallery-slide ' + alignment}, 
+              React.createElement("img", {src: item.original})
+            )
+          );
+        }
+      } else {
         slides.push(
           React.createElement("div", {
             key: index, 
@@ -263,8 +276,12 @@ var ImageGallery = React.createClass({
             onTouchStart: this.slideToIndex.bind(this, currentIndex + 1), 
             onClick: this.slideToIndex.bind(this, currentIndex + 1)}), 
 
-          React.createElement("div", {className: "image-gallery-slides"}, 
-            slides
+          React.createElement(Swipeable, {
+            onSwipedLeft: this.slideToIndex.bind(this, currentIndex + 1), 
+            onSwipedRight: this.slideToIndex.bind(this, currentIndex - 1)}, 
+              React.createElement("div", {className: "image-gallery-slides"}, 
+                slides
+              )
           ), 
 
           
@@ -298,5 +315,5 @@ var ImageGallery = React.createClass({
 module.exports = ImageGallery;
 
 
-},{"react/addons":"react/addons"}]},{},[1])(1)
+},{"react-swipeable":"react-swipeable","react/addons":"react/addons"}]},{},[1])(1)
 });
