@@ -259,6 +259,9 @@ var ImageGallery = React.createClass({
       }
     }.bind(this));
 
+    var swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
+    var swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
+
     return (
       <section className='image-gallery'>
         <div
@@ -267,17 +270,16 @@ var ImageGallery = React.createClass({
           className='image-gallery-content'>
 
           <a className='image-gallery-left-nav'
-            onTouchStart={this.slideToIndex.bind(this, currentIndex - 1)}
-            onClick={this.slideToIndex.bind(this, currentIndex - 1)}/>
-
+            onTouchStart={swipePrev}
+            onClick={swipePrev}/>
 
           <a className='image-gallery-right-nav'
-            onTouchStart={this.slideToIndex.bind(this, currentIndex + 1)}
-            onClick={this.slideToIndex.bind(this, currentIndex + 1)}/>
+            onTouchStart={swipeNext}
+            onClick={swipeNext}/>
 
           <Swipeable
-            onSwipedLeft={this.slideToIndex.bind(this, currentIndex + 1)}
-            onSwipedRight={this.slideToIndex.bind(this, currentIndex - 1)}>
+            onSwipedLeft={swipeNext}
+            onSwipedRight={swipePrev}>
               <div className='image-gallery-slides'>
                 {slides}
               </div>
