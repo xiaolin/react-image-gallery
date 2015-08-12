@@ -90,6 +90,10 @@ var ImageGallery = React.createClass({
 
   componentWillUnmount: function() {
     window.removeEventListener('resize', this._handleResize);
+    if (this._intervalId) {
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
+    }
   },
 
   slideToIndex: function(index, event) {
