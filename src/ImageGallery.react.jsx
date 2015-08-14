@@ -1,11 +1,9 @@
 'use strict';
 
-var React = require('react/addons');
-var Swipeable = require('react-swipeable');
+import React from 'react';
+import Swipeable from 'react-swipeable';
 
-var ImageGallery = React.createClass({
-
-  mixins: [React.addons.PureRenderMixin],
+const ImageGallery = React.createClass({
 
   displayName: 'ImageGallery',
 
@@ -19,7 +17,7 @@ var ImageGallery = React.createClass({
     onSlide: React.PropTypes.func
   },
 
-  getDefaultProps: function() {
+  getDefaultProps() {
     return {
       lazyLoad: true,
       showThumbnails: true,
@@ -29,7 +27,7 @@ var ImageGallery = React.createClass({
     };
   },
 
-  getInitialState: function() {
+  getInitialState() {
     return {
       currentIndex: 0,
       thumbnailsTranslateX: 0,
@@ -37,7 +35,7 @@ var ImageGallery = React.createClass({
     };
   },
 
-  componentDidUpdate: function(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.containerWidth !== this.state.containerWidth ||
         prevProps.showThumbnails !== this.props.showThumbnails) {
 
@@ -63,9 +61,9 @@ var ImageGallery = React.createClass({
       if (this.state.currentIndex === 0) {
         this._setThumbnailsTranslateX(0);
       } else {
-        var indexDifference = Math.abs(
+        let indexDifference = Math.abs(
           prevState.currentIndex - this.state.currentIndex);
-        var scrollX = this._getScrollX(indexDifference);
+        let scrollX = this._getScrollX(indexDifference);
         if (scrollX > 0) {
           if (prevState.currentIndex < this.state.currentIndex) {
             this._setThumbnailsTranslateX(
@@ -80,7 +78,7 @@ var ImageGallery = React.createClass({
 
   },
 
-  componentDidMount: function() {
+  componentDidMount() {
     this._handleResize();
     if (this.props.autoPlay) {
       this.play();
@@ -88,7 +86,7 @@ var ImageGallery = React.createClass({
     window.addEventListener('resize', this._handleResize);
   },
 
-  componentWillUnmount: function() {
+  componentWillUnmount() {
     window.removeEventListener('resize', this._handleResize);
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
@@ -96,8 +94,8 @@ var ImageGallery = React.createClass({
     }
   },
 
-  slideToIndex: function(index, event) {
-    var slideCount = this.props.items.length - 1;
+  slideToIndex(index, event) {
+    let slideCount = this.props.items.length - 1;
 
     if (index < 0) {
       this.setState({currentIndex: slideCount});
@@ -116,61 +114,61 @@ var ImageGallery = React.createClass({
     }
   },
 
-  play: function() {
+  play() {
     if (this._intervalId) {
       return;
     }
-    this._intervalId = window.setInterval(function() {
+    this._intervalId = window.setInterval(() => {
       if (!this.state.hovering) {
         this.slideToIndex(this.state.currentIndex + 1);
       }
     }.bind(this), this.props.slideInterval);
   },
 
-  pause: function() {
+  pause() {
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
     }
   },
 
-  _setThumbnailsTranslateX: function(x) {
+  _setThumbnailsTranslateX(x) {
     this.setState({thumbnailsTranslateX: x});
   },
 
-  _handleResize: function() {
+  _handleResize() {
     this.setState({containerWidth: this.getDOMNode().offsetWidth});
   },
 
-  _getScrollX: function(indexDifference) {
+  _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      var thumbNode = this.refs.thumbnails.getDOMNode();
+      let thumbNode = this.refs.thumbnails.getDOMNode();
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
-      var totalThumbnails = thumbNode.children.length;
+      let totalThumbnails = thumbNode.children.length;
 
       // total scroll-x required to see the last thumbnail
-      var totalScrollX = thumbNode.scrollWidth - this.state.containerWidth;
+      let totalScrollX = thumbNode.scrollWidth - this.state.containerWidth;
 
       // scroll-x required per index change
-      var perIndexScrollX = totalScrollX / (totalThumbnails - 1);
+      let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
 
       return indexDifference * perIndexScrollX;
     }
   },
 
-  _handleMouseOver: function() {
+  _handleMouseOver() {
     this.setState({hovering: true});
   },
 
-  _handleMouseLeave: function() {
+  _handleMouseLeave() {
     this.setState({hovering: false});
   },
 
-  _getAlignment: function(index) {
-    var currentIndex = this.state.currentIndex;
-    var alignment = '';
+  _getAlignment(index) {
+    let currentIndex = this.state.currentIndex;
+    let alignment = '';
     switch (index) {
       case (currentIndex - 1):
         alignment = 'left';
@@ -196,9 +194,9 @@ var ImageGallery = React.createClass({
     return alignment;
   },
 
-  render: function() {
-    var currentIndex = this.state.currentIndex;
-    var thumbnailStyle = {
+  render() {
+    let currentIndex = this.state.currentIndex;
+    let thumbnailStyle = {
       MozTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
       WebkitTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
       OTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
@@ -206,12 +204,12 @@ var ImageGallery = React.createClass({
       transform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)'
     };
 
-    var slides = [];
-    var thumbnails = [];
-    var bullets = [];
+    let slides = [];
+    let thumbnails = [];
+    let bullets = [];
 
-    this.props.items.map(function(item, index) {
-      var alignment = this._getAlignment(index);
+    this.props.items.map((item, index) => {
+      let alignment = this._getAlignment(index);
       if (this.props.lazyLoad) {
         if (alignment) {
           slides.push(
@@ -261,10 +259,10 @@ var ImageGallery = React.createClass({
           </li>
         );
       }
-    }.bind(this));
+    });
 
-    var swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
-    var swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
+    let swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
+    let swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
 
     return (
       <section className='image-gallery'>
@@ -317,4 +315,4 @@ var ImageGallery = React.createClass({
 
 });
 
-module.exports = ImageGallery;
+export default ImageGallery;
