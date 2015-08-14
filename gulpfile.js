@@ -10,6 +10,8 @@ var livereload = require('gulp-livereload');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var source = require('vinyl-source-stream');
+var streamify = require('gulp-streamify');
+var uglify = require('gulp-uglify');
 var watchify = require('watchify');
 
 gulp.task('server', function () {
@@ -36,6 +38,7 @@ gulp.task('scripts', function() {
   }))
     .bundle()
     .pipe(source('example.js'))
+    .pipe(streamify(uglify()))
     .pipe(gulp.dest('./example/'))
     .pipe(livereload());
 });
