@@ -86,11 +86,20 @@ var ImageGallery = _react2['default'].createClass({
     if (this.props.autoPlay) {
       this.play();
     }
-    window.addEventListener('resize', this._handleResize);
+    if (window.addEventListener) {
+      window.addEventListener('resize', this._handleResize);
+    } else if (window.attachEvent) {
+      window.attachEvent('onresize', this._handleResize);
+    }
   },
 
   componentWillUnmount: function componentWillUnmount() {
-    window.removeEventListener('resize', this._handleResize);
+    if (window.removeEventListener) {
+      window.removeEventListener('resize', this._handleResize);
+    } else if (window.detachEvent) {
+      window.detachEvent('onresize', this._handleResize);
+    }
+
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
