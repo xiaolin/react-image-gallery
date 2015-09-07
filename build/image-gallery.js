@@ -157,7 +157,7 @@ var ImageGallery = _react2['default'].createClass({
   _getScrollX: function _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
       var thumbNode = this.refs.thumbnails.getDOMNode();
-      if (thumbNode.scrollWidth <= this.state.containerWidth) {
+      if (this.state.containerWidth === 0 || thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
       var totalThumbnails = thumbNode.children.length;
