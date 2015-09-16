@@ -206,11 +206,7 @@ const ImageGallery = React.createClass({
   render() {
     let currentIndex = this.state.currentIndex;
     let thumbnailStyle = {
-      MozTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
-      WebkitTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
-      OTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
-      msTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
-      transform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)'
+      left: this.state.thumbnailsTranslateX
     };
 
     let slides = [];

@@ -100,6 +100,7 @@
   overflow: hidden;
   padding-top: 10px; }
   .image-gallery-thumbnails .image-gallery-thumbnails-container {
+    position: relative;
     cursor: pointer;
     text-align: center;
     transition: all .45s ease-out;

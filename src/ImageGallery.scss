@@ -138,6 +138,7 @@ $ig-blue: #337ab7;
   padding-top: 10px;
 
   .image-gallery-thumbnails-container {
+    position: relative;
     cursor: pointer;
     text-align: center;
     transition: all .45s ease-out;
