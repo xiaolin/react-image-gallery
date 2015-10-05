@@ -14,7 +14,8 @@ const ImageGallery = React.createClass({
     autoPlay: React.PropTypes.bool,
     lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
-    onSlide: React.PropTypes.func
+    onSlide: React.PropTypes.func,
+    initialImage: React.PropTypes.number
   },
 
   getDefaultProps() {
@@ -23,13 +24,14 @@ const ImageGallery = React.createClass({
       showThumbnails: true,
       showBullets: false,
       autoPlay: false,
-      slideInterval: 4000
+      slideInterval: 4000,
+      initialImage: 0
     };
   },
 
   getInitialState() {
     return {
-      currentIndex: 0,
+      currentIndex: this.props.initialImage || 0,
       thumbnailsTranslateX: 0,
       containerWidth: 0
     };
@@ -203,6 +205,10 @@ const ImageGallery = React.createClass({
     return alignment;
   },
 
+  _handleError() {
+    console.log('Error loading image', this);
+  },
+
   render() {
     let currentIndex = this.state.currentIndex;
     let thumbnailStyle = {
@@ -225,7 +231,7 @@ const ImageGallery = React.createClass({
             <div
               key={index}
               className={'image-gallery-slide ' + alignment}>
-              <img src={item.original}/>
+              <img src={item.original} onError={this._handleError}/>
             </div>
           );
         }
@@ -234,7 +240,7 @@ const ImageGallery = React.createClass({
           <div
             key={index}
             className={'image-gallery-slide ' + alignment}>
-            <img src={item.original}/>
+            <img src={item.original} onError={this._handleError}/>
           </div>
         );
       }
@@ -250,7 +256,7 @@ const ImageGallery = React.createClass({
             onTouchStart={this.slideToIndex.bind(this, index)}
             onClick={this.slideToIndex.bind(this, index)}>
 
-            <img src={item.thumbnail}/>
+            <img src={item.thumbnail} onError={this._handleError}/>
           </a>
         );
       }
