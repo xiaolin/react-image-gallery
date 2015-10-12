@@ -146,12 +146,12 @@ const ImageGallery = React.createClass({
   },
 
   _handleResize() {
-    this.setState({containerWidth: this.getDOMNode().offsetWidth});
+    this.setState({containerWidth: this.findDOMNode().offsetWidth});
   },
 
   _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      let thumbNode = this.refs.thumbnails.getDOMNode();
+      let thumbNode = this.refs.thumbnails.findDOMNode();
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
