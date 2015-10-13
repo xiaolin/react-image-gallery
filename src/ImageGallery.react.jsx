@@ -1,6 +1,7 @@
 'use strict';
 
 import React from 'react';
+import ReactDOM from 'react-dom';
 import Swipeable from 'react-swipeable';
 
 const ImageGallery = React.createClass({
@@ -146,12 +147,12 @@ const ImageGallery = React.createClass({
   },
 
   _handleResize() {
-    this.setState({containerWidth: React.findDOMNode(this).offsetWidth});
+    this.setState({containerWidth: ReactDOM.findDOMNode(this.offsetWidth)});
   },
 
   _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      let thumbNode = React.findDOMNode(this.refs.thumbnails);
+      let thumbNode = ReactDOM.findDOMNode(this.refs.thumbnails);
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
