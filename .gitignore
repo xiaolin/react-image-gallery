@@ -1,6 +1,4 @@
 node_modules
 npm-debug.log
 .DS_Store
-.idea/
 example/example.js
-build
