@@ -10,6 +10,10 @@ var _react = require('react');
 
 var _react2 = _interopRequireDefault(_react);
 
+var _reactDom = require('react-dom');
+
+var _reactDom2 = _interopRequireDefault(_reactDom);
+
 var _reactSwipeable = require('react-swipeable');
 
 var _reactSwipeable2 = _interopRequireDefault(_reactSwipeable);
@@ -151,12 +155,12 @@ var ImageGallery = _react2['default'].createClass({
   },
 
   _handleResize: function _handleResize() {
-    this.setState({ containerWidth: this.getDOMNode().offsetWidth });
+    this.setState({ containerWidth: _reactDom2['default'].findDOMNode(this.offsetWidth) });
   },
 
   _getScrollX: function _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      var thumbNode = this.refs.thumbnails.getDOMNode();
+      var thumbNode = _reactDom2['default'].findDOMNode(this.refs.thumbnails);
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
