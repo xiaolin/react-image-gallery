@@ -146,12 +146,12 @@ const ImageGallery = React.createClass({
   },
 
   _handleResize() {
-    this.setState({containerWidth: this.getDOMNode().offsetWidth});
+    this.setState({containerWidth: this.refs.imageGallery.offsetWidth});
   },
 
   _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      let thumbNode = this.refs.thumbnails.getDOMNode();
+      let thumbNode = this.refs.thumbnails;
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
@@ -274,7 +274,7 @@ const ImageGallery = React.createClass({
     let swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
 
     return (
-      <section className='image-gallery'>
+      <section ref='imageGallery' className='image-gallery'>
         <div
           onMouseOver={this._handleMouseOver}
           onMouseLeave={this._handleMouseLeave}
