@@ -151,12 +151,12 @@ var ImageGallery = _react2['default'].createClass({
   },
 
   _handleResize: function _handleResize() {
-    this.setState({ containerWidth: this.getDOMNode().offsetWidth });
+    this.setState({ containerWidth: this.refs.imageGallery.offsetWidth });
   },
 
   _getScrollX: function _getScrollX(indexDifference) {
     if (this.refs.thumbnails) {
-      var thumbNode = this.refs.thumbnails.getDOMNode();
+      var thumbNode = this.refs.thumbnails;
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
@@ -274,7 +274,7 @@ var ImageGallery = _react2['default'].createClass({
 
     return _react2['default'].createElement(
       'section',
-      { className: 'image-gallery' },
+      { ref: 'imageGallery', className: 'image-gallery' },
       _react2['default'].createElement(
         'div',
         {

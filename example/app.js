@@ -1,11 +1,14 @@
 'use strict';
 
-import React from 'react/addons';
+import React from 'react';
+import ReactDOM from 'react-dom';
+import LinkedStateMixin from 'react-addons-linked-state-mixin';
+
 import ImageGallery from '../src/ImageGallery.react';
 
 const App = React.createClass({
 
-  mixins: [React.addons.LinkedStateMixin],
+  mixins: [LinkedStateMixin],
 
   getInitialState() {
     return {
@@ -118,16 +121,14 @@ const App = React.createClass({
             <li>
               <input
                 type='checkbox'
-                checkedLink={this.linkState('showBullets')}>
+                checkedLink={this.linkState('showBullets')}/>
                 show bullets?
-              </input>
             </li>
             <li>
               <input
                 type='checkbox'
-                checkedLink={this.linkState('showThumbnails')}>
+                checkedLink={this.linkState('showThumbnails')}/>
                 show Thumbnails?
-              </input>
             </li>
             {
               this.state.currentIndex !== null &&
@@ -146,5 +147,5 @@ const App = React.createClass({
 
 
 (function() {
-  React.render(<App/>, document.getElementById('container'));
+  ReactDOM.render(<App/>, document.getElementById('container'));
 })();
