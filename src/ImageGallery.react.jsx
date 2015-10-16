@@ -14,7 +14,8 @@ const ImageGallery = React.createClass({
     autoPlay: React.PropTypes.bool,
     lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
-    onSlide: React.PropTypes.func
+    onSlide: React.PropTypes.func,
+    startIndex: React.PropTypes.number
   },
 
   getDefaultProps() {
@@ -23,13 +24,14 @@ const ImageGallery = React.createClass({
       showThumbnails: true,
       showBullets: false,
       autoPlay: false,
-      slideInterval: 4000
+      slideInterval: 4000,
+      startIndex: 0
     };
   },
 
   getInitialState() {
     return {
-      currentIndex: 0,
+      currentIndex: this.props.startIndex,
       thumbnailsTranslateX: 0,
       containerWidth: 0
     };
