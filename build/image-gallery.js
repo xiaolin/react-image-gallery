@@ -208,32 +208,6 @@ var ImageGallery = _react2['default'].createClass({
     return alignment;
   },
 
-  renderSlides: function renderSlides(slides) {
-    return this.props.items.length >= 2 ? [_react2['default'].createElement('a', { key: 'leftNav',
-      className: 'image-gallery-left-nav',
-      onTouchStart: this.swipePrev,
-      onClick: this.swipePrev }), _react2['default'].createElement('a', {
-      key: 'rightNav',
-      className: 'image-gallery-right-nav',
-      onTouchStart: this.swipeNext,
-      onClick: this.swipeNext }), _react2['default'].createElement(
-      _reactSwipeable2['default'],
-      {
-        key: 'swipeable',
-        onSwipedLeft: this.swipeNext,
-        onSwipedRight: this.swipePrev },
-      _react2['default'].createElement(
-        'div',
-        { className: 'image-gallery-slides' },
-        slides
-      )
-    )] : _react2['default'].createElement(
-      'div',
-      { className: 'image-gallery-slides' },
-      slides
-    );
-  },
-
   render: function render() {
     var _this2 = this;
 
@@ -295,8 +269,8 @@ var ImageGallery = _react2['default'].createClass({
       }
     });
 
-    this.swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
-    this.swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
+    var swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
+    var swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
 
     return _react2['default'].createElement(
       'section',
@@ -307,7 +281,29 @@ var ImageGallery = _react2['default'].createClass({
           onMouseOver: this._handleMouseOver,
           onMouseLeave: this._handleMouseLeave,
           className: 'image-gallery-content' },
-        this.renderSlides(slides),
+        this.props.items.length >= 2 ? [_react2['default'].createElement('a', { key: 'leftNav',
+          className: 'image-gallery-left-nav',
+          onTouchStart: swipePrev,
+          onClick: swipePrev }), _react2['default'].createElement('a', {
+          key: 'rightNav',
+          className: 'image-gallery-right-nav',
+          onTouchStart: swipeNext,
+          onClick: swipeNext }), _react2['default'].createElement(
+          _reactSwipeable2['default'],
+          {
+            key: 'swipeable',
+            onSwipedLeft: swipeNext,
+            onSwipedRight: swipePrev },
+          _react2['default'].createElement(
+            'div',
+            { className: 'image-gallery-slides' },
+            slides
+          )
+        )] : _react2['default'].createElement(
+          'div',
+          { className: 'image-gallery-slides' },
+          slides
+        ),
         this.props.showBullets && _react2['default'].createElement(
           'div',
           { className: 'image-gallery-bullets' },
