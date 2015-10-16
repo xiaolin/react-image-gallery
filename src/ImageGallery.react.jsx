@@ -227,7 +227,7 @@ const ImageGallery = React.createClass({
             <div
               key={index}
               className={'image-gallery-slide ' + alignment}>
-              <img src={item.original} onError={this._handleError}/>
+              <img src={item.original}/>
             </div>
           );
         }
