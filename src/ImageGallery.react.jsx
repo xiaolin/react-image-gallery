@@ -281,23 +281,34 @@ const ImageGallery = React.createClass({
           onMouseOver={this._handleMouseOver}
           onMouseLeave={this._handleMouseLeave}
           className='image-gallery-content'>
+          {
+            this.props.items.length >= 2 ?
+            [
+             <a key='leftNav'
+               className='image-gallery-left-nav'
+               onTouchStart={swipePrev}
+               onClick={swipePrev}/>,
 
-          <a className='image-gallery-left-nav'
-            onTouchStart={swipePrev}
-            onClick={swipePrev}/>
+             <a
+               key='rightNav'
+               className='image-gallery-right-nav'
+               onTouchStart={swipeNext}
+               onClick={swipeNext}/>,
 
-          <a className='image-gallery-right-nav'
-            onTouchStart={swipeNext}
-            onClick={swipeNext}/>
-
-          <Swipeable
-            onSwipedLeft={swipeNext}
-            onSwipedRight={swipePrev}>
-              <div className='image-gallery-slides'>
-                {slides}
-              </div>
-          </Swipeable>
-
+             <Swipeable
+               key='swipeable'
+               onSwipedLeft={swipeNext}
+               onSwipedRight={swipePrev}>
+                 <div className='image-gallery-slides'>
+                   {slides}
+                 </div>
+             </Swipeable>
+            ]
+            :
+            <div className='image-gallery-slides'>
+              {slides}
+            </div>
+          }
           {
             this.props.showBullets &&
               <div className='image-gallery-bullets'>
