@@ -15,6 +15,7 @@ const App = React.createClass({
       isPlaying: false,
       slideInterval: 4000,
       showThumbnails: true,
+      showNav: true,
       showBullets: true,
       currentIndex: null
     };
@@ -87,6 +88,7 @@ const App = React.createClass({
           lazyLoad={false}
           showBullets={this.state.showBullets}
           showThumbnails={this.state.showThumbnails}
+          showNav={this.state.showNav}
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
           onSlide={this._handleSlide}
@@ -129,6 +131,12 @@ const App = React.createClass({
                 type='checkbox'
                 checkedLink={this.linkState('showThumbnails')}/>
                 show Thumbnails?
+            </li>
+            <li>
+              <input
+                type='checkbox'
+                checkedLink={this.linkState('showNav')}/>
+                show Navigation?
             </li>
             {
               this.state.currentIndex !== null &&
