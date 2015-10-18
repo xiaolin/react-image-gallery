@@ -11,6 +11,7 @@ const ImageGallery = React.createClass({
     items: React.PropTypes.array.isRequired,
     showThumbnails: React.PropTypes.bool,
     showBullets: React.PropTypes.bool,
+    showNav: React.PropTypes.bool,
     autoPlay: React.PropTypes.bool,
     lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
@@ -23,6 +24,7 @@ const ImageGallery = React.createClass({
       lazyLoad: true,
       showThumbnails: true,
       showBullets: false,
+      showNav: true,
       autoPlay: false,
       slideInterval: 4000,
       startIndex: 0
@@ -283,31 +285,34 @@ const ImageGallery = React.createClass({
           className='image-gallery-content'>
           {
             this.props.items.length >= 2 ?
-            [
-             <a key='leftNav'
-               className='image-gallery-left-nav'
-               onTouchStart={swipePrev}
-               onClick={swipePrev}/>,
+              [
+                this.props.showNav &&
+                  [
+                    <a
+                      key='leftNav'
+                      className='image-gallery-left-nav'
+                      onTouchStart={swipePrev}
+                      onClick={swipePrev}/>,
+                    <a
+                      key='rightNav'
+                      className='image-gallery-right-nav'
+                      onTouchStart={swipeNext}
+                      onClick={swipeNext}/>
+                  ],
 
-             <a
-               key='rightNav'
-               className='image-gallery-right-nav'
-               onTouchStart={swipeNext}
-               onClick={swipeNext}/>,
-
-             <Swipeable
-               key='swipeable'
-               onSwipedLeft={swipeNext}
-               onSwipedRight={swipePrev}>
-                 <div className='image-gallery-slides'>
-                   {slides}
-                 </div>
-             </Swipeable>
-            ]
+                <Swipeable
+                  key='swipeable'
+                  onSwipedLeft={swipeNext}
+                  onSwipedRight={swipePrev}>
+                  <div className='image-gallery-slides'>
+                    {slides}
+                  </div>
+                </Swipeable>
+              ]
             :
-            <div className='image-gallery-slides'>
-              {slides}
-            </div>
+              <div className='image-gallery-slides'>
+                {slides}
+              </div>
           }
           {
             this.props.showBullets &&
