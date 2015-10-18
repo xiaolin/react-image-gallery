@@ -85,9 +85,11 @@ render: function() {
 * `items`: (required) Array of images,
 * `lazyLoad`: Boolean, default `true`
 * `showThumbnails`: Boolean, default `true`
+* `showNav`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `autoPlay`: Boolean, default `false`
 * `slideInterval`: Integer, default `4000`
+* `startIndex`: Integer, default `0`
 * `onSlide`: Function, `callback(index)`
 
 

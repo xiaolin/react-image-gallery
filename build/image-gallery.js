@@ -22,10 +22,12 @@ var ImageGallery = _react2['default'].createClass({
     items: _react2['default'].PropTypes.array.isRequired,
     showThumbnails: _react2['default'].PropTypes.bool,
     showBullets: _react2['default'].PropTypes.bool,
+    showNav: _react2['default'].PropTypes.bool,
     autoPlay: _react2['default'].PropTypes.bool,
     lazyLoad: _react2['default'].PropTypes.bool,
     slideInterval: _react2['default'].PropTypes.number,
-    onSlide: _react2['default'].PropTypes.func
+    onSlide: _react2['default'].PropTypes.func,
+    startIndex: _react2['default'].PropTypes.number
   },
 
   getDefaultProps: function getDefaultProps() {
@@ -33,14 +35,16 @@ var ImageGallery = _react2['default'].createClass({
       lazyLoad: true,
       showThumbnails: true,
       showBullets: false,
+      showNav: true,
       autoPlay: false,
-      slideInterval: 4000
+      slideInterval: 4000,
+      startIndex: 0
     };
   },
 
   getInitialState: function getInitialState() {
     return {
-      currentIndex: 0,
+      currentIndex: this.props.startIndex,
       thumbnailsTranslateX: 0,
       containerWidth: 0
     };
@@ -281,14 +285,15 @@ var ImageGallery = _react2['default'].createClass({
           onMouseOver: this._handleMouseOver,
           onMouseLeave: this._handleMouseLeave,
           className: 'image-gallery-content' },
-        this.props.items.length >= 2 ? [_react2['default'].createElement('a', { key: 'leftNav',
+        this.props.items.length >= 2 ? [this.props.showNav && [_react2['default'].createElement('a', {
+          key: 'leftNav',
           className: 'image-gallery-left-nav',
           onTouchStart: swipePrev,
           onClick: swipePrev }), _react2['default'].createElement('a', {
           key: 'rightNav',
           className: 'image-gallery-right-nav',
           onTouchStart: swipeNext,
-          onClick: swipeNext }), _react2['default'].createElement(
+          onClick: swipeNext })], _react2['default'].createElement(
           _reactSwipeable2['default'],
           {
             key: 'swipeable',
