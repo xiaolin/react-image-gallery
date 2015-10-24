@@ -66,6 +66,21 @@
     transform: translate3d(100%, 0, 0); }
   .image-gallery-slide img {
     width: 100%; }
+  .image-gallery-slide span {
+    background: rgba(34, 34, 34, 0.6);
+    bottom: 70px;
+    color: #fff;
+    left: 0;
+    line-height: 1;
+    padding: 10px 20px;
+    position: absolute;
+    transition: all .45s ease-out;
+    white-space: normal; }
+    @media (max-width: 768px) {
+      .image-gallery-slide span {
+        bottom: 45px;
+        font-size: .8em;
+        padding: 8px 15px; } }
 
 .image-gallery-bullets {
   bottom: 20px;

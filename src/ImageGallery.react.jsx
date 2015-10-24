@@ -226,24 +226,21 @@ const ImageGallery = React.createClass({
       let originalClass = item.originalClass ? ' ' + item.originalClass : '';
       let thumbnailClass = item.thumbnailClass ? ' ' + item.thumbnailClass : '';
 
+      let slide = (
+        <div
+          key={index}
+          className={'image-gallery-slide' + alignment + originalClass}>
+          <img src={item.original}/>
+          {item.description}
+        </div>
+      );
+
       if (this.props.lazyLoad) {
         if (alignment) {
-          slides.push(
-            <div
-              key={index}
-              className={'image-gallery-slide' + alignment + originalClass}>
-              <img src={item.original}/>
-            </div>
-          );
+          slides.push(slide);
         }
       } else {
-        slides.push(
-          <div
-            key={index}
-            className={'image-gallery-slide' + alignment + originalClass}>
-            <img src={item.original}/>
-          </div>
-        );
+        slides.push(slide);
       }
 
       if (this.props.showThumbnails) {
