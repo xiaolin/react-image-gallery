@@ -179,28 +179,28 @@ const ImageGallery = React.createClass({
     this.setState({hovering: false});
   },
 
-  _getAlignment(index) {
+  _getAlignmentClassName(index) {
     let currentIndex = this.state.currentIndex;
     let alignment = '';
     switch (index) {
       case (currentIndex - 1):
-        alignment = 'left';
+        alignment = ' left';
         break;
       case (currentIndex):
-        alignment = 'center';
+        alignment = ' center';
         break;
       case (currentIndex + 1):
-        alignment = 'right';
+        alignment = ' right';
         break;
     }
 
     if (this.props.items.length >= 3) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
-        alignment = 'right';
+        alignment = ' right';
       } else if (index === this.props.items.length - 1 && currentIndex === 0) {
         // set last slide as left slide if were sliding left from first slide
-        alignment = 'left';
+        alignment = ' left';
       }
     }
 
@@ -222,13 +222,16 @@ const ImageGallery = React.createClass({
     let bullets = [];
 
     this.props.items.map((item, index) => {
-      let alignment = this._getAlignment(index);
+      let alignment = this._getAlignmentClassName(index);
+      let originalClass = item.originalClass ? ' ' + item.originalClass : '';
+      let thumbnailClass = item.thumbnailClass ? ' ' + item.thumbnailClass : '';
+
       if (this.props.lazyLoad) {
         if (alignment) {
           slides.push(
             <div
               key={index}
-              className={'image-gallery-slide ' + alignment}>
+              className={'image-gallery-slide' + alignment + originalClass}>
               <img src={item.original}/>
             </div>
           );
@@ -237,7 +240,7 @@ const ImageGallery = React.createClass({
         slides.push(
           <div
             key={index}
-            className={'image-gallery-slide ' + alignment}>
+            className={'image-gallery-slide' + alignment + originalClass}>
             <img src={item.original}/>
           </div>
         );
@@ -248,8 +251,10 @@ const ImageGallery = React.createClass({
           <a
             key={index}
             className={
-              'image-gallery-thumbnail ' + (
-                currentIndex === index ? 'active' : '')}
+              'image-gallery-thumbnail' +
+              (currentIndex === index ? ' active' : '') +
+              thumbnailClass
+            }
 
             onTouchStart={this.slideToIndex.bind(this, index)}
             onClick={this.slideToIndex.bind(this, index)}>
