@@ -18,7 +18,7 @@
     text-shadow: 0 2px 2px #222;
     top: 48%;
     transition: all .2s ease-out;
-    z-index: 1; }
+    z-index: 2; }
     @media (max-width: 768px) {
       .image-gallery-content .image-gallery-left-nav, .image-gallery-content .image-gallery-right-nav {
         font-size: 3.4em; } }
@@ -57,7 +57,8 @@
     transform: translate3d(-100%, 0, 0); }
   .image-gallery-slide.center {
     opacity: 1;
-    position: relative; }
+    position: relative;
+    z-index: 1; }
   .image-gallery-slide.right {
     -webkit-transform: translate3d(100%, 0, 0);
     -moz-transform: translate3d(100%, 0, 0);

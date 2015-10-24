@@ -27,7 +27,7 @@ $ig-blue: #337ab7;
     text-shadow: 0 2px 2px $ig-black;
     top: 48%;
     transition: all .2s ease-out;
-    z-index: 1;
+    z-index: 2;
 
     @media (max-width: $ig-screen-sm-min) {
       font-size: 3.4em;
@@ -82,6 +82,7 @@ $ig-blue: #337ab7;
   &.center {
     opacity: 1;
     position: relative;
+    z-index: 1;
   }
 
   &.right {
@@ -117,6 +118,7 @@ $ig-blue: #337ab7;
   position: absolute;
   text-align: center;
   width: 100%;
+  z-index: 2;
 
   .image-gallery-bullets-container {
     margin: 0;
