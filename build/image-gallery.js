@@ -184,28 +184,28 @@ var ImageGallery = _react2['default'].createClass({
     this.setState({ hovering: false });
   },
 
-  _getAlignment: function _getAlignment(index) {
+  _getAlignmentClassName: function _getAlignmentClassName(index) {
     var currentIndex = this.state.currentIndex;
     var alignment = '';
     switch (index) {
       case currentIndex - 1:
-        alignment = 'left';
+        alignment = ' left';
         break;
       case currentIndex:
-        alignment = 'center';
+        alignment = ' center';
         break;
       case currentIndex + 1:
-        alignment = 'right';
+        alignment = ' right';
         break;
     }
 
     if (this.props.items.length >= 3) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
-        alignment = 'right';
+        alignment = ' right';
       } else if (index === this.props.items.length - 1 && currentIndex === 0) {
         // set last slide as left slide if were sliding left from first slide
-        alignment = 'left';
+        alignment = ' left';
       }
     }
 
@@ -229,25 +229,25 @@ var ImageGallery = _react2['default'].createClass({
     var bullets = [];
 
     this.props.items.map(function (item, index) {
-      var alignment = _this2._getAlignment(index);
+      var alignment = _this2._getAlignmentClassName(index);
+      var originalClass = item.originalClass ? ' ' + item.originalClass : '';
+      var thumbnailClass = item.thumbnailClass ? ' ' + item.thumbnailClass : '';
+
+      var slide = _react2['default'].createElement(
+        'div',
+        {
+          key: index,
+          className: 'image-gallery-slide' + alignment + originalClass },
+        _react2['default'].createElement('img', { src: item.original }),
+        item.description
+      );
+
       if (_this2.props.lazyLoad) {
         if (alignment) {
-          slides.push(_react2['default'].createElement(
-            'div',
-            {
-              key: index,
-              className: 'image-gallery-slide ' + alignment },
-            _react2['default'].createElement('img', { src: item.original })
-          ));
+          slides.push(slide);
         }
       } else {
-        slides.push(_react2['default'].createElement(
-          'div',
-          {
-            key: index,
-            className: 'image-gallery-slide ' + alignment },
-          _react2['default'].createElement('img', { src: item.original })
-        ));
+        slides.push(slide);
       }
 
       if (_this2.props.showThumbnails) {
@@ -255,7 +255,7 @@ var ImageGallery = _react2['default'].createClass({
           'a',
           {
             key: index,
-            className: 'image-gallery-thumbnail ' + (currentIndex === index ? 'active' : ''),
+            className: 'image-gallery-thumbnail' + (currentIndex === index ? ' active' : '') + thumbnailClass,
 
             onTouchStart: _this2.slideToIndex.bind(_this2, index),
             onClick: _this2.slideToIndex.bind(_this2, index) },
