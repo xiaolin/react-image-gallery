@@ -58,3 +58,26 @@ li + li {
   border: 1px solid #222;
   transition: border .4s ease-in;
 }
+
+.featured-slide::before {
+  content: ' ';
+  width: 148px;
+  height: 149px;
+  background-image: url('./featured_ribbon.png');
+  background-size: 148px 149px;
+  position: absolute;
+  left: 0;
+  top: 0;
+}
+
+@media (max-width: 768px) {
+  .featured-slide::before {
+    width: 74px;
+    height: 75px;
+    background-size: 74px 75px;
+  }
+}
+
+.featured-thumb.active img {
+  border: 4px solid #E12822;
+}

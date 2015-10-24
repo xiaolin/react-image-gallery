@@ -51,7 +51,9 @@ const App = React.createClass({
     const images = [
       {
         original: 'http://lorempixel.com/1000/600/nature/1/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/1/'
+        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+        originalClass: 'featured-slide',
+        thumbnailClass: 'featured-thumb'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/2/',
