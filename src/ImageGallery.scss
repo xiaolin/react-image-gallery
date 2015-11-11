@@ -184,3 +184,12 @@ $ig-blue: #337ab7;
   }
 }
 
+.image-gallery-index {
+  background: rgba(34, 34, 34, .6);
+  bottom: 0;
+  color: $ig-white;
+  line-height: 1;
+  padding: 10px 20px;
+  position: absolute;
+  right: 0;
+}
