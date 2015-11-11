@@ -90,6 +90,8 @@ render: function() {
 * `showThumbnails`: Boolean, default `true`
 * `showNav`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
+* `showIndex`: Boolean, default `false`
+* `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `autoPlay`: Boolean, default `false`
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`

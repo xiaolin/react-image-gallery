@@ -12,6 +12,8 @@ const ImageGallery = React.createClass({
     showThumbnails: React.PropTypes.bool,
     showBullets: React.PropTypes.bool,
     showNav: React.PropTypes.bool,
+    showIndex: React.PropTypes.bool,
+    indexSeparator: React.PropTypes.string,
     autoPlay: React.PropTypes.bool,
     lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
@@ -25,6 +27,8 @@ const ImageGallery = React.createClass({
       showThumbnails: true,
       showBullets: false,
       showNav: true,
+      showIndex: false,
+      indexSeparator: ' / ',
       autoPlay: false,
       slideInterval: 4000,
       startIndex: 0
@@ -278,6 +282,7 @@ const ImageGallery = React.createClass({
 
     let swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
     let swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
+    let itemsTotal = this.props.items.length;
 
     return (
       <section ref='imageGallery' className='image-gallery'>
@@ -286,7 +291,7 @@ const ImageGallery = React.createClass({
           onMouseLeave={this._handleMouseLeave}
           className='image-gallery-content'>
           {
-            this.props.items.length >= 2 ?
+            itemsTotal >= 2 ?
               [
                 this.props.showNav &&
                   [
@@ -301,7 +306,6 @@ const ImageGallery = React.createClass({
                       onTouchStart={swipeNext}
                       onClick={swipeNext}/>
                   ],
-
                 <Swipeable
                   key='swipeable'
                   onSwipedLeft={swipeNext}
@@ -322,6 +326,14 @@ const ImageGallery = React.createClass({
                 <ul className='image-gallery-bullets-container'>
                   {bullets}
                 </ul>
+              </div>
+          }
+          {
+            this.props.showIndex &&
+              <div className='image-gallery-index'>
+                <span className="image-gallery-index-current">{this.state.currentIndex+1}</span>
+                <span className="image-gallery-index-separator">{this.props.indexSeparator}</span>
+                <span className="image-gallery-index-total">{itemsTotal}</span>
               </div>
           }
         </div>
