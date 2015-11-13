@@ -164,7 +164,7 @@ var ImageGallery = _react2['default'].createClass({
       if (thumbNode.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
-      var totalThumbnails = thumbNode.children.length;
+      var totalThumbnails = thumbNode.props.children.length;
 
       // total scroll-x required to see the last thumbnail
       var totalScrollX = thumbNode.scrollWidth - this.state.containerWidth;
