@@ -331,9 +331,15 @@ const ImageGallery = React.createClass({
           {
             this.props.showIndex &&
               <div className='image-gallery-index'>
-                <span className="image-gallery-index-current">{this.state.currentIndex+1}</span>
-                <span className="image-gallery-index-separator">{this.props.indexSeparator}</span>
-                <span className="image-gallery-index-total">{itemsTotal}</span>
+                <span className='image-gallery-index-current'>
+                  {this.state.currentIndex + 1}
+                </span>
+                <span className='image-gallery-index-separator'>
+                  {this.props.indexSeparator}
+                </span>
+                <span className='image-gallery-index-total'>
+                  {itemsTotal}
+                </span>
               </div>
           }
         </div>
