@@ -154,19 +154,19 @@ const ImageGallery = React.createClass({
   },
 
   _handleResize() {
-    this.setState({containerWidth: this.refs.imageGallery.offsetWidth});
+    this.setState({containerWidth: this._imageGallery.offsetWidth});
   },
 
   _getScrollX(indexDifference) {
-    if (this.refs.thumbnails) {
-      let thumbNode = this.refs.thumbnails;
-      if (thumbNode.scrollWidth <= this.state.containerWidth) {
+    if (this._thumbnails) {
+      if (this._thumbnails.scrollWidth <= this.state.containerWidth) {
         return 0;
       }
-      let totalThumbnails = thumbNode.props.children.length;
+
+      let totalThumbnails = this._thumbnails.children.length;
 
       // total scroll-x required to see the last thumbnail
-      let totalScrollX = thumbNode.scrollWidth - this.state.containerWidth;
+      let totalScrollX = this._thumbnails.scrollWidth - this.state.containerWidth;
 
       // scroll-x required per index change
       let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
@@ -285,7 +285,7 @@ const ImageGallery = React.createClass({
     let itemsTotal = this.props.items.length;
 
     return (
-      <section ref='imageGallery' className='image-gallery'>
+      <section ref={(i) => this._imageGallery = i} className='image-gallery'>
         <div
           onMouseOver={this._handleMouseOver}
           onMouseLeave={this._handleMouseLeave}
@@ -342,7 +342,7 @@ const ImageGallery = React.createClass({
           this.props.showThumbnails &&
             <div className='image-gallery-thumbnails'>
               <div
-                ref='thumbnails'
+                ref={(t) => this._thumbnails = t}
                 className='image-gallery-thumbnails-container'
                 style={thumbnailStyle}>
                 {thumbnails}
