@@ -17,8 +17,7 @@ const App = React.createClass({
       showThumbnails: true,
       showIndex: false,
       showNav: true,
-      showBullets: true,
-      currentIndex: null
+      showBullets: true
     };
   },
 
@@ -42,10 +41,6 @@ const App = React.createClass({
       this.refs.imageGallery.play();
       this.setState({isPlaying: true});
     }
-  },
-
-  _handleSlide(index) {
-    this.setState({currentIndex: index});
   },
 
   render() {
@@ -97,7 +92,6 @@ const App = React.createClass({
           showNav={this.state.showNav}
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
-          onSlide={this._handleSlide}
         />
 
         <div className='app-sandbox'>
@@ -150,12 +144,6 @@ const App = React.createClass({
                 checkedLink={this.linkState('showIndex')}/>
                 show Index?
             </li>
-            {
-              this.state.currentIndex !== null &&
-                <li>
-                  Event: slid to index {this.state.currentIndex}
-                </li>
-            }
           </ul>
 
         </div>
