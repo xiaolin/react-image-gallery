@@ -96,6 +96,7 @@ render: function() {
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`
 * `onSlide`: Function, `callback(index)`
+* `onClick`: Function, `callback(event)`
 
 
 # functions

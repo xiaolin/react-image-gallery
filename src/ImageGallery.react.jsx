@@ -18,6 +18,7 @@ const ImageGallery = React.createClass({
     lazyLoad: React.PropTypes.bool,
     slideInterval: React.PropTypes.number,
     onSlide: React.PropTypes.func,
+    onClick: React.PropTypes.func,
     startIndex: React.PropTypes.number
   },
 
@@ -233,9 +234,11 @@ const ImageGallery = React.createClass({
       let slide = (
         <div
           key={index}
-          className={'image-gallery-slide' + alignment + originalClass}>
-          <img src={item.original}/>
-          {item.description}
+          className={'image-gallery-slide' + alignment + originalClass}
+          onClick={this.props.onClick}
+          onTouchStart={this.props.onClick}>
+            <img src={item.original}/>
+            {item.description}
         </div>
       );
 
