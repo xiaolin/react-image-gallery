@@ -30,15 +30,15 @@ const App = React.createClass({
   },
 
   _pauseSlider() {
-    if (this.refs.imageGallery) {
-      this.refs.imageGallery.pause();
+    if (this._imageGallery) {
+      this._imageGallery.pause();
       this.setState({isPlaying: false});
     }
   },
 
   _playSlider() {
-    if (this.refs.imageGallery) {
-      this.refs.imageGallery.play();
+    if (this._imageGallery) {
+      this._imageGallery.play();
       this.setState({isPlaying: true});
     }
   },
@@ -83,7 +83,7 @@ const App = React.createClass({
 
       <section className='app'>
         <ImageGallery
-          ref='imageGallery'
+          ref={(i) => this._imageGallery = i}
           items={images}
           lazyLoad={false}
           showBullets={this.state.showBullets}
