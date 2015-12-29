@@ -212,6 +212,10 @@ const ImageGallery = React.createClass({
     return alignment;
   },
 
+  _handleImageLoad(event) {
+    event.target.className += 'loaded';
+  },
+
   render() {
     let currentIndex = this.state.currentIndex;
     let thumbnailStyle = {
@@ -237,7 +241,7 @@ const ImageGallery = React.createClass({
           className={'image-gallery-slide' + alignment + originalClass}
           onClick={this.props.onClick}
           onTouchStart={this.props.onClick}>
-            <img src={item.original}/>
+            <img src={item.original} onLoad={this._handleImageLoad}/>
             {item.description}
         </div>
       );
