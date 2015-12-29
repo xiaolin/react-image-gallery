@@ -90,7 +90,13 @@ $ig-blue: #337ab7;
   }
 
   img {
+    opacity: 0;
+    transition: opacity .45s ease-out;
     width: 100%;
+
+    &.loaded {
+      opacity: 1;
+    }
   }
 
   span {
