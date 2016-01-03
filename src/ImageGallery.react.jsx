@@ -213,7 +213,9 @@ const ImageGallery = React.createClass({
   },
 
   _handleImageLoad(event) {
-    event.target.className += 'loaded';
+    if (event.target.className.indexOf('loaded') === -1) {
+      event.target.className += ' loaded';
+    }
   },
 
   render() {
