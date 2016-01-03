@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.5.3",
+  "version": "0.5.4",
   "description": "Image gallery component for React.JS",
   "main": "./build/image-gallery",
   "scripts": {
