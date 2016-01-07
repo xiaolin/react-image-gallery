@@ -227,7 +227,7 @@ const ImageGallery = React.createClass({
   },
 
   _handleImageError(event) {
-    if (this.props.defaultImage) {
+    if (this.props.defaultImage && event.target.src.indexOf(this.props.defaultImage) === -1) {
       event.target.src = this.props.defaultImage;
     }
   },
