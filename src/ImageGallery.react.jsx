@@ -87,6 +87,13 @@ const ImageGallery = React.createClass({
 
   },
 
+  componentWillReceiveProps(nextProps) {
+    if (nextProps.items.length) {
+      const startIndex = nextProps.startIndex || 0;
+      this.setState({ currentIndex: startIndex });
+    }
+  },
+
   componentDidMount() {
     this._handleResize();
     if (this.props.autoPlay) {
