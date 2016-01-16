@@ -1,10 +1,10 @@
 {
   "name": "react-image-gallery",
-  "version": "0.5.5",
+  "version": "0.5.6",
   "description": "Image gallery component for React.JS",
   "main": "./build/image-gallery",
   "scripts": {
-    "test": "gulp dev"
+    "start": "gulp dev"
   },
   "repository": {
     "type": "git",
