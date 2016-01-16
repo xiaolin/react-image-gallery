@@ -100,20 +100,11 @@ const ImageGallery = React.createClass({
     if (this.props.autoPlay) {
       this.play();
     }
-    if (window.addEventListener) {
-      window.addEventListener('resize', this._handleResize);
-    } else if (window.attachEvent) {
-      window.attachEvent('onresize', this._handleResize);
-    }
+    window.addEventListener('resize', this._handleResize);
   },
 
   componentWillUnmount() {
-    if (window.removeEventListener) {
-      window.removeEventListener('resize', this._handleResize);
-    } else if (window.detachEvent) {
-      window.detachEvent('onresize', this._handleResize);
-    }
-
+    window.removeEventListener('resize', this._handleResize);
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
