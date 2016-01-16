@@ -95,6 +95,7 @@ render: function() {
 * `autoPlay`: Boolean, default `false`
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`
+* `defaultImage`: String, default `undefined`
 * `onSlide`: Function, `callback(index)`
 * `onClick`: Function, `callback(event)`
 
