@@ -248,7 +248,7 @@ const ImageGallery = React.createClass({
           className={'image-gallery-slide' + alignment + originalClass}
           onClick={this.props.onClick}
           onTouchStart={this.props.onClick}>
-            <img src={item.original} onLoad={this._handleImageLoad} onError={this._handleImageError}/>
+            <img src={item.original} alt={item.alt} onLoad={this._handleImageLoad} onError={this._handleImageError}/>
             {item.description}
         </div>
       );
