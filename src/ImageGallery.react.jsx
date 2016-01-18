@@ -20,7 +20,8 @@ const ImageGallery = React.createClass({
     onSlide: React.PropTypes.func,
     onClick: React.PropTypes.func,
     startIndex: React.PropTypes.number,
-    defaultImage: React.PropTypes.string
+    defaultImage: React.PropTypes.string,
+    server: React.PropTypes.bool
   },
 
   getDefaultProps() {
@@ -33,7 +34,8 @@ const ImageGallery = React.createClass({
       indexSeparator: ' / ',
       autoPlay: false,
       slideInterval: 4000,
-      startIndex: 0
+      startIndex: 0,
+      server: false
     };
   },
 
@@ -248,7 +250,7 @@ const ImageGallery = React.createClass({
           className={'image-gallery-slide' + alignment + originalClass}
           onClick={this.props.onClick}
           onTouchStart={this.props.onClick}>
-            <img src={item.original} onLoad={this._handleImageLoad} onError={this._handleImageError}/>
+            <img className={(this.props.server && 'loaded')} src={item.original} onLoad={this._handleImageLoad} onError={this._handleImageError}/>
             {item.description}
         </div>
       );
