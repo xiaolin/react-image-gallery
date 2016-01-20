@@ -55,6 +55,8 @@ var images = [
     thumbnail: 'http://lorempixel.com/250/150/nature/1/',
     originalClass: 'featured-slide',
     thumbnailClass: 'featured-thumb',
+    originalAlt: 'original-alt',
+    thumbnailAlt: 'thumbnail-alt',
     description: 'Optional description...'
   },
   {
