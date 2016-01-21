@@ -21,6 +21,7 @@ const ImageGallery = React.createClass({
     onClick: React.PropTypes.func,
     startIndex: React.PropTypes.number,
     defaultImage: React.PropTypes.string,
+    disableScrolling: React.PropTypes.bool,
     server: React.PropTypes.bool
   },
 
@@ -35,6 +36,7 @@ const ImageGallery = React.createClass({
       autoPlay: false,
       slideInterval: 4000,
       startIndex: 0,
+      disableScrolling: false,
       server: false
     };
   },
@@ -160,6 +162,9 @@ const ImageGallery = React.createClass({
   },
 
   _getScrollX(indexDifference) {
+    if (this.props.disableScrolling) {
+      return 0;
+    }
     if (this._thumbnails) {
       if (this._thumbnails.scrollWidth <= this.state.containerWidth) {
         return 0;
