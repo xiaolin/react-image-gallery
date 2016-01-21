@@ -143,7 +143,7 @@ const ImageGallery = React.createClass({
       if (!this.state.hovering) {
         this.slideToIndex(this.state.currentIndex + 1);
       }
-    }.bind(this), this.props.slideInterval);
+    }, this.props.slideInterval);
   },
 
   pause() {
