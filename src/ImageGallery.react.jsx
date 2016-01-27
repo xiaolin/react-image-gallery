@@ -250,7 +250,12 @@ const ImageGallery = React.createClass({
           className={'image-gallery-slide' + alignment + originalClass}
           onClick={this.props.onClick}
           onTouchStart={this.props.onClick}>
-            <img className={(this.props.server && 'loaded')} src={item.original} alt={item.originalAlt} onLoad={this._handleImageLoad} onError={this._handleImageError}/>
+            <img
+              className={(this.props.server && 'loaded')}
+              src={item.original}
+              alt={item.originalAlt}
+              onLoad={this._handleImageLoad}
+              onError={this._handleImageError}/>
             {item.description}
         </div>
       );
@@ -276,7 +281,10 @@ const ImageGallery = React.createClass({
             onTouchStart={this.slideToIndex.bind(this, index)}
             onClick={this.slideToIndex.bind(this, index)}>
 
-            <img src={item.thumbnail} alt={item.thumbnailAlt} onError={this._handleImageError}/>
+            <img
+              src={item.thumbnail}
+              alt={item.thumbnailAlt}
+              onError={this._handleImageError}/>
           </a>
         );
       }
