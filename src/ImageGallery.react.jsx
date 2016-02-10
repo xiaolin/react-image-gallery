@@ -92,6 +92,10 @@ const ImageGallery = React.createClass({
 
   },
 
+  componentWillMount() {
+    this._thumbnailDelay = 300;
+  },
+
   componentDidMount() {
     this._handleResize();
     if (this.props.autoPlay) {
@@ -173,6 +177,29 @@ const ImageGallery = React.createClass({
 
       return indexDifference * perIndexScrollX;
     }
+  },
+
+  _handleMouseOverThumbnails(index, event) {
+    this.setState({hovering: true});
+    if (this._thumbnailTimer) {
+      window.clearTimeout(this._thumbnailTimer);
+      this._thumbnailTimer = null;
+    }
+    this._thumbnailTimer = window.setTimeout(() => {
+      this.slideToIndex(index);
+      this.pause();
+    }, this._thumbnailDelay)
+  },
+
+  _handleMouseLeaveThumbnails() {
+    if (this._thumbnailTimer) {
+      window.clearTimeout(this._thumbnailTimer);
+      this._thumbnailTimer = null;
+      if (this.props.autoPlay == true) {
+        this.play();
+      }
+    }
+    this.setState({hovering: false});
   },
 
   _handleMouseOver() {
@@ -268,7 +295,8 @@ const ImageGallery = React.createClass({
 
       if (this.props.showThumbnails) {
         thumbnails.push(
-          <a
+          <a onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
+             onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
             key={index}
             className={
               'image-gallery-thumbnail' +
@@ -305,7 +333,6 @@ const ImageGallery = React.createClass({
     let swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
     let swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
     let itemsTotal = this.props.items.length;
-
     return (
       <section ref={(i) => this._imageGallery = i} className='image-gallery'>
         <div
