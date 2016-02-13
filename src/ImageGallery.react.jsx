@@ -92,6 +92,12 @@ const ImageGallery = React.createClass({
 
   },
 
+  componentWillMount() {
+    this._thumbnailDelay = 300;
+    this._ghotClickDelay = 600;
+    this._preventGhostClick = false;
+  },
+
   componentDidMount() {
     this._handleResize();
     if (this.props.autoPlay) {
@@ -124,7 +130,6 @@ const ImageGallery = React.createClass({
         this.pause();
         this.play();
       }
-      event.preventDefault();
     }
   },
 
@@ -144,6 +149,23 @@ const ImageGallery = React.createClass({
       window.clearInterval(this._intervalId);
       this._intervalId = null;
     }
+  },
+
+  _wrapClick(func) {
+    return event => {
+      if (this._preventGhostClick === true) {
+        return;
+      }
+      func(event);
+    }
+  },
+
+  _touchEnd(event) {
+    this._preventGhostClick = true;
+    this._preventGhostClickTimer = window.setTimeout(_ => {
+      this._preventGhostClick = false;
+      this._preventGhostClickTimer = null;
+    }, this._ghotClickDelay)
   },
 
   _setThumbnailsTranslateX(x) {
@@ -173,6 +195,29 @@ const ImageGallery = React.createClass({
 
       return indexDifference * perIndexScrollX;
     }
+  },
+
+  _handleMouseOverThumbnails(index, event) {
+    this.setState({hovering: true});
+    if (this._thumbnailTimer) {
+      window.clearTimeout(this._thumbnailTimer);
+      this._thumbnailTimer = null;
+    }
+    this._thumbnailTimer = window.setTimeout(() => {
+      this.slideToIndex(index);
+      this.pause();
+    }, this._thumbnailDelay)
+  },
+
+  _handleMouseLeaveThumbnails() {
+    if (this._thumbnailTimer) {
+      window.clearTimeout(this._thumbnailTimer);
+      this._thumbnailTimer = null;
+      if (this.props.autoPlay == true) {
+        this.play();
+      }
+    }
+    this.setState({hovering: false});
   },
 
   _handleMouseOver() {
@@ -246,8 +291,9 @@ const ImageGallery = React.createClass({
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          onClick={this.props.onClick}
-          onTouchStart={this.props.onClick}>
+          onClick={this._wrapClick(this.props.onClick)}
+          onTouchStart={this.props.onClick}
+          onTouchEnd={this._touchEnd} >
             <img
               className={(this.props.server && 'loaded')}
               src={item.original}
@@ -268,7 +314,8 @@ const ImageGallery = React.createClass({
 
       if (this.props.showThumbnails) {
         thumbnails.push(
-          <a
+          <a onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
+             onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
             key={index}
             className={
               'image-gallery-thumbnail' +
@@ -277,7 +324,8 @@ const ImageGallery = React.createClass({
             }
 
             onTouchStart={this.slideToIndex.bind(this, index)}
-            onClick={this.slideToIndex.bind(this, index)}>
+            onTouchEnd={this._touchEnd}
+            onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
 
             <img
               src={item.thumbnail}
@@ -296,7 +344,8 @@ const ImageGallery = React.createClass({
                 currentIndex === index ? 'active' : '')}
 
             onTouchStart={this.slideToIndex.bind(this, index)}
-            onClick={this.slideToIndex.bind(this, index)}>
+            onTouchEnd={this._touchEnd}
+            onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
           </li>
         );
       }
@@ -305,7 +354,6 @@ const ImageGallery = React.createClass({
     let swipePrev = this.slideToIndex.bind(this, currentIndex - 1);
     let swipeNext = this.slideToIndex.bind(this, currentIndex + 1);
     let itemsTotal = this.props.items.length;
-
     return (
       <section ref={(i) => this._imageGallery = i} className='image-gallery'>
         <div
@@ -321,12 +369,14 @@ const ImageGallery = React.createClass({
                       key='leftNav'
                       className='image-gallery-left-nav'
                       onTouchStart={swipePrev}
-                      onClick={swipePrev}/>,
+                      onTouchEnd={this._touchEnd}
+                      onClick={this._wrapClick(swipePrev)}/>,
                     <a
                       key='rightNav'
                       className='image-gallery-right-nav'
                       onTouchStart={swipeNext}
-                      onClick={swipeNext}/>
+                      onTouchEnd={this._touchEnd}
+                      onClick={this._wrapClick(swipeNext)}/>
                   ],
                 <Swipeable
                   key='swipeable'
