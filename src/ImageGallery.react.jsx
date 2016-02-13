@@ -160,7 +160,7 @@ const ImageGallery = React.createClass({
 
   _touchEnd(event) {
     this._preventGhostClick = true
-    this._preventGhostClickTimer = window.setTimeout(_ => {
+    this._preventGhostClickTimer = window.setTimeout(() => {
       this._preventGhostClick = false
       this._preventGhostClickTimer = null
     }, this._ghotClickDelay)
