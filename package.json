@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.5.8",
+  "version": "0.5.9",
   "description": "Image gallery component for React.JS",
   "main": "./build/image-gallery",
   "scripts": {
@@ -13,11 +13,15 @@
   "keywords": [
     "react",
     "react-component",
+    "react caoursel",
+    "react slideshow",
+    "react gallery",
+    "image gallery",
+    "image slider",
     "carousel",
     "slideshow",
     "gallery",
-    "image gallery",
-    "image slider"
+    "slider"
   ],
   "author": "Xiao Lin",
   "email": "xiao@linxtion.com",
