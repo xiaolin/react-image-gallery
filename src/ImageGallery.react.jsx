@@ -20,6 +20,7 @@ const ImageGallery = React.createClass({
     startIndex: React.PropTypes.number,
     defaultImage: React.PropTypes.string,
     disableThumbnailScroll: React.PropTypes.bool,
+    slideOnThumbnailHover: React.PropTypes.bool,
     server: React.PropTypes.bool
   },
 
