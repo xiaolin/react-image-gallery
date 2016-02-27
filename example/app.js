@@ -96,7 +96,7 @@ const App = React.createClass({
 
         <div className='app-sandbox'>
 
-          <h2> Playground </h2>
+          <h2> Available Props </h2>
 
           <ul>
             <li>
@@ -122,33 +122,38 @@ const App = React.createClass({
             </li>
             <li>
               <input
+                id='show_bullets'
                 type='checkbox'
                 checkedLink={this.linkState('showBullets')}/>
-                show bullets?
+                <label htmlFor='show_bullets'>show bullets?</label>
             </li>
             <li>
               <input
+                id='show_thumbnails'
                 type='checkbox'
                 checkedLink={this.linkState('showThumbnails')}/>
-                show thumbnails?
+                <label htmlFor='show_thumbnails'>show thumbnails?</label>
             </li>
             <li>
               <input
+                id='show_navigation'
                 type='checkbox'
                 checkedLink={this.linkState('showNav')}/>
-                show navigation?
+                <label htmlFor='show_navigation'>show navigation?</label>
             </li>
             <li>
               <input
+                id='show_index'
                 type='checkbox'
                 checkedLink={this.linkState('showIndex')}/>
-                show index?
+                <label htmlFor='show_index'>show index?</label>
             </li>
             <li>
               <input
+                id='slide_on_thumbnail_hover'
                 type='checkbox'
                 checkedLink={this.linkState('slideOnThumbnailHover')}/>
-                slide on thumbnail hover?
+                <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover?</label>
             </li>
           </ul>
 
