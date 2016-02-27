@@ -19,7 +19,7 @@ const ImageGallery = React.createClass({
     onClick: React.PropTypes.func,
     startIndex: React.PropTypes.number,
     defaultImage: React.PropTypes.string,
-    disableScrolling: React.PropTypes.bool,
+    disableThumbnailScroll: React.PropTypes.bool,
     server: React.PropTypes.bool
   },
 
@@ -27,15 +27,16 @@ const ImageGallery = React.createClass({
     return {
       lazyLoad: true,
       showThumbnails: true,
-      showBullets: false,
       showNav: true,
+      showBullets: false,
       showIndex: false,
       indexSeparator: ' / ',
       autoPlay: false,
+      disableThumbnailScroll: false,
+      server: false,
+      slideOnThumbnailHover: false,
       slideInterval: 4000,
-      startIndex: 0,
-      disableScrolling: false,
-      server: false
+      startIndex: 0
     }
   },
 
@@ -158,7 +159,7 @@ const ImageGallery = React.createClass({
     }
   },
 
-  _touchEnd(event) {
+  _touchEnd() {
     this._preventGhostClick = true
     this._preventGhostClickTimer = window.setTimeout(() => {
       this._preventGhostClick = false
@@ -175,7 +176,7 @@ const ImageGallery = React.createClass({
   },
 
   _getScrollX(indexDifference) {
-    if (this.props.disableScrolling) {
+    if (this.props.disableThumbnailScroll) {
       return 0
     }
     if (this._thumbnails) {
@@ -195,16 +196,18 @@ const ImageGallery = React.createClass({
     }
   },
 
-  _handleMouseOverThumbnails(index, event) {
-    this.setState({hovering: true})
-    if (this._thumbnailTimer) {
-      window.clearTimeout(this._thumbnailTimer)
-      this._thumbnailTimer = null
+  _handleMouseOverThumbnails(index) {
+    if (this.props.slideOnThumbnailHover) {
+      this.setState({hovering: true})
+      if (this._thumbnailTimer) {
+        window.clearTimeout(this._thumbnailTimer)
+        this._thumbnailTimer = null
+      }
+      this._thumbnailTimer = window.setTimeout(() => {
+        this.slideToIndex(index)
+        this.pause()
+      }, this._thumbnailDelay)
     }
-    this._thumbnailTimer = window.setTimeout(() => {
-      this.slideToIndex(index)
-      this.pause()
-    }, this._thumbnailDelay)
   },
 
   _handleMouseLeaveThumbnails() {
@@ -255,6 +258,8 @@ const ImageGallery = React.createClass({
   },
 
   _handleImageLoad(event) {
+    // slide images have an opacity of 0, onLoad the class 'loaded' is added
+    // so that it transitions smoothly when navigating to non adjacent slides
     if (event.target.className.indexOf('loaded') === -1) {
       event.target.className += ' loaded'
     }
@@ -293,7 +298,7 @@ const ImageGallery = React.createClass({
           onTouchStart={this.props.onClick}
           onTouchEnd={this._touchEnd} >
             <img
-              className={(this.props.server && 'loaded')}
+              className={this.props.server ? 'loaded' : null}
               src={item.original}
               alt={item.originalAlt}
               onLoad={this._handleImageLoad}
@@ -312,8 +317,9 @@ const ImageGallery = React.createClass({
 
       if (this.props.showThumbnails) {
         thumbnails.push(
-          <a onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
-             onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
+          <a
+            onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
+            onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
             key={index}
             className={
               'image-gallery-thumbnail' +
