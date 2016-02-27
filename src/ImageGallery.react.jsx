@@ -151,11 +151,13 @@ const ImageGallery = React.createClass({
   },
 
   _wrapClick(func) {
-    return event => {
-      if (this._preventGhostClick === true) {
-        return
+    if (typeof func === 'function') {
+      return event => {
+        if (this._preventGhostClick === true) {
+          return
+        }
+        func(event)
       }
-      func(event)
     }
   },
 
