@@ -11,11 +11,12 @@ const App = React.createClass({
   getInitialState() {
     return {
       isPlaying: false,
-      slideInterval: 4000,
-      showThumbnails: true,
       showIndex: false,
+      slideOnThumbnailHover: false,
+      showBullets: true,
+      showThumbnails: true,
       showNav: true,
-      showBullets: true
+      slideInterval: 4000
     }
   },
 
@@ -90,6 +91,7 @@ const App = React.createClass({
           showNav={this.state.showNav}
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
+          slideOnThumbnailHover={this.state.slideOnThumbnailHover}
         />
 
         <div className='app-sandbox'>
@@ -112,7 +114,7 @@ const App = React.createClass({
             </a>
             </li>
             <li>
-              <div>Slide interval</div>
+              <div>slide interval</div>
               <input
                 type='text'
                 placeholder='SlideInterval'
@@ -128,19 +130,25 @@ const App = React.createClass({
               <input
                 type='checkbox'
                 checkedLink={this.linkState('showThumbnails')}/>
-                show Thumbnails?
+                show thumbnails?
             </li>
             <li>
               <input
                 type='checkbox'
                 checkedLink={this.linkState('showNav')}/>
-                show Navigation?
+                show navigation?
             </li>
             <li>
               <input
                 type='checkbox'
                 checkedLink={this.linkState('showIndex')}/>
-                show Index?
+                show index?
+            </li>
+            <li>
+              <input
+                type='checkbox'
+                checkedLink={this.linkState('slideOnThumbnailHover')}/>
+                slide on thumbnail hover?
             </li>
           </ul>
 
