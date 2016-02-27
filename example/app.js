@@ -1,10 +1,8 @@
-'use strict';
+import React from 'react'
+import ReactDOM from 'react-dom'
+import LinkedStateMixin from 'react-addons-linked-state-mixin'
 
-import React from 'react';
-import ReactDOM from 'react-dom';
-import LinkedStateMixin from 'react-addons-linked-state-mixin';
-
-import ImageGallery from '../src/ImageGallery.react';
+import ImageGallery from '../src/ImageGallery.react'
 
 const App = React.createClass({
 
@@ -18,28 +16,28 @@ const App = React.createClass({
       showIndex: false,
       showNav: true,
       showBullets: true
-    };
+    }
   },
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.slideInterval !== prevState.slideInterval) {
       // refresh setInterval
-      this._pauseSlider();
-      this._playSlider();
+      this._pauseSlider()
+      this._playSlider()
     }
   },
 
   _pauseSlider() {
     if (this._imageGallery) {
-      this._imageGallery.pause();
-      this.setState({isPlaying: false});
+      this._imageGallery.pause()
+      this.setState({isPlaying: false})
     }
   },
 
   _playSlider() {
     if (this._imageGallery) {
-      this._imageGallery.play();
-      this.setState({isPlaying: true});
+      this._imageGallery.play()
+      this.setState({isPlaying: true})
     }
   },
 
@@ -77,7 +75,7 @@ const App = React.createClass({
         original: 'http://lorempixel.com/1000/600/nature/7/',
         thumbnail: 'http://lorempixel.com/250/150/nature/7/'
       }
-    ];
+    ]
 
     return (
 
@@ -148,12 +146,10 @@ const App = React.createClass({
 
         </div>
       </section>
-    );
+    )
   }
 
-});
+})
 
+ReactDOM.render(<App/>, document.getElementById('container'))
 
-(function() {
-  ReactDOM.render(<App/>, document.getElementById('container'));
-})();
