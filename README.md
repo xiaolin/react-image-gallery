@@ -87,19 +87,24 @@ render: function() {
 
 # Props
 
-* `items`: (required) Array of images,
+* `items`: (required) Array of objects, see example above,
 * `lazyLoad`: Boolean, default `true`
-* `showThumbnails`: Boolean, default `true`
 * `showNav`: Boolean, default `true`
+* `showThumbnails`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
 * `server`: Boolean, default `false`
-* `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
+  * adds `loaded` class to all slide `<img>`
 * `autoPlay`: Boolean, default `false`
+* `disableThumbnailScroll`: Boolean, default `false`
+  * disables the thumbnail container from adjusting
+* `slideOnThumbnailHover`: Boolean, default `false`
+  * slides to the currently hovered thumbnail
+* `defaultImage`: String, default `undefined`
+  * an image src pointing to your default image if an image fails to load
+* `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`
-* `defaultImage`: String, default `undefined`
-* `disableScrolling`: Boolean, default `false`
 * `onSlide`: Function, `callback(index)`
 * `onClick`: Function, `callback(event)`
 
