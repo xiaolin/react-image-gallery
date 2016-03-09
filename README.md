@@ -32,6 +32,8 @@ Then open [`localhost:8001`](http://localhost:8001) in a browser.
 
 ## Use
 
+If you want ImageGallery to work with touch event, please install [react-tab-event-plugin](https://github.com/zilverline/react-tap-event-plugin) and follow the plugin's instruction how to inject the event mechanism.
+
 ### SASS
 
 ```

@@ -3,7 +3,7 @@ import Swipeable from 'react-swipeable'
 
 const ImageGallery = React.createClass({
 
-  displayName: 'ImageGallery',
+  displayName: 'ImageGallery2',
 
   propTypes: {
     items: React.PropTypes.array.isRequired,

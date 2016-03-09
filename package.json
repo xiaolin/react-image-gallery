@@ -49,6 +49,8 @@
     "watchify": "^2.4.0"
   },
   "dependencies": {
+    "classnames": "^2.2.3",
+    "react-addons-pure-render-mixin": "^0.14.7",
     "react-swipeable": "^3.0.2"
   }
 }

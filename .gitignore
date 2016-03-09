@@ -4,3 +4,6 @@ npm-debug.log
 
 build/
 example/example.js
+
+*.swp
+*.swo
