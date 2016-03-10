@@ -42,9 +42,9 @@
     "gulp-sass": "^2.1.1",
     "gulp-streamify": "^1.0.0",
     "gulp-uglify": "^1.2.0",
-    "react": "^0.14.0",
-    "react-addons-linked-state-mixin": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^0.14.7",
+    "react-addons-linked-state-mixin": "^0.14.7",
+    "react-dom": "^0.14.7",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.4.0"
   },

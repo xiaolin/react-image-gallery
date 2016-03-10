@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import LinkedStateMixin from 'react-addons-linked-state-mixin'
 
-import ImageGallery from '../src/ImageGallery.react'
+import ImageGallery from '../src/javascripts/components/ImageGallery.react'
 
 const App = React.createClass({
 

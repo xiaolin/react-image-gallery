@@ -21,7 +21,7 @@ gulp.task('server', function () {
 })
 
 gulp.task('sass', function () {
-  gulp.src('./src/ImageGallery.scss')
+  gulp.src('./src/stylesheets/ImageGallery.scss')
     .pipe(sass())
     .pipe(rename('image-gallery.css'))
     .pipe(gulp.dest('./build/'))
@@ -31,7 +31,7 @@ gulp.task('sass', function () {
 gulp.task('scripts', function() {
   watchify(browserify({
     entries: ['./example/app.js'],
-    extensions: ['.jsx'],
+    extensions: ['.js', '.jsx', '.react.jsx'],
     transform: [babelify]
   }))
     .bundle()
@@ -42,7 +42,7 @@ gulp.task('scripts', function() {
 })
 
 gulp.task('source-js', function () {
-  return gulp.src('./src/components/ImageGallery.react.jsx')
+  return gulp.src('./src/javascripts/components/ImageGallery.react.jsx')
     .pipe(concat('image-gallery.js'))
     .pipe(babel())
     .pipe(gulp.dest('./build'))

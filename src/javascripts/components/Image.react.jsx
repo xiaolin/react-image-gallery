@@ -8,7 +8,7 @@ export default React.createClass({
 
   getInitialState () {
     return {
-      src: this.props.src}
+      src: this.props.src
     };
   },
 
@@ -23,7 +23,7 @@ export default React.createClass({
   render () {
     return (
       <img
-        className={this.props.classNames}
+        className={this.props.className}
         src={this.props.src}
         alt={this.props.alt}
         onLoad={this.props.handleLoad}

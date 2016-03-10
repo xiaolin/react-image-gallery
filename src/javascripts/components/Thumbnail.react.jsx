@@ -3,11 +3,15 @@ import classNames from 'classnames';
 import Image from './Image';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
+import ClickAndTap from './mixins/click-and-tap';
 
 export default React.createClass({
   displayName: 'Thumbnail',
 
-  mixins: [PureRenderMixin],
+  mixins: [
+    ClickAndTap,
+    PureRenderMixin
+  ],
 
   mouseOver (e) {
     this.props.mouseOver(this.props.item, this.props.index);
@@ -23,21 +27,6 @@ export default React.createClass({
     });
   },
 
-  onTouchTap (e) {
-    if (this.props.onTouchTap) {
-      this.props.onTouchTap(this.props.item, this.props.index);
-    } else if (this.props.onClick) {
-      this.props.onClick(this.props.item, this.props.index);
-    }
-  },
-
-  onClick (e) {
-    if (this.props.onClick) {
-      e.preventDefault();
-      this.props.onClick(this.props.item, this.props.index);
-    }
-  },
-
   render () {
     return (
       <a
@@ -47,10 +36,10 @@ export default React.createClass({
         onTouchTap={this.onTouchTap}
         onClick={this.onClick}>
 
-        <img
-          src={item.thumbnail}
-          alt={item.thumbnailAlt}
-          onError={this._handleImageError}/>
+        <Image
+          src={this.props.item.thumbnail}
+          alt={this.props.item.thumbnailAlt}
+        />
       </a>   
     );
   }
