@@ -1,47 +1,52 @@
 import React from 'react';
 import classNames from 'classnames';
-import Image from './Image';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ClickAndTap from './mixins/click-and-tap';
 
-export default React.createClass({
-  displayName: 'Thumbnail',
+export default function ThumbnsilImporter(
+  Image
+) {
+  if (!Image) { throw "You didn't pass required dependencies" }
 
-  mixins: [
-    ClickAndTap,
-    PureRenderMixin
-  ],
+  return React.createClass({
+    displayName: 'Thumbnail',
 
-  mouseOver (e) {
-    this.props.mouseOver(this.props.item, this.props.index);
-  },
+    mixins: [
+      ClickAndTap,
+      PureRenderMixin
+    ],
 
-  mouseLeave (e) {
-    this.props.mouseLeave(this.props.item, this.props.index);
-  },
+    mouseOver (e) {
+      this.props.mouseOver(this.props.item, this.props.index);
+    },
 
-  cssClasses () {
-    return classNames('image-gallery-thumbnail', this.props.classNames, {
-      'active': this.props.active
-    });
-  },
+    mouseLeave (e) {
+      this.props.mouseLeave(this.props.item, this.props.index);
+    },
 
-  render () {
-    return (
-      <a
-        onMouseOver={this.mouseOver}
-        onMouseLeave={this.mouseLeave}
-        className={this.cssClasses()}
-        onTouchTap={this.onTouchTap}
-        onClick={this.onClick}>
+    cssClasses () {
+      return classNames('image-gallery-thumbnail', this.props.classNames, {
+        'active': this.props.active
+      });
+    },
 
-        <Image
-          src={this.props.item.thumbnail}
-          alt={this.props.item.thumbnailAlt}
-        />
-      </a>   
-    );
-  }
-  
-});
+    render () {
+      return (
+        <a
+          onMouseOver={this.mouseOver}
+          onMouseLeave={this.mouseLeave}
+          className={this.cssClasses()}
+          onTouchTap={this.onTouchTap}
+          onClick={this.onClick}>
+
+          <Image
+            src={this.props.item.thumbnail}
+            alt={this.props.item.thumbnailAlt}
+          />
+        </a>
+      );
+    }
+
+  });
+}
