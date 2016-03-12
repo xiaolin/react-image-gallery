@@ -4,6 +4,8 @@ import Swipeable from 'react-swipeable';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import AlignmentMixin from './mixins/alignment';
 
+import LeftNav from './LeftNav';
+import RightNav from './RightNav';
 import Slide from './Slide';
 
 export default React.createClass({
@@ -13,6 +15,25 @@ export default React.createClass({
     AlignmentMixin,
     PureRenderMixin
   ],
+
+  renderNavs () {
+    if (this.props.showNav) {
+      return [
+        <LeftNav
+          key='left-nav'
+          onTouchTap={this.props.onSwipedLeft}
+          onClick={this.props.onSwipedLeft}
+          active={this.props.infinite || this.props.currentIndex > 0}
+        />,
+        <RightNav
+          key='right-nav'
+          onTouchTap={this.props.onSwipedRight}
+          onClick={this.props.onSwipedRight}
+          active={this.props.infinite || this.props.currentIndex < this.props.items.length - 1}
+        />
+      ];
+    }
+  },
 
   renderSlides () {
     let slides = [];
@@ -42,12 +63,16 @@ export default React.createClass({
           <div className='image-gallery-slides'>
             {this.renderSlides()}
           </div>
+          {this.renderNavs()}
         </Swipeable>
       );
     } else {
       return (
-        <div className='image-gallery-slides'>
-          {this.renderSlides()}
+        <div>
+          <div className='image-gallery-slides'>
+            {this.renderSlides()}
+          </div>
+          {this.renderNavs()}
         </div>
       );
     }

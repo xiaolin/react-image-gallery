@@ -6,8 +6,6 @@ import Utils from '../utils';
 import SlidesContainer from './SlidesContainer';
 import ThumbnailsContainer from './ThumbnailsContainer';
 import BulletsContainer from './BulletsContainer';
-import LeftNav from './LeftNav';
-import RightNav from './RightNav';
 import GalleryIndex from './Index';
 
 export default React.createClass({
@@ -160,13 +158,13 @@ export default React.createClass({
     let slideCount = this.props.items.length - 1;
 
     if (index < 0) {
-      if (this.props.infinite || event) {
+      if (this.props.infinite || !event) {
         this.setState({currentIndex: slideCount});
       } else {
         this.setState({currentIndex: 0});
       }
     } else if (index > slideCount) {
-      if (this.props.infinite || event) {
+      if (this.props.infinite || !event) {
         this.setState({currentIndex: 0})
       } else {
         this.setState({currentIndex: slideCount});
@@ -247,23 +245,6 @@ export default React.createClass({
     this.setState({thumbnailsTranslateX: x});
   },
 
-  renderNavs () {
-    if (this.props.showNav) {
-      return [
-        <LeftNav
-          onTouchTap={this.swipePrev}
-          onClick={this.swipePrev}
-          active={this.props.infinite || this.state.currentIndex > 0}
-        />,
-        <RightNav
-          onTouchTap={this.swipeNext}
-          onClick={this.swipeNext}
-          active={this.props.infinite || this.state.currentIndex < this.props.items.length - 1}
-        />
-      ];
-    }
-  },
-
   renderBullets () {
     if (this.props.showBullets) {
       return (
@@ -286,6 +267,8 @@ export default React.createClass({
         lazyLoad={this.props.lazyLoad}
         onSwipedRight={this.swipeNext}
         onSwipedLeft={this.swipePrev}
+        showNav={this.props.showNav}
+        infinite={this.props.infinite}
       />
     );
   },
@@ -332,7 +315,6 @@ export default React.createClass({
           onMouseLeave={this.handleMouseLeave}
           className='image-gallery-content'
         >
-          {this.renderNavs()}
           {this.renderSlides()}
           {this.renderBullets()}
           {this.renderIndex()}
