@@ -19,10 +19,12 @@ export default React.createClass({
   },
 
   render () {
-    <a
-      className={this.cssClasses()}
-      onTouchTap={this.onTouchTap}
-      onClick={this.onClick}
-    /> 
+    return (
+      <a
+        className={this.cssClasses()}
+        onTouchTap={this.onTouchTap}
+        onClick={this.onClick}
+      />
+    );
   }
 });

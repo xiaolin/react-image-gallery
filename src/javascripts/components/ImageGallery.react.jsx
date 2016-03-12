@@ -231,7 +231,6 @@ export default React.createClass({
         return 0;
       }
 
-      console.log(thumbnails.scrollWidth);
       let totalThumbnails = thumbnails.children.length;
 
       // total scroll-x required to see the last thumbnail
@@ -249,7 +248,7 @@ export default React.createClass({
   },
 
   renderNavs () {
-    if (this.props.showNavs) {
+    if (this.props.showNav) {
       return [
         <LeftNav
           onTouchTap={this.swipePrev}
@@ -323,7 +322,6 @@ export default React.createClass({
   },
 
   render () {
-    console.log(this.props.items);
     return (
       <section
         ref='imageGallery'

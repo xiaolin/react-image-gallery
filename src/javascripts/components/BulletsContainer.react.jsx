@@ -17,11 +17,12 @@ export default React.createClass({
           key={i}
           index={i}
           active={this.props.currentIndex == i}
-          onTouchTap={this.props.onBulletTap}
-          onClick={this.props.onBulletClick}
+          onTouchTap={this.props.onTouchTap}
+          onClick={this.props.onClick}
         />
       );
     };
+    return bullets;
   },
 
   render () {
