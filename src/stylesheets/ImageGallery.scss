@@ -99,26 +99,27 @@ $ig-blue: #337ab7;
       opacity: 1;
     }
   }
-
-  span {
-    background: rgba(34, 34, 34, .6);
-    bottom: 70px;
-    color: $ig-white;
-    left: 0;
-    line-height: 1;
-    padding: 10px 20px;
-    position: absolute;
-    transition: all .45s ease-out;
-    white-space: normal;
-
-    @media (max-width: $ig-screen-sm-min) {
-      bottom: 45px;
-      font-size: .8em;
-      padding: 8px 15px;
-    }
-
-  }
 }
+
+.image-gallery-description {
+  background: rgba(34, 34, 34, .6);
+  bottom: 70px;
+  color: $ig-white;
+  left: 0;
+  line-height: 1;
+  padding: 10px 20px;
+  position: absolute;
+  transition: all .45s ease-out;
+  white-space: normal;
+
+  @media (max-width: $ig-screen-sm-min) {
+    bottom: 45px;
+    font-size: .8em;
+    padding: 8px 15px;
+  }
+
+}
+
 
 .image-gallery-bullets {
   bottom: 90px;

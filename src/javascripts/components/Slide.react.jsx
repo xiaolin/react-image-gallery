@@ -1,5 +1,6 @@
 import React from 'react';
 import Image from './Image';
+import SlideDescription from './SlideDescription';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -50,7 +51,7 @@ export default React.createClass({
           alt={this.props.item.originalAlt}
           handleLoad={this.handleImageLoad}
         />
-        {this.props.item.description}
+        <SlideDescription item={this.props.item} />
       </div> 
     );
   }
