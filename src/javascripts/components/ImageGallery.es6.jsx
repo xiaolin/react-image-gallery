@@ -18,6 +18,7 @@ export default function ImageGalleryImporter(
       showBullets: React.PropTypes.bool,
       showNav: React.PropTypes.bool,
       showIndex: React.PropTypes.bool,
+      showDescription: React.PropTypes.bool,
       indexSeparator: React.PropTypes.string,
       autoPlay: React.PropTypes.bool,
       lazyLoad: React.PropTypes.bool,
@@ -39,6 +40,7 @@ export default function ImageGalleryImporter(
         showNav: true,
         showBullets: false,
         showIndex: false,
+        showDescription: false,
         infinite: true,
         indexSeparator: ' / ',
         autoPlay: false,
@@ -269,6 +271,7 @@ export default function ImageGalleryImporter(
           onSwipedRight={this.swipeNext}
           onSwipedLeft={this.swipePrev}
           showNav={this.props.showNav}
+          showDescription={this.props.showDescription}
           infinite={this.props.infinite}
         />
       );

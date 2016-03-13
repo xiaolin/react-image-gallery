@@ -18,6 +18,7 @@ const App = React.createClass({
       showBullets: true,
       showThumbnails: true,
       showNav: true,
+      showDescription: false,
       infinite: true,
       slideInterval: 4000
     }
@@ -92,6 +93,7 @@ const App = React.createClass({
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
+          showDescription={this.state.showDescription}
           infinite={this.state.infinite}
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
@@ -151,6 +153,13 @@ const App = React.createClass({
                 type='checkbox'
                 checkedLink={this.linkState('showIndex')}/>
                 <label htmlFor='show_index'>show index?</label>
+            </li>
+            <li>
+              <input
+                id='show_desc'
+                type='checkbox'
+                checkedLink={this.linkState('showDescription')}/>
+                <label htmlFor='show_desc'>show descriptions?</label>
             </li>
             <li>
               <input

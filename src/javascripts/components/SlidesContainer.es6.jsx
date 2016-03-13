@@ -47,6 +47,7 @@ export default function SlidesContainerImporter(
               item={this.props.items[i]}
               server={this.props.server}
               alignment={alignment}
+              showDescription={this.props.showDescription}
             />
           );
         }
