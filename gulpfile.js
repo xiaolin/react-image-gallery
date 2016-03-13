@@ -42,7 +42,7 @@ gulp.task('scripts', function() {
 })
 
 gulp.task('source-js', function () {
-  return gulp.src('./src/javascripts/components/ImageGallery.react.jsx')
+  return gulp.src('./src/javascripts/main.js')
     .pipe(concat('image-gallery.js'))
     .pipe(babel())
     .pipe(gulp.dest('./build'))

@@ -1,11 +1,9 @@
 import React from 'react';
-import Image from './Image';
-import SlideDescription from './SlideDescription';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
 export default function SlideImporter (
-  Image
+  Image,
   SlideDescription
 ) {
   if (!Image || !SlideDescription) { throw "You didn't pass required dependencies" }
