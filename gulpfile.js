@@ -31,7 +31,7 @@ gulp.task('sass', function () {
 gulp.task('scripts', function() {
   watchify(browserify({
     entries: ['./example/app.js'],
-    extensions: ['.js', '.jsx', '.react.jsx'],
+    extensions: ['.js', '.es6', '.es6.jsx'],
     transform: [babelify]
   }))
     .bundle()
@@ -42,7 +42,7 @@ gulp.task('scripts', function() {
 })
 
 gulp.task('source-js', function () {
-  return gulp.src('./src/javascripts/main.js')
+  return gulp.src('./src/javascripts/main.es6')
     .pipe(concat('image-gallery.js'))
     .pipe(babel())
     .pipe(gulp.dest('./build'))
