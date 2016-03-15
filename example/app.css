@@ -21,13 +21,13 @@ li + li {
   font-family: "Arial Narrow", Arial, sans-serif;
 }
 
-.app .image-gallery {
+.app .image-gallery-container {
   width: 70%;
   margin: 0 auto;
 }
 
 @media (max-width: 768px) {
-  .app .image-gallery {
+  .app .image-gallery-container{
     width: 100%;
   }
 }

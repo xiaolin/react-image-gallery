@@ -29,11 +29,9 @@ export default function BulletsContainerImporter(
 
     render () {
       return (
-        <div className='image-gallery-bullets'>
-          <ul className='image-gallery-bullets-container'>
-            {this.renderBullets()}
-          </ul>
-        </div>
+        <ul className='image-gallery-bullets'>
+          {this.renderBullets()}
+        </ul>
       );
     }
   });

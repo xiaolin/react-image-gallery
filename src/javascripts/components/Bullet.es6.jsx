@@ -19,8 +19,8 @@ export default React.createClass({
   },
 
   cssClasses () {
-    return classNames('image-gallery-bullet', this.props.classNames, {
-      'active': this.props.active
+    return classNames('image-gallery-bullets__item', {
+      'image-gallery-bullets__item--active': this.props.active
     });
   },
 
@@ -30,7 +30,7 @@ export default React.createClass({
         className={this.cssClasses()}
         onTouchTap={this.onTouchTap}
         onClick={this.onClick}>
-      </li>     
+      </li>
     );
   }
 });

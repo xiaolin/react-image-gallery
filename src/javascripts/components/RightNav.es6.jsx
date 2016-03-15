@@ -13,8 +13,8 @@ export default React.createClass({
   ],
 
   cssClasses () {
-    return classNames('image-gallery-right-nav', this.props.classNames, {
-      'active': this.props.active
+    return classNames('image-gallery-right-nav', {
+      'image-gallery-right-nav--active': this.props.active
     });
   },
 

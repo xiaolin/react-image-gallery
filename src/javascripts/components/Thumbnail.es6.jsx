@@ -26,8 +26,8 @@ export default function ThumbnsilImporter(
     },
 
     cssClasses () {
-      return classNames('image-gallery-thumbnail', this.props.classNames, {
-        'active': this.props.active
+      return classNames('image-gallery-thumbnails__item', this.props.classNames, {
+        'image-gallery-thumbnails__item--active': this.props.active
       });
     },
 
@@ -41,6 +41,7 @@ export default function ThumbnsilImporter(
           onClick={this.onClick}>
 
           <Image
+            className='image-gallery-thumbnails__item__image'
             src={this.props.item.thumbnail}
             alt={this.props.item.thumbnailAlt}
           />

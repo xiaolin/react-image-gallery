@@ -9,6 +9,12 @@ export default function ImageGalleryImporter(
   BulletsContainer,
   GalleryIndex
 ) {
+  if (
+    !SlidesContainer ||
+    !ThumbnailsContainer ||
+    !BulletsContainer ||
+    !GalleryIndex
+  ) { throw "You didn't pass required dependencies" }
   return React.createClass({
     displayName: 'ImageGallery',
 
@@ -157,17 +163,17 @@ export default function ImageGalleryImporter(
     },
 
     // now, event says if the call is a user one
-    slideToIndex (index, event) {
+    slideToIndex (index, userEvent) {
       let slideCount = this.props.items.length - 1;
 
       if (index < 0) {
-        if (this.props.infinite || !event) {
+        if (this.props.infinite || !userEvent) {
           this.setState({currentIndex: slideCount});
         } else {
           this.setState({currentIndex: 0});
         }
       } else if (index > slideCount) {
-        if (this.props.infinite || !event) {
+        if (this.props.infinite || !userEvent) {
           this.setState({currentIndex: 0})
         } else {
           this.setState({currentIndex: slideCount});
@@ -175,7 +181,7 @@ export default function ImageGalleryImporter(
       } else {
         this.setState({currentIndex: index});
       }
-      if (event) {
+      if (userEvent) {
         if (this._intervalId) {
           // user event, reset interval
           this.pause();
@@ -251,29 +257,33 @@ export default function ImageGalleryImporter(
     renderBullets () {
       if (this.props.showBullets) {
         return (
-          <BulletsContainer
-            numberOfBullets={this.props.items.length}
-            onTouchTap={this.onBulletChanged}
-            onClick={this.onBulletChanged}
-            currentIndex={this.state.currentIndex}
-          />
+          <div className='image-gallery-container__content__bullets-container'>
+            <BulletsContainer
+              numberOfBullets={this.props.items.length}
+              onTouchTap={this.onBulletChanged}
+              onClick={this.onBulletChanged}
+              currentIndex={this.state.currentIndex}
+            />
+          </div>
         );
       }
     },
 
     renderSlides () {
       return (
-        <SlidesContainer
-          items={this.props.items}
-          currentIndex={this.state.currentIndex}
-          server={this.props.server}
-          lazyLoad={this.props.lazyLoad}
-          onSwipedRight={this.swipeNext}
-          onSwipedLeft={this.swipePrev}
-          showNav={this.props.showNav}
-          showDescription={this.props.showDescription}
-          infinite={this.props.infinite}
-        />
+        <div className='image-gallery-container__content__slides-container'>
+          <SlidesContainer
+            items={this.props.items}
+            currentIndex={this.state.currentIndex}
+            server={this.props.server}
+            lazyLoad={this.props.lazyLoad}
+            onSwipedRight={this.swipeNext}
+            onSwipedLeft={this.swipePrev}
+            showNav={this.props.showNav}
+            showDescription={this.props.showDescription}
+            infinite={this.props.infinite}
+          />
+        </div>
       );
     },
 
@@ -292,7 +302,7 @@ export default function ImageGalleryImporter(
     renderThumbnails () {
       if (this.props.showThumbnails) {
         return (
-          <div className='image-gallery-thumbnails'>
+          <div className='image-gallery-container__content__thumbnails-container'>
             <ThumbnailsContainer
               ref='thumbnails'
               items={this.props.items}
@@ -312,12 +322,12 @@ export default function ImageGalleryImporter(
       return (
         <section
           ref='imageGallery'
-          className='image-gallery'
+          className='image-gallery-container'
         >
           <div
             onMouseOver={this.handleMouseOver}
             onMouseLeave={this.handleMouseLeave}
-            className='image-gallery-content'
+            className='image-gallery-container__content'
           >
             {this.renderSlides()}
             {this.renderBullets()}

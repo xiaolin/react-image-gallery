@@ -26,7 +26,7 @@ export default function ThumbnailsContainerImporter(
     },
 
     renderThumbnails () {
-      return this.props.items.map((item, index) => {
+      return [...this.props.items, ...this.props.items].map((item, index) => {
         return (
           <Thumbnail
             key={index}
@@ -45,7 +45,7 @@ export default function ThumbnailsContainerImporter(
     render () {
       return (
         <div
-          className='image-gallery-thumbnails-container'
+          className='image-gallery-thumbnails'
           style={this.cssPosition()}
         >
           {this.renderThumbnails()}

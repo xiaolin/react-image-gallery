@@ -1,4 +1,5 @@
 import React from 'react';
+import classNames from 'classnames';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 
@@ -20,21 +21,19 @@ export default function SlideImporter (
 
     getInitialState () {
       return {
-        imageCssClass: this.props.server ? 'loaded' : ''
+        imageCssClass: this.props.server ? 'image-gallery-slides__item__image--loaded' : ''
       };
     },
 
     cssClasses () {
-      let classNames = [
-        'image-gallery-slide',
-        this.props.alignment
-      ];
+      return classNames('image-gallery-slides__item', {
+        [`image-gallery-slides__item--${this.props.alignment}`]: this.props.alignment,
+        [`${this.props.item.originalClass}`]: this.props.item.originalClass
+      });
+    },
 
-      if (this.props.item.originalClass) {
-        classNames.push(this.props.item.originalClass);
-      }
-
-      return classNames.join(' ');
+    imageCssClasses () {
+      return ['image-gallery-slides__item__image', this.state.imageCssClass].join(' ');
     },
 
     handleImageLoad (event) {
@@ -43,7 +42,7 @@ export default function SlideImporter (
       // TODO: Check if setState is OK for this usecase. If it is, I think this is
       // more react-way.
       this.setState({
-        imageCssClass: 'loaded'
+        imageCssClass: 'image-gallery-slides__item__image--loaded'
       })
     },
 
@@ -56,6 +55,7 @@ export default function SlideImporter (
     },
 
     render () {
+      console.log(this.cssClasses());
       return (
         <div
           className={this.cssClasses()}
@@ -63,7 +63,7 @@ export default function SlideImporter (
           onTouchTap={this.props.onTouchTap || this.props.onClick}
         >
           <Image
-            className={this.state.imageCssClass}
+            className={this.imageCssClasses()}
             src={this.props.item.original}
             alt={this.props.item.originalAlt}
             handleLoad={this.handleImageLoad}

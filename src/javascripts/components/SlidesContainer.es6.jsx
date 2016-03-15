@@ -64,16 +64,14 @@ export default function SlidesContainerImporter(
           >
             <div className='image-gallery-slides'>
               {this.renderSlides()}
+              {this.renderNavs()}
             </div>
-            {this.renderNavs()}
           </Swipeable>
         );
       } else {
         return (
-          <div>
-            <div className='image-gallery-slides'>
-              {this.renderSlides()}
-            </div>
+          <div className='image-gallery-slides'>
+            {this.renderSlides()}
             {this.renderNavs()}
           </div>
         );

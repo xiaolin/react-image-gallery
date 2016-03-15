@@ -18,7 +18,7 @@ export default React.createClass({
         src: this.props.defaultImage
       });
     }
-  }, 
+  },
 
   render () {
     return (
@@ -28,7 +28,7 @@ export default React.createClass({
         alt={this.props.alt}
         onLoad={this.props.handleLoad}
         onError={this.props.handleLoadError || this.handleLoadError}
-      />     
+      />
     );
   }
 });
