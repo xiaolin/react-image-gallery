@@ -9,16 +9,16 @@ export default React.createClass({
   render () {
     return (
       <div className='image-gallery-index'>
-        <span className='image-gallery-index-current'>
+        <span className='image-gallery-index__current'>
           {this.props.index + 1}
         </span>
-        <span className='image-gallery-index-separator'>
+        <span className='image-gallery-index__separator'>
           {this.props.indexSeparator}
         </span>
-        <span className='image-gallery-index-total'>
+        <span className='image-gallery-index__total'>
           {this.props.total}
         </span>
-      </div>   
+      </div>
     );
   }
 });

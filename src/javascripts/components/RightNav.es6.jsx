@@ -14,7 +14,7 @@ export default React.createClass({
 
   cssClasses () {
     return classNames('image-gallery-right-nav', {
-      'image-gallery-right-nav--active': this.props.active
+      'image-gallery-right-nav--inactive': !this.props.active
     });
   },
 

@@ -21,7 +21,7 @@ gulp.task('server', function () {
 })
 
 gulp.task('sass', function () {
-  gulp.src('./src/stylesheets/ImageGallery.scss')
+  gulp.src('./src/stylesheets/main.scss')
     .pipe(sass())
     .pipe(rename('image-gallery.css'))
     .pipe(gulp.dest('./build/'))

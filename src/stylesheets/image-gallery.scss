@@ -1,0 +1,25 @@
+@import 'mixins';
+@import 'variables';
+
+.image-gallery-container {
+  @include vendor-prefix('user-select', none);
+  &__content {
+    position: relative;
+    &__bullets-container {
+      position: absolute;
+      bottom: 90px;
+      text-align: center;
+      width: 100%;
+      z-index: 2;
+      padding: 0;
+      margin: 0;
+    }
+    &__thumbnails-container {
+      background: $ig-white;
+      padding-top: 10px;
+      overflow: hidden;
+      cursor: pointer;
+      text-align: center;
+    }
+  }
+}

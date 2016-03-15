@@ -1,0 +1,23 @@
+@import 'mixins';
+@import 'variables';
+
+.image-gallery-bullets {
+  &__item {
+    border: 1px solid $ig-white;
+    border-radius: 50%;
+    box-shadow: 0 1px 0 $ig-black;
+    cursor: pointer;
+    display: inline-block;
+    margin: 0 5px;
+    padding: 5px;
+
+    @media (max-width: $ig-screen-sm-min) {
+      margin: 0 3px;
+      padding: 3px;
+    }
+
+    &--active {
+      background: $ig-white;
+    }
+  }
+}

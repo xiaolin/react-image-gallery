@@ -1,0 +1,29 @@
+@import 'mixins';
+@import 'variables';
+
+.image-gallery-thumbnails {
+  white-space: nowrap;
+  transition: all .45s ease-out;
+  &__item {
+    display: inline-block;
+    padding-right: 10px;
+
+    &__image {
+      border: 4px solid transparent;
+      transition: border .3s ease-out;
+      vertical-align: middle;
+      width: 100px;
+      @media (max-width: $ig-screen-sm-min) {
+        border: 3px solid transparent;
+        width: 75px;
+      }
+    }
+
+    &--active &__image {
+      border: 4px solid $ig-blue;
+      @media (max-width: $ig-screen-sm-min) {
+        border: 3px solid $ig-blue;
+      }
+    }
+  }
+}
