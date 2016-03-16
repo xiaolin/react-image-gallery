@@ -55,7 +55,6 @@ export default function SlideImporter (
     },
 
     render () {
-      console.log(this.cssClasses());
       return (
         <div
           className={this.cssClasses()}
