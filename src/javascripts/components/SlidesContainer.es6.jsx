@@ -64,7 +64,9 @@ export default function SlidesContainerImporter(
           >
             <div className='image-gallery-slides'>
               {this.renderSlides()}
-              {this.renderNavs()}
+              <div className='image-gallary-slides__nav-container'>
+                {this.renderNavs()}
+              </div>
             </div>
           </Swipeable>
         );
@@ -72,7 +74,9 @@ export default function SlidesContainerImporter(
         return (
           <div className='image-gallery-slides'>
             {this.renderSlides()}
-            {this.renderNavs()}
+            <div className='image-gallary-slides__nav-container'>
+              {this.renderNavs()}
+            </div>
           </div>
         );
       }
