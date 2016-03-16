@@ -50,34 +50,41 @@ const App = React.createClass({
     const images = [
       {
         original: 'http://lorempixel.com/1000/600/nature/1/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/1/',
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
         description: 'Custom class for slides & thumbnails'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/2/',
+        original: 'http://lorempixel.co/1000/600/nature/2/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/2/',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/3/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/3/'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/4/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/4/'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/5/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/5/'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/6/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/6/'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/7/',
+        defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/7/'
       }
     ]

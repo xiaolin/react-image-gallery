@@ -8,7 +8,7 @@ export default React.createClass({
 
   getInitialState () {
     return {
-      src: this.props.src
+      src: this.props.src || this.props.defaultImage
     };
   },
 
