@@ -24,7 +24,7 @@ export default React.createClass({
     return (
       <img
         className={this.props.className}
-        src={this.props.src}
+        src={this.state.src}
         alt={this.props.alt}
         onLoad={this.props.handleLoad}
         onError={this.props.handleLoadError || this.handleLoadError}

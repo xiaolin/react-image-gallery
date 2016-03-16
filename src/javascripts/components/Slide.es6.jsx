@@ -66,6 +66,7 @@ export default function SlideImporter (
             src={this.props.item.original}
             alt={this.props.item.originalAlt}
             handleLoad={this.handleImageLoad}
+            defaultImage={this.props.item.defaultSrc}
           />
           {this.renderDescription()}
         </div>
