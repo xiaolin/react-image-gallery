@@ -4,7 +4,7 @@ import classNames from 'classnames';
 import PureRenderMixin from 'react-addons-pure-render-mixin';
 import ClickAndTap from './mixins/click-and-tap';
 
-export default function ThumbnsilImporter(
+export default function ThumbnailImporter(
   Image
 ) {
   if (!Image) { throw "You didn't pass required dependencies" }

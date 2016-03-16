@@ -5,7 +5,7 @@ import RightNav from './components/RightNav';
 import Index from './components/Index'
 import SlideDescription from './components/SlideDescription';
 
-import ThumbnsilImporter from './components/Thumbnail';
+import ThumbnailImporter from './components/Thumbnail';
 import ThumbnailsContainerImporter from './components/ThumbnailsContainer';
 import BulletsContainerImporter from './components/BulletsContainer';
 import SlideImporter from './components/Slide';
@@ -35,7 +35,7 @@ export function MainImporter(dependencies = {}) {
   if (dependencies.ThumbnailImporter) {
     Thumbnail = dependencies.ThumbnailImporter(ImageComponent)
   } else {
-    Thumbnail = ThumbnsilImporter(ImageComponent);
+    Thumbnail = ThumbnailImporter(ImageComponent);
   }
 
   if (dependencies.ThumnailsContainer) {
