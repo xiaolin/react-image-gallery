@@ -1,53 +1,16 @@
 import React from 'react'
 import Swipeable from 'react-swipeable'
 
-const ImageGallery = React.createClass({
+export default class ImageGallery extends React.Component {
 
-  displayName: 'ImageGallery',
-
-  propTypes: {
-    items: React.PropTypes.array.isRequired,
-    showThumbnails: React.PropTypes.bool,
-    showBullets: React.PropTypes.bool,
-    showNav: React.PropTypes.bool,
-    showIndex: React.PropTypes.bool,
-    indexSeparator: React.PropTypes.string,
-    autoPlay: React.PropTypes.bool,
-    lazyLoad: React.PropTypes.bool,
-    slideInterval: React.PropTypes.number,
-    onSlide: React.PropTypes.func,
-    onClick: React.PropTypes.func,
-    startIndex: React.PropTypes.number,
-    defaultImage: React.PropTypes.string,
-    disableThumbnailScroll: React.PropTypes.bool,
-    slideOnThumbnailHover: React.PropTypes.bool,
-    server: React.PropTypes.bool
-  },
-
-  getDefaultProps() {
-    return {
-      lazyLoad: true,
-      showThumbnails: true,
-      showNav: true,
-      showBullets: false,
-      showIndex: false,
-      indexSeparator: ' / ',
-      autoPlay: false,
-      disableThumbnailScroll: false,
-      server: false,
-      slideOnThumbnailHover: false,
-      slideInterval: 4000,
-      startIndex: 0
-    }
-  },
-
-  getInitialState() {
-    return {
-      currentIndex: this.props.startIndex,
+  constructor(props) {
+    super(props)
+    this.state = {
+      currentIndex: props.startIndex,
       thumbnailsTranslateX: 0,
       containerWidth: 0
     }
-  },
+  }
 
   componentDidUpdate(prevProps, prevState) {
     if (prevState.containerWidth !== this.state.containerWidth ||
@@ -89,30 +52,29 @@ const ImageGallery = React.createClass({
         }
       }
     }
-
-  },
+  }
 
   componentWillMount() {
     this._thumbnailDelay = 300
     this._ghotClickDelay = 600
     this._preventGhostClick = false
-  },
+  }
 
   componentDidMount() {
     this._handleResize()
     if (this.props.autoPlay) {
       this.play()
     }
-    window.addEventListener('resize', this._handleResize)
-  },
+    window.addEventListener('resize', this._handleResize.bind(this))
+  }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._handleResize)
+    window.removeEventListener('resize', this._handleResize.bind(this))
     if (this._intervalId) {
       window.clearInterval(this._intervalId)
       this._intervalId = null
     }
-  },
+  }
 
   slideToIndex(index, event) {
     let slideCount = this.props.items.length - 1
@@ -131,7 +93,7 @@ const ImageGallery = React.createClass({
         this.play()
       }
     }
-  },
+  }
 
   play() {
     if (this._intervalId) {
@@ -142,14 +104,14 @@ const ImageGallery = React.createClass({
         this.slideToIndex(this.state.currentIndex + 1)
       }
     }, this.props.slideInterval)
-  },
+  }
 
   pause() {
     if (this._intervalId) {
       window.clearInterval(this._intervalId)
       this._intervalId = null
     }
-  },
+  }
 
   _wrapClick(func) {
     if (typeof func === 'function') {
@@ -160,7 +122,7 @@ const ImageGallery = React.createClass({
         func(event)
       }
     }
-  },
+  }
 
   _touchEnd() {
     this._preventGhostClick = true
@@ -168,15 +130,15 @@ const ImageGallery = React.createClass({
       this._preventGhostClick = false
       this._preventGhostClickTimer = null
     }, this._ghotClickDelay)
-  },
+  }
 
   _setThumbnailsTranslateX(x) {
     this.setState({thumbnailsTranslateX: x})
-  },
+  }
 
   _handleResize() {
     this.setState({containerWidth: this._imageGallery.offsetWidth})
-  },
+  }
 
   _getScrollX(indexDifference) {
     if (this.props.disableThumbnailScroll) {
@@ -197,7 +159,7 @@ const ImageGallery = React.createClass({
 
       return indexDifference * perIndexScrollX
     }
-  },
+  }
 
   _handleMouseOverThumbnails(index) {
     if (this.props.slideOnThumbnailHover) {
@@ -211,7 +173,7 @@ const ImageGallery = React.createClass({
         this.pause()
       }, this._thumbnailDelay)
     }
-  },
+  }
 
   _handleMouseLeaveThumbnails() {
     if (this._thumbnailTimer) {
@@ -222,15 +184,15 @@ const ImageGallery = React.createClass({
       }
     }
     this.setState({hovering: false})
-  },
+  }
 
   _handleMouseOver() {
     this.setState({hovering: true})
-  },
+  }
 
   _handleMouseLeave() {
     this.setState({hovering: false})
-  },
+  }
 
   _getAlignmentClassName(index) {
     let currentIndex = this.state.currentIndex
@@ -258,7 +220,7 @@ const ImageGallery = React.createClass({
     }
 
     return alignment
-  },
+  }
 
   _handleImageLoad(event) {
     // slide images have an opacity of 0, onLoad the class 'loaded' is added
@@ -266,13 +228,17 @@ const ImageGallery = React.createClass({
     if (event.target.className.indexOf('loaded') === -1) {
       event.target.className += ' loaded'
     }
-  },
+  }
 
   _handleImageError(event) {
     if (this.props.defaultImage && event.target.src.indexOf(this.props.defaultImage) === -1) {
       event.target.src = this.props.defaultImage
     }
-  },
+  }
+
+  _hasMinSlidesToShowNav() {
+    return this.props.items.length >= 2
+  }
 
   render() {
     let currentIndex = this.state.currentIndex
@@ -283,6 +249,8 @@ const ImageGallery = React.createClass({
       msTransform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)',
       transform: 'translate3d(' + this.state.thumbnailsTranslateX + 'px, 0, 0)'
     }
+    let swipePrev = this.slideToIndex.bind(this, currentIndex - 1)
+    let swipeNext = this.slideToIndex.bind(this, currentIndex + 1)
 
     let slides = []
     let thumbnails = []
@@ -358,17 +326,14 @@ const ImageGallery = React.createClass({
       }
     })
 
-    let swipePrev = this.slideToIndex.bind(this, currentIndex - 1)
-    let swipeNext = this.slideToIndex.bind(this, currentIndex + 1)
-    let itemsTotal = this.props.items.length
     return (
-      <section ref={(i) => this._imageGallery = i} className='image-gallery'>
+      <section ref={i => this._imageGallery = i} className='image-gallery'>
         <div
-          onMouseOver={this._handleMouseOver}
-          onMouseLeave={this._handleMouseLeave}
+          onMouseOver={this._handleMouseOver.bind(this)}
+          onMouseLeave={this._handleMouseLeave.bind(this)}
           className='image-gallery-content'>
           {
-            itemsTotal >= 2 ?
+            this._hasMinSlidesToShowNav() ?
               [
                 this.props.showNav &&
                   [
@@ -417,7 +382,7 @@ const ImageGallery = React.createClass({
                   {this.props.indexSeparator}
                 </span>
                 <span className='image-gallery-index-total'>
-                  {itemsTotal}
+                  {this.props.items.length}
                 </span>
               </div>
           }
@@ -427,7 +392,7 @@ const ImageGallery = React.createClass({
           this.props.showThumbnails &&
             <div className='image-gallery-thumbnails'>
               <div
-                ref={(t) => this._thumbnails = t}
+                ref={t => this._thumbnails = t}
                 className='image-gallery-thumbnails-container'
                 style={thumbnailStyle}>
                 {thumbnails}
@@ -436,9 +401,40 @@ const ImageGallery = React.createClass({
         }
       </section>
     )
-
   }
 
-})
+}
 
-export default ImageGallery
+ImageGallery.propTypes = {
+  items: React.PropTypes.array.isRequired,
+  showThumbnails: React.PropTypes.bool,
+  showBullets: React.PropTypes.bool,
+  showNav: React.PropTypes.bool,
+  showIndex: React.PropTypes.bool,
+  indexSeparator: React.PropTypes.string,
+  autoPlay: React.PropTypes.bool,
+  lazyLoad: React.PropTypes.bool,
+  slideInterval: React.PropTypes.number,
+  onSlide: React.PropTypes.func,
+  onClick: React.PropTypes.func,
+  startIndex: React.PropTypes.number,
+  defaultImage: React.PropTypes.string,
+  disableThumbnailScroll: React.PropTypes.bool,
+  slideOnThumbnailHover: React.PropTypes.bool,
+  server: React.PropTypes.bool
+}
+
+ImageGallery.defaultProps = {
+  lazyLoad: true,
+  showThumbnails: true,
+  showNav: true,
+  showBullets: false,
+  showIndex: false,
+  indexSeparator: ' / ',
+  autoPlay: false,
+  disableThumbnailScroll: false,
+  server: false,
+  slideOnThumbnailHover: false,
+  slideInterval: 4000,
+  startIndex: 0
+}
