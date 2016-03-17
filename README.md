@@ -17,30 +17,9 @@ Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/re
 
 ## Getting started
 
-```sh
+```
 npm install react-image-gallery
 ```
-
-
-To build the example locally, run:
-
-```
-npm install
-```
-```
-gulp dev
-```
-
-You might need to run the following command if you do not have gulp installed globally.
-
-```
-npm install --global gulp
-```
-
-Then open [`localhost:8001`](http://localhost:8001) in a browser.
-
-
-## Use
 
 ### SASS
 
@@ -51,10 +30,10 @@ Then open [`localhost:8001`](http://localhost:8001) in a browser.
 ### CSS
 
 ```
-<link rel="stylesheet" href="/image-gallery.css"/>
+build/image-gallery.css
 ```
 
-### JS
+### JSX
 
 ```js
 var ImageGallery = require('react-image-gallery');
@@ -128,6 +107,17 @@ render: function() {
 # Notes
 
 * Feel free to contribute and or provide feedback!
+
+# To build the example locally
+
+```
+git clone https://github.com/xiaolin/react-image-gallery.git
+npm install
+npm start
+```
+
+Then open [`localhost:8001`](http://localhost:8001) in a browser.
+
 
 # License
 
