@@ -2,7 +2,6 @@ React Image Gallery
 ===
 
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
---
 ![](https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/react-image-gallery.png)
 
 React image gallery is a React component for building image carousels
