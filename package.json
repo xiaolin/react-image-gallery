@@ -40,11 +40,12 @@
     "gulp-livereload": "^3.8.0",
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.1.1",
-    "gulp-streamify": "^1.0.0",
+    "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.2.0",
     "react": "^0.14.0",
     "react-addons-linked-state-mixin": "^0.14.0",
     "react-dom": "^0.14.0",
+    "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.4.0"
   },
