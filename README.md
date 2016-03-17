@@ -1,16 +1,26 @@
-# react-image-gallery
+React Image Gallery
+===
 
-Responsive image gallery, slideshow, carousel
+[![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
+--
+![](https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/react-image-gallery.png)
 
-## Install
+React image gallery is a React component for building image carousels
+
+Features of `react-image-gallery`
+* Responsive design
+* Thumbnail navigation
+* Mobile friendly
+
+## Demo & Examples
+Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
+
+## Getting started
 
 ```sh
 npm install react-image-gallery
 ```
 
-## Demo & Examples
-
-Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
 To build the example locally, run:
 
