@@ -2,7 +2,7 @@
   "name": "react-image-gallery",
   "version": "0.5.10",
   "description": "Image gallery component for React.JS",
-  "main": "./build/image-gallery",
+  "main": "./build/main",
   "scripts": {
     "start": "gulp dev"
   },

@@ -73,7 +73,7 @@ export default function ThumbnailsContainerImporter(
           if (oldIndex < newIndex) {
             positionX = this.state.positionX - scrollX;
           } else if (oldIndex > newIndex) {
-            positionX = this.state.thumbnailsTranslateX + scrollX;
+            positionX = this.state.positionX + scrollX;
           }
         }
       }
