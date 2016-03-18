@@ -61,7 +61,6 @@ export default function ImageGalleryImporter(
     getInitialState () {
       return {
         currentIndex: this.props.startIndex,
-        thumbnailsTranslateX: 0,
         containerWidth: 0
       }
     },
@@ -87,47 +86,10 @@ export default function ImageGalleryImporter(
     },
 
     componentDidUpdate (prevProps, prevState) {
-      if (prevState.containerWidth !== this.state.containerWidth ||
-          prevProps.showThumbnails !== this.props.showThumbnails) {
-
-        // adjust thumbnail container when window width is adjusted
-        // when the container resizes, thumbnailsTranslateX
-        // should always be negative (moving right),
-        // if container fits all thumbnails its set to 0
-
-        this._setThumbnailsTranslateX(
-          -this._getScrollX(this.state.currentIndex > 0 ? 1 : 0) *
-            this.state.currentIndex
-        );
-
-      }
-
       if (prevState.currentIndex !== this.state.currentIndex) {
-
         // call back function if provided
         if (this.props.onSlide) {
           this.props.onSlide(this.state.currentIndex);
-        }
-
-        // calculates thumbnail container position
-        if (this.state.currentIndex === 0) {
-          this._setThumbnailsTranslateX(0);
-        } else {
-          let indexDifference = Math.abs(
-            prevState.currentIndex - this.state.currentIndex
-          );
-          let scrollX = this._getScrollX(indexDifference);
-          if (scrollX > 0) {
-            if (prevState.currentIndex < this.state.currentIndex) {
-              this._setThumbnailsTranslateX(
-                this.state.thumbnailsTranslateX - scrollX
-              );
-            } else if (prevState.currentIndex > this.state.currentIndex) {
-              this._setThumbnailsTranslateX(
-                this.state.thumbnailsTranslateX + scrollX
-              );
-            }
-          }
         }
       }
     },
@@ -228,32 +190,6 @@ export default function ImageGalleryImporter(
       this.setState({hovering: false});
     },
 
-    _getScrollX (indexDifference) {
-      let thumbnails = ReactDOM.findDOMNode(this.refs.thumbnails);
-      if (this.props.disableThumbnailScroll) {
-        return 0;
-      }
-      if (thumbnails) {
-        if (thumbnails.scrollWidth <= this.state.containerWidth) {
-          return 0;
-        }
-
-        let totalThumbnails = thumbnails.children.length;
-
-        // total scroll-x required to see the last thumbnail
-        let totalScrollX = thumbnails.scrollWidth - this.state.containerWidth;
-
-        // scroll-x required per index change
-        let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
-
-        return indexDifference * perIndexScrollX;
-      }
-    },
-
-    _setThumbnailsTranslateX (x) {
-      this.setState({thumbnailsTranslateX: x});
-    },
-
     renderBullets () {
       if (this.props.showBullets) {
         return (
@@ -304,14 +240,12 @@ export default function ImageGalleryImporter(
         return (
           <div className='image-gallery-container__content__thumbnails-container'>
             <ThumbnailsContainer
-              ref='thumbnails'
               items={this.props.items}
               currentIndex={this.state.currentIndex}
               mouseOver={this.handleMouseOverThumbnails}
               mouseLeave={this.handleMouseLeaveThumbnails}
               onTouchTap={this.onBulletChanged}
               onClick={this.onBulletChanged}
-              positionX={this.state.thumbnailsTranslateX}
             />
           </div>
         );

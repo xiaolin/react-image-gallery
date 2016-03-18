@@ -86,6 +86,47 @@ const App = React.createClass({
         original: 'http://lorempixel.com/1000/600/nature/7/',
         defaultSrc: 'http://placehold.it/1000x600',
         thumbnail: 'http://lorempixel.com/250/150/nature/7/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/7/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/nature/7/'
+      },
+      {
+        original: 'http://lorempixel.co/1000/600/nature/8/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/nature/8/',
+        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/9/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/nature/9/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/nature/10/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/nature/10/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/sports/10/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/sports/10/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/sports/9/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/sports/9/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/sports/8/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/sports/8/'
+      },
+      {
+        original: 'http://lorempixel.com/1000/600/sports/7/',
+        defaultSrc: 'http://placehold.it/1000x600',
+        thumbnail: 'http://lorempixel.com/250/150/sports/7/'
       }
     ]
 

@@ -35,7 +35,7 @@ gulp.task('scripts', function() {
   }))
     .bundle()
     .pipe(source('example.js'))
-    .pipe(streamify(uglify()))
+    //.pipe(streamify(uglify()))
     .pipe(gulp.dest('./example/'))
     .pipe(livereload())
 })
