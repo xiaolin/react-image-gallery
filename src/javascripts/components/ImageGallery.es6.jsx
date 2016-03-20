@@ -213,8 +213,8 @@ export default function ImageGalleryImporter(
             currentIndex={this.state.currentIndex}
             server={this.props.server}
             lazyLoad={this.props.lazyLoad}
-            onSwipedRight={this.swipeNext}
-            onSwipedLeft={this.swipePrev}
+            onSwipedRight={this.swipePrev}
+            onSwipedLeft={this.swipeNext}
             showNav={this.props.showNav}
             showDescription={this.props.showDescription}
             infinite={this.props.infinite}
