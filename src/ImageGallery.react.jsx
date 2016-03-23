@@ -267,7 +267,7 @@ export default class ImageGallery extends React.Component {
           className={'image-gallery-slide' + alignment + originalClass}
           onClick={this._wrapClick(this.props.onClick)}
           onTouchStart={this.props.onClick}
-          onTouchEnd={this._touchEnd} >
+          onTouchEnd={this._touchEnd.bind(this)} >
             <img
               className={this.props.server ? 'loaded' : null}
               src={item.original}
@@ -299,7 +299,7 @@ export default class ImageGallery extends React.Component {
             }
 
             onTouchStart={this.slideToIndex.bind(this, index)}
-            onTouchEnd={this._touchEnd}
+            onTouchEnd={this._touchEnd.bind(this)}
             onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
 
             <img
@@ -319,7 +319,7 @@ export default class ImageGallery extends React.Component {
                 currentIndex === index ? 'active' : '')}
 
             onTouchStart={this.slideToIndex.bind(this, index)}
-            onTouchEnd={this._touchEnd}
+            onTouchEnd={this._touchEnd.bind(this)}
             onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
           </li>
         )
@@ -341,13 +341,13 @@ export default class ImageGallery extends React.Component {
                       key='leftNav'
                       className='image-gallery-left-nav'
                       onTouchStart={swipePrev}
-                      onTouchEnd={this._touchEnd}
+                      onTouchEnd={this._touchEnd.bind(this)}
                       onClick={this._wrapClick(swipePrev)}/>,
                     <a
                       key='rightNav'
                       className='image-gallery-right-nav'
                       onTouchStart={swipeNext}
-                      onTouchEnd={this._touchEnd}
+                      onTouchEnd={this._touchEnd.bind(this)}
                       onClick={this._wrapClick(swipeNext)}/>
                   ],
                 <Swipeable
