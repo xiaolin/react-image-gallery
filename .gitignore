@@ -4,6 +4,10 @@ npm-debug.log
 
 build/
 example/example.js
+<<<<<<< HEAD
 
 *.swp
 *.swo
+=======
+example/example.js.map
+>>>>>>> master
