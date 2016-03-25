@@ -2,7 +2,6 @@ import React from 'react';
 import classNames from 'classnames';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ClickAndTap from './mixins/click-and-tap';
 
 export default function ThumbnailImporter(
   Image
@@ -13,7 +12,6 @@ export default function ThumbnailImporter(
     displayName: 'Thumbnail',
 
     mixins: [
-      ClickAndTap,
       PureRenderMixin
     ],
 
@@ -23,6 +21,13 @@ export default function ThumbnailImporter(
 
     mouseLeave (e) {
       this.props.mouseLeave(this.props.item, this.props.index);
+    },
+
+    onTouchTap (e) {
+      e.preventDefault();
+      if (this.props.onClick) {
+        this.props.onClick(this.props.item, this.props.index);
+      }
     },
 
     cssClasses () {
@@ -38,7 +43,7 @@ export default function ThumbnailImporter(
           onMouseLeave={this.mouseLeave}
           className={this.cssClasses()}
           onTouchTap={this.onTouchTap}
-          onClick={this.onClick}>
+        >
 
           <Image
             className='image-gallery-thumbnails__item__image'

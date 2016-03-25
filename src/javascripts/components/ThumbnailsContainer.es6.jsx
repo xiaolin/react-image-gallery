@@ -114,7 +114,6 @@ export default function ThumbnailsContainerImporter(
             mouseOver={this.props.mouseOver}
             mouseLeave={this.props.mouseLeave}
             onClick={this.props.onClick}
-            onTouchTap={this.props.onTouchTap}
           />
         )
       });

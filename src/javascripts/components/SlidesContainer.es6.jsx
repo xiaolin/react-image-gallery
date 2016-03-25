@@ -22,14 +22,12 @@ export default function SlidesContainerImporter(
         return [
           <LeftNav
             key='left-nav'
-            onTouchTap={this.props.onSwipedLeft}
-            onClick={this.props.onSwipedLeft}
+            onClick={this.props.onSwipedRight}
             active={this.props.infinite || this.props.currentIndex > 0}
           />,
           <RightNav
             key='right-nav'
-            onTouchTap={this.props.onSwipedRight}
-            onClick={this.props.onSwipedRight}
+            onClick={this.props.onSwipedLeft}
             active={this.props.infinite || this.props.currentIndex < this.props.items.length - 1}
           />
         ];

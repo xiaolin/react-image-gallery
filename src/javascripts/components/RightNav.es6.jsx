@@ -2,15 +2,18 @@ import React from 'react';
 import classNames from 'classnames';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ClickAndTap from './mixins/click-and-tap';
 
 export default React.createClass({
   displayName: 'RightNav',
 
   mixins: [
-    ClickAndTap,
     PureRenderMixin
   ],
+
+  onTouchTap (e) {
+    e.preventDefault();
+    this.props.onClick();
+  },
 
   cssClasses () {
     return classNames('image-gallery-right-nav', {
@@ -23,7 +26,6 @@ export default React.createClass({
       <a
         className={this.cssClasses()}
         onTouchTap={this.onTouchTap}
-        onClick={this.onClick}
       />
     );
   }

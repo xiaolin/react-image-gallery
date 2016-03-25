@@ -58,8 +58,6 @@ export default function SlideImporter (
       return (
         <div
           className={this.cssClasses()}
-          onClick={this.props.onClick}
-          onTouchTap={this.props.onTouchTap || this.props.onClick}
         >
           <Image
             className={this.imageCssClasses()}

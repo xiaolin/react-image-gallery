@@ -19,7 +19,6 @@ export default function BulletsContainerImporter(
             key={i}
             index={i}
             active={this.props.currentIndex == i}
-            onTouchTap={this.props.onTouchTap}
             onClick={this.props.onClick}
           />
         );

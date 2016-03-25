@@ -4,6 +4,10 @@ import LinkedStateMixin from 'react-addons-linked-state-mixin'
 
 import * as ImageGalleryImporter from '../src/javascripts/main'
 
+import injectTapEvent from 'react-tap-event-plugin';
+
+injectTapEvent();
+
 let ImageGallery = ImageGalleryImporter.MainImporter();
 
 const App = React.createClass({
@@ -49,84 +53,84 @@ const App = React.createClass({
   render() {
     const images = [
       {
-        original: 'http://lorempixel.com/1000/600/nature/1/',
+        original: 'http://placehold.it/1000x600?text=1',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+        thumbnail: 'http://placehold.it/250x150?text=1',
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
         description: 'Custom class for slides & thumbnails'
       },
       {
-        original: 'http://lorempixel.co/1000/600/nature/2/',
+        original: 'http://lorempixel.co/1000/600/nature/2',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/2/',
+        thumbnail: 'http://placehold.it/250x150?text=2',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/3/',
+        original: 'http://placehold.it/1000x600?text=3',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
+        thumbnail: 'http://placehold.it/250x150?text=3'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/4/',
+        original: 'http://placehold.it/1000x600?text=4',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/4/'
+        thumbnail: 'http://placehold.it/250x150?text=4'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/5/',
+        original: 'http://placehold.it/1000x600?text=5',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/5/'
+        thumbnail: 'http://placehold.it/250x150?text=5'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/6/',
+        original: 'http://placehold.it/1000x600?text=6',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/6/'
+        thumbnail: 'http://placehold.it/250x150?text=6'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/7/',
+        original: 'http://placehold.it/1000x600?text=7',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/7/'
+        thumbnail: 'http://placehold.it/250x150?text=7'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/7/',
+        original: 'http://placehold.it/1000x600?text=7',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/7/'
+        thumbnail: 'http://placehold.it/250x150?text=7'
       },
       {
-        original: 'http://lorempixel.co/1000/600/nature/8/',
+        original: 'http://lorempixel.co/1000/600/nature/9',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/8/',
+        thumbnail: 'http://placehold.it/250x150?text=9',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/9/',
+        original: 'http://placehold.it/1000x600?text=10',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/9/'
+        thumbnail: 'http://placehold.it/250x150?text=10'
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/10/',
+        original: 'http://placehold.it/1000x600?text=11',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/nature/10/'
+        thumbnail: 'http://placehold.it/250x150?text=11'
       },
       {
-        original: 'http://lorempixel.com/1000/600/sports/10/',
+        original: 'http://placehold.it/1000x600?text=11',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/sports/10/'
+        thumbnail: 'http://placehold.it/250x150?text=11'
       },
       {
-        original: 'http://lorempixel.com/1000/600/sports/9/',
+        original: 'http://placehold.it/1000x600?text=12',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/sports/9/'
+        thumbnail: 'http://placehold.it/250x150?text=12'
       },
       {
-        original: 'http://lorempixel.com/1000/600/sports/8/',
+        original: 'http://placehold.it/1000x600?text=13',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/sports/8/'
+        thumbnail: 'http://placehold.it/250x150?text=13'
       },
       {
-        original: 'http://lorempixel.com/1000/600/sports/7/',
+        original: 'http://placehold.it/1000x600?text=14',
         defaultSrc: 'http://placehold.it/1000x600',
-        thumbnail: 'http://lorempixel.com/250/150/sports/7/'
+        thumbnail: 'http://placehold.it/250x150?text=14'
       }
     ]
 

@@ -120,8 +120,12 @@ export default function ImageGalleryImporter(
       this.slideToIndex(this.state.currentIndex - 1, true);
     },
 
-    onBulletChanged (bullet, bulletIndex) {
+    onBulletChanged (bulletIndex) {
       this.slideToIndex(bulletIndex, true);
+    },
+
+    onThumbnailChanged (thumbnail, index) {
+      this.slideToIndex(index, true);
     },
 
     // now, event says if the call is a user one
@@ -196,7 +200,6 @@ export default function ImageGalleryImporter(
           <div className='image-gallery-container__content__bullets-container'>
             <BulletsContainer
               numberOfBullets={this.props.items.length}
-              onTouchTap={this.onBulletChanged}
               onClick={this.onBulletChanged}
               currentIndex={this.state.currentIndex}
             />
@@ -213,8 +216,8 @@ export default function ImageGalleryImporter(
             currentIndex={this.state.currentIndex}
             server={this.props.server}
             lazyLoad={this.props.lazyLoad}
-            onSwipedRight={this.swipeNext}
-            onSwipedLeft={this.swipePrev}
+            onSwipedRight={this.swipePrev}
+            onSwipedLeft={this.swipeNext}
             showNav={this.props.showNav}
             showDescription={this.props.showDescription}
             infinite={this.props.infinite}
@@ -244,8 +247,7 @@ export default function ImageGalleryImporter(
               currentIndex={this.state.currentIndex}
               mouseOver={this.handleMouseOverThumbnails}
               mouseLeave={this.handleMouseLeaveThumbnails}
-              onTouchTap={this.onBulletChanged}
-              onClick={this.onBulletChanged}
+              onClick={this.onThumbnailChanged}
             />
           </div>
         );

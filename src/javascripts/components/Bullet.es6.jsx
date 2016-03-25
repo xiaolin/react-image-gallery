@@ -2,20 +2,19 @@ import React from 'react';
 import classNames from 'classnames';
 
 import PureRenderMixin from 'react-addons-pure-render-mixin';
-import ClickAndTap from './mixins/click-and-tap';
 
 export default React.createClass({
   displayName: 'Bullet',
 
   mixins: [
-    ClickAndTap,
     PureRenderMixin
   ],
 
-  getDefaultProps () {
-    return {
-      item: this
-    };
+  onTouchTap (e) {
+    e.preventDefault();
+    if (this.props.onClick) {
+      this.props.onClick(this.props.index);
+    }
   },
 
   cssClasses () {
@@ -29,7 +28,7 @@ export default React.createClass({
        <li
         className={this.cssClasses()}
         onTouchTap={this.onTouchTap}
-        onClick={this.onClick}>
+      >
       </li>
     );
   }
