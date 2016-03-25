@@ -33,7 +33,6 @@ export default function ImageGalleryImporter(
       onSlide: React.PropTypes.func,
       onClick: React.PropTypes.func,
       startIndex: React.PropTypes.number,
-      defaultImage: React.PropTypes.string,
       disableThumbnailScroll: React.PropTypes.bool,
       slideOnThumbnailHover: React.PropTypes.bool,
       server: React.PropTypes.bool

@@ -49,6 +49,7 @@ export default function ThumbnailImporter(
             className='image-gallery-thumbnails__item__image'
             src={this.props.item.thumbnail}
             alt={this.props.item.thumbnailAlt}
+            defaultImage={this.props.item.thumbnailDefault}
           />
         </a>
       );

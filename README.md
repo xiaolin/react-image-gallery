@@ -44,6 +44,8 @@ var images = [
   {
     original: 'http://lorempixel.com/1000/600/nature/1/',
     thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+    originalDefault: 'default-image', // default is used when loading of original file failed
+    thumbnailDefault: 'default-thumbnail',
     originalClass: 'featured-slide',
     thumbnailClass: 'featured-thumb',
     originalAlt: 'original-alt',
@@ -116,8 +118,6 @@ This allows passing a dependency to your component and you can use, in that case
   * disables the thumbnail container from adjusting
 * `slideOnThumbnailHover`: Boolean, default `false`
   * slides to the currently hovered thumbnail
-* `defaultImage`: String, default `undefined`
-  * an image src pointing to your default image if an image fails to load
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`
