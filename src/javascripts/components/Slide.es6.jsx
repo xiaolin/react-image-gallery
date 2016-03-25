@@ -39,8 +39,6 @@ export default function SlideImporter (
     handleImageLoad (event) {
       // slide images have an opacity of 0, onLoad the class 'loaded' is added
       // so that it transitions smoothly when navigating to non adjacent slides
-      // TODO: Check if setState is OK for this usecase. If it is, I think this is
-      // more react-way.
       this.setState({
         imageCssClass: 'image-gallery-slides__item__image--loaded'
       })
