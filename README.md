@@ -78,7 +78,7 @@ render: function() {
 
 ```
 
-If you want to override some component pass it to `MainImporter`, like this:
+If you want to override some component pass it to the `MainImporter`, like this:
 
 ```javascript
 var NewSlideDescription = require('mycomponent');
@@ -87,7 +87,7 @@ var ImageGallery = require('react-image-gallery').MainImporter({
 });
 ```
 
-There is a catch, however. If overwritten component contains some dependency, like `Thumbnail` component needs `Image` component, you need exporting a function wrapping the component:
+There is a catch, however. If a overwritten component contains some dependency, like `Thumbnail` component needs `Image` component, you need to export a function wrapping the component:
 
 ```javascript
 var ThumbnailImporter = function(Image) {
@@ -101,7 +101,7 @@ var ImageGallery = require('react-image-gallery').MainImporter({
 });
 ```
 
-This allows passing a dependency to your component and you can use, in that case, a `Image` component with no need of providing one by yourself.
+This allows passing a dependency to your component and you can use, in that case, the `Image` component with no need of providing one by yourself.
 
 # Props
 
