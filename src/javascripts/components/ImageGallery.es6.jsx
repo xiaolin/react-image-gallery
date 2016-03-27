@@ -1,8 +1,6 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import Utils from '../utils';
-
 export default function ImageGalleryImporter(
   SlidesContainer,
   ThumbnailsContainer,
