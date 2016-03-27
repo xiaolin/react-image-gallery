@@ -22,9 +22,8 @@ gulp.task('server', function () {
 })
 
 gulp.task('sass', function () {
-  gulp.src('./src/ImageGallery.scss')
+  gulp.src('./src/stylesheets/main.scss')
     .pipe(sass())
-    .pipe(rename('image-gallery.css'))
     .pipe(gulp.dest('./build/'))
     .pipe(livereload())
 })
@@ -32,7 +31,7 @@ gulp.task('sass', function () {
 gulp.task('scripts', function() {
   watchify(browserify({
     entries: ['./example/app.js'],
-    extensions: ['.jsx'],
+    extensions: ['.js', '.es6', '.es6.jsx'],
     transform: [babelify]
   }))
     .bundle()
@@ -46,8 +45,11 @@ gulp.task('scripts', function() {
 })
 
 gulp.task('source-js', function () {
-  return gulp.src('./src/ImageGallery.react.jsx')
-    .pipe(concat('image-gallery.js'))
+  return gulp.src('./src/javascripts/**')
+    .pipe(rename(function(fileObj) {
+      fileObj.basename = fileObj.basename.replace('.es6','');
+      return fileObj;
+    }))
     .pipe(babel())
     .pipe(gulp.dest('./build'))
 })
@@ -58,5 +60,5 @@ gulp.task('watch', function() {
   gulp.watch(['src/*.jsx', 'example/app.js'], ['scripts'])
 })
 
-gulp.task('dev', ['watch', 'scripts', 'sass', 'server'])
 gulp.task('build', ['source-js', 'sass'])
+gulp.task('dev', ['watch', 'build', 'scripts', 'server'])

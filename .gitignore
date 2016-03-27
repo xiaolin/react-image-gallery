@@ -5,3 +5,6 @@ npm-debug.log
 build/
 example/example.js
 example/example.js.map
+
+*.swp
+*.swo

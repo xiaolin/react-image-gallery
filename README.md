@@ -21,27 +21,31 @@ Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/re
 npm install react-image-gallery
 ```
 
+Install [react-tab-event-plugin](https://github.com/zilverline/react-tap-event-plugin) and follow the plugin's instruction how to inject the event mechanism.
+
 ### SASS
 
 ```
-@import "../node_modules/react-image-gallery/src/ImageGallery";
+@import "../node_modules/react-image-gallery/src/stylesheets/main";
 ```
 
 ### CSS
 
 ```
-build/image-gallery.css
+build/main.css
 ```
 
 ### JSX
 
 ```js
-var ImageGallery = require('react-image-gallery');
+var ImageGallery = require('react-image-gallery').MainImporter();
 
 var images = [
   {
     original: 'http://lorempixel.com/1000/600/nature/1/',
     thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+    originalDefault: 'default-image', // default is used when loading of original file failed
+    thumbnailDefault: 'default-thumbnail',
     originalClass: 'featured-slide',
     thumbnailClass: 'featured-thumb',
     originalAlt: 'original-alt',
@@ -74,6 +78,31 @@ render: function() {
 
 ```
 
+If you want to override some component pass it to the `MainImporter`, like this:
+
+```javascript
+var NewSlideDescription = require('mycomponent');
+var ImageGallery = require('react-image-gallery').MainImporter({
+  SlideDescription: NewSlideDescription
+});
+```
+
+There is a catch, however. If a overwritten component contains some dependency, like `Thumbnail` component needs `Image` component, you need to export a function wrapping the component:
+
+```javascript
+var ThumbnailImporter = function(Image) {
+  return React.creatClass({
+    //...
+  });
+}
+
+var ImageGallery = require('react-image-gallery').MainImporter({
+  ThumbnailImporter: ThumbnailImporter
+});
+```
+
+This allows passing a dependency to your component and you can use, in that case, the `Image` component with no need of providing one by yourself.
+
 # Props
 
 * `items`: (required) Array of objects, see example above,
@@ -89,13 +118,10 @@ render: function() {
   * disables the thumbnail container from adjusting
 * `slideOnThumbnailHover`: Boolean, default `false`
   * slides to the currently hovered thumbnail
-* `defaultImage`: String, default `undefined`
-  * an image src pointing to your default image if an image fails to load
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideInterval`: Integer, default `4000`
 * `startIndex`: Integer, default `0`
 * `onSlide`: Function, `callback(index)`
-* `onClick`: Function, `callback(event)`
 
 
 # functions
@@ -113,6 +139,7 @@ render: function() {
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
 npm install
+npm install react-tab-event-plugin
 npm start
 ```
 

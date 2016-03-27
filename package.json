@@ -2,7 +2,7 @@
   "name": "react-image-gallery",
   "version": "0.5.12",
   "description": "Image gallery component for React.JS",
-  "main": "./build/image-gallery",
+  "main": "./build/main",
   "scripts": {
     "start": "gulp dev"
   },
@@ -42,14 +42,16 @@
     "gulp-sass": "^2.1.1",
     "gulp-sourcemaps": "^1.6.0",
     "gulp-uglify": "^1.2.0",
-    "react": "^0.14.0",
-    "react-addons-linked-state-mixin": "^0.14.0",
-    "react-dom": "^0.14.0",
+    "react": "^0.14.7",
+    "react-addons-linked-state-mixin": "^0.14.7",
+    "react-dom": "^0.14.7",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",
     "watchify": "^2.4.0"
   },
   "dependencies": {
+    "classnames": "^2.2.3",
+    "react-addons-pure-render-mixin": "^0.14.7",
     "react-swipeable": "^3.0.2"
   }
 }
