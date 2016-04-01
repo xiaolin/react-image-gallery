@@ -10,6 +10,7 @@ export default class ImageGallery extends React.Component {
       thumbnailsTranslateX: 0,
       containerWidth: 0
     }
+    this._handleResize = this._handleResize.bind(this)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -65,11 +66,11 @@ export default class ImageGallery extends React.Component {
     if (this.props.autoPlay) {
       this.play()
     }
-    window.addEventListener('resize', this._handleResize.bind(this))
+    window.addEventListener('resize', this._handleResize)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('resize', this._handleResize.bind(this))
+    window.removeEventListener('resize', this._handleResize)
     if (this._intervalId) {
       window.clearInterval(this._intervalId)
       this._intervalId = null
