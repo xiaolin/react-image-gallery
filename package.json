@@ -1,7 +1,7 @@
 {
   "name": "react-image-gallery",
-  "version": "0.5.12",
-  "description": "Image gallery component for React.JS",
+  "version": "0.5.13",
+  "description": "Image gallery, Carousel, Slide Show component for React",
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev"
