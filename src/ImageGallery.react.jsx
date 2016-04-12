@@ -138,7 +138,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleResize() {
-    this.setState({containerWidth: this._imageGallery.offsetWidth})
+    if (this._imageGallery !== null) {
+      this.setState({containerWidth: this._imageGallery.offsetWidth})
+    }
   }
 
   _getScrollX(indexDifference) {
@@ -274,7 +276,7 @@ export default class ImageGallery extends React.Component {
               src={item.original}
               alt={item.originalAlt}
               onLoad={this._handleImageLoad}
-              onError={this._handleImageError}/>
+              onError={this._handleImageError.bind(this)}/>
             {item.description}
         </div>
       )
@@ -306,7 +308,7 @@ export default class ImageGallery extends React.Component {
             <img
               src={item.thumbnail}
               alt={item.thumbnailAlt}
-              onError={this._handleImageError}/>
+              onError={this._handleImageError.bind(this)}/>
           </a>
         )
       }
