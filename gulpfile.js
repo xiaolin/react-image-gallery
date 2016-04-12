@@ -1,4 +1,3 @@
-var babelify = require('babelify')
 var babel = require('gulp-babel')
 var browserify = require('browserify')
 var concat = require('gulp-concat')
@@ -7,14 +6,13 @@ var gulp = require('gulp')
 var livereload = require('gulp-livereload')
 var rename = require('gulp-rename')
 var sass = require('gulp-sass')
-var sourcemaps = require('gulp-sourcemaps')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
-var uglify = require('gulp-uglify')
 var watchify = require('watchify')
 
 gulp.task('server', function () {
   connect.server({
+    host: '0.0.0.0',
     root: ['example', 'build'],
     port: 8001,
     livereload: true
@@ -22,7 +20,7 @@ gulp.task('server', function () {
 })
 
 gulp.task('sass', function () {
-  gulp.src('./src/ImageGallery.scss')
+  gulp.src('./src/image-gallery.scss')
     .pipe(sass())
     .pipe(rename('image-gallery.css'))
     .pipe(gulp.dest('./build/'))
@@ -31,24 +29,24 @@ gulp.task('sass', function () {
 
 gulp.task('scripts', function() {
   watchify(browserify({
-    entries: ['./example/app.js'],
+    entries: './example/app.js',
     extensions: ['.jsx'],
-    transform: [babelify]
-  }))
+    debug: true
+  }).transform('babelify', {presets: ['es2015', 'react']}))
     .bundle()
     .pipe(source('example.js'))
     .pipe(buffer())
-    .pipe(sourcemaps.init({loadMaps: true}))
-    .pipe(uglify())
-    .pipe(sourcemaps.write('.'))
     .pipe(gulp.dest('./example/'))
     .pipe(livereload())
 })
 
 gulp.task('source-js', function () {
-  return gulp.src('./src/ImageGallery.react.jsx')
+  return gulp.src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
-    .pipe(babel())
+    .pipe(babel({
+      plugins: ['transform-runtime'],
+      presets: ['es2015', 'react']
+    }))
     .pipe(gulp.dest('./build'))
 })
 
