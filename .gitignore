@@ -3,5 +3,6 @@ npm-debug.log
 .DS_Store
 
 build/
+example/example.gif
 example/example.js
 example/example.js.map
