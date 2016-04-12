@@ -273,6 +273,7 @@ export default class ImageGallery extends React.Component {
               className={this.props.server ? 'loaded' : null}
               src={item.original}
               alt={item.originalAlt}
+              name={item.originalName}
               onLoad={this._handleImageLoad}
               onError={this._handleImageError}/>
             {item.description}
@@ -352,6 +353,7 @@ export default class ImageGallery extends React.Component {
                       onClick={this._wrapClick(swipeNext)}/>
                   ],
                 <Swipeable
+                  className='image-gallery-swipe'
                   key='swipeable'
                   onSwipedLeft={swipeNext}
                   onSwipedRight={swipePrev}>
