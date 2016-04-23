@@ -6,6 +6,7 @@ var gulp = require('gulp')
 var livereload = require('gulp-livereload')
 var rename = require('gulp-rename')
 var sass = require('gulp-sass')
+var uglify = require('gulp-uglify')
 var source = require('vinyl-source-stream')
 var buffer = require('vinyl-buffer')
 var watchify = require('watchify')
@@ -32,12 +33,31 @@ gulp.task('scripts', function() {
     entries: './example/app.js',
     extensions: ['.jsx'],
     debug: true
-  }).transform('babelify', {presets: ['es2015', 'react']}))
+  }).transform('babelify', {
+      plugins: ['transform-runtime'],
+      presets: ['es2015', 'react']
+    }))
     .bundle()
     .pipe(source('example.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./example/'))
     .pipe(livereload())
+})
+
+gulp.task('demo-js', function() {
+  browserify({
+    entries: './example/app.js',
+    extensions: ['.jsx'],
+    debug: true
+  }).transform('babelify', {
+      plugins: ['transform-runtime'],
+      presets: ['es2015', 'react']
+    })
+    .bundle()
+    .pipe(source('demo.js'))
+    .pipe(buffer())
+    .pipe(uglify())
+    .pipe(gulp.dest('./demo/'))
 })
 
 gulp.task('source-js', function () {
@@ -58,3 +78,5 @@ gulp.task('watch', function() {
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server'])
 gulp.task('build', ['source-js', 'sass'])
+// NODE_ENV=production gulp demo
+gulp.task('demo', ['demo-js'])
