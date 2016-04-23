@@ -109,7 +109,7 @@ class MyComponent extends React.Component {
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
-* `slideInterval`: Integer, default `4000`
+* `slideInterval`: Integer, default `3000`
 * `startIndex`: Integer, default `0`
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
