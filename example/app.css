@@ -114,13 +114,3 @@ label {
 .app-checkboxes li {
   display: block;
 }
-
-.featured-thumb.active img {
-  border: 4px solid #E12822;
-}
-
-@media (max-width: 768px) {
-  .featured-thumb.active img {
-    border: 3px solid #E12822;
-  }
-}
