@@ -2,7 +2,7 @@ React Image Gallery
 ===
 
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
-[![Download Count](http://img.shields.io/npm/dm/react-swipe.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
+[![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
 
 ![http://i.imgur.com/bxa4s9f.gif](http://i.imgur.com/bxa4s9f.gif)
 
