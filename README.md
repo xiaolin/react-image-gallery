@@ -13,7 +13,7 @@ Features of `react-image-gallery`
 * Thumbnail navigation
 * Responsive design
 
-## Demo & Examples
+## Live Demo (try it on mobile)
 Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
 ## Getting started
