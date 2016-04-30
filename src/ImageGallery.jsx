@@ -569,6 +569,7 @@ export default class ImageGallery extends React.Component {
                   <Swipeable
                     className='image-gallery-swipe'
                     key='swipeable'
+                    delta={1}
                     onSwipingLeft={this._handleSwiping.bind(this, -1)}
                     onSwipingRight={this._handleSwiping.bind(this, 1)}
                     onSwiped={this._handleOnSwiped.bind(this)}
