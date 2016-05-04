@@ -435,6 +435,10 @@ export default class ImageGallery extends React.Component {
       const thumbnailClass = item.thumbnailClass ?
         ` ${item.thumbnailClass}` : ''
 
+      let onImageError = this._handleImageError;
+      if (this.props.onImageError) {
+        onImageError = this.props.onImageError
+      }
       const slide = (
         <div
           key={index}
@@ -449,7 +453,7 @@ export default class ImageGallery extends React.Component {
               src={item.original}
               alt={item.originalAlt}
               onLoad={this.props.onImageLoad}
-              onError={this._handleImageError.bind(this)}
+              onError={onImageError.bind(this)}
             />
             {
               item.description &&
@@ -467,6 +471,11 @@ export default class ImageGallery extends React.Component {
         }
       } else {
         slides.push(slide)
+      }
+      
+      let onThumbnailError = this._handleImageError;
+      if (this.props.onThumbnailError) {
+        onThumbnailError = this.props.onThumbnailError
       }
 
       if (this.props.showThumbnails) {
@@ -488,7 +497,7 @@ export default class ImageGallery extends React.Component {
             <img
               src={item.thumbnail}
               alt={item.thumbnailAlt}
-              onError={this._handleImageError.bind(this)}/>
+              onError={onThumbnailError.bind(this)}/>
           </a>
         )
       }
@@ -619,6 +628,8 @@ ImageGallery.propTypes = {
   onPlay: React.PropTypes.func,
   onClick: React.PropTypes.func,
   onImageLoad: React.PropTypes.func,
+  onImageError: React.PropTypes.func,
+  onThumbnailError: React.PropTypes.func,
 }
 
 ImageGallery.defaultProps = {
