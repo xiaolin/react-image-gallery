@@ -15,7 +15,8 @@ class App extends React.Component {
       infinite: true,
       showThumbnails: true,
       showNav: true,
-      slideInterval: 2000
+      slideInterval: 2000,
+      fullscreen: false,
     }
   }
 
@@ -143,6 +144,7 @@ class App extends React.Component {
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
+          fullscreen={this.state.fullscreen}
         />
 
         <div className='app-sandbox'>
@@ -224,6 +226,14 @@ class App extends React.Component {
                 onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
                 checked={this.state.slideOnThumbnailHover}/>
                 <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
+            </li>
+            <li>
+              <input
+                  id='fullscreen'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'fullscreen')}
+                  checked={this.state.fullscreen}/>
+              <label htmlFor='infinite'>fullscreen</label>
             </li>
           </ul>
 
