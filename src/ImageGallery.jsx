@@ -1,5 +1,6 @@
 import React from 'react'
 import Swipeable from 'react-swipeable'
+import ScreenFull from 'screenfull'
 
 const MIN_INTERVAL = 500
 
@@ -50,6 +51,7 @@ export default class ImageGallery extends React.Component {
     this._slideRight = throttle(this._slideRight, MIN_INTERVAL, true)
     this._handleResize = this._handleResize.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
+    this._fullScreen = this._fullScreen.bind(this);
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -417,6 +419,18 @@ export default class ImageGallery extends React.Component {
     this.slideToIndex(this.state.currentIndex + 1)
   }
 
+  _fullScreen() {
+      if (ScreenFull.enabled) {
+          if (!ScreenFull.isFullscreen) {
+              ScreenFull.request(this._imageGallery);
+          } else {
+              ScreenFull.exit();
+          }
+      }
+  }
+
+
+
   render() {
     const {currentIndex} = this.state
     const thumbnailStyle = this._getThumbnailStyle()
@@ -537,6 +551,10 @@ export default class ImageGallery extends React.Component {
                           onTouchEnd={this._touchEnd.bind(this)}
                           onClick={this._wrapClick(slideRight)}/>
                     }
+                      {
+                          this.props.fullscreen &&
+                          <a className='image-gallery-fullscreen' onClick={this._fullScreen} />
+                      }
                   </span>,
 
                   <Swipeable
@@ -619,6 +637,7 @@ ImageGallery.propTypes = {
   onPlay: React.PropTypes.func,
   onClick: React.PropTypes.func,
   onImageLoad: React.PropTypes.func,
+  fullscreen: React.PropTypes.bool,
 }
 
 ImageGallery.defaultProps = {
@@ -634,5 +653,6 @@ ImageGallery.defaultProps = {
   disableThumbnailScroll: false,
   indexSeparator: ' / ',
   startIndex: 0,
-  slideInterval: 3000
+  slideInterval: 3000,
+  fullscreen:false
 }
