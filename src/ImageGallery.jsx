@@ -364,16 +364,18 @@ export default class ImageGallery extends React.Component {
   _getSlideStyle(index) {
     const {currentIndex, offsetPercentage} = this.state
     const basetranslateX = -100 * currentIndex
-    const totalSlides = this.props.items.length - 1
+
+    const totalSlides = this.props.items.length;
+    const finalSlideCell = this.props.items.length -1;
 
     let translateX = basetranslateX + (index * 100) + offsetPercentage
     let zIndex = 1
 
-    if (this.props.infinite) {
-      if (currentIndex === 0 && index === totalSlides) {
+    if (this.props.infinite && totalSlides > 1) {
+      if (currentIndex === 0 && index === finalSlideCell) {
         // make the last slide the slide before the first
         translateX = -100 + offsetPercentage
-      } else if (currentIndex === totalSlides && index === 0) {
+      } else if (currentIndex === finalSlideCell && index === 0) {
         // make the first slide the slide after the last
         translateX = 100 + offsetPercentage
       }
