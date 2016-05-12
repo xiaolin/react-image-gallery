@@ -39,11 +39,11 @@ class App extends React.Component {
   }
 
   _onImageClick(event) {
-    console.debug('clicked on image ', event.target)
+    console.debug('clicked on image ', event.target.src)
   }
 
   _onImageLoad(event) {
-    console.debug('loaded image ', event.target)
+    console.debug('loaded image ', event.target.src)
   }
 
   _onSlide(index) {
