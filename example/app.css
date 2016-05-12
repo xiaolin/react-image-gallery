@@ -57,19 +57,37 @@ label {
 
 .app-button {
   font-size: 14px;
-  color: #222;
+  color: #555;
   display: inline-block;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   border-radius: 4px;
   cursor: pointer;
-  padding: 10px 20px;
+  padding: 10.5px 5px;
+  width: 80px;
+  text-align: center;
   background: #fff;
   line-height: 1;
+  font-weight: 500;
+}
+
+@media (max-width: 768px) {
+  .app-buttons li {
+    display: block;
+    margin: 10px 0;
+  }
+
+  .app-buttons li + li {
+    padding: 0;
+  }
+}
+
+.app-button:hover {
+  border: 3px solid #555;
 }
 
 .app-button.active {
   background: #5cb85c;
-  border: 1px solid #4cae4c;
+  border: 3px solid #4cae4c;
   color: #fff;
 }
 
@@ -87,7 +105,7 @@ label {
   color: #555;
   text-align: center;
   background-color: #eee;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   border-right: none;
   border-radius: 4px;
   border-top-right-radius: 0;
@@ -101,7 +119,7 @@ label {
   padding: 9px;
   border-radius: 5px;
   font-size: 14px;
-  border: 1px solid #ccc;
+  border: 3px solid #ccc;
   width: 65px;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
