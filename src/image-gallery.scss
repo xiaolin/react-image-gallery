@@ -18,8 +18,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   position: relative;
 
   .image-gallery-left-nav,
-  .image-gallery-right-nav,
-  .image-gallery-fullscreen{
+  .image-gallery-right-nav {
     color: $ig-white;
     cursor: pointer;
     font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
@@ -59,19 +58,6 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
       padding: 50px 15px;
     }
   }
-
-  .image-gallery-fullscreen{
-    left: 0;
-    top: inherit;
-    bottom: 5%;
-    font-size: 3.5em;
-    &::before {
-      content: '※';
-      padding: 50px 15px;
-    }
-  }
-
-
 
 }
 

@@ -38,6 +38,10 @@ class App extends React.Component {
     this.setState({isPlaying: true})
   }
 
+  _fullScreen() {
+    this._imageGallery.fullScreen()
+  }
+
   _onImageClick(event) {
     console.debug('clicked on image ', event.target.src)
   }
@@ -144,7 +148,6 @@ class App extends React.Component {
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
-          fullscreen={this.state.fullscreen}
         />
 
         <div className='app-sandbox'>
@@ -165,6 +168,13 @@ class App extends React.Component {
               onClick={this._pauseSlider.bind(this)}>
               Pause
             </a>
+            </li>
+            <li>
+              <a
+                className='app-button'
+                onClick={this._fullScreen.bind(this)}>
+                Full Screen
+              </a>
             </li>
             <li>
               <div className='app-interval-input-group'>
@@ -226,14 +236,6 @@ class App extends React.Component {
                 onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
                 checked={this.state.slideOnThumbnailHover}/>
                 <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
-            </li>
-            <li>
-              <input
-                  id='fullscreen'
-                  type='checkbox'
-                  onChange={this._handleCheckboxChange.bind(this, 'fullscreen')}
-                  checked={this.state.fullscreen}/>
-              <label htmlFor='infinite'>fullscreen</label>
             </li>
           </ul>
 
