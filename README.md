@@ -108,6 +108,11 @@ class MyComponent extends React.Component {
   * slides to the currently hovered thumbnail
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
+  * handles both slide image, and thumbnail image
+* `onImageError`: Function, `callback(event)`
+  * overrides defaultImage
+* `onThumbnailError`: Function, `callback(event)`
+  * overrides defaultImage
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideInterval`: Integer, default `3000`
 * `startIndex`: Integer, default `0`
@@ -122,6 +127,7 @@ class MyComponent extends React.Component {
 
 * `play()`: continuous plays if image is not hovered.
 * `pause()`: pauses the slides.
+* `fullScreen()`: activates full screen
 * `slideToIndex(index)`: slide to a specific index.
 
 # Notes
