@@ -75,57 +75,33 @@ class App extends React.Component {
   render() {
     const images = [
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/1.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/1t.jpg',
+        original: 'http://lorempixel.com/1600/900/nature/1/',
+        thumbnail: 'http://lorempixel.com/150/84/nature/1/',
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
-        description: 'Custom class for slides & thumbnails'
+        description: 'Custom class for slides & thumbnails',
+        srcSet:'http://lorempixel.com/1280/720/nature/1/ 1280w, http://lorempixel.com/1024/576/nature/1/ 1024w, http://lorempixel.com/800/450/nature/1/ 800w, http://lorempixel.com/360/203/nature/1/ 360w',
+        sizes:'100vw'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/2.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/2t.jpg',
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
+        original: 'http://lorempixel.com/1600/900/nature/2/',
+        thumbnail: 'http://lorempixel.com/150/84/nature/2/',
+        srcSet:'http://lorempixel.com/1280/720/nature/2/ 1280w, http://lorempixel.com/1024/576/nature/2/ 1024w, http://lorempixel.com/800/450/nature/2/ 800w, http://lorempixel.com/360/203/nature/2/ 360w',
+        sizes:'100vw'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/3.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/3t.jpg'
+        original: 'http://lorempixel.com/1600/900/nature/3/',
+        thumbnail: 'http://lorempixel.com/150/84/nature/3/',
+        srcSet:'http://lorempixel.com/1280/720/nature/3/ 1280w, http://lorempixel.com/1024/576/nature/3/ 1024w, http://lorempixel.com/800/450/nature/3/ 800w, http://lorempixel.com/360/203/nature/3/ 360w',
+        sizes:'100vw'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/4.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/4t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/5.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/5t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/6.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/6t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/7.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/7t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/8.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/8t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/9.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/9t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/10.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/10t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/11.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/11t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/12.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/12t.jpg'
+        original: 'http://lorempixel.com/1600/900/nature/4/',
+        thumbnail: 'http://lorempixel.com/150/84/nature/4/',
+        srcSet:'http://lorempixel.com/1280/720/nature/4/ 1280w, http://lorempixel.com/1024/576/nature/4/ 1024w, http://lorempixel.com/800/450/nature/4/ 800w, http://lorempixel.com/360/203/nature/4/ 360w',
+        sizes:'100vw'
       }
+
     ]
 
     return (
