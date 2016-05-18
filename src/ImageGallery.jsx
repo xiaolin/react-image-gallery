@@ -132,9 +132,9 @@ export default class ImageGallery extends React.Component {
   fullScreen() {
     if (ScreenFull.enabled) {
       if (!ScreenFull.isFullscreen) {
-          ScreenFull.request(this._imageGallery);
+          ScreenFull.request(this._imageGallery)
       } else {
-          ScreenFull.exit();
+          ScreenFull.exit()
       }
     }
   }
@@ -165,6 +165,10 @@ export default class ImageGallery extends React.Component {
         this.play(false)
       }
     }
+  }
+
+  getCurrentIndex() {
+    return this.state.currentIndex
   }
 
   _wrapClick(func) {
@@ -446,7 +450,7 @@ export default class ImageGallery extends React.Component {
       const thumbnailClass = item.thumbnailClass ?
         ` ${item.thumbnailClass}` : ''
 
-      let onImageError = this._handleImageError;
+      let onImageError = this._handleImageError
       if (this.props.onImageError) {
         onImageError = this.props.onImageError
       }
@@ -456,7 +460,6 @@ export default class ImageGallery extends React.Component {
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this._wrapClick(this.props.onClick)}
-          onTouchStart={this.props.onClick}
           onTouchEnd={this._touchEnd.bind(this)}
         >
           <div className='image-gallery-image'>
@@ -486,7 +489,7 @@ export default class ImageGallery extends React.Component {
         slides.push(slide)
       }
 
-      let onThumbnailError = this._handleImageError;
+      let onThumbnailError = this._handleImageError
       if (this.props.onThumbnailError) {
         onThumbnailError = this.props.onThumbnailError
       }
