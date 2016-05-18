@@ -85,7 +85,7 @@ class MyComponent extends React.Component {
           ref={i => this._imageGallery = i}
           items={images}
           slideInterval={2000}
-          handleImageLoad={this.handleImageLoad}/>
+          onImageLoad={this.handleImageLoad}/>
       </div>
     );
   }
