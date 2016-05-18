@@ -456,7 +456,6 @@ export default class ImageGallery extends React.Component {
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this._wrapClick(this.props.onClick)}
-          onTouchStart={this.props.onClick}
           onTouchEnd={this._touchEnd.bind(this)}
         >
           <div className='image-gallery-image'>
