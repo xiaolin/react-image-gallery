@@ -122,7 +122,7 @@ class MyComponent extends React.Component {
 * `onSlide`: Function, `callback(currentIndex)`
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
-* `onClick`: Function, `callback(currentIndex, event)`
+* `onClick`: Function, `callback(event)`
 
 
 # functions
