@@ -463,6 +463,8 @@ export default class ImageGallery extends React.Component {
             <img
               src={item.original}
               alt={item.originalAlt}
+              srcSet={item.srcSet}
+              sizes={item.sizes}
               onLoad={this.props.onImageLoad}
               onError={onImageError.bind(this)}
             />

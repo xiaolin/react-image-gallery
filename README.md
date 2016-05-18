@@ -64,6 +64,8 @@ class MyComponent extends React.Component {
         originalAlt: 'original-alt',
         thumbnailAlt: 'thumbnail-alt',
         description: 'Optional description...'
+        srcSet: 'Optional srcset (responsive images src)'
+        size: 'Optional size (image size relative to the breakpoint)'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/2/',
