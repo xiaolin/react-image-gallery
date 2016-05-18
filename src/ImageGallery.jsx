@@ -167,6 +167,10 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  getCurrentIndex() {
+    return this.state.currentIndex
+  }
+
   _wrapClick(func) {
     if (typeof func === 'function') {
       return event => {
@@ -455,7 +459,7 @@ export default class ImageGallery extends React.Component {
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
-          onClick={this._wrapClick(this.props.onClick.bind(this, currentIndex))}
+          onClick={this._wrapClick(this.props.onClick)}
           onTouchEnd={this._touchEnd.bind(this)}
         >
           <div className='image-gallery-image'>

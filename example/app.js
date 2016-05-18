@@ -42,8 +42,8 @@ class App extends React.Component {
     this._imageGallery.fullScreen()
   }
 
-  _onImageClick(index, event) {
-    console.debug('clicked on index', index, ', image', event.target.src)
+  _onImageClick(event) {
+    console.debug('clicked on image', event.target.src, 'at index', this._imageGallery.getCurrentIndex())
   }
 
   _onImageLoad(event) {
@@ -136,7 +136,7 @@ class App extends React.Component {
           ref={i => this._imageGallery = i}
           items={images}
           lazyLoad={false}
-          onClick={this._onImageClick}
+          onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
           onSlide={this._onSlide}
           onPause={this._onPause.bind(this)}
