@@ -42,25 +42,25 @@ class App extends React.Component {
     this._imageGallery.fullScreen()
   }
 
-  _onImageClick(event) {
-    console.debug('clicked on image ', event.target.src)
+  _onImageClick(index, event) {
+    console.debug('clicked on index', index, ', image', event.target.src)
   }
 
   _onImageLoad(event) {
-    console.debug('loaded image ', event.target.src)
+    console.debug('loaded image', event.target.src)
   }
 
   _onSlide(index) {
-    console.debug('slid to ', index)
+    console.debug('slid to index', index)
   }
 
   _onPause(index) {
-    console.debug('paused on index ', index)
+    console.debug('paused on index', index)
     this.setState({isPlaying: false})
   }
 
   _onPlay(index) {
-    console.debug('playing from index ', index)
+    console.debug('playing from index', index)
     this.setState({isPlaying: true})
   }
 
