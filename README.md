@@ -108,6 +108,7 @@ class MyComponent extends React.Component {
   * disables the thumbnail container from adjusting
 * `slideOnThumbnailHover`: Boolean, default `false`
   * slides to the currently hovered thumbnail
+* `disableArrowKeys`: Boolean, default `false`
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
