@@ -98,12 +98,16 @@ export default class ImageGallery extends React.Component {
     if (this.props.autoPlay) {
       this.play()
     }
-    window.addEventListener('keydown', this._handleKeyDown)
+    if (!this.props.disableArrowKeys) {
+      window.addEventListener('keydown', this._handleKeyDown)
+    }
     window.addEventListener('resize', this._handleResize)
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this._handleKeyDown)
+    if (!this.props.disableArrowKeys) {
+      window.removeEventListener('keydown', this._handleKeyDown)
+    }
     window.removeEventListener('resize', this._handleResize)
     if (this._intervalId) {
       window.clearInterval(this._intervalId)
@@ -623,6 +627,7 @@ ImageGallery.propTypes = {
   showThumbnails: React.PropTypes.bool,
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
+  disableArrowKeys: React.PropTypes.bool,
   defaultImage: React.PropTypes.string,
   indexSeparator: React.PropTypes.string,
   startIndex: React.PropTypes.number,
@@ -647,6 +652,7 @@ ImageGallery.defaultProps = {
   showThumbnails: true,
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,
+  disableArrowKeys: false,
   indexSeparator: ' / ',
   startIndex: 0,
   slideInterval: 3000
