@@ -35,6 +35,16 @@ function throttle(func, wait) {
   }
 }
 
+// This is to handle accessing event properties in an asynchronous way
+// https://facebook.github.io/react/docs/events.html#syntheticevent
+function debounceEventHandler(...args) {
+  const throttled = throttle(...args)
+  return function(event) {
+    event.persist()
+    return throttled(event)
+  }
+}
+
 
 export default class ImageGallery extends React.Component {
 
@@ -47,8 +57,8 @@ export default class ImageGallery extends React.Component {
       galleryWidth: 0
     }
 
-    this._slideLeft = throttle(this._slideLeft, MIN_INTERVAL, true)
-    this._slideRight = throttle(this._slideRight, MIN_INTERVAL, true)
+    this._slideLeft = debounceEventHandler(this._slideLeft.bind(this), MIN_INTERVAL, true)
+    this._slideRight = debounceEventHandler(this._slideRight.bind(this), MIN_INTERVAL, true)
     this._handleResize = this._handleResize.bind(this)
     this._handleKeyDown = this._handleKeyDown.bind(this)
   }
@@ -140,6 +150,15 @@ export default class ImageGallery extends React.Component {
   }
 
   slideToIndex(index, event) {
+    if (event) {
+      event.preventDefault()
+      if (this._intervalId) {
+        // user triggered event while ImageGallery is playing, reset interval
+        this.pause(false)
+        this.play(false)
+      }
+    }
+
     let slideCount = this.props.items.length - 1
     let currentIndex = index
 
@@ -157,33 +176,6 @@ export default class ImageGallery extends React.Component {
         transition: 'transform .45s ease-out'
       }
     })
-
-    if (event) {
-      if (this._intervalId) {
-        // user event, while playing, reset interval
-        this.pause(false)
-        this.play(false)
-      }
-    }
-  }
-
-  _wrapClick(func) {
-    if (typeof func === 'function') {
-      return event => {
-        if (this._preventGhostClick === true) {
-          return
-        }
-        func(event)
-      }
-    }
-  }
-
-  _touchEnd() {
-    this._preventGhostClick = true
-    this._preventGhostClickTimer = window.setTimeout(() => {
-      this._preventGhostClick = false
-      this._preventGhostClickTimer = null
-    }, this._ghotClickDelay)
   }
 
   _handleResize() {
@@ -420,12 +412,12 @@ export default class ImageGallery extends React.Component {
     }
   }
 
-  _slideLeft() {
-    this.slideToIndex(this.state.currentIndex - 1)
+  _slideLeft(event) {
+    this.slideToIndex(this.state.currentIndex - 1, event)
   }
 
-  _slideRight() {
-    this.slideToIndex(this.state.currentIndex + 1)
+  _slideRight(event) {
+    this.slideToIndex(this.state.currentIndex + 1, event)
   }
 
   render() {
@@ -455,9 +447,7 @@ export default class ImageGallery extends React.Component {
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
-          onClick={this._wrapClick(this.props.onClick)}
-          onTouchStart={this.props.onClick}
-          onTouchEnd={this._touchEnd.bind(this)}
+          onClick={this.props.onClick}
         >
           <div className='image-gallery-image'>
             <img
@@ -503,9 +493,8 @@ export default class ImageGallery extends React.Component {
               thumbnailClass
             }
 
-            onTouchStart={this.slideToIndex.bind(this, index)}
-            onTouchEnd={this._touchEnd.bind(this)}
-            onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
+            onTouchStart={event => this.slideToIndex.call(this, index, event)}
+            onClick={event => this.slideToIndex.call(this, index, event)}>
 
             <img
               src={item.thumbnail}
@@ -523,9 +512,8 @@ export default class ImageGallery extends React.Component {
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
 
-            onTouchStart={this.slideToIndex.bind(this, index)}
-            onTouchEnd={this._touchEnd.bind(this)}
-            onClick={this._wrapClick(this.slideToIndex.bind(this, index))}>
+            onTouchStart={event => this.slideToIndex.call(this, index, event)}
+            onClick={event => this.slideToIndex.call(this, index, event)}>
           </li>
         )
       }
@@ -547,8 +535,7 @@ export default class ImageGallery extends React.Component {
                         <a
                           className='image-gallery-left-nav'
                           onTouchStart={slideLeft}
-                          onTouchEnd={this._touchEnd.bind(this)}
-                          onClick={this._wrapClick(slideLeft)}/>
+                          onClick={slideLeft}/>
 
                     }
                     {
@@ -556,8 +543,7 @@ export default class ImageGallery extends React.Component {
                         <a
                           className='image-gallery-right-nav'
                           onTouchStart={slideRight}
-                          onTouchEnd={this._touchEnd.bind(this)}
-                          onClick={this._wrapClick(slideRight)}/>
+                          onClick={slideRight}/>
                     }
                   </span>,
 
