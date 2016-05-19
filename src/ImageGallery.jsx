@@ -40,8 +40,12 @@ function throttle(func, wait) {
 function debounceEventHandler(...args) {
   const throttled = throttle(...args)
   return function(event) {
-    event.persist()
-    return throttled(event)
+    if (event) {
+      event.persist()
+      return throttled(event)
+    }
+
+    return throttled()
   }
 }
 
