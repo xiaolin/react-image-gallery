@@ -43,24 +43,24 @@ class App extends React.Component {
   }
 
   _onImageClick(event) {
-    console.debug('clicked on image ', event.target.src)
+    console.debug('clicked on image', event.target.src, 'at index', this._imageGallery.getCurrentIndex())
   }
 
   _onImageLoad(event) {
-    console.debug('loaded image ', event.target.src)
+    console.debug('loaded image', event.target.src)
   }
 
   _onSlide(index) {
-    console.debug('slid to ', index)
+    console.debug('slid to index', index)
   }
 
   _onPause(index) {
-    console.debug('paused on index ', index)
+    console.debug('paused on index', index)
     this.setState({isPlaying: false})
   }
 
   _onPlay(index) {
-    console.debug('playing from index ', index)
+    console.debug('playing from index', index)
     this.setState({isPlaying: true})
   }
 
@@ -136,7 +136,7 @@ class App extends React.Component {
           ref={i => this._imageGallery = i}
           items={images}
           lazyLoad={false}
-          onClick={this._onImageClick}
+          onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
           onSlide={this._onSlide}
           onPause={this._onPause.bind(this)}
