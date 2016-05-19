@@ -186,6 +186,10 @@ export default class ImageGallery extends React.Component {
     })
   }
 
+  getCurrentIndex() {
+    return this.state.currentIndex
+  }
+
   _handleResize() {
     if (this._imageGallery) {
       this.setState({galleryWidth: this._imageGallery.offsetWidth})
