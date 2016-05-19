@@ -101,7 +101,9 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this._handleKeyDown)
+    if (!this.props.disableArrowKeys) {
+      window.removeEventListener('keydown', this._handleKeyDown)
+    }
     window.removeEventListener('resize', this._handleResize)
     if (this._intervalId) {
       window.clearInterval(this._intervalId)
