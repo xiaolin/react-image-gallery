@@ -75,56 +75,48 @@ class App extends React.Component {
   render() {
     const images = [
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/1.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/1t.jpg',
+        original: 'http://lorempixel.com/1000/600/food/1/',
+        thumbnail: 'http://lorempixel.com/100/75/food/1/',
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
         description: 'Custom class for slides & thumbnails'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/2.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/2t.jpg',
+        original: 'http://lorempixel.com/1000/600/food/2/',
+        thumbnail: 'http://lorempixel.com/100/75/food/2/',
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/3.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/3t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/3/',
+        thumbnail: 'http://lorempixel.com/100/75/food/3/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/4.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/4t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/4/',
+        thumbnail: 'http://lorempixel.com/100/75/food/4/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/5.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/5t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/5/',
+        thumbnail: 'http://lorempixel.com/100/75/food/5/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/6.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/6t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/6/',
+        thumbnail: 'http://lorempixel.com/100/75/food/6/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/7.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/7t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/7/',
+        thumbnail: 'http://lorempixel.com/100/75/food/7/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/8.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/8t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/8/',
+        thumbnail: 'http://lorempixel.com/100/75/food/8/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/9.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/9t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/9/',
+        thumbnail: 'http://lorempixel.com/100/75/food/9/'
       },
       {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/10.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/10t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/11.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/11t.jpg'
-      },
-      {
-        original: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/12.jpg',
-        thumbnail: 'https://raw.githubusercontent.com/xiaolin/linxtion.github.io/master/static/img/image-gallery/12t.jpg'
+        original: 'http://lorempixel.com/1000/600/food/10/',
+        thumbnail: 'http://lorempixel.com/100/75/food/10/'
       }
 
     ]
