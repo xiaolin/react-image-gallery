@@ -45,6 +45,7 @@ gulp.task('scripts', function() {
 })
 
 gulp.task('demo-js', function() {
+  process.env.NODE_ENV = 'production'
   browserify({
     entries: './example/app.js',
     extensions: ['.jsx'],
@@ -78,5 +79,4 @@ gulp.task('watch', function() {
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server'])
 gulp.task('build', ['source-js', 'sass'])
-// NODE_ENV=production gulp demo
 gulp.task('demo', ['demo-js'])
