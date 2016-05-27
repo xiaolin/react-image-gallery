@@ -1,6 +1,5 @@
 import React from 'react'
 import Swipeable from 'react-swipeable'
-import ScreenFull from 'screenfull'
 
 const MIN_INTERVAL = 500
 
@@ -148,12 +147,16 @@ export default class ImageGallery extends React.Component {
   }
 
   fullScreen() {
-    if (ScreenFull.enabled) {
-      if (!ScreenFull.isFullscreen) {
-          ScreenFull.request(this._imageGallery)
-      } else {
-          ScreenFull.exit()
-      }
+    const gallery = this._imageGallery
+
+    if (gallery.requestFullscreen) {
+      gallery.requestFullscreen()
+    } else if (gallery.msRequestFullscreen) {
+      gallery.msRequestFullscreen()
+    } else if (gallery.mozRequestFullScreen) {
+      gallery.mozRequestFullScreen()
+    } else if (gallery.webkitRequestFullscreen) {
+      gallery.webkitRequestFullscreen()
     }
   }
 
