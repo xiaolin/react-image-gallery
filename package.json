@@ -1,7 +1,7 @@
 {
   "name": "react-image-gallery",
-  "version": "0.6.2",
-  "description": "React Image gallery, React Carousel, React Slide Show component",
+  "version": "0.6.3",
+  "description": "React Carousel, React Image gallery, React Slide Show component",
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev"
@@ -12,6 +12,7 @@
   },
   "keywords": [
     "react",
+    "carousel",
     "react-component",
     "react-carousel",
     "react-slideshow",
@@ -21,7 +22,6 @@
     "react gallery",
     "image gallery",
     "image slider",
-    "carousel",
     "slideshow",
     "gallery",
     "slider"
