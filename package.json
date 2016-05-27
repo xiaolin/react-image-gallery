@@ -58,7 +58,6 @@
     "watchify": "^2.4.0"
   },
   "dependencies": {
-    "react-swipeable": "^3.3.1",
-    "screenfull": "^3.0.0"
+    "react-swipeable": "^3.3.1"
   }
 }
