@@ -387,7 +387,7 @@ export default class ImageGallery extends React.Component {
     let translateX = basetranslateX + (index * 100) + offsetPercentage
     let zIndex = 1
 
-    if (this.props.infinite && this.props.items.length > 1) {
+    if (this.props.infinite && this.props.items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
         translateX = -100 + offsetPercentage
