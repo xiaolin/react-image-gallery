@@ -435,6 +435,29 @@ export default class ImageGallery extends React.Component {
     this.slideToIndex(this.state.currentIndex + 1, event)
   }
 
+  _renderItem(item) {
+    const onImageError = this.props.onImageError || this._handleImageError
+
+    return (
+      <div className='image-gallery-image'>
+        <img
+            src={item.original}
+            alt={item.originalAlt}
+            srcSet={item.srcSet}
+            sizes={item.sizes}
+            onLoad={this.props.onImageLoad}
+            onError={onImageError.bind(this)}
+        />
+        {
+          item.description &&
+          <span className='image-gallery-description'>
+                {item.description}
+              </span>
+        }
+      </div>
+    );
+  }
+
   render() {
     const {currentIndex} = this.state
     const thumbnailStyle = this._getThumbnailStyle()
@@ -453,10 +476,8 @@ export default class ImageGallery extends React.Component {
       const thumbnailClass = item.thumbnailClass ?
         ` ${item.thumbnailClass}` : ''
 
-      let onImageError = this._handleImageError
-      if (this.props.onImageError) {
-        onImageError = this.props.onImageError
-      }
+      const renderItem = item.renderItem || this.props.renderItem || this._renderItem
+
       const slide = (
         <div
           key={index}
@@ -464,22 +485,7 @@ export default class ImageGallery extends React.Component {
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
         >
-          <div className='image-gallery-image'>
-            <img
-              src={item.original}
-              alt={item.originalAlt}
-              srcSet={item.srcSet}
-              sizes={item.sizes}
-              onLoad={this.props.onImageLoad}
-              onError={onImageError.bind(this)}
-            />
-            {
-              item.description &&
-                <span className='image-gallery-description'>
-                  {item.description}
-                </span>
-            }
-          </div>
+          {renderItem(item)}
         </div>
       )
 
@@ -645,7 +651,8 @@ ImageGallery.propTypes = {
   onClick: React.PropTypes.func,
   onImageLoad: React.PropTypes.func,
   onImageError: React.PropTypes.func,
-  onThumbnailError: React.PropTypes.func
+  onThumbnailError: React.PropTypes.func,
+  renderItem: React.PropTypes.func,
 }
 
 ImageGallery.defaultProps = {
