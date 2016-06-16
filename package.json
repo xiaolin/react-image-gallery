@@ -4,7 +4,8 @@
   "description": "React Carousel, React Image gallery, React Slide Show component",
   "main": "./build/image-gallery",
   "scripts": {
-    "start": "gulp dev"
+    "start": "gulp dev",
+    "build": "gulp build"
   },
   "repository": {
     "type": "git",
