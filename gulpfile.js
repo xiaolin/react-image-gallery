@@ -34,7 +34,7 @@ gulp.task('scripts', function() {
     extensions: ['.jsx'],
     debug: true
   }).transform('babelify', {
-      plugins: ['transform-runtime'],
+      plugins: ['transform-object-assign'],
       presets: ['es2015', 'react']
     }))
     .bundle()
@@ -51,7 +51,7 @@ gulp.task('demo-js', function() {
     extensions: ['.jsx'],
     debug: true
   }).transform('babelify', {
-      plugins: ['transform-runtime'],
+      plugins: ['transform-object-assign'],
       presets: ['es2015', 'react']
     })
     .bundle()
@@ -65,7 +65,7 @@ gulp.task('source-js', function () {
   return gulp.src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
     .pipe(babel({
-      plugins: ['transform-runtime'],
+      plugins: ['transform-object-assign'],
       presets: ['es2015', 'react']
     }))
     .pipe(gulp.dest('./build'))
