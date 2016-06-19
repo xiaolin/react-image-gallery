@@ -450,12 +450,12 @@ export default class ImageGallery extends React.Component {
         />
         {
           item.description &&
-          <span className='image-gallery-description'>
-                {item.description}
-              </span>
+            <span className='image-gallery-description'>
+              {item.description}
+            </span>
         }
       </div>
-    );
+    )
   }
 
   render() {
@@ -476,7 +476,8 @@ export default class ImageGallery extends React.Component {
       const thumbnailClass = item.thumbnailClass ?
         ` ${item.thumbnailClass}` : ''
 
-      const renderItem = item.renderItem || this.props.renderItem || this._renderItem
+      const renderItem = item.renderItem ||
+        this.props.renderItem || this._renderItem.bind(this)
 
       const slide = (
         <div
