@@ -124,6 +124,33 @@ class MyComponent extends React.Component {
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`
+* `renderItem`: Function, custom item rendering
+  * As a prop on a specific item `[{thumbnail: '...', renderItem: '...'}]`
+  * As a prop passed into `ImageGallery` to completely override `_renderItem`, see original below
+    ```javascript
+      _renderItem(item) {
+        const onImageError = this.props.onImageError || this._handleImageError
+
+        return (
+          <div className='image-gallery-image'>
+            <img
+                src={item.original}
+                alt={item.originalAlt}
+                srcSet={item.srcSet}
+                sizes={item.sizes}
+                onLoad={this.props.onImageLoad}
+                onError={onImageError.bind(this)}
+            />
+            {
+              item.description &&
+                <span className='image-gallery-description'>
+                  {item.description}
+                </span>
+            }
+          </div>
+        )
+      }
+    ```
 
 
 # functions
