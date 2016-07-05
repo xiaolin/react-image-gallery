@@ -59,11 +59,6 @@ export default class ImageGallery extends React.Component {
       offsetPercentage: 0,
       galleryWidth: 0
     }
-
-    this._slideLeft = debounceEventHandler(this._slideLeft.bind(this), MIN_INTERVAL, true)
-    this._slideRight = debounceEventHandler(this._slideRight.bind(this), MIN_INTERVAL, true)
-    this._handleResize = this._handleResize.bind(this)
-    this._handleKeyDown = this._handleKeyDown.bind(this)
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -87,9 +82,15 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillMount() {
+    this._slideLeft = debounceEventHandler(
+      this._slideLeft.bind(this), MIN_INTERVAL, true)
+
+    this._slideRight = debounceEventHandler(
+      this._slideRight.bind(this), MIN_INTERVAL, true)
+
+    this._handleResize = this._handleResize.bind(this)
+    this._handleKeyDown = this._handleKeyDown.bind(this)
     this._thumbnailDelay = 300
-    this._ghotClickDelay = 600
-    this._preventGhostClick = false
   }
 
   componentDidMount() {
