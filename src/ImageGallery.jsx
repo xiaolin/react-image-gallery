@@ -94,7 +94,9 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-    window.setTimeout(() => {this._handleResize(), 300})
+    // delay initial resize to get the accurate this._imageGallery.offsetWidth
+    window.setTimeout(() => this._handleResize(), 500)
+
     if (this.props.autoPlay) {
       this.play()
     }
