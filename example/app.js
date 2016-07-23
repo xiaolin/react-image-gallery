@@ -1,12 +1,12 @@
-import React from 'react'
-import ReactDOM from 'react-dom'
+import React from 'react';
+import ReactDOM from 'react-dom';
 
-import ImageGallery from '../src/ImageGallery'
+import ImageGallery from '../src/ImageGallery';
 
 class App extends React.Component {
 
   constructor() {
-    super()
+    super();
     this.state = {
       isPlaying: false,
       showIndex: false,
@@ -17,59 +17,59 @@ class App extends React.Component {
       showNav: true,
       slideInterval: 2000,
       fullscreen: false,
-    }
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {
     if (this.state.slideInterval !== prevState.slideInterval) {
       // refresh setInterval
-      this._pauseSlider()
-      this._playSlider()
+      this._pauseSlider();
+      this._playSlider();
     }
   }
 
   _pauseSlider() {
-    this._imageGallery.pause()
-    this.setState({isPlaying: false})
+    this._imageGallery.pause();
+    this.setState({isPlaying: false});
   }
 
   _playSlider() {
-    this._imageGallery.play()
-    this.setState({isPlaying: true})
+    this._imageGallery.play();
+    this.setState({isPlaying: true});
   }
 
   _fullScreen() {
-    this._imageGallery.fullScreen()
+    this._imageGallery.fullScreen();
   }
 
   _onImageClick(event) {
-    console.debug('clicked on image', event.target.src, 'at index', this._imageGallery.getCurrentIndex())
+    console.debug('clicked on image', event.target.src, 'at index', this._imageGallery.getCurrentIndex());
   }
 
   _onImageLoad(event) {
-    console.debug('loaded image', event.target.src)
+    console.debug('loaded image', event.target.src);
   }
 
   _onSlide(index) {
-    console.debug('slid to index', index)
+    console.debug('slid to index', index);
   }
 
   _onPause(index) {
-    console.debug('paused on index', index)
-    this.setState({isPlaying: false})
+    console.debug('paused on index', index);
+    this.setState({isPlaying: false});
   }
 
   _onPlay(index) {
-    console.debug('playing from index', index)
-    this.setState({isPlaying: true})
+    console.debug('playing from index', index);
+    this.setState({isPlaying: true});
   }
 
   _handleInputChange(state, event) {
-    this.setState({[state]: event.target.value})
+    this.setState({[state]: event.target.value});
   }
 
   _handleCheckboxChange(state, event) {
-    this.setState({[state]: event.target.checked})
+    this.setState({[state]: event.target.checked});
   }
 
   render() {
@@ -119,7 +119,7 @@ class App extends React.Component {
         thumbnail: 'http://lorempixel.com/100/75/food/10/'
       }
 
-    ]
+    ];
 
     return (
 
@@ -234,9 +234,9 @@ class App extends React.Component {
 
         </div>
       </section>
-    )
+    );
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('container'))
+ReactDOM.render(<App/>, document.getElementById('container'));
 
