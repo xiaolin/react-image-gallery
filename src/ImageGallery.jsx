@@ -1,64 +1,66 @@
-import React from 'react'
-import Swipeable from 'react-swipeable'
+import React from 'react';
+import Swipeable from 'react-swipeable';
 
-const MIN_INTERVAL = 500
+const MIN_INTERVAL = 500;
 
 function throttle(func, wait) {
-  let context, args, result
-  let timeout = null
-  let previous = 0
+  let context, args, result;
+  let timeout = null;
+  let previous = 0;
 
   let later = function() {
-    previous = new Date().getTime()
-    timeout = null
-    result = func.apply(context, args)
-    if (!timeout) context = args = null
-  }
+    previous = new Date().getTime();
+    timeout = null;
+    result = func.apply(context, args);
+    if (!timeout) context = args = null;
+  };
+
   return function() {
-    let now = new Date().getTime()
-    let remaining = wait - (now - previous)
-    context = this
-    args = arguments
+    let now = new Date().getTime();
+    let remaining = wait - (now - previous);
+    context = this;
+    args = arguments;
     if (remaining <= 0 || remaining > wait) {
       if (timeout) {
-        clearTimeout(timeout)
-        timeout = null
+        clearTimeout(timeout);
+        timeout = null;
       }
-      previous = now
-      result = func.apply(context, args)
-      if (!timeout) context = args = null
+      previous = now;
+      result = func.apply(context, args);
+      if (!timeout) context = args = null;
     } else if (!timeout) {
-      timeout = setTimeout(later, remaining)
+      timeout = setTimeout(later, remaining);
     }
-    return result
-  }
+    return result;
+  };
+
 }
 
 // This is to handle accessing event properties in an asynchronous way
 // https://facebook.github.io/react/docs/events.html#syntheticevent
 function debounceEventHandler(...args) {
-  const throttled = throttle(...args)
+  const throttled = throttle(...args);
   return function(event) {
     if (event) {
-      event.persist()
-      return throttled(event)
+      event.persist();
+      return throttled(event);
     }
 
-    return throttled()
-  }
+    return throttled();
+  };
 }
 
 
 export default class ImageGallery extends React.Component {
 
   constructor(props) {
-    super(props)
+    super(props);
     this.state = {
       currentIndex: props.startIndex,
       thumbsTranslateX: 0,
       offsetPercentage: 0,
       galleryWidth: 0
-    }
+    };
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -68,118 +70,118 @@ export default class ImageGallery extends React.Component {
       // adjust thumbnail container when window width is adjusted
       this._setThumbsTranslateX(
         -this._getThumbsTranslateX(
-          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex)
+          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
 
     }
 
     if (prevState.currentIndex !== this.state.currentIndex) {
       if (this.props.onSlide) {
-        this.props.onSlide(this.state.currentIndex)
+        this.props.onSlide(this.state.currentIndex);
       }
 
-      this._updateThumbnailTranslateX(prevState)
+      this._updateThumbnailTranslateX(prevState);
     }
   }
 
   componentWillMount() {
     this._slideLeft = debounceEventHandler(
-      this._slideLeft.bind(this), MIN_INTERVAL, true)
+      this._slideLeft.bind(this), MIN_INTERVAL, true);
 
     this._slideRight = debounceEventHandler(
-      this._slideRight.bind(this), MIN_INTERVAL, true)
+      this._slideRight.bind(this), MIN_INTERVAL, true);
 
-    this._handleResize = this._handleResize.bind(this)
-    this._handleKeyDown = this._handleKeyDown.bind(this)
-    this._thumbnailDelay = 300
+    this._handleResize = this._handleResize.bind(this);
+    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._thumbnailDelay = 300;
   }
 
   componentDidMount() {
     // delay initial resize to get the accurate this._imageGallery.offsetWidth
-    window.setTimeout(() => this._handleResize(), 500)
+    window.setTimeout(() => this._handleResize(), 500);
 
     if (this.props.autoPlay) {
-      this.play()
+      this.play();
     }
     if (!this.props.disableArrowKeys) {
-      window.addEventListener('keydown', this._handleKeyDown)
+      window.addEventListener('keydown', this._handleKeyDown);
     }
-    window.addEventListener('resize', this._handleResize)
+    window.addEventListener('resize', this._handleResize);
   }
 
   componentWillUnmount() {
     if (!this.props.disableArrowKeys) {
-      window.removeEventListener('keydown', this._handleKeyDown)
+      window.removeEventListener('keydown', this._handleKeyDown);
     }
-    window.removeEventListener('resize', this._handleResize)
+    window.removeEventListener('resize', this._handleResize);
     if (this._intervalId) {
-      window.clearInterval(this._intervalId)
-      this._intervalId = null
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
     }
   }
 
   play(callback = true) {
     if (this._intervalId) {
-      return
+      return;
     }
-    const {slideInterval} = this.props
+    const {slideInterval} = this.props;
     this._intervalId = window.setInterval(() => {
       if (!this.state.hovering) {
         if (!this.props.infinite && !this._canSlideRight()) {
-          this.pause()
+          this.pause();
         } else {
-          this.slideToIndex(this.state.currentIndex + 1)
+          this.slideToIndex(this.state.currentIndex + 1);
         }
       }
-    }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL)
+    }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
 
     if (this.props.onPlay && callback) {
-      this.props.onPlay(this.state.currentIndex)
+      this.props.onPlay(this.state.currentIndex);
     }
 
   }
 
   pause(callback = true) {
     if (this._intervalId) {
-      window.clearInterval(this._intervalId)
-      this._intervalId = null
+      window.clearInterval(this._intervalId);
+      this._intervalId = null;
     }
 
     if (this.props.onPause && callback) {
-      this.props.onPause(this.state.currentIndex)
+      this.props.onPause(this.state.currentIndex);
     }
   }
 
   fullScreen() {
-    const gallery = this._imageGallery
+    const gallery = this._imageGallery;
 
     if (gallery.requestFullscreen) {
-      gallery.requestFullscreen()
+      gallery.requestFullscreen();
     } else if (gallery.msRequestFullscreen) {
-      gallery.msRequestFullscreen()
+      gallery.msRequestFullscreen();
     } else if (gallery.mozRequestFullScreen) {
-      gallery.mozRequestFullScreen()
+      gallery.mozRequestFullScreen();
     } else if (gallery.webkitRequestFullscreen) {
-      gallery.webkitRequestFullscreen()
+      gallery.webkitRequestFullscreen();
     }
   }
 
   slideToIndex(index, event) {
     if (event) {
-      event.preventDefault()
+      event.preventDefault();
       if (this._intervalId) {
         // user triggered event while ImageGallery is playing, reset interval
-        this.pause(false)
-        this.play(false)
+        this.pause(false);
+        this.play(false);
       }
     }
 
-    let slideCount = this.props.items.length - 1
-    let currentIndex = index
+    let slideCount = this.props.items.length - 1;
+    let currentIndex = index;
 
     if (index < 0) {
-      currentIndex = slideCount
+      currentIndex = slideCount;
     } else if (index > slideCount) {
-      currentIndex = 0
+      currentIndex = 0;
     }
 
     this.setState({
@@ -189,225 +191,225 @@ export default class ImageGallery extends React.Component {
       style: {
         transition: 'transform .45s ease-out'
       }
-    })
+    });
   }
 
   getCurrentIndex() {
-    return this.state.currentIndex
+    return this.state.currentIndex;
   }
 
   _handleResize() {
     if (this._imageGallery) {
-      this.setState({galleryWidth: this._imageGallery.offsetWidth})
+      this.setState({galleryWidth: this._imageGallery.offsetWidth});
     }
   }
 
   _handleKeyDown(event) {
-    const LEFT_ARROW = 37
-    const RIGHT_ARROW = 39
-    const key = parseInt(event.keyCode || event.which || 0)
+    const LEFT_ARROW = 37;
+    const RIGHT_ARROW = 39;
+    const key = parseInt(event.keyCode || event.which || 0);
 
     switch(key) {
       case LEFT_ARROW:
         if (this._canSlideLeft() && !this._intervalId) {
-          this._slideLeft()
+          this._slideLeft();;
         }
-        break
+        break;
       case RIGHT_ARROW:
         if (this._canSlideRight() && !this._intervalId) {
-          this._slideRight()
+          this._slideRight();
         }
-        break
+        break;
     }
   }
 
   _handleMouseOverThumbnails(index) {
     if (this.props.slideOnThumbnailHover) {
-      this.setState({hovering: true})
+      this.setState({hovering: true});
       if (this._thumbnailTimer) {
-        window.clearTimeout(this._thumbnailTimer)
-        this._thumbnailTimer = null
+        window.clearTimeout(this._thumbnailTimer);
+        this._thumbnailTimer = null;
       }
       this._thumbnailTimer = window.setTimeout(() => {
-        this.slideToIndex(index)
-      }, this._thumbnailDelay)
+        this.slideToIndex(index);
+      }, this._thumbnailDelay);
     }
   }
 
   _handleMouseLeaveThumbnails() {
     if (this._thumbnailTimer) {
-      window.clearTimeout(this._thumbnailTimer)
-      this._thumbnailTimer = null
+      window.clearTimeout(this._thumbnailTimer);
+      this._thumbnailTimer = null;
       if (this.props.autoPlay === true) {
-        this.play(false)
+        this.play(false);
       }
     }
-    this.setState({hovering: false})
+    this.setState({hovering: false});
   }
 
   _handleMouseOver() {
-    this.setState({hovering: true})
+    this.setState({hovering: true});
   }
 
   _handleMouseLeave() {
-    this.setState({hovering: false})
+    this.setState({hovering: false});
   }
 
   _handleImageError(event) {
     if (this.props.defaultImage &&
         event.target.src.indexOf(this.props.defaultImage) === -1) {
-      event.target.src = this.props.defaultImage
+      event.target.src = this.props.defaultImage;
     }
   }
 
   _handleOnSwiped(ev, x, y, isFlick) {
-    this.setState({isFlick: isFlick})
+    this.setState({isFlick: isFlick});
   }
 
   _handleOnSwipedTo(index) {
-    let slideTo = this.state.currentIndex
+    let slideTo = this.state.currentIndex;
     if (Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick) {
-      slideTo += index
+      slideTo += index;
     }
 
     if (index < 0) {
       if (!this._canSlideLeft()) {
-        slideTo = this.state.currentIndex
+        slideTo = this.state.currentIndex;
       }
     } else {
       if (!this._canSlideRight()) {
-        slideTo = this.state.currentIndex
+        slideTo = this.state.currentIndex;
       }
     }
 
-    this.slideToIndex(slideTo)
+    this.slideToIndex(slideTo);
   }
 
   _handleSwiping(index, _, delta) {
-    const offsetPercentage = index * (delta / this.state.galleryWidth * 100)
-    this.setState({offsetPercentage: offsetPercentage, style: {}})
+    const offsetPercentage = index * (delta / this.state.galleryWidth * 100);
+    this.setState({offsetPercentage: offsetPercentage, style: {}});
   }
 
   _canNavigate() {
-    return this.props.items.length >= 2
+    return this.props.items.length >= 2;
   }
 
   _canSlideLeft() {
     if (this.props.infinite) {
-      return true
+      return true;
     } else {
-      return this.state.currentIndex > 0
+      return this.state.currentIndex > 0;
     }
   }
 
   _canSlideRight() {
     if (this.props.infinite) {
-      return true
+      return true;
     } else {
-      return this.state.currentIndex < this.props.items.length - 1
+      return this.state.currentIndex < this.props.items.length - 1;
     }
   }
 
   _updateThumbnailTranslateX(prevState) {
     if (this.state.currentIndex === 0) {
-      this._setThumbsTranslateX(0)
+      this._setThumbsTranslateX(0);
     } else {
       let indexDifference = Math.abs(
-        prevState.currentIndex - this.state.currentIndex)
-      let scrollX = this._getThumbsTranslateX(indexDifference)
+        prevState.currentIndex - this.state.currentIndex);
+      let scrollX = this._getThumbsTranslateX(indexDifference);
       if (scrollX > 0) {
         if (prevState.currentIndex < this.state.currentIndex) {
           this._setThumbsTranslateX(
-            this.state.thumbsTranslateX - scrollX)
+            this.state.thumbsTranslateX - scrollX);
         } else if (prevState.currentIndex > this.state.currentIndex) {
           this._setThumbsTranslateX(
-            this.state.thumbsTranslateX + scrollX)
+            this.state.thumbsTranslateX + scrollX);
         }
       }
     }
   }
 
   _setThumbsTranslateX(thumbsTranslateX) {
-    this.setState({thumbsTranslateX})
+    this.setState({thumbsTranslateX});
   }
 
   _getThumbsTranslateX(indexDifference) {
     if (this.props.disableThumbnailScroll) {
-      return 0
+      return 0;
     }
 
     if (this._thumbnails) {
       if (this._thumbnails.scrollWidth <= this.state.galleryWidth) {
-        return 0
+        return 0;
       }
-      let totalThumbnails = this._thumbnails.children.length
+      let totalThumbnails = this._thumbnails.children.length;
       // total scroll-x required to see the last thumbnail
-      let totalScrollX = this._thumbnails.scrollWidth - this.state.galleryWidth
+      let totalScrollX = this._thumbnails.scrollWidth - this.state.galleryWidth;
       // scroll-x required per index change
-      let perIndexScrollX = totalScrollX / (totalThumbnails - 1)
+      let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
 
-      return indexDifference * perIndexScrollX
+      return indexDifference * perIndexScrollX;
     }
   }
 
   _getAlignmentClassName(index) {
-    let {currentIndex} = this.state
-    let alignment = ''
-    const LEFT = 'left'
-    const CENTER = 'center'
-    const RIGHT = 'right'
+    let {currentIndex} = this.state;
+    let alignment = '';
+    const LEFT = 'left';
+    const CENTER = 'center';
+    const RIGHT = 'right';
 
     switch (index) {
       case (currentIndex - 1):
-        alignment = ` ${LEFT}`
-        break
+        alignment = ` ${LEFT}`;
+        break;
       case (currentIndex):
-        alignment = ` ${CENTER}`
-        break
+        alignment = ` ${CENTER}`;
+        break;
       case (currentIndex + 1):
-        alignment = ` ${RIGHT}`
-        break
+        alignment = ` ${RIGHT}`;
+        break;
     }
 
     if (this.props.items.length >= 3 && this.props.infinite) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
-        alignment = ` ${RIGHT}`
+        alignment = ` ${RIGHT}`;
       } else if (index === this.props.items.length - 1 && currentIndex === 0) {
         // set last slide as left slide if were sliding left from first slide
-        alignment = ` ${LEFT}`
+        alignment = ` ${LEFT}`;
       }
     }
 
-    return alignment
+    return alignment;
   }
 
   _getSlideStyle(index) {
-    const {currentIndex, offsetPercentage} = this.state
-    const basetranslateX = -100 * currentIndex
-    const totalSlides = this.props.items.length - 1
+    const {currentIndex, offsetPercentage} = this.state;
+    const basetranslateX = -100 * currentIndex;
+    const totalSlides = this.props.items.length - 1;
 
-    let translateX = basetranslateX + (index * 100) + offsetPercentage
-    let zIndex = 1
+    let translateX = basetranslateX + (index * 100) + offsetPercentage;
+    let zIndex = 1;
 
     if (this.props.infinite && this.props.items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
-        translateX = -100 + offsetPercentage
+        translateX = -100 + offsetPercentage;
       } else if (currentIndex === totalSlides && index === 0) {
         // make the first slide the slide after the last
-        translateX = 100 + offsetPercentage
+        translateX = 100 + offsetPercentage;
       }
     }
 
     // current index has more zIndex so slides wont fly by toggling infinite
     if (index === currentIndex) {
-      zIndex = 3
+      zIndex = 3;
     } else if (index === this.state.previousIndex) {
-      zIndex = 2
+      zIndex = 2;
     }
 
-    const translate3d = `translate3d(${translateX}%, 0, 0)`
+    const translate3d = `translate3d(${translateX}%, 0, 0)`;
 
     return {
       WebkitTransform: translate3d,
@@ -416,30 +418,30 @@ export default class ImageGallery extends React.Component {
       OTransform: translate3d,
       transform: translate3d,
       zIndex: zIndex
-    }
+    };
   }
 
   _getThumbnailStyle() {
-    const translate3d = `translate3d(${this.state.thumbsTranslateX}px, 0, 0)`
+    const translate3d = `translate3d(${this.state.thumbsTranslateX}px, 0, 0)`;
     return {
       WebkitTransform: translate3d,
       MozTransform: translate3d,
       msTransform: translate3d,
       OTransform: translate3d,
       transform: translate3d
-    }
+    };
   }
 
   _slideLeft(event) {
-    this.slideToIndex(this.state.currentIndex - 1, event)
+    this.slideToIndex(this.state.currentIndex - 1, event);
   }
 
   _slideRight(event) {
-    this.slideToIndex(this.state.currentIndex + 1, event)
+    this.slideToIndex(this.state.currentIndex + 1, event);
   }
 
   _renderItem(item) {
-    const onImageError = this.props.onImageError || this._handleImageError
+    const onImageError = this.props.onImageError || this._handleImageError;
 
     return (
       <div className='image-gallery-image'>
@@ -458,29 +460,29 @@ export default class ImageGallery extends React.Component {
             </span>
         }
       </div>
-    )
+    );
   }
 
   render() {
-    const {currentIndex} = this.state
-    const thumbnailStyle = this._getThumbnailStyle()
+    const {currentIndex} = this.state;
+    const thumbnailStyle = this._getThumbnailStyle();
 
-    const slideLeft = this._slideLeft.bind(this)
-    const slideRight = this._slideRight.bind(this)
+    const slideLeft = this._slideLeft.bind(this);
+    const slideRight = this._slideRight.bind(this);
 
-    let slides = []
-    let thumbnails = []
-    let bullets = []
+    let slides = [];
+    let thumbnails = [];
+    let bullets = [];
 
     this.props.items.map((item, index) => {
-      const alignment = this._getAlignmentClassName(index)
+      const alignment = this._getAlignmentClassName(index);
       const originalClass = item.originalClass ?
-        ` ${item.originalClass}` : ''
+        ` ${item.originalClass}` : '';
       const thumbnailClass = item.thumbnailClass ?
-        ` ${item.thumbnailClass}` : ''
+        ` ${item.thumbnailClass}` : '';
 
       const renderItem = item.renderItem ||
-        this.props.renderItem || this._renderItem.bind(this)
+        this.props.renderItem || this._renderItem.bind(this);
 
       const slide = (
         <div
@@ -491,19 +493,19 @@ export default class ImageGallery extends React.Component {
         >
           {renderItem(item)}
         </div>
-      )
+      );
 
       if (this.props.lazyLoad) {
         if (alignment) {
-          slides.push(slide)
+          slides.push(slide);
         }
       } else {
-        slides.push(slide)
+        slides.push(slide);
       }
 
-      let onThumbnailError = this._handleImageError
+      let onThumbnailError = this._handleImageError;
       if (this.props.onThumbnailError) {
-        onThumbnailError = this.props.onThumbnailError
+        onThumbnailError = this.props.onThumbnailError;
       }
 
       if (this.props.showThumbnails) {
@@ -526,7 +528,7 @@ export default class ImageGallery extends React.Component {
               alt={item.thumbnailAlt}
               onError={onThumbnailError.bind(this)}/>
           </a>
-        )
+        );
       }
 
       if (this.props.showBullets) {
@@ -540,9 +542,9 @@ export default class ImageGallery extends React.Component {
             onTouchStart={event => this.slideToIndex.call(this, index, event)}
             onClick={event => this.slideToIndex.call(this, index, event)}>
           </li>
-        )
+        );
       }
-    })
+    });
 
     return (
       <section ref={i => this._imageGallery = i} className='image-gallery'>
@@ -628,7 +630,7 @@ export default class ImageGallery extends React.Component {
             </div>
         }
       </section>
-    )
+    );
   }
 
 }
@@ -657,7 +659,7 @@ ImageGallery.propTypes = {
   onImageError: React.PropTypes.func,
   onThumbnailError: React.PropTypes.func,
   renderItem: React.PropTypes.func,
-}
+};
 
 ImageGallery.defaultProps = {
   items: [],
@@ -674,4 +676,4 @@ ImageGallery.defaultProps = {
   indexSeparator: ' / ',
   startIndex: 0,
   slideInterval: 3000
-}
+};
