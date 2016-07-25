@@ -351,32 +351,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _getAlignmentClassName(index) {
-    let {currentIndex} = this.state;
     let alignment = '';
-    const LEFT = 'left';
-    const CENTER = 'center';
-    const RIGHT = 'right';
-
-    switch (index) {
-      case (currentIndex - 1):
-        alignment = ` ${LEFT}`;
-        break;
-      case (currentIndex):
-        alignment = ` ${CENTER}`;
-        break;
-      case (currentIndex + 1):
-        alignment = ` ${RIGHT}`;
-        break;
-    }
-
-    if (this.props.items.length >= 3 && this.props.infinite) {
-      if (index === 0 && currentIndex === this.props.items.length - 1) {
-        // set first slide as right slide if were sliding right from last slide
-        alignment = ` ${RIGHT}`;
-      } else if (index === this.props.items.length - 1 && currentIndex === 0) {
-        // set last slide as left slide if were sliding left from first slide
-        alignment = ` ${LEFT}`;
-      }
+    if (this.state.currentIndex === index) {
+      alignment = ' center';
     }
 
     return alignment;
@@ -427,8 +404,9 @@ export default class ImageGallery extends React.Component {
 
   _getSlideStyle(index) {
     const {currentIndex, offsetPercentage} = this.state;
+    const {infinite, items} = this.props;
     const baseTranslateX = -100 * currentIndex;
-    const totalSlides = this.props.items.length - 1;
+    const totalSlides = items.length - 1;
 
     // calculates where the other slides belong based on currentIndex
     let translateX = baseTranslateX + (index * 100) + offsetPercentage;
@@ -443,7 +421,7 @@ export default class ImageGallery extends React.Component {
       zIndex = 2;
     }
 
-    if (this.props.infinite && this.props.items.length > 2) {
+    if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
         translateX = -100 + offsetPercentage;
@@ -453,8 +431,8 @@ export default class ImageGallery extends React.Component {
       }
     }
 
-    // Special case when there are only 2 photos
-    if (this.props.infinite && this.props.items.length === 2) {
+    // Special case when there are only 2 items with infinite on
+    if (infinite && items.length === 2) {
       translateX = this._getTranslateXForTwoSlide(index);
     }
 
