@@ -267,7 +267,14 @@ export default class ImageGallery extends React.Component {
   }
 
   _shouldSlideOnSwipe() {
-    return Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick;
+    const shouldSlide = Math.abs(this.state.offsetPercentage) > 30 ||
+      this.state.isFlick;
+
+    if (shouldSlide) {
+      // reset isFlick state after so data is not persisted
+      this.setState({isFlick: false});
+    }
+    return shouldSlide;
   }
 
   _handleOnSwipedTo(index) {
