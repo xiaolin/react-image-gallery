@@ -266,9 +266,14 @@ export default class ImageGallery extends React.Component {
     this.setState({isFlick: isFlick});
   }
 
+  _shouldSlideOnSwipe() {
+    return Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick;
+  }
+
   _handleOnSwipedTo(index) {
     let slideTo = this.state.currentIndex;
-    if (Math.abs(this.state.offsetPercentage) > 30 || this.state.isFlick) {
+
+    if (this._shouldSlideOnSwipe()) {
       slideTo += index;
     }
 
@@ -295,19 +300,12 @@ export default class ImageGallery extends React.Component {
   }
 
   _canSlideLeft() {
-    if (this.props.infinite) {
-      return true;
-    } else {
-      return this.state.currentIndex > 0;
-    }
+    return this.props.infinite || this.state.currentIndex > 0;
   }
 
   _canSlideRight() {
-    if (this.props.infinite) {
-      return true;
-    } else {
-      return this.state.currentIndex < this.props.items.length - 1;
-    }
+    return this.props.infinite ||
+      this.state.currentIndex < this.props.items.length - 1;
   }
 
   _updateThumbnailTranslateX(prevState) {
@@ -384,13 +382,66 @@ export default class ImageGallery extends React.Component {
     return alignment;
   }
 
+  _getTranslateXForTwoSlide(index) {
+    // For taking care of infinite swipe when there are only two slides
+    const {currentIndex, offsetPercentage, previousIndex} = this.state;
+    const baseTranslateX = -100 * currentIndex;
+    let translateX = baseTranslateX + (index * 100) + offsetPercentage;
+
+    // keep track of user swiping direction
+    if (offsetPercentage > 0) {
+      this.direction = 'left';
+    } else if (offsetPercentage < 0) {
+      this.direction = 'right';
+    }
+
+    // when swiping make sure the slides are on the correct side
+    if (currentIndex === 0 && index === 1 && offsetPercentage > 0) {
+      translateX = -100 + offsetPercentage;
+    } else if (currentIndex === 1 && index === 0 && offsetPercentage < 0) {
+      translateX = 100 + offsetPercentage;
+    }
+
+    if (currentIndex !== previousIndex) {
+      // when swiped move the slide to the correct side
+      if (previousIndex === 0 && index === 0 &&
+          offsetPercentage === 0 && this.direction === 'left') {
+        translateX = 100;
+      } else if (previousIndex === 1 && index === 1 &&
+          offsetPercentage === 0 && this.direction === 'right') {
+        translateX = -100;
+      }
+    } else {
+      // keep the slide on the correct slide even when not a swipe
+      if (currentIndex === 0 && index === 1 &&
+          offsetPercentage === 0 && this.direction === 'left') {
+        translateX = -100;
+      } else if (currentIndex === 1 && index === 0 &&
+          offsetPercentage === 0 && this.direction === 'right') {
+        translateX = 100;
+      }
+    }
+
+    return translateX;
+  }
+
   _getSlideStyle(index) {
     const {currentIndex, offsetPercentage} = this.state;
-    const basetranslateX = -100 * currentIndex;
+    const baseTranslateX = -100 * currentIndex;
     const totalSlides = this.props.items.length - 1;
 
-    let translateX = basetranslateX + (index * 100) + offsetPercentage;
+    // calculates where the other slides belong based on currentIndex
+    let translateX = baseTranslateX + (index * 100) + offsetPercentage;
+
+    // adjust zIndex so that only the current slide and the slide were going
+    // to is at the top layer, this prevents transitions from flying in the
+    // background when swiping before the first slide or beyond the last slide
     let zIndex = 1;
+    if (index === currentIndex) {
+      zIndex = 3;
+    } else if (index === this.state.previousIndex) {
+      zIndex = 2;
+    }
 
     if (this.props.infinite && this.props.items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
@@ -402,11 +453,9 @@ export default class ImageGallery extends React.Component {
       }
     }
 
-    // current index has more zIndex so slides wont fly by toggling infinite
-    if (index === currentIndex) {
-      zIndex = 3;
-    } else if (index === this.state.previousIndex) {
-      zIndex = 2;
+    // Special case when there are only 2 photos
+    if (this.props.infinite && this.props.items.length === 2) {
+      translateX = this._getTranslateXForTwoSlide(index);
     }
 
     const translate3d = `translate3d(${translateX}%, 0, 0)`;
