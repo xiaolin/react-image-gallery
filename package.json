@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.6.6",
+  "version": "0.6.7",
   "description": "React Carousel, React Image gallery, React Slide Show component",
   "main": "./build/image-gallery",
   "scripts": {
