@@ -343,13 +343,15 @@ export default class ImageGallery extends React.Component {
       return 0;
     }
 
+    const {galleryWidth} = this.state;
+
     if (this._thumbnails) {
-      if (this._thumbnails.scrollWidth <= this.state.galleryWidth) {
+      if (this._thumbnails.scrollWidth <= galleryWidth) {
         return 0;
       }
       let totalThumbnails = this._thumbnails.children.length;
       // total scroll-x required to see the last thumbnail
-      let totalScrollX = this._thumbnails.scrollWidth - this.state.galleryWidth;
+      let totalScrollX = this._thumbnails.scrollWidth - galleryWidth;
       // scroll-x required per index change
       let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
 
@@ -358,9 +360,33 @@ export default class ImageGallery extends React.Component {
   }
 
   _getAlignmentClassName(index) {
+    // LEFT, and RIGHT alignments are necessary for lazyLoad
+    let {currentIndex} = this.state;
     let alignment = '';
-    if (this.state.currentIndex === index) {
-      alignment = ' center';
+    const LEFT = 'left';
+    const CENTER = 'center';
+    const RIGHT = 'right';
+
+    switch (index) {
+      case (currentIndex - 1):
+        alignment = ` ${LEFT}`;
+        break;
+      case (currentIndex):
+        alignment = ` ${CENTER}`;
+        break;
+      case (currentIndex + 1):
+        alignment = ` ${RIGHT}`;
+        break;
+    }
+
+    if (this.props.items.length >= 3 && this.props.infinite) {
+      if (index === 0 && currentIndex === this.props.items.length - 1) {
+        // set first slide as right slide if were sliding right from last slide
+        alignment = ` ${RIGHT}`;
+      } else if (index === this.props.items.length - 1 && currentIndex === 0) {
+        // set last slide as left slide if were sliding left from first slide
+        alignment = ` ${LEFT}`;
+      }
     }
 
     return alignment;
