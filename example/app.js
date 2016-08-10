@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import ImageGallery from '../src/ImageGallery';
 
+const PREFIX_URL = 'https://raw.githubusercontent.com/xiaolin/react-image-gallery/master/static/';
+
 class App extends React.Component {
 
   constructor() {
@@ -72,54 +74,34 @@ class App extends React.Component {
     this.setState({[state]: event.target.checked});
   }
 
+  _getStaticImages() {
+    let images = [];
+    for (let i = 3; i < 12; i++) {
+      images.push({
+        original: `${PREFIX_URL}${i}.jpg`,
+        thumbnail:`${PREFIX_URL}${i}t.jpg`
+      });
+    }
+
+    return images;
+  }
+
   render() {
     const images = [
       {
-        original: 'http://lorempixel.com/1000/600/food/1/',
-        thumbnail: 'http://lorempixel.com/100/75/food/1/',
+        original: `${PREFIX_URL}1.jpg`,
+        thumbnail: `${PREFIX_URL}1t.jpg`,
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
         description: 'Custom class for slides & thumbnails'
       },
       {
-        original: 'http://lorempixel.com/1000/600/food/2/',
-        thumbnail: 'http://lorempixel.com/100/75/food/2/',
+        original: `${PREFIX_URL}2.jpg`,
+        thumbnail: `${PREFIX_URL}2t.jpg`,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/3/',
-        thumbnail: 'http://lorempixel.com/100/75/food/3/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/4/',
-        thumbnail: 'http://lorempixel.com/100/75/food/4/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/5/',
-        thumbnail: 'http://lorempixel.com/100/75/food/5/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/6/',
-        thumbnail: 'http://lorempixel.com/100/75/food/6/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/7/',
-        thumbnail: 'http://lorempixel.com/100/75/food/7/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/8/',
-        thumbnail: 'http://lorempixel.com/100/75/food/8/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/9/',
-        thumbnail: 'http://lorempixel.com/100/75/food/9/'
-      },
-      {
-        original: 'http://lorempixel.com/1000/600/food/10/',
-        thumbnail: 'http://lorempixel.com/100/75/food/10/'
       }
+    ].concat(this._getStaticImages());
 
-    ];
 
     return (
 
