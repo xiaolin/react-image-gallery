@@ -582,15 +582,13 @@ export default class ImageGallery extends React.Component {
 
             onTouchStart={event => this.slideToIndex.call(this, index, event)}
             onClick={event => this.slideToIndex.call(this, index, event)}>
-            <div style={{ width: '63px' }}>
               <img
                 src={item.thumbnail}
                 alt={item.thumbnailAlt}
                 onError={onThumbnailError.bind(this)}/>
-               <span style={{ fontSize: '0.8em', color: 'black' }}>
-                 {item.label}
-               </span>
-            </div>
+              <div >
+                {item.label}
+              </div>
           </a>
         );
       }
