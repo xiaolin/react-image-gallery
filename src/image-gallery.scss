@@ -155,10 +155,10 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   div {
     font-size: 1.0em;
     color: $ig-black;
-  }
 
-  @media(max-width: $ig-screen-sm-min) {
-    font-size: 0.8em;
+    @media(max-width: $ig-screen-sm-min) {
+      font-size: 0.8em;
+    }
   }
 
   img {
