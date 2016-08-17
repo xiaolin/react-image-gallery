@@ -586,7 +586,7 @@ export default class ImageGallery extends React.Component {
                 src={item.thumbnail}
                 alt={item.thumbnailAlt}
                 onError={onThumbnailError.bind(this)}/>
-              <div >
+              <div className='image-gallery-thumbnail-label'>
                 {item.label}
               </div>
           </a>

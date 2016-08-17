@@ -152,15 +152,6 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   display: inline-block;
   padding-right: 5px;
 
-  div {
-    font-size: 1.0em;
-    color: $ig-black;
-
-    @media(max-width: $ig-screen-sm-min) {
-      font-size: 0.8em;
-    }
-  }
-
   img {
     border: 4px solid transparent;
     transition: border .3s ease-out;
@@ -181,6 +172,15 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
         border: 3px solid $ig-blue;
       }
     }
+  }
+}
+
+.image-gallery-thumbnail-label {
+  font-size: 1.0em;
+  color: $ig-black;
+
+  @media(max-width: $ig-screen-sm-min) {
+    font-size: 0.8em;
   }
 }
 
