@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.6.7",
+  "version": "0.6.8",
   "description": "React Carousel, React Image gallery, React Slide Show component",
   "main": "./build/image-gallery",
   "scripts": {
@@ -51,7 +51,7 @@
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.1.1",
     "gulp-uglify": "^1.5.3",
-    "react": "^15.2.1",
+    "react": "^15.3.0",
     "react-dom": "^15.2.1",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.0.0",

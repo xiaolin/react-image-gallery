@@ -63,6 +63,16 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  componentWillReceiveProps(nextProps) {
+    if (this.props.disableArrowKeys !== nextProps.disableArrowKeys) {
+      if (nextProps.disableArrowKeys) {
+        window.removeEventListener('keydown', this._handleKeyDown);
+      } else {
+        window.addEventListener('keydown', this._handleKeyDown);
+      }
+    }
+  }
+
   componentDidUpdate(prevProps, prevState) {
     if (prevState.galleryWidth !== this.state.galleryWidth ||
         prevProps.showThumbnails !== this.props.showThumbnails) {
