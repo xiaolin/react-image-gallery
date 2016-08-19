@@ -149,7 +149,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 }
 
 .image-gallery-thumbnail {
-  display: inline-block;
+  display: table-cell;
   padding-right: 5px;
 
   img {
@@ -176,11 +176,11 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 }
 
 .image-gallery-thumbnail-label {
-  font-size: 1.0em;
   color: $ig-black;
+  font-size: 1em;
 
   @media(max-width: $ig-screen-sm-min) {
-    font-size: 0.8em;
+    font-size: .8em;
   }
 }
 
