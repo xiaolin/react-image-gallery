@@ -222,7 +222,7 @@ export default class ImageGallery extends React.Component {
     switch(key) {
       case LEFT_ARROW:
         if (this._canSlideLeft() && !this._intervalId) {
-          this._slideLeft();;
+          this._slideLeft();
         }
         break;
       case RIGHT_ARROW:
