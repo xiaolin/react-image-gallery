@@ -59,7 +59,8 @@ export default class ImageGallery extends React.Component {
       currentIndex: props.startIndex,
       thumbsTranslateX: 0,
       offsetPercentage: 0,
-      galleryWidth: 0
+      galleryWidth: 0,
+      thumbnailWidth: 0
     };
   }
 
@@ -74,10 +75,10 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.galleryWidth !== this.state.galleryWidth ||
+    if (prevState.thumbnailWidth !== this.state.thumbnailWidth ||
         prevProps.showThumbnails !== this.props.showThumbnails) {
 
-      // adjust thumbnail container when window width is adjusted
+      // adjust thumbnail container when thumbnail width is adjusted
       this._setThumbsTranslateX(
         -this._getThumbsTranslateX(
           this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
@@ -211,6 +212,10 @@ export default class ImageGallery extends React.Component {
   _handleResize() {
     if (this._imageGallery) {
       this.setState({galleryWidth: this._imageGallery.offsetWidth});
+    }
+
+    if (this._imageGalleryThumbnail) {
+      this.setState({thumbnailWidth: this._imageGalleryThumbnail.offsetWidth});
     }
   }
 
@@ -353,15 +358,15 @@ export default class ImageGallery extends React.Component {
       return 0;
     }
 
-    const {galleryWidth} = this.state;
+    const {thumbnailWidth} = this.state;
 
     if (this._thumbnails) {
-      if (this._thumbnails.scrollWidth <= galleryWidth) {
+      if (this._thumbnails.scrollWidth <= thumbnailWidth) {
         return 0;
       }
       let totalThumbnails = this._thumbnails.children.length;
       // total scroll-x required to see the last thumbnail
-      let totalScrollX = this._thumbnails.scrollWidth - galleryWidth;
+      let totalScrollX = this._thumbnails.scrollWidth - thumbnailWidth;
       // scroll-x required per index change
       let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
 
@@ -692,7 +697,10 @@ export default class ImageGallery extends React.Component {
 
         {
           this.props.showThumbnails &&
-            <div className='image-gallery-thumbnails'>
+            <div
+              className='image-gallery-thumbnails'
+              ref={i => this._imageGalleryThumbnail = i}
+            >
               <div
                 ref={t => this._thumbnails = t}
                 className='image-gallery-thumbnails-container'
