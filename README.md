@@ -66,7 +66,7 @@ class MyComponent extends React.Component {
         thumbnailLabel: 'Optional',
         description: 'Optional description...'
         srcSet: 'Optional srcset (responsive images src)'
-        size: 'Optional size (image size relative to the breakpoint)'
+        sizes: 'Optional sizes (image sizes relative to the breakpoint)'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/2/',
