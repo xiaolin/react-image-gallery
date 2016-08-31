@@ -18,7 +18,7 @@ class App extends React.Component {
       showThumbnails: true,
       showNav: true,
       slideInterval: 2000,
-      fullscreen: false,
+      showFullscreen: true
     };
   }
 
@@ -38,10 +38,6 @@ class App extends React.Component {
   _playSlider() {
     this._imageGallery.play();
     this.setState({isPlaying: true});
-  }
-
-  _fullScreen() {
-    this._imageGallery.fullScreen();
   }
 
   _onImageClick(event) {
@@ -71,7 +67,9 @@ class App extends React.Component {
   }
 
   _handleCheckboxChange(state, event) {
+    console.log(state, event.target.checked, this.state);
     this.setState({[state]: event.target.checked});
+    console.log(this.state);
   }
 
   _getStaticImages() {
@@ -120,6 +118,7 @@ class App extends React.Component {
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
+          showFullscreen={this.state.showFullscreen}
           slideInterval={parseInt(this.state.slideInterval)}
           autoPlay={this.state.isPlaying}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
@@ -143,13 +142,6 @@ class App extends React.Component {
               onClick={this._pauseSlider.bind(this)}>
               Pause
             </a>
-            </li>
-            <li>
-              <a
-                className='app-button'
-                onClick={this._fullScreen.bind(this)}>
-                Full Screen
-              </a>
             </li>
             <li>
               <div className='app-interval-input-group'>
@@ -211,6 +203,14 @@ class App extends React.Component {
                 onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
                 checked={this.state.slideOnThumbnailHover}/>
                 <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
+            </li>
+            <li>
+              <input
+                  id='show_fullscreen'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'showFullscreen')}
+                  checked={this.state.showFullscreen}/>
+              <label htmlFor='show_fullscreen'>show fullscreen button</label>
             </li>
           </ul>
 

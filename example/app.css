@@ -29,6 +29,30 @@ label {
 .app .image-gallery {
   margin: 0 auto;
   width: 100%;
+  position:relative;
+}
+
+.app .fullscreen {
+  position: absolute;
+  top: 0;
+  right: 0;
+  z-index: 9999;
+
+  background: #ffffff none repeat scroll 0 0;
+  border: 3px solid #cccccc;
+  border-radius: 4px;
+  color: #555555;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1;
+  padding: 10.5px 5px;
+  text-align: center;
+  width: 80px;
+}
+
+.app .fullscreen:before {
+  content:"Fullscreen"
 }
 
 @media (min-width: 1320px) {
