@@ -60,7 +60,8 @@ export default class ImageGallery extends React.Component {
       thumbsTranslateX: 0,
       offsetPercentage: 0,
       galleryWidth: 0,
-      thumbnailWidth: 0
+      thumbnailWidth: 0,
+      isFullscreen: false
     };
   }
 
@@ -165,15 +166,28 @@ export default class ImageGallery extends React.Component {
   fullScreen() {
     const gallery = this._imageGallery;
 
-    if (gallery.requestFullscreen) {
-      gallery.requestFullscreen();
-    } else if (gallery.msRequestFullscreen) {
-      gallery.msRequestFullscreen();
-    } else if (gallery.mozRequestFullScreen) {
-      gallery.mozRequestFullScreen();
-    } else if (gallery.webkitRequestFullscreen) {
-      gallery.webkitRequestFullscreen();
+    if (this.state.isFullscreen) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      }
+
+    } else {
+      if (gallery.requestFullscreen) {
+        gallery.requestFullscreen();
+      } else if (gallery.msRequestFullscreen) {
+        gallery.msRequestFullscreen();
+      } else if (gallery.mozRequestFullScreen) {
+        gallery.mozRequestFullScreen();
+      } else if (gallery.webkitRequestFullscreen) {
+        gallery.webkitRequestFullscreen();
+      }
     }
+
+    this.state.isFullscreen = !this.state.isFullscreen;
   }
 
   slideToIndex(index, event) {
@@ -694,20 +708,9 @@ export default class ImageGallery extends React.Component {
               </div>
           }
         </div>
-
         {
-          this.props.showThumbnails &&
-            <div
-              className='image-gallery-thumbnails'
-              ref={i => this._imageGalleryThumbnail = i}
-            >
-              <div
-                ref={t => this._thumbnails = t}
-                className='image-gallery-thumbnails-container'
-                style={thumbnailStyle}>
-                {thumbnails}
-              </div>
-            </div>
+          this.props.showFullscreen &&
+            <div className={this.props.fullscreenClassName} onClick={this.fullScreen.bind(this)}></div>
         }
       </section>
     );
@@ -723,12 +726,14 @@ ImageGallery.propTypes = {
   infinite: React.PropTypes.bool,
   showIndex: React.PropTypes.bool,
   showBullets: React.PropTypes.bool,
+  showFullscreen: React.PropTypes.bool,
   showThumbnails: React.PropTypes.bool,
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
   disableArrowKeys: React.PropTypes.bool,
   defaultImage: React.PropTypes.string,
   indexSeparator: React.PropTypes.string,
+  fullscreenClassName: React.PropTypes.string,
   startIndex: React.PropTypes.number,
   slideInterval: React.PropTypes.number,
   onSlide: React.PropTypes.func,
@@ -738,7 +743,7 @@ ImageGallery.propTypes = {
   onImageLoad: React.PropTypes.func,
   onImageError: React.PropTypes.func,
   onThumbnailError: React.PropTypes.func,
-  renderItem: React.PropTypes.func,
+  renderItem: React.PropTypes.func
 };
 
 ImageGallery.defaultProps = {
@@ -749,11 +754,13 @@ ImageGallery.defaultProps = {
   infinite: true,
   showIndex: false,
   showBullets: false,
+  showFullscreen: true,
   showThumbnails: true,
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,
   disableArrowKeys: false,
   indexSeparator: ' / ',
+  fullscreenClassName: 'fullscreen',
   startIndex: 0,
   slideInterval: 3000
 };
