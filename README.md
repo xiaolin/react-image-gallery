@@ -35,7 +35,7 @@ npm install react-image-gallery
 build/image-gallery.css
 ```
 
-### EXAMPLE
+### Example
 Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js)
 ```js
 import ImageGallery from 'react-image-gallery';
@@ -155,7 +155,7 @@ class MyComponent extends React.Component {
     ```
 
 
-# functions
+# Functions
 
 * `play()`: continuous plays if image is not hovered
 * `pause()`: pauses the slides
@@ -167,7 +167,7 @@ class MyComponent extends React.Component {
 
 * Feel free to contribute and or provide feedback!
 
-# To build the example locally
+# Build the example locally
 
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
