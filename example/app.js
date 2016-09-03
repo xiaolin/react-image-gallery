@@ -19,6 +19,7 @@ class App extends React.Component {
       showNav: true,
       slideInterval: 2000,
       fullscreen: false,
+      showVideo: {},
     };
   }
 
@@ -86,6 +87,43 @@ class App extends React.Component {
     return images;
   }
 
+  _toggleShowVideo(url) {
+    this.state.showVideo[url] = !Boolean(this.state.showVideo[url]);
+    this.setState({
+      showVideo: this.state.showVideo
+    });
+  }
+
+  _renderVideo(item) {
+    return (
+      <div className='image-gallery-image'>
+        {
+          this.state.showVideo[item.embedUrl] ?
+            <div className='video-wrapper'>
+                <a
+                  className='close-video'
+                  onClick={this._toggleShowVideo.bind(this, item.embedUrl)}
+                >
+                </a>
+                <iframe
+                  width='560'
+                  height='315'
+                  src={item.embedUrl}
+                  frameBorder='0'
+                  allowFullScreen
+                >
+                </iframe>
+            </div>
+          :
+            <a onClick={this._toggleShowVideo.bind(this, item.embedUrl)}>
+              <div className='play-button'></div>
+              <img src={item.original}/>
+            </a>
+        }
+      </div>
+    );
+  }
+
   render() {
     const images = [
       {
@@ -99,6 +137,18 @@ class App extends React.Component {
         original: `${PREFIX_URL}2.jpg`,
         thumbnail: `${PREFIX_URL}2t.jpg`,
         description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
+      },
+      {
+        thumbnail: `${PREFIX_URL}3v.jpg`,
+        original: `${PREFIX_URL}3v.jpg`,
+        embedUrl: 'https://www.youtube.com/embed/iNJdPyoqt8U?autoplay=1&showinfo=0',
+        renderItem: this._renderVideo.bind(this)
+      },
+      {
+        thumbnail: `${PREFIX_URL}4v.jpg`,
+        original: `${PREFIX_URL}4v.jpg`,
+        embedUrl: 'https://www.youtube.com/embed/4pSzhZ76GdM?autoplay=1&showinfo=0',
+        renderItem: this._renderVideo.bind(this)
       }
     ].concat(this._getStaticImages());
 
