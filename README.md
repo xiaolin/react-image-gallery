@@ -65,8 +65,8 @@ class MyComponent extends React.Component {
         originalAlt: 'original-alt',
         thumbnailAlt: 'thumbnail-alt',
         thumbnailLabel: 'Optional',
-        description: 'Optional description...'
-        srcSet: 'Optional srcset (responsive images src)'
+        description: 'Optional description...',
+        srcSet: 'Optional srcset (responsive images src)',
         sizes: 'Optional sizes (image sizes relative to the breakpoint)'
       },
       {
