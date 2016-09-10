@@ -10,13 +10,13 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
-      isPlaying: false,
       showIndex: false,
       slideOnThumbnailHover: false,
       showBullets: true,
       infinite: true,
       showThumbnails: true,
       allowFullscreen: true,
+      showPlayButton: true,
       showNav: true,
       slideInterval: 2000,
       showVideo: {},
@@ -26,23 +26,13 @@ class App extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     if (this.state.slideInterval !== prevState.slideInterval) {
       // refresh setInterval
-      this._pauseSlider();
-      this._playSlider();
+      this._imageGallery.pause();
+      this._imageGallery.play();
     }
   }
 
-  _pauseSlider() {
-    this._imageGallery.pause();
-    this.setState({isPlaying: false});
-  }
-
-  _playSlider() {
-    this._imageGallery.play();
-    this.setState({isPlaying: true});
-  }
-
   _onImageClick(event) {
-    console.debug('clicked on image', event.target.src, 'at index', this._imageGallery.getCurrentIndex());
+    console.debug('clicked on image', event.target, 'at index', this._imageGallery.getCurrentIndex());
   }
 
   _onImageLoad(event) {
@@ -50,17 +40,16 @@ class App extends React.Component {
   }
 
   _onSlide(index) {
+    this._resetVideo();
     console.debug('slid to index', index);
   }
 
   _onPause(index) {
     console.debug('paused on index', index);
-    this.setState({isPlaying: false});
   }
 
   _onPlay(index) {
     console.debug('playing from index', index);
-    this.setState({isPlaying: true});
   }
 
   _handleInputChange(state, event) {
@@ -83,11 +72,29 @@ class App extends React.Component {
     return images;
   }
 
+  _resetVideo() {
+    this.setState({
+      showVideo: {},
+      showPlayButton: true,
+      allowFullscreen: true
+    });
+  }
+
   _toggleShowVideo(url) {
     this.state.showVideo[url] = !Boolean(this.state.showVideo[url]);
     this.setState({
       showVideo: this.state.showVideo
     });
+
+    if (this.state.showVideo[url]) {
+      if (this.state.showPlayButton) {
+        this.setState({showPlayButton: false});
+      }
+
+      if (this.state.allowFullscreen) {
+        this.setState({allowFullscreen: false});
+      }
+    }
   }
 
   _renderVideo(item) {
@@ -106,7 +113,7 @@ class App extends React.Component {
                   height='315'
                   src={item.embedUrl}
                   frameBorder='0'
-                  allowFullscreen
+                  allowFullScreen
                 >
                 </iframe>
             </div>
@@ -157,17 +164,17 @@ class App extends React.Component {
           lazyLoad={false}
           onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide}
+          onSlide={this._onSlide.bind(this)}
           onPause={this._onPause.bind(this)}
           onPlay={this._onPlay.bind(this)}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
           allowFullscreen={this.state.allowFullscreen}
+          showPlayButton={this.state.showPlayButton}
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
           slideInterval={parseInt(this.state.slideInterval)}
-          autoPlay={this.state.isPlaying}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
         />
 
@@ -177,22 +184,8 @@ class App extends React.Component {
 
           <ul className='app-buttons'>
             <li>
-              <a
-                className={'app-button ' + (this.state.isPlaying ? 'active' : '')}
-                onClick={this._playSlider.bind(this)}>
-                Play
-              </a>
-            </li>
-            <li>
-            <a
-              className={'app-button ' + (!this.state.isPlaying ? 'active' : '')}
-              onClick={this._pauseSlider.bind(this)}>
-              Pause
-            </a>
-            </li>
-            <li>
               <div className='app-interval-input-group'>
-                <span className='app-interval-label'>interval</span>
+                <span className='app-interval-label'>Play Interval</span>
                 <input
                   className='app-interval-input'
                   type='text'
@@ -217,7 +210,15 @@ class App extends React.Component {
                 type='checkbox'
                 onChange={this._handleCheckboxChange.bind(this, 'allowFullscreen')}
                 checked={this.state.allowFullscreen}/>
-                <label htmlFor='show_fullscreen'>allow fullscreen </label>
+                <label htmlFor='show_fullscreen'>allow fullscreen</label>
+            </li>
+            <li>
+              <input
+                id='show_playbutton'
+                type='checkbox'
+                onChange={this._handleCheckboxChange.bind(this, 'showPlayButton')}
+                checked={this.state.showPlayButton}/>
+                <label htmlFor='show_playbutton'>show play button</label>
             </li>
             <li>
               <input

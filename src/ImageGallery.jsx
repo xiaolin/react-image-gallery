@@ -50,6 +50,13 @@ function debounceEventHandler(...args) {
   };
 }
 
+const screenChangeEvents = [
+  'fullscreenchange',
+  'msfullscreenchange',
+  'mozfullscreenchange',
+  'webkitfullscreenchange'
+];
+
 
 export default class ImageGallery extends React.Component {
 
@@ -61,7 +68,8 @@ export default class ImageGallery extends React.Component {
       offsetPercentage: 0,
       galleryWidth: 0,
       thumbnailWidth: 0,
-      isFullscreen: false
+      isFullscreen: false,
+      isPlaying: false
     };
   }
 
@@ -96,6 +104,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillMount() {
+
     this._slideLeft = debounceEventHandler(
       this._slideLeft.bind(this), MIN_INTERVAL, true);
 
@@ -103,6 +112,7 @@ export default class ImageGallery extends React.Component {
       this._slideRight.bind(this), MIN_INTERVAL, true);
 
     this._handleResize = this._handleResize.bind(this);
+    this._handleScreenChange = this._handleScreenChange.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._thumbnailDelay = 300;
   }
@@ -118,6 +128,7 @@ export default class ImageGallery extends React.Component {
       window.addEventListener('keydown', this._handleKeyDown);
     }
     window.addEventListener('resize', this._handleResize);
+    this._onScreenChangeEvent();
   }
 
   componentWillUnmount() {
@@ -125,6 +136,8 @@ export default class ImageGallery extends React.Component {
       window.removeEventListener('keydown', this._handleKeyDown);
     }
     window.removeEventListener('resize', this._handleResize);
+    this._offScreenChangeEvent();
+
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
@@ -132,22 +145,22 @@ export default class ImageGallery extends React.Component {
   }
 
   play(callback = true) {
-    if (this._intervalId) {
-      return;
-    }
-    const {slideInterval} = this.props;
-    this._intervalId = window.setInterval(() => {
-      if (!this.state.hovering) {
-        if (!this.props.infinite && !this._canSlideRight()) {
-          this.pause();
-        } else {
-          this.slideToIndex(this.state.currentIndex + 1);
+    if (!this._intervalId) {
+      this.setState({isPlaying: true});
+      const {slideInterval} = this.props;
+      this._intervalId = window.setInterval(() => {
+        if (!this.state.hovering) {
+          if (!this.props.infinite && !this._canSlideRight()) {
+            this.pause();
+          } else {
+            this.slideToIndex(this.state.currentIndex + 1);
+          }
         }
-      }
-    }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
+      }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
 
-    if (this.props.onPlay && callback) {
-      this.props.onPlay(this.state.currentIndex);
+      if (this.props.onPlay && callback) {
+        this.props.onPlay(this.state.currentIndex);
+      }
     }
 
   }
@@ -156,10 +169,11 @@ export default class ImageGallery extends React.Component {
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
-    }
+      this.setState({isPlaying: false});
 
-    if (this.props.onPause && callback) {
-      this.props.onPause(this.state.currentIndex);
+      if (this.props.onPause && callback) {
+        this.props.onPause(this.state.currentIndex);
+      }
     }
   }
 
@@ -236,6 +250,26 @@ export default class ImageGallery extends React.Component {
     return this.state.currentIndex;
   }
 
+  _onScreenChangeEvent() {
+    screenChangeEvents.map(eventName => {
+      document.addEventListener(eventName, this._handleScreenChange);
+    });
+  }
+
+  _offScreenChangeEvent() {
+    screenChangeEvents.map(eventName => {
+      document.removeEventListener(eventName, this._handleScreenChange);
+    });
+  }
+
+  _togglePlay() {
+    if (this._intervalId) {
+      this.pause();
+    } else {
+      this.play();
+    }
+  }
+
   _toggleFullScreen() {
     if (this.state.isFullscreen) {
       this.exitFullScreen();
@@ -252,6 +286,15 @@ export default class ImageGallery extends React.Component {
     if (this._imageGalleryThumbnail) {
       this.setState({thumbnailWidth: this._imageGalleryThumbnail.offsetWidth});
     }
+  }
+
+  _handleScreenChange() {
+    const fullScreenElement = document.fullscreenElement ||
+      document.msFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.webkitFullscreenElement;
+
+    this.setState({isFullscreen: !!fullScreenElement});
   }
 
   _handleKeyDown(event) {
@@ -294,14 +337,6 @@ export default class ImageGallery extends React.Component {
         this.play(false);
       }
     }
-    this.setState({hovering: false});
-  }
-
-  _handleMouseOver() {
-    this.setState({hovering: true});
-  }
-
-  _handleMouseLeave() {
     this.setState({hovering: false});
   }
 
@@ -574,7 +609,13 @@ export default class ImageGallery extends React.Component {
   }
 
   render() {
-    const {currentIndex, isFullscreen, modalFullscreen} = this.state;
+    const {
+      currentIndex,
+      isFullscreen,
+      modalFullscreen,
+      isPlaying
+    } = this.state;
+
     const thumbnailStyle = this._getThumbnailStyle();
 
     const slideLeft = this._slideLeft.bind(this);
@@ -661,19 +702,28 @@ export default class ImageGallery extends React.Component {
     return (
       <section
         ref={i => this._imageGallery = i}
-        className={`image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
+        className={
+          `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
 
         <div className='image-gallery-content'>
           <div
-            onMouseOver={this._handleMouseOver.bind(this)}
-            onMouseLeave={this._handleMouseLeave.bind(this)}
             className='image-gallery-slide-wrapper'>
 
             {
               this.props.allowFullscreen &&
                 <a
-                  className={`image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+                  className={
+                    `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
                   onClick={this._toggleFullScreen.bind(this)}/>
+            }
+
+            {
+              this.props.showPlayButton &&
+                <a
+                  ref={p => this._playButton = p}
+                  className={
+                    `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+                  onClick={this._togglePlay.bind(this)}/>
             }
 
             {
@@ -745,7 +795,8 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails${isFullscreen ? ' fullscreen' : ''}`}
+                className={
+                  `image-gallery-thumbnails${isFullscreen ? ' fullscreen' : ''}`}
                 ref={i => this._imageGalleryThumbnail = i}
               >
                 <div
@@ -774,6 +825,7 @@ ImageGallery.propTypes = {
   showIndex: React.PropTypes.bool,
   showBullets: React.PropTypes.bool,
   showThumbnails: React.PropTypes.bool,
+  showPlayButton: React.PropTypes.bool,
   allowFullscreen: React.PropTypes.bool,
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
@@ -801,6 +853,7 @@ ImageGallery.defaultProps = {
   showIndex: false,
   showBullets: false,
   showThumbnails: true,
+  showPlayButton: true,
   allowFullscreen: true,
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,

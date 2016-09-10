@@ -45,6 +45,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 }
 
 .image-gallery-fullscreen-button,
+.image-gallery-play-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   cursor: pointer;
@@ -68,14 +69,13 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   }
 }
 
-.image-gallery-fullscreen-button {
-  right: 0;
-  top: 0;
+.image-gallery-fullscreen-button,
+.image-gallery-play-button {
+  bottom: 0;
 
   &::before {
-    content: $ionicon-var-android-expand;
     font-size: 1.7em;
-    padding: 15px;
+    padding: 15px 20px;
     text-shadow: 0 1px 1px lighten($ig-black, 10%);
 
     @media (max-width: $ig-screen-sm-min) {
@@ -96,6 +96,15 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
     }
   }
 
+}
+
+.image-gallery-fullscreen-button {
+  right: 0;
+
+  &::before {
+    content: $ionicon-var-android-expand;
+  }
+
   &.active::before {
     content: $ionicon-var-android-contract;
   }
@@ -103,6 +112,19 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   &.active:hover::before {
     transform: scale(.9);
   }
+}
+
+.image-gallery-play-button {
+  left: 0;
+
+  &::before {
+    content: $ionicon-var-ios-play;
+  }
+
+  &.active::before {
+    content: $ionicon-var-ios-pause;
+  }
+
 }
 
 .image-gallery-left-nav,
@@ -181,14 +203,17 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
 .image-gallery-bullets {
   bottom: 20px;
+  left: 0;
+  margin: 0 auto;
   position: absolute;
-  text-align: center;
-  width: 100%;
+  right: 0;
+  width: 80%;
   z-index: 4;
 
   .image-gallery-bullets-container {
     margin: 0;
     padding: 0;
+    text-align: center;
   }
 
   .image-gallery-bullet {
@@ -271,11 +296,16 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
 .image-gallery-index {
   background: $ig-background-black;
-  bottom: 0;
   color: $ig-white;
   line-height: 1;
   padding: 10px 20px;
   position: absolute;
   right: 0;
+  top: 0;
   z-index: 4;
+
+  @media(max-width: $ig-screen-sm-min) {
+    font-size: .8em;
+    padding: 5px 10px;
+  }
 }
