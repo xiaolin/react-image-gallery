@@ -187,7 +187,7 @@ class App extends React.Component {
         <div className='app-sandbox'>
 
           <div className='app-sandbox-content'>
-            <h2 className='app-header'>Image Gallery Settings</h2>
+            <h2 className='app-header'>Settings</h2>
 
             <ul className='app-buttons'>
               <li>
