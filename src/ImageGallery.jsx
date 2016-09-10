@@ -178,24 +178,22 @@ export default class ImageGallery extends React.Component {
   }
 
   fullScreen() {
-    if (this.props.allowFullscreen) {
-      const gallery = this._imageGallery;
+    const gallery = this._imageGallery;
 
-      if (gallery.requestFullscreen) {
-        gallery.requestFullscreen();
-      } else if (gallery.msRequestFullscreen) {
-        gallery.msRequestFullscreen();
-      } else if (gallery.mozRequestFullScreen) {
-        gallery.mozRequestFullScreen();
-      } else if (gallery.webkitRequestFullscreen) {
-        gallery.webkitRequestFullscreen();
-      } else {
-        // fallback to modal for unsupported browsers
-        this.setState({modalFullscreen: true});
-      }
-
-      this.setState({isFullscreen: true});
+    if (gallery.requestFullscreen) {
+      gallery.requestFullscreen();
+    } else if (gallery.msRequestFullscreen) {
+      gallery.msRequestFullscreen();
+    } else if (gallery.mozRequestFullScreen) {
+      gallery.mozRequestFullScreen();
+    } else if (gallery.webkitRequestFullscreen) {
+      gallery.webkitRequestFullscreen();
+    } else {
+      // fallback to modal for unsupported browsers
+      this.setState({modalFullscreen: true});
     }
+
+    this.setState({isFullscreen: true});
   }
 
   exitFullScreen() {
@@ -710,7 +708,7 @@ export default class ImageGallery extends React.Component {
             className='image-gallery-slide-wrapper'>
 
             {
-              this.props.allowFullscreen &&
+              this.props.showFullscreenButton &&
                 <a
                   className={
                     `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
@@ -822,7 +820,7 @@ ImageGallery.propTypes = {
   showBullets: React.PropTypes.bool,
   showThumbnails: React.PropTypes.bool,
   showPlayButton: React.PropTypes.bool,
-  allowFullscreen: React.PropTypes.bool,
+  showFullscreenButton: React.PropTypes.bool,
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
   disableArrowKeys: React.PropTypes.bool,
@@ -850,7 +848,7 @@ ImageGallery.defaultProps = {
   showBullets: false,
   showThumbnails: true,
   showPlayButton: true,
-  allowFullscreen: true,
+  showFullscreenButton: true,
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,
   disableArrowKeys: false,

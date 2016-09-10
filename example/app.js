@@ -15,7 +15,7 @@ class App extends React.Component {
       showBullets: true,
       infinite: true,
       showThumbnails: true,
-      allowFullscreen: true,
+      showFullscreenButton: true,
       showPlayButton: true,
       showNav: true,
       slideInterval: 2000,
@@ -76,7 +76,7 @@ class App extends React.Component {
     this.setState({
       showVideo: {},
       showPlayButton: true,
-      allowFullscreen: true
+      showFullscreenButton: true
     });
   }
 
@@ -91,8 +91,8 @@ class App extends React.Component {
         this.setState({showPlayButton: false});
       }
 
-      if (this.state.allowFullscreen) {
-        this.setState({allowFullscreen: false});
+      if (this.state.showFullscreenButton) {
+        this.setState({showFullscreenButton: false});
       }
     }
   }
@@ -169,7 +169,7 @@ class App extends React.Component {
           onPlay={this._onPlay.bind(this)}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
-          allowFullscreen={this.state.allowFullscreen}
+          showFullscreenButton={this.state.showFullscreenButton}
           showPlayButton={this.state.showPlayButton}
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
@@ -202,15 +202,15 @@ class App extends React.Component {
                 type='checkbox'
                 onChange={this._handleCheckboxChange.bind(this, 'infinite')}
                 checked={this.state.infinite}/>
-                <label htmlFor='infinite'>infinite sliding</label>
+                <label htmlFor='infinite'>allow infinite sliding</label>
             </li>
             <li>
               <input
                 id='show_fullscreen'
                 type='checkbox'
-                onChange={this._handleCheckboxChange.bind(this, 'allowFullscreen')}
-                checked={this.state.allowFullscreen}/>
-                <label htmlFor='show_fullscreen'>allow fullscreen</label>
+                onChange={this._handleCheckboxChange.bind(this, 'showFullscreenButton')}
+                checked={this.state.showFullscreenButton}/>
+                <label htmlFor='show_fullscreen'>show fullscreen button</label>
             </li>
             <li>
               <input
