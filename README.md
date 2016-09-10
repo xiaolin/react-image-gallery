@@ -26,13 +26,13 @@ npm install react-image-gallery
 ### SASS
 
 ```
-@import "../node_modules/react-image-gallery/src/image-gallery";
+@import "../node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 ```
 
 ### CSS
 
 ```
-build/image-gallery.css
+@import "../node_modules/react-image-gallery/styles/css/image-gallery.css";
 ```
 
 ### Example
@@ -103,6 +103,7 @@ class MyComponent extends React.Component {
 * `lazyLoad`: Boolean, default `false`
 * `showNav`: Boolean, default `true`
 * `showThumbnails`: Boolean, default `true`
+* `allowFullscreen`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
 * `autoPlay`: Boolean, default `false`
@@ -160,6 +161,7 @@ class MyComponent extends React.Component {
 * `play()`: continuous plays if image is not hovered
 * `pause()`: pauses the slides
 * `fullScreen()`: activates full screen
+* `exitFullScreen()`: deactivates full screen
 * `slideToIndex(index)`: slides to a specific index
 * `getCurrentIndex()`: returns the current index
 

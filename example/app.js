@@ -16,9 +16,9 @@ class App extends React.Component {
       showBullets: true,
       infinite: true,
       showThumbnails: true,
+      allowFullscreen: true,
       showNav: true,
       slideInterval: 2000,
-      fullscreen: false,
       showVideo: {},
     };
   }
@@ -39,10 +39,6 @@ class App extends React.Component {
   _playSlider() {
     this._imageGallery.play();
     this.setState({isPlaying: true});
-  }
-
-  _fullScreen() {
-    this._imageGallery.fullScreen();
   }
 
   _onImageClick(event) {
@@ -110,7 +106,7 @@ class App extends React.Component {
                   height='315'
                   src={item.embedUrl}
                   frameBorder='0'
-                  allowFullScreen
+                  allowFullscreen
                 >
                 </iframe>
             </div>
@@ -152,7 +148,6 @@ class App extends React.Component {
       }
     ].concat(this._getStaticImages());
 
-
     return (
 
       <section className='app'>
@@ -167,6 +162,7 @@ class App extends React.Component {
           onPlay={this._onPlay.bind(this)}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
+          allowFullscreen={this.state.allowFullscreen}
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
@@ -195,13 +191,6 @@ class App extends React.Component {
             </a>
             </li>
             <li>
-              <a
-                className='app-button'
-                onClick={this._fullScreen.bind(this)}>
-                Full Screen
-              </a>
-            </li>
-            <li>
               <div className='app-interval-input-group'>
                 <span className='app-interval-label'>interval</span>
                 <input
@@ -221,6 +210,14 @@ class App extends React.Component {
                 onChange={this._handleCheckboxChange.bind(this, 'infinite')}
                 checked={this.state.infinite}/>
                 <label htmlFor='infinite'>infinite sliding</label>
+            </li>
+            <li>
+              <input
+                id='show_fullscreen'
+                type='checkbox'
+                onChange={this._handleCheckboxChange.bind(this, 'allowFullscreen')}
+                checked={this.state.allowFullscreen}/>
+                <label htmlFor='show_fullscreen'>allow fullscreen </label>
             </li>
             <li>
               <input
