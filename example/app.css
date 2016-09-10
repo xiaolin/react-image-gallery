@@ -65,16 +65,14 @@ label {
   content: '✖';
   cursor: pointer;
   position: absolute;
-  right: 45px;
-  top: 85px;
+  right: 0;
+  top: 0;
   font-size: 20px;
-  padding: 13px;
+  padding: 20px;
   z-index: 1;
   line-height: .7;
-  border-radius: 6px;
   display: block;
   color: #fff;
-  background: rgba(0, 0, 0, .4);
 }
 
 .video-wrapper {
@@ -115,21 +113,6 @@ label {
   padding-left: 10px;
 }
 
-.app-button {
-  font-size: 14px;
-  color: #555;
-  display: inline-block;
-  border: 3px solid #ccc;
-  border-radius: 4px;
-  cursor: pointer;
-  padding: 10.5px 5px;
-  width: 80px;
-  text-align: center;
-  background: #fff;
-  line-height: 1;
-  font-weight: 500;
-}
-
 @media (max-width: 768px) {
   .app-buttons li {
     display: block;
@@ -139,16 +122,22 @@ label {
   .app-buttons li + li {
     padding: 0;
   }
-}
 
-.app-button:hover {
-  border: 3px solid #555;
-}
+  .play-button {
+    height: 40px;
+    width: 65px;
+  }
 
-.app-button.active {
-  background: #5cb85c;
-  border: 3px solid #4cae4c;
-  color: #fff;
+  .play-button:after {
+    top: 11px;
+    left: 27px;
+    border-width: 8.5px 0 8.5px 12px;
+  }
+
+  .close-video::before {
+    font-size: 16px;
+    padding: 15px;
+  }
 }
 
 .app-interval-input-group {
