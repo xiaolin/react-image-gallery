@@ -1,6 +1,9 @@
 body {
   margin: 0;
   padding: 0;
+  background: #222;
+  color: #eee;
+  font-family: 'Raleway', sans-serif;
 }
 
 ul, li {
@@ -19,15 +22,17 @@ label {
 }
 
 .app {
-  font-family: "Arial Narrow", Arial, sans-serif;
+
 }
 
 .app-header {
-  letter-spacing: 3px;
+  letter-spacing: 1px;
+  text-transform: uppercase;
 }
 
-.app .image-gallery {
-  margin: 0 auto;
+.app .image-gallery,
+.app-sandbox {
+  margin: 40px auto;
   width: 100%;
 }
 
@@ -90,14 +95,14 @@ label {
 }
 
 @media (min-width: 1320px) {
-  .app .image-gallery {
+  .app .image-gallery,
+  .app-sandbox {
     width: 70%;
   }
 }
 
 .app-sandbox {
-  margin-top: 20px;
-  padding: 20px;
+  padding: 0 20px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
