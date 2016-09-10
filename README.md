@@ -11,7 +11,8 @@ React image gallery is a React component for building image gallery and carousel
 Features of `react-image-gallery`
 * Mobile friendly
 * Thumbnail navigation
-* Custom slides (video slides)
+* Fullscreen support
+* Custom rendered slides
 * Responsive design
 
 ## Live Demo (try it on mobile)
