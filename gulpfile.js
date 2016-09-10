@@ -7,6 +7,7 @@ var livereload = require('gulp-livereload');
 var rename = require('gulp-rename');
 var sass = require('gulp-sass');
 var uglify = require('gulp-uglify');
+var cleanCSS = require('gulp-clean-css');
 var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
@@ -44,7 +45,7 @@ gulp.task('scripts', function() {
     .pipe(livereload());
 });
 
-gulp.task('demo-js', function() {
+gulp.task('demo-src', function() {
   process.env.NODE_ENV = 'production';
   browserify({
     entries: './example/app.js',
@@ -58,6 +59,11 @@ gulp.task('demo-js', function() {
     .pipe(source('demo.js'))
     .pipe(buffer())
     .pipe(uglify())
+    .pipe(gulp.dest('./demo/'));
+
+  gulp.src(['./styles/css/image-gallery.css', './example/app.css'])
+    .pipe(concat('demo.css'))
+    .pipe(cleanCSS({keepSpecialComments: false}))
     .pipe(gulp.dest('./demo/'));
 });
 
@@ -79,4 +85,4 @@ gulp.task('watch', function() {
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
 gulp.task('build', ['source-js', 'sass']);
-gulp.task('demo', ['demo-js']);
+gulp.task('demo', ['demo-src']);
