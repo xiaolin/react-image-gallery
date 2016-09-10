@@ -1,3 +1,5 @@
+@import './ionicons';
+
 $ig-screen-sm-min: 768px !default;
 $ig-white: #fff !default;
 $ig-black: #222 !default;
@@ -16,49 +18,92 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
 .image-gallery-content {
   position: relative;
+}
 
-  .image-gallery-left-nav,
-  .image-gallery-right-nav {
+.image-gallery-fullscreen,
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  cursor: pointer;
+  position: absolute;
+  z-index: 4;
+
+  &::before {
+    @extend %ion;
     color: $ig-white;
-    cursor: pointer;
-    font-family: Arial, "Helvetica Neue", Helvetica, sans-serif;
-    font-size: 6em;
-    line-height: 0;
-    position: absolute;
+    line-height: .7;
     text-shadow: 0 2px 2px $ig-black;
-    top: 48%;
-    transition: all .2s ease-out;
-    z-index: 4;
+    transition: color .2s ease-out;
+  }
+
+  &:hover::before {
+    color: $ig-blue;
 
     @media (max-width: $ig-screen-sm-min) {
-      font-size: 3.4em;
+      color: $ig-white;
     }
+  }
+}
 
-    @media (min-width: $ig-screen-sm-min) {
-      &:hover {
-        color: $ig-white;
-      }
+.image-gallery-fullscreen {
+  right: 0;
+  top: 0;
+
+  &::before {
+    content: $ionicon-var-android-expand;
+    font-size: 1.7em;
+    padding: 15px;
+    text-shadow: 0 1px 1px $ig-black;
+
+    @media (max-width: $ig-screen-sm-min) {
+      font-size: 2em;
     }
   }
 
-  .image-gallery-left-nav {
-    left: 0;
+  &:hover::before {
+    color: $ig-white;
+    transform: scale(1.1);
 
-    &::before {
-      content: '‹';
-      padding: 50px 15px;
+    @media (max-width: $ig-screen-sm-min) {
+      transform: none;
     }
   }
 
-  .image-gallery-right-nav {
-    right: 0;
-
-    &::before {
-      content: '›';
-      padding: 50px 15px;
-    }
+  &.active::before {
+    content: $ionicon-var-android-contract;
   }
 
+  &.active:hover::before {
+    transform: scale(.9);
+  }
+}
+
+.image-gallery-left-nav,
+.image-gallery-right-nav {
+  color: $ig-white;
+  font-size: 5em;
+  padding: 50px 15px;
+  top: 50%;
+  transform: translateY(-50%);
+
+  @media (max-width: $ig-screen-sm-min) {
+    font-size: 3.4em;
+  }
+}
+
+.image-gallery-left-nav {
+  left: 0;
+
+  &::before {
+    content: $ionicon-var-ios-arrow-left;
+  }
+}
+
+.image-gallery-right-nav {
+  right: 0;
+
+  &::before {
+    content: $ionicon-var-ios-arrow-right;
+  }
 }
 
 .image-gallery-slides {
