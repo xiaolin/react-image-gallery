@@ -731,21 +731,17 @@ export default class ImageGallery extends React.Component {
                 [
                   this.props.showNav &&
                     <span key='navigation'>
-                      {
-                        this._canSlideLeft() &&
-                          <a
-                            className='image-gallery-left-nav'
-                            onTouchStart={slideLeft}
-                            onClick={slideLeft}/>
+                      <a
+                        className='image-gallery-left-nav'
+                        disabled={!this._canSlideLeft()}
+                        onTouchStart={slideLeft}
+                        onClick={slideLeft}/>
 
-                      }
-                      {
-                        this._canSlideRight() &&
-                          <a
-                            className='image-gallery-right-nav'
-                            onTouchStart={slideRight}
-                            onClick={slideRight}/>
-                      }
+                      <a
+                        className='image-gallery-right-nav'
+                        disabled={!this._canSlideRight()}
+                        onTouchStart={slideRight}
+                        onClick={slideRight}/>
                     </span>,
 
                     <Swipeable
