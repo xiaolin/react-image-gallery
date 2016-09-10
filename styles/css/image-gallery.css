@@ -17,7 +17,7 @@
   font-weight: normal;
   font-style: normal; }
 
-.image-gallery-fullscreen::before,
+.image-gallery-fullscreen-button::before,
 .image-gallery-left-nav::before,
 .image-gallery-right-nav::before {
   display: inline-block;
@@ -38,53 +38,73 @@
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none; }
+  .image-gallery.fullscreen-modal {
+    background: #000;
+    bottom: 0;
+    height: 100%;
+    left: 0;
+    position: fixed;
+    right: 0;
+    top: 0;
+    width: 100%;
+    z-index: 5; }
+    .image-gallery.fullscreen-modal .image-gallery-content {
+      position: relative;
+      top: 50%;
+      transform: translateY(-50%); }
 
 .image-gallery-content {
+  top: 0; }
+
+.image-gallery-slide-wrapper {
   position: relative; }
 
-.image-gallery-fullscreen,
+.image-gallery-fullscreen-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   cursor: pointer;
   position: absolute;
   z-index: 4; }
-  .image-gallery-fullscreen::before,
+  .image-gallery-fullscreen-button::before,
   .image-gallery-left-nav::before,
   .image-gallery-right-nav::before {
     color: #fff;
     line-height: .7;
-    text-shadow: 0 2px 2px #222;
+    text-shadow: 0 2px 2px #1a1a1a;
     transition: color .2s ease-out; }
-  .image-gallery-fullscreen:hover::before,
+  .image-gallery-fullscreen-button:hover::before,
   .image-gallery-left-nav:hover::before,
   .image-gallery-right-nav:hover::before {
     color: #337ab7; }
     @media (max-width: 768px) {
-      .image-gallery-fullscreen:hover::before,
+      .image-gallery-fullscreen-button:hover::before,
       .image-gallery-left-nav:hover::before,
       .image-gallery-right-nav:hover::before {
         color: #fff; } }
 
-.image-gallery-fullscreen {
+.image-gallery-fullscreen-button {
   right: 0;
   top: 0; }
-  .image-gallery-fullscreen::before {
+  .image-gallery-fullscreen-button::before {
     content: "";
     font-size: 1.7em;
     padding: 15px;
-    text-shadow: 0 1px 1px #222; }
+    text-shadow: 0 1px 1px #1a1a1a; }
     @media (max-width: 768px) {
-      .image-gallery-fullscreen::before {
-        font-size: 2em; } }
-  .image-gallery-fullscreen:hover::before {
+      .image-gallery-fullscreen-button::before {
+        font-size: 1.4em; } }
+    @media (max-width: 480px) {
+      .image-gallery-fullscreen-button::before {
+        font-size: 1em; } }
+  .image-gallery-fullscreen-button:hover::before {
     color: #fff;
     transform: scale(1.1); }
     @media (max-width: 768px) {
-      .image-gallery-fullscreen:hover::before {
+      .image-gallery-fullscreen-button:hover::before {
         transform: none; } }
-  .image-gallery-fullscreen.active::before {
+  .image-gallery-fullscreen-button.active::before {
     content: ""; }
-  .image-gallery-fullscreen.active:hover::before {
+  .image-gallery-fullscreen-button.active:hover::before {
     transform: scale(0.9); }
 
 .image-gallery-left-nav,
@@ -98,6 +118,10 @@
     .image-gallery-left-nav,
     .image-gallery-right-nav {
       font-size: 3.4em; } }
+  @media (max-width: 480px) {
+    .image-gallery-left-nav,
+    .image-gallery-right-nav {
+      font-size: 2.4em; } }
 
 .image-gallery-left-nav {
   left: 0; }
@@ -152,7 +176,7 @@
   .image-gallery-bullets .image-gallery-bullet {
     border: 1px solid #fff;
     border-radius: 50%;
-    box-shadow: 0 1px 0 #222;
+    box-shadow: 0 1px 0 #1a1a1a;
     cursor: pointer;
     display: inline-block;
     margin: 0 5px;
@@ -161,13 +185,18 @@
       .image-gallery-bullets .image-gallery-bullet {
         margin: 0 3px;
         padding: 3px; } }
+    @media (max-width: 480px) {
+      .image-gallery-bullets .image-gallery-bullet {
+        padding: 2.7px; } }
     .image-gallery-bullets .image-gallery-bullet.active {
       background: #fff; }
 
 .image-gallery-thumbnails {
   background: #fff;
   overflow: hidden;
-  padding-top: 5px; }
+  padding: 5px 0; }
+  .image-gallery-thumbnails.fullscreen {
+    background: #000; }
   .image-gallery-thumbnails .image-gallery-thumbnails-container {
     cursor: pointer;
     text-align: center;
@@ -193,7 +222,7 @@
         border: 3px solid #337ab7; } }
 
 .image-gallery-thumbnail-label {
-  color: #222;
+  color: #1a1a1a;
   font-size: 1em; }
   @media (max-width: 768px) {
     .image-gallery-thumbnail-label {

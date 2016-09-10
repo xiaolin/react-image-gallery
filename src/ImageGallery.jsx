@@ -60,7 +60,8 @@ export default class ImageGallery extends React.Component {
       thumbsTranslateX: 0,
       offsetPercentage: 0,
       galleryWidth: 0,
-      thumbnailWidth: 0
+      thumbnailWidth: 0,
+      isFullscreen: false
     };
   }
 
@@ -163,16 +164,42 @@ export default class ImageGallery extends React.Component {
   }
 
   fullScreen() {
-    const gallery = this._imageGallery;
+    if (this.props.allowFullscreen) {
+      const gallery = this._imageGallery;
 
-    if (gallery.requestFullscreen) {
-      gallery.requestFullscreen();
-    } else if (gallery.msRequestFullscreen) {
-      gallery.msRequestFullscreen();
-    } else if (gallery.mozRequestFullScreen) {
-      gallery.mozRequestFullScreen();
-    } else if (gallery.webkitRequestFullscreen) {
-      gallery.webkitRequestFullscreen();
+      if (gallery.requestFullscreen) {
+        gallery.requestFullscreen();
+      } else if (gallery.msRequestFullscreen) {
+        gallery.msRequestFullscreen();
+      } else if (gallery.mozRequestFullScreen) {
+        gallery.mozRequestFullScreen();
+      } else if (gallery.webkitRequestFullscreen) {
+        gallery.webkitRequestFullscreen();
+      } else {
+        // fallback to modal for unsupported browsers
+        this.setState({modalFullscreen: true});
+      }
+
+      this.setState({isFullscreen: true});
+    }
+  }
+
+  exitFullScreen() {
+    if (this.state.isFullscreen) {
+      if (document.exitFullscreen) {
+        document.exitFullscreen();
+      } else if (document.webkitExitFullscreen) {
+        document.webkitExitFullscreen();
+      } else if (document.mozCancelFullScreen) {
+        document.mozCancelFullScreen();
+      } else if (document.msExitFullscreen) {
+        document.msExitFullscreen();
+      } else {
+        // fallback to modal for unsupported browsers
+        this.setState({modalFullscreen: false});
+      }
+
+      this.setState({isFullscreen: false});
     }
   }
 
@@ -207,6 +234,14 @@ export default class ImageGallery extends React.Component {
 
   getCurrentIndex() {
     return this.state.currentIndex;
+  }
+
+  _toggleFullScreen() {
+    if (this.state.isFullscreen) {
+      this.exitFullScreen();
+    } else {
+      this.fullScreen();
+    }
   }
 
   _handleResize() {
@@ -539,7 +574,7 @@ export default class ImageGallery extends React.Component {
   }
 
   render() {
-    const {currentIndex} = this.state;
+    const {currentIndex, isFullscreen, modalFullscreen} = this.state;
     const thumbnailStyle = this._getThumbnailStyle();
 
     const slideLeft = this._slideLeft.bind(this);
@@ -624,91 +659,106 @@ export default class ImageGallery extends React.Component {
     });
 
     return (
-      <section ref={i => this._imageGallery = i} className='image-gallery'>
-        <div
-          onMouseOver={this._handleMouseOver.bind(this)}
-          onMouseLeave={this._handleMouseLeave.bind(this)}
-          className='image-gallery-content'>
-          {
-            this._canNavigate() ?
-              [
-                this.props.showNav &&
-                  <span key='navigation'>
-                    {
-                      this._canSlideLeft() &&
-                        <a
-                          className='image-gallery-left-nav'
-                          onTouchStart={slideLeft}
-                          onClick={slideLeft}/>
+      <section
+        ref={i => this._imageGallery = i}
+        className={`image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
 
-                    }
-                    {
-                      this._canSlideRight() &&
-                        <a
-                          className='image-gallery-right-nav'
-                          onTouchStart={slideRight}
-                          onClick={slideRight}/>
-                    }
-                  </span>,
+        <div className='image-gallery-content'>
+          <div
+            onMouseOver={this._handleMouseOver.bind(this)}
+            onMouseLeave={this._handleMouseLeave.bind(this)}
+            className='image-gallery-slide-wrapper'>
 
-                  <Swipeable
-                    className='image-gallery-swipe'
-                    key='swipeable'
-                    delta={1}
-                    onSwipingLeft={this._handleSwiping.bind(this, -1)}
-                    onSwipingRight={this._handleSwiping.bind(this, 1)}
-                    onSwiped={this._handleOnSwiped.bind(this)}
-                    onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
-                    onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
-                  >
-                    <div className='image-gallery-slides'>
-                      {slides}
-                    </div>
-                  </Swipeable>
-              ]
-            :
-              <div className='image-gallery-slides'>
-                {slides}
-              </div>
-          }
+            {
+              this.props.allowFullscreen &&
+                <a
+                  className={`image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+                  onClick={this._toggleFullScreen.bind(this)}/>
+            }
+
+            {
+              this._canNavigate() ?
+                [
+                  this.props.showNav &&
+                    <span key='navigation'>
+                      {
+                        this._canSlideLeft() &&
+                          <a
+                            className='image-gallery-left-nav'
+                            onTouchStart={slideLeft}
+                            onClick={slideLeft}/>
+
+                      }
+                      {
+                        this._canSlideRight() &&
+                          <a
+                            className='image-gallery-right-nav'
+                            onTouchStart={slideRight}
+                            onClick={slideRight}/>
+                      }
+                    </span>,
+
+                    <Swipeable
+                      className='image-gallery-swipe'
+                      key='swipeable'
+                      delta={1}
+                      onSwipingLeft={this._handleSwiping.bind(this, -1)}
+                      onSwipingRight={this._handleSwiping.bind(this, 1)}
+                      onSwiped={this._handleOnSwiped.bind(this)}
+                      onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
+                      onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
+                    >
+                      <div className='image-gallery-slides'>
+                        {slides}
+                      </div>
+                    </Swipeable>
+                ]
+              :
+                <div className='image-gallery-slides'>
+                  {slides}
+                </div>
+            }
+            {
+              this.props.showBullets &&
+                <div className='image-gallery-bullets'>
+                  <ul className='image-gallery-bullets-container'>
+                    {bullets}
+                  </ul>
+                </div>
+            }
+            {
+              this.props.showIndex &&
+                <div className='image-gallery-index'>
+                  <span className='image-gallery-index-current'>
+                    {this.state.currentIndex + 1}
+                  </span>
+                  <span className='image-gallery-index-separator'>
+                    {this.props.indexSeparator}
+                  </span>
+                  <span className='image-gallery-index-total'>
+                    {this.props.items.length}
+                  </span>
+                </div>
+            }
+          </div>
+
           {
-            this.props.showBullets &&
-              <div className='image-gallery-bullets'>
-                <ul className='image-gallery-bullets-container'>
-                  {bullets}
-                </ul>
+            this.props.showThumbnails &&
+              <div
+                className={`image-gallery-thumbnails${isFullscreen ? ' fullscreen' : ''}`}
+                ref={i => this._imageGalleryThumbnail = i}
+              >
+                <div
+                  ref={t => this._thumbnails = t}
+                  className='image-gallery-thumbnails-container'
+                  style={thumbnailStyle}>
+                  {thumbnails}
+                </div>
               </div>
           }
-          {
-            this.props.showIndex &&
-              <div className='image-gallery-index'>
-                <span className='image-gallery-index-current'>
-                  {this.state.currentIndex + 1}
-                </span>
-                <span className='image-gallery-index-separator'>
-                  {this.props.indexSeparator}
-                </span>
-                <span className='image-gallery-index-total'>
-                  {this.props.items.length}
-                </span>
-              </div>
-          }
+
         </div>
 
-        {
-          this.props.showThumbnails &&
-            <div
-              className='image-gallery-thumbnails'
-              ref={i => this._imageGalleryThumbnail = i}
-            >
-              <div
-                ref={t => this._thumbnails = t}
-                className='image-gallery-thumbnails-container'
-                style={thumbnailStyle}>
-                {thumbnails}
-              </div>
-            </div>
-        }
       </section>
     );
   }
@@ -724,6 +774,7 @@ ImageGallery.propTypes = {
   showIndex: React.PropTypes.bool,
   showBullets: React.PropTypes.bool,
   showThumbnails: React.PropTypes.bool,
+  allowFullscreen: React.PropTypes.bool,
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
   disableArrowKeys: React.PropTypes.bool,
@@ -750,6 +801,7 @@ ImageGallery.defaultProps = {
   showIndex: false,
   showBullets: false,
   showThumbnails: true,
+  allowFullscreen: true,
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,
   disableArrowKeys: false,
