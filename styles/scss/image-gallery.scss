@@ -135,6 +135,12 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   top: 50%;
   transform: translateY(-50%);
 
+  &[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none;
+  }
+
   @media (max-width: $ig-screen-sm-min) {
     font-size: 3.4em;
   }

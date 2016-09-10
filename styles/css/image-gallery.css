@@ -135,6 +135,11 @@
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%); }
+  .image-gallery-left-nav[disabled],
+  .image-gallery-right-nav[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none; }
   @media (max-width: 768px) {
     .image-gallery-left-nav,
     .image-gallery-right-nav {
