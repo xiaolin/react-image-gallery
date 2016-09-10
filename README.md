@@ -46,14 +46,6 @@ class MyComponent extends React.Component {
     console.log('Image loaded ', event.target)
   }
 
-  handlePlay() {
-    this._imageGallery.play()
-  }
-
-  handlePause() {
-    this._imageGallery.pause()
-  }
-
   render() {
 
     const images = [
@@ -80,15 +72,11 @@ class MyComponent extends React.Component {
     ]
 
     return (
-      <div>
-        <button onClick={this.handlePlay.bind(this)}>Play</button>
-        <button onClick={this.handlePause.bind(this)}>Pause</button>
-        <ImageGallery
-          ref={i => this._imageGallery = i}
-          items={images}
-          slideInterval={2000}
-          onImageLoad={this.handleImageLoad}/>
-      </div>
+      <ImageGallery
+        ref={i => this._imageGallery = i}
+        items={images}
+        slideInterval={2000}
+        onImageLoad={this.handleImageLoad}/>
     );
   }
 
