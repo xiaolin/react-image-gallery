@@ -16,7 +16,9 @@ class App extends React.Component {
       infinite: true,
       showThumbnails: true,
       showFullscreenButton: true,
+      showGalleryFullscreenButton: true,
       showPlayButton: true,
+      showGalleryPlayButton: true,
       showNav: true,
       slideInterval: 2000,
       showVideo: {},
@@ -73,11 +75,15 @@ class App extends React.Component {
   }
 
   _resetVideo() {
-    this.setState({
-      showVideo: {},
-      showPlayButton: true,
-      showFullscreenButton: true
-    });
+    this.setState({showVideo: {}});
+
+    if (this.state.showPlayButton) {
+      this.setState({showGalleryPlayButton: true});
+    }
+
+    if (this.state.showFullscreenButton) {
+      this.setState({showGalleryFullscreenButton: true});
+    }
   }
 
   _toggleShowVideo(url) {
@@ -88,11 +94,11 @@ class App extends React.Component {
 
     if (this.state.showVideo[url]) {
       if (this.state.showPlayButton) {
-        this.setState({showPlayButton: false});
+        this.setState({showGalleryPlayButton: false});
       }
 
       if (this.state.showFullscreenButton) {
-        this.setState({showFullscreenButton: false});
+        this.setState({showGalleryFullscreenButton: false});
       }
     }
   }
@@ -169,8 +175,8 @@ class App extends React.Component {
           onPlay={this._onPlay.bind(this)}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
-          showFullscreenButton={this.state.showFullscreenButton}
-          showPlayButton={this.state.showPlayButton}
+          showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
+          showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
