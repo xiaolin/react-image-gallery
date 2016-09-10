@@ -38,6 +38,10 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
 .image-gallery-content {
   top: 0;
+
+  &.fullscreen {
+    background: $ig-black;
+  }
 }
 
 .image-gallery-slide-wrapper {
@@ -247,13 +251,8 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 }
 
 .image-gallery-thumbnails {
-  background: $ig-white;
   overflow: hidden;
   padding: 5px 0;
-
-  &.fullscreen {
-    background: $ig-black;
-  }
 
   .image-gallery-thumbnails-container {
     cursor: pointer;

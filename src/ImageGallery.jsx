@@ -703,7 +703,7 @@ export default class ImageGallery extends React.Component {
         className={
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
 
-        <div className='image-gallery-content'>
+        <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
           <div
             className='image-gallery-slide-wrapper'>
 
@@ -789,8 +789,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={
-                  `image-gallery-thumbnails${isFullscreen ? ' fullscreen' : ''}`}
+                className='image-gallery-thumbnails'
                 ref={i => this._imageGalleryThumbnail = i}
               >
                 <div
