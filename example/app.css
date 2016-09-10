@@ -101,6 +101,12 @@ label {
   }
 }
 
+@media (max-width: 1320px) {
+  .app-sandbox-content {
+    padding: 0 20px;
+  }
+}
+
 .app-sandbox {
   margin: 40px auto;
   -webkit-user-select: none;
@@ -108,10 +114,6 @@ label {
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
-}
-
-.app-sandbox-content {
-  padding: 0 20px;
 }
 
 .app-buttons li {
