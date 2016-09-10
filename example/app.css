@@ -102,12 +102,15 @@ label {
 }
 
 .app-sandbox {
-  padding: 0 20px;
   -webkit-user-select: none;
   -moz-user-select: none;
   -ms-user-select: none;
   -o-user-select: none;
   user-select: none;
+}
+
+.app-sandbox-content {
+  padding: 0 20px;
 }
 
 .app-buttons li {
@@ -119,6 +122,11 @@ label {
 }
 
 @media (max-width: 768px) {
+
+  .app-header {
+    font-size: 20px;
+  }
+
   .app-buttons li {
     display: block;
     margin: 10px 0;
