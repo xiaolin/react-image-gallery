@@ -30,11 +30,6 @@ label {
   text-transform: uppercase;
 }
 
-.app .image-gallery,
-.app-sandbox {
-  width: 100%;
-}
-
 .play-button {
   cursor: pointer;
   position: absolute;
@@ -93,13 +88,14 @@ label {
   height: 100%;
 }
 
-@media (min-width: 1320px) {
-  .app .image-gallery,
-  .app-sandbox {
-    margin: 0 auto;
-    width: 70%;
-  }
+
+.app .image-gallery,
+.app-sandbox {
+  margin: 0 auto;
+  width: 65%;
+  transition: all 1s ease;
 }
+
 
 @media (max-width: 1320px) {
   .app-sandbox-content {
@@ -153,6 +149,13 @@ label {
   .close-video::before {
     font-size: 16px;
     padding: 15px;
+  }
+}
+
+@media (max-width: 1024px) {
+  .app .image-gallery,
+  .app-sandbox {
+    width: 100%;
   }
 }
 
