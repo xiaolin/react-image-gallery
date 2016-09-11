@@ -292,6 +292,10 @@ export default class ImageGallery extends React.Component {
       document.mozFullScreenElement ||
       document.webkitFullscreenElement;
 
+    if (this.props.onScreenChange) {
+      this.props.onScreenChange(fullScreenElement);
+    }
+
     this.setState({isFullscreen: !!fullScreenElement});
   }
 
