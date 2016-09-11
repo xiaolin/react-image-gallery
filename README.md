@@ -114,6 +114,7 @@ class MyComponent extends React.Component {
 * `startIndex`: Integer, default `0`
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
+* `onScreenChange`: Function, `callback(fullscreenElement)`
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`

@@ -50,6 +50,10 @@ class App extends React.Component {
     console.debug('paused on index', index);
   }
 
+  _onScreenChange(fullScreenElement) {
+    console.debug('isFullScreen?', !!fullScreenElement);
+  }
+
   _onPlay(index) {
     console.debug('playing from index', index);
   }
@@ -172,6 +176,7 @@ class App extends React.Component {
           onImageLoad={this._onImageLoad}
           onSlide={this._onSlide.bind(this)}
           onPause={this._onPause.bind(this)}
+          onScreenChange={this._onScreenChange.bind(this)}
           onPlay={this._onPlay.bind(this)}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
