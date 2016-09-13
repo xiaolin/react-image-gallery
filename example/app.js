@@ -68,7 +68,7 @@ class App extends React.Component {
 
   _getStaticImages() {
     let images = [];
-    for (let i = 3; i < 12; i++) {
+    for (let i = 2; i < 12; i++) {
       images.push({
         original: `${PREFIX_URL}${i}.jpg`,
         thumbnail:`${PREFIX_URL}${i}t.jpg`
@@ -131,6 +131,15 @@ class App extends React.Component {
             <a onClick={this._toggleShowVideo.bind(this, item.embedUrl)}>
               <div className='play-button'></div>
               <img src={item.original}/>
+              {
+                item.description &&
+                  <span
+                    className='image-gallery-description'
+                    style={{right: '0', left: 'initial'}}
+                  >
+                    {item.description}
+                  </span>
+              }
             </a>
         }
       </div>
@@ -147,14 +156,10 @@ class App extends React.Component {
         description: 'Custom class for slides & thumbnails'
       },
       {
-        original: `${PREFIX_URL}2.jpg`,
-        thumbnail: `${PREFIX_URL}2t.jpg`,
-        description: 'Lorem ipsum dolor sit amet, consectetur adipiscing...'
-      },
-      {
         thumbnail: `${PREFIX_URL}3v.jpg`,
         original: `${PREFIX_URL}3v.jpg`,
         embedUrl: 'https://www.youtube.com/embed/iNJdPyoqt8U?autoplay=1&showinfo=0',
+        description: 'Render custom slides within the gallery',
         renderItem: this._renderVideo.bind(this)
       },
       {
