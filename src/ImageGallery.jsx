@@ -708,8 +708,7 @@ export default class ImageGallery extends React.Component {
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
 
         <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
-          <div
-            className='image-gallery-slide-wrapper'>
+          <div className='image-gallery-slide-wrapper'>
 
             {
               this.props.showFullscreenButton &&

@@ -264,7 +264,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 }
 
 .image-gallery-thumbnail {
-  display: table-cell;
+  display: inline-block;
   padding-right: 5px;
 
   img {
