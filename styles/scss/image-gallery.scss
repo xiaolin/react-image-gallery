@@ -55,7 +55,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   cursor: pointer;
   position: absolute;
   z-index: 4;
-
+  
   &::before {
     @extend %ion;
     color: $ig-white;
@@ -138,6 +138,11 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
+  appearance: none;
+  background-color: transparent;
+  display: block;
+  padding: 0;
+  border: none;
 
   &[disabled] {
     cursor: disabled;
@@ -159,6 +164,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
   &::before {
     content: $ionicon-var-ios-arrow-left;
+    display: block;
   }
 }
 
@@ -167,6 +173,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
   &::before {
     content: $ionicon-var-ios-arrow-right;
+    display: block;
   }
 }
 
@@ -234,6 +241,8 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
     display: inline-block;
     margin: 0 5px;
     padding: 5px;
+    appearance: none;
+    background-color: transparent;
 
     @media (max-width: $ig-screen-sm-min) {
       margin: 0 3px;
