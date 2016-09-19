@@ -688,7 +688,7 @@ export default class ImageGallery extends React.Component {
 
       if (this.props.showBullets) {
         bullets.push(
-          <li
+          <button
             key={index}
             className={
               'image-gallery-bullet ' + (
@@ -696,7 +696,7 @@ export default class ImageGallery extends React.Component {
 
             onTouchStart={event => this.slideToIndex.call(this, index, event)}
             onClick={event => this.slideToIndex.call(this, index, event)}>
-          </li>
+          </button>
         );
       }
     });
@@ -732,13 +732,13 @@ export default class ImageGallery extends React.Component {
                 [
                   this.props.showNav &&
                     <span key='navigation'>
-                      <a
+                      <button
                         className='image-gallery-left-nav'
                         disabled={!this._canSlideLeft()}
                         onTouchStart={slideLeft}
                         onClick={slideLeft}/>
 
-                      <a
+                      <button
                         className='image-gallery-right-nav'
                         disabled={!this._canSlideRight()}
                         onTouchStart={slideRight}
