@@ -55,7 +55,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   cursor: pointer;
   position: absolute;
   z-index: 4;
-  
+
   &::before {
     @extend %ion;
     color: $ig-white;
@@ -133,16 +133,15 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
 .image-gallery-left-nav,
 .image-gallery-right-nav {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
   color: $ig-white;
   font-size: 5em;
+  outline: none;
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
-  appearance: none;
-  background-color: transparent;
-  display: block;
-  padding: 0;
-  border: none;
 
   &[disabled] {
     cursor: disabled;
@@ -164,7 +163,6 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
   &::before {
     content: $ionicon-var-ios-arrow-left;
-    display: block;
   }
 }
 
@@ -173,7 +171,6 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
 
   &::before {
     content: $ionicon-var-ios-arrow-right;
-    display: block;
   }
 }
 
@@ -206,7 +203,6 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
     line-height: 1;
     padding: 10px 20px;
     position: absolute;
-    transition: all .45s ease-out;
     white-space: normal;
 
     @media (max-width: $ig-screen-sm-min) {
@@ -234,15 +230,16 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   }
 
   .image-gallery-bullet {
+    appearance: none;
+    background-color: transparent;
     border: 1px solid $ig-white;
     border-radius: 50%;
     box-shadow: 0 1px 0 lighten($ig-black, 10%);
     cursor: pointer;
     display: inline-block;
     margin: 0 5px;
+    outline: none;
     padding: 5px;
-    appearance: none;
-    background-color: transparent;
 
     @media (max-width: $ig-screen-sm-min) {
       margin: 0 3px;
@@ -266,7 +263,7 @@ $ig-background-black: rgba(0, 0, 0, .4) !default;
   .image-gallery-thumbnails-container {
     cursor: pointer;
     text-align: center;
-    transition: all .45s ease-out;
+    transition: transform .45s ease-out;
     white-space: nowrap;
   }
 
