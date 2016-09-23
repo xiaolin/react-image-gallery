@@ -831,6 +831,7 @@ ImageGallery.propTypes = {
   startIndex: React.PropTypes.number,
   slideInterval: React.PropTypes.number,
   onSlide: React.PropTypes.func,
+  onScreenChange: React.PropTypes.func,
   onPause: React.PropTypes.func,
   onPlay: React.PropTypes.func,
   onClick: React.PropTypes.func,
