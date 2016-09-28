@@ -745,19 +745,24 @@ export default class ImageGallery extends React.Component {
                         onClick={slideRight}/>
                     </span>,
 
-                    <Swipeable
-                      className='image-gallery-swipe'
-                      key='swipeable'
-                      delta={1}
-                      onSwipingLeft={this._handleSwiping.bind(this, -1)}
-                      onSwipingRight={this._handleSwiping.bind(this, 1)}
-                      onSwiped={this._handleOnSwiped.bind(this)}
-                      onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
-                      onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
-                    >
-                      <div className='image-gallery-slides'>
+                    this.props.disableSwipe ?
+                      <div className='image-gallery-slides' key='slides'>
                         {slides}
                       </div>
+                    :
+                      <Swipeable
+                        className='image-gallery-swipe'
+                        key='swipeable'
+                        delta={1}
+                        onSwipingLeft={this._handleSwiping.bind(this, -1)}
+                        onSwipingRight={this._handleSwiping.bind(this, 1)}
+                        onSwiped={this._handleOnSwiped.bind(this)}
+                        onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
+                        onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
+                      >
+                        <div className='image-gallery-slides'>
+                          {slides}
+                        </div>
                     </Swipeable>
                 ]
               :
@@ -826,6 +831,7 @@ ImageGallery.propTypes = {
   slideOnThumbnailHover: React.PropTypes.bool,
   disableThumbnailScroll: React.PropTypes.bool,
   disableArrowKeys: React.PropTypes.bool,
+  disableSwipe: React.PropTypes.bool,
   defaultImage: React.PropTypes.string,
   indexSeparator: React.PropTypes.string,
   startIndex: React.PropTypes.number,
@@ -855,6 +861,7 @@ ImageGallery.defaultProps = {
   slideOnThumbnailHover: false,
   disableThumbnailScroll: false,
   disableArrowKeys: false,
+  disableSwipe: false,
   indexSeparator: ' / ',
   startIndex: 0,
   slideInterval: 3000
