@@ -36,27 +36,12 @@ function throttle(func, wait) {
 
 }
 
-// This is to handle accessing event properties in an asynchronous way
-// https://facebook.github.io/react/docs/events.html#syntheticevent
-function debounceEventHandler(...args) {
-  const throttled = throttle(...args);
-  return function(event) {
-    if (event) {
-      event.persist();
-      return throttled(event);
-    }
-
-    return throttled();
-  };
-}
-
 const screenChangeEvents = [
   'fullscreenchange',
   'msfullscreenchange',
   'mozfullscreenchange',
   'webkitfullscreenchange'
 ];
-
 
 export default class ImageGallery extends React.Component {
 
@@ -104,13 +89,8 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillMount() {
-
-    this._slideLeft = debounceEventHandler(
-      this._slideLeft.bind(this), MIN_INTERVAL, true);
-
-    this._slideRight = debounceEventHandler(
-      this._slideRight.bind(this), MIN_INTERVAL, true);
-
+    this._slideLeft = throttle(this._slideLeft.bind(this), MIN_INTERVAL, true);
+    this._slideRight = throttle(this._slideRight.bind(this), MIN_INTERVAL, true);
     this._handleResize = this._handleResize.bind(this);
     this._handleScreenChange = this._handleScreenChange.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
@@ -227,7 +207,6 @@ export default class ImageGallery extends React.Component {
 
   slideToIndex(index, event) {
     if (event) {
-      event.preventDefault();
       if (this._intervalId) {
         // user triggered event while ImageGallery is playing, reset interval
         this.pause(false);
@@ -686,7 +665,6 @@ export default class ImageGallery extends React.Component {
               thumbnailClass
             }
 
-            onTouchStart={event => this.slideToIndex.call(this, index, event)}
             onClick={event => this.slideToIndex.call(this, index, event)}>
               <img
                 src={item.thumbnail}
@@ -707,7 +685,6 @@ export default class ImageGallery extends React.Component {
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
 
-            onTouchStart={event => this.slideToIndex.call(this, index, event)}
             onClick={event => this.slideToIndex.call(this, index, event)}>
           </button>
         );
@@ -748,13 +725,11 @@ export default class ImageGallery extends React.Component {
                       <button
                         className='image-gallery-left-nav'
                         disabled={!this._canSlideLeft()}
-                        onTouchStart={slideLeft}
                         onClick={slideLeft}/>
 
                       <button
                         className='image-gallery-right-nav'
                         disabled={!this._canSlideRight()}
-                        onTouchStart={slideRight}
                         onClick={slideRight}/>
                     </span>,
 
