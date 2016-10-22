@@ -6,7 +6,7 @@ React Image Gallery
 
 ![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery.gif)
 
-React image gallery is a React component for building image gallery and carousels
+React image gallery is a React component for building image galleries and carousels
 
 Features of `react-image-gallery`
 * Mobile friendly
