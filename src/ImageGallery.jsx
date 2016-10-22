@@ -189,11 +189,16 @@ export default class ImageGallery extends React.Component {
     } else if (gallery.webkitRequestFullscreen) {
       gallery.webkitRequestFullscreen();
     } else {
-      // fallback to modal for unsupported browsers
+      // fallback to fullscreen modal for unsupported browsers
       this.setState({modalFullscreen: true});
+      // manually call because browser does not support screenchange events
+      if (this.props.onScreenChange) {
+        this.props.onScreenChange(true);
+      }
     }
 
     this.setState({isFullscreen: true});
+
   }
 
   exitFullScreen() {
@@ -207,11 +212,16 @@ export default class ImageGallery extends React.Component {
       } else if (document.msExitFullscreen) {
         document.msExitFullscreen();
       } else {
-        // fallback to modal for unsupported browsers
+        // fallback to fullscreen modal for unsupported browsers
         this.setState({modalFullscreen: false});
+        // manually call because browser does not support screenchange events
+        if (this.props.onScreenChange) {
+          this.props.onScreenChange(false);
+        }
       }
 
       this.setState({isFullscreen: false});
+
     }
   }
 
@@ -248,6 +258,22 @@ export default class ImageGallery extends React.Component {
     return this.state.currentIndex;
   }
 
+  _handleScreenChange() {
+    /*
+      handles screen change events that the browser triggers e.g. esc key
+    */
+    const fullScreenElement = document.fullscreenElement ||
+      document.msFullscreenElement ||
+      document.mozFullScreenElement ||
+      document.webkitFullscreenElement;
+
+    if (this.props.onScreenChange) {
+      this.props.onScreenChange(fullScreenElement);
+    }
+
+    this.setState({isFullscreen: !!fullScreenElement});
+  }
+
   _onScreenChangeEvent() {
     screenChangeEvents.map(eventName => {
       document.addEventListener(eventName, this._handleScreenChange);
@@ -260,19 +286,19 @@ export default class ImageGallery extends React.Component {
     });
   }
 
-  _togglePlay() {
-    if (this._intervalId) {
-      this.pause();
-    } else {
-      this.play();
-    }
-  }
-
   _toggleFullScreen() {
     if (this.state.isFullscreen) {
       this.exitFullScreen();
     } else {
       this.fullScreen();
+    }
+  }
+
+  _togglePlay() {
+    if (this._intervalId) {
+      this.pause();
+    } else {
+      this.play();
     }
   }
 
@@ -284,19 +310,6 @@ export default class ImageGallery extends React.Component {
     if (this._imageGalleryThumbnail) {
       this.setState({thumbnailWidth: this._imageGalleryThumbnail.offsetWidth});
     }
-  }
-
-  _handleScreenChange() {
-    const fullScreenElement = document.fullscreenElement ||
-      document.msFullscreenElement ||
-      document.mozFullScreenElement ||
-      document.webkitFullscreenElement;
-
-    if (this.props.onScreenChange) {
-      this.props.onScreenChange(fullScreenElement);
-    }
-
-    this.setState({isFullscreen: !!fullScreenElement});
   }
 
   _handleKeyDown(event) {
