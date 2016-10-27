@@ -24,17 +24,20 @@ Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/re
 npm install react-image-gallery
 ```
 
-### SASS
+### Style import
 
 ```
+# SCSS
 @import "../node_modules/react-image-gallery/styles/scss/image-gallery.scss";
-```
 
-### CSS
-
-```
+# CSS
 @import "../node_modules/react-image-gallery/styles/css/image-gallery.css";
+
+# Webpack
+import "react-image-gallery/styles/css/image-gallery";
+
 ```
+
 
 ### Example
 Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js)
