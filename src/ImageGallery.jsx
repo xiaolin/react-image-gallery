@@ -681,6 +681,7 @@ export default class ImageGallery extends React.Component {
         bullets.push(
           <button
             key={index}
+            type='button'
             className={
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
@@ -723,11 +724,13 @@ export default class ImageGallery extends React.Component {
                   this.props.showNav &&
                     <span key='navigation'>
                       <button
+                        type='button'
                         className='image-gallery-left-nav'
                         disabled={!this._canSlideLeft()}
                         onClick={slideLeft}/>
 
                       <button
+                        type='button'
                         className='image-gallery-right-nav'
                         disabled={!this._canSlideRight()}
                         onClick={slideRight}/>
