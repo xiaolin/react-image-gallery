@@ -122,6 +122,13 @@ class MyComponent extends React.Component {
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`
+* `renderCustomControls`: Function, custom controls rendering
+  * Use this to render custom controls or other elements on the currently displayed image (like the fullscreen button)
+  ```javascript
+    _renderCustomControls() {
+      return <a href='' className='image-gallery-custom-action' onClick={this._customAction.bind(this)}/>
+    }
+  ```
 * `renderItem`: Function, custom item rendering
   * As a prop on a specific item `[{thumbnail: '...', renderItem: '...'}]`
   * As a prop passed into `ImageGallery` to completely override `_renderItem`, see original below

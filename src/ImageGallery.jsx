@@ -701,6 +701,8 @@ export default class ImageGallery extends React.Component {
         <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
           <div className='image-gallery-slide-wrapper'>
 
+            {this.props.renderCustomControls && this.props.renderCustomControls()}
+
             {
               this.props.showFullscreenButton &&
                 <a
@@ -835,6 +837,7 @@ ImageGallery.propTypes = {
   onImageLoad: React.PropTypes.func,
   onImageError: React.PropTypes.func,
   onThumbnailError: React.PropTypes.func,
+  renderCustomControls: React.PropTypes.func,
   renderItem: React.PropTypes.func,
 };
 
