@@ -5,7 +5,8 @@
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev",
-    "build": "gulp build"
+    "build": "gulp build",
+    "postinstall": "gulp build",
   },
   "repository": {
     "type": "git",
