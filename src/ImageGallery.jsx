@@ -396,7 +396,10 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping(index, _, delta) {
-    const offsetPercentage = index * (delta / this.state.galleryWidth * 100);
+    let offsetPercentage = index * (delta / this.state.galleryWidth * 100);
+    if (Math.abs(offsetPercentage) >= 100) {
+      offsetPercentage = index * 100;
+    }
     this.setState({offsetPercentage: offsetPercentage, style: {}});
   }
 
