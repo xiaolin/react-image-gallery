@@ -1,0 +1,23 @@
+{
+    "parser": "babel-eslint",
+    "plugins": ["react"],
+    "env": {
+        "browser": true,
+        "node": true
+    },
+    "parserOptions": {
+        "ecmaVersion": 6,
+        "sourceType": "module",
+        "ecmaFeatures": {
+            "jsx": true
+        }
+    },
+    "rules": {
+        "semi": ["error", "always"],
+        "no-underscore-dangle": 0,
+        "no-unused-vars": 2,
+        "no-undef": 2,
+
+        "react/jsx-uses-vars": 1
+    }
+}
