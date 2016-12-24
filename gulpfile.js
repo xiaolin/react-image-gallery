@@ -12,6 +12,11 @@ var source = require('vinyl-source-stream');
 var buffer = require('vinyl-buffer');
 var watchify = require('watchify');
 
+var babelOptions = {
+  plugins: ['transform-object-assign'],
+  presets: ['es2015', 'react', 'stage-0']
+};
+
 gulp.task('server', function () {
   connect.server({
     host: '0.0.0.0',
@@ -34,10 +39,7 @@ gulp.task('scripts', function() {
     entries: './example/app.js',
     extensions: ['.jsx'],
     debug: true
-  }).transform('babelify', {
-      plugins: ['transform-object-assign'],
-      presets: ['es2015', 'react']
-    }))
+  }).transform('babelify', babelOptions))
     .bundle()
     .pipe(source('example.js'))
     .pipe(buffer())
@@ -51,10 +53,7 @@ gulp.task('demo-src', function() {
     entries: './example/app.js',
     extensions: ['.jsx'],
     debug: true
-  }).transform('babelify', {
-      plugins: ['transform-object-assign'],
-      presets: ['es2015', 'react']
-    })
+  }).transform('babelify', babelOptions)
     .bundle()
     .pipe(source('demo.js'))
     .pipe(buffer())
@@ -70,10 +69,7 @@ gulp.task('demo-src', function() {
 gulp.task('source-js', function () {
   return gulp.src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
-    .pipe(babel({
-      plugins: ['transform-object-assign'],
-      presets: ['es2015', 'react']
-    }))
+    .pipe(babel(babelOptions))
     .pipe(gulp.dest('./build'));
 });
 
