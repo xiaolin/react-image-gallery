@@ -1,47 +1,15 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
+import throttle from 'lodash.throttle';
 
 const MIN_INTERVAL = 500;
-
-function throttle(func, wait) {
-  let context, args, result;
-  let timeout = null;
-  let previous = 0;
-
-  let later = function() {
-    previous = new Date().getTime();
-    timeout = null;
-    result = func.apply(context, args);
-    if (!timeout) context = args = null;
-  };
-
-  return function() {
-    let now = new Date().getTime();
-    let remaining = wait - (now - previous);
-    context = this;
-    args = arguments;
-    if (remaining <= 0 || remaining > wait) {
-      if (timeout) {
-        clearTimeout(timeout);
-        timeout = null;
-      }
-      previous = now;
-      result = func.apply(context, args);
-      if (!timeout) context = args = null;
-    } else if (!timeout) {
-      timeout = setTimeout(later, remaining);
-    }
-    return result;
-  };
-
-}
-
 const screenChangeEvents = [
   'fullscreenchange',
   'msfullscreenchange',
   'mozfullscreenchange',
   'webkitfullscreenchange'
 ];
+
 
 export default class ImageGallery extends React.Component {
 
@@ -57,6 +25,57 @@ export default class ImageGallery extends React.Component {
       isPlaying: false
     };
   }
+
+  static propTypes = {
+    items: React.PropTypes.array.isRequired,
+    showNav: React.PropTypes.bool,
+    autoPlay: React.PropTypes.bool,
+    lazyLoad: React.PropTypes.bool,
+    infinite: React.PropTypes.bool,
+    showIndex: React.PropTypes.bool,
+    showBullets: React.PropTypes.bool,
+    showThumbnails: React.PropTypes.bool,
+    showPlayButton: React.PropTypes.bool,
+    showFullscreenButton: React.PropTypes.bool,
+    slideOnThumbnailHover: React.PropTypes.bool,
+    disableThumbnailScroll: React.PropTypes.bool,
+    disableArrowKeys: React.PropTypes.bool,
+    disableSwipe: React.PropTypes.bool,
+    defaultImage: React.PropTypes.string,
+    indexSeparator: React.PropTypes.string,
+    startIndex: React.PropTypes.number,
+    slideInterval: React.PropTypes.number,
+    onSlide: React.PropTypes.func,
+    onScreenChange: React.PropTypes.func,
+    onPause: React.PropTypes.func,
+    onPlay: React.PropTypes.func,
+    onClick: React.PropTypes.func,
+    onImageLoad: React.PropTypes.func,
+    onImageError: React.PropTypes.func,
+    onThumbnailError: React.PropTypes.func,
+    renderCustomControls: React.PropTypes.func,
+    renderItem: React.PropTypes.func,
+  };
+
+  static defaultProps = {
+    items: [],
+    showNav: true,
+    autoPlay: false,
+    lazyLoad: false,
+    infinite: true,
+    showIndex: false,
+    showBullets: false,
+    showThumbnails: true,
+    showPlayButton: true,
+    showFullscreenButton: true,
+    slideOnThumbnailHover: false,
+    disableThumbnailScroll: false,
+    disableArrowKeys: false,
+    disableSwipe: false,
+    indexSeparator: ' / ',
+    startIndex: 0,
+    slideInterval: 3000,
+  };
 
   componentWillReceiveProps(nextProps) {
     if (this.props.disableArrowKeys !== nextProps.disableArrowKeys) {
@@ -809,54 +828,3 @@ export default class ImageGallery extends React.Component {
   }
 
 }
-
-ImageGallery.propTypes = {
-  items: React.PropTypes.array.isRequired,
-  showNav: React.PropTypes.bool,
-  autoPlay: React.PropTypes.bool,
-  lazyLoad: React.PropTypes.bool,
-  infinite: React.PropTypes.bool,
-  showIndex: React.PropTypes.bool,
-  showBullets: React.PropTypes.bool,
-  showThumbnails: React.PropTypes.bool,
-  showPlayButton: React.PropTypes.bool,
-  showFullscreenButton: React.PropTypes.bool,
-  slideOnThumbnailHover: React.PropTypes.bool,
-  disableThumbnailScroll: React.PropTypes.bool,
-  disableArrowKeys: React.PropTypes.bool,
-  disableSwipe: React.PropTypes.bool,
-  defaultImage: React.PropTypes.string,
-  indexSeparator: React.PropTypes.string,
-  startIndex: React.PropTypes.number,
-  slideInterval: React.PropTypes.number,
-  onSlide: React.PropTypes.func,
-  onScreenChange: React.PropTypes.func,
-  onPause: React.PropTypes.func,
-  onPlay: React.PropTypes.func,
-  onClick: React.PropTypes.func,
-  onImageLoad: React.PropTypes.func,
-  onImageError: React.PropTypes.func,
-  onThumbnailError: React.PropTypes.func,
-  renderCustomControls: React.PropTypes.func,
-  renderItem: React.PropTypes.func,
-};
-
-ImageGallery.defaultProps = {
-  items: [],
-  showNav: true,
-  autoPlay: false,
-  lazyLoad: false,
-  infinite: true,
-  showIndex: false,
-  showBullets: false,
-  showThumbnails: true,
-  showPlayButton: true,
-  showFullscreenButton: true,
-  slideOnThumbnailHover: false,
-  disableThumbnailScroll: false,
-  disableArrowKeys: false,
-  disableSwipe: false,
-  indexSeparator: ' / ',
-  startIndex: 0,
-  slideInterval: 3000
-};
