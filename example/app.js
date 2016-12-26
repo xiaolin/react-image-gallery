@@ -24,6 +24,29 @@ class App extends React.Component {
       thumbnailPosition: 'bottom',
       showVideo: {},
     };
+
+    this.images = [
+      {
+        original: `${PREFIX_URL}1.jpg`,
+        thumbnail: `${PREFIX_URL}1t.jpg`,
+        originalClass: 'featured-slide',
+        thumbnailClass: 'featured-thumb',
+        description: 'Custom class for slides & thumbnails'
+      },
+      {
+        thumbnail: `${PREFIX_URL}3v.jpg`,
+        original: `${PREFIX_URL}3v.jpg`,
+        embedUrl: 'https://www.youtube.com/embed/iNJdPyoqt8U?autoplay=1&showinfo=0',
+        description: 'Render custom slides within the gallery',
+        renderItem: this._renderVideo.bind(this)
+      },
+      {
+        thumbnail: `${PREFIX_URL}4v.jpg`,
+        original: `${PREFIX_URL}4v.jpg`,
+        embedUrl: 'https://www.youtube.com/embed/4pSzhZ76GdM?autoplay=1&showinfo=0',
+        renderItem: this._renderVideo.bind(this)
+      }
+    ].concat(this._getStaticImages());
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -152,35 +175,12 @@ class App extends React.Component {
   }
 
   render() {
-    const images = [
-      {
-        original: `${PREFIX_URL}1.jpg`,
-        thumbnail: `${PREFIX_URL}1t.jpg`,
-        originalClass: 'featured-slide',
-        thumbnailClass: 'featured-thumb',
-        description: 'Custom class for slides & thumbnails'
-      },
-      {
-        thumbnail: `${PREFIX_URL}3v.jpg`,
-        original: `${PREFIX_URL}3v.jpg`,
-        embedUrl: 'https://www.youtube.com/embed/iNJdPyoqt8U?autoplay=1&showinfo=0',
-        description: 'Render custom slides within the gallery',
-        renderItem: this._renderVideo.bind(this)
-      },
-      {
-        thumbnail: `${PREFIX_URL}4v.jpg`,
-        original: `${PREFIX_URL}4v.jpg`,
-        embedUrl: 'https://www.youtube.com/embed/4pSzhZ76GdM?autoplay=1&showinfo=0',
-        renderItem: this._renderVideo.bind(this)
-      }
-    ].concat(this._getStaticImages());
-
     return (
 
       <section className='app'>
         <ImageGallery
           ref={i => this._imageGallery = i}
-          items={images}
+          items={this.images}
           lazyLoad={false}
           onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
