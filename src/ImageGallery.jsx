@@ -10,7 +10,6 @@ const screenChangeEvents = [
   'webkitfullscreenchange'
 ];
 
-
 export default class ImageGallery extends React.Component {
 
   constructor(props) {
@@ -24,6 +23,10 @@ export default class ImageGallery extends React.Component {
       isFullscreen: false,
       isPlaying: false
     };
+    
+    if (props.lazyLoad) {
+      this.lazyLoaded = [];
+    }
   }
 
   static propTypes = {
@@ -84,6 +87,11 @@ export default class ImageGallery extends React.Component {
       } else {
         window.addEventListener('keydown', this._handleKeyDown);
       }
+    }
+
+    if (nextProps.lazyLoad &&
+      (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
+      this.lazyLoaded = [];
     }
   }
 
@@ -663,8 +671,9 @@ export default class ImageGallery extends React.Component {
       );
 
       if (this.props.lazyLoad) {
-        if (alignment) {
+        if (alignment || this.lazyLoaded[index]) {
           slides.push(slide);
+          this.lazyLoaded[index] = true;
         }
       } else {
         slides.push(slide);
