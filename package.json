@@ -5,7 +5,8 @@
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev",
-    "build": "gulp build"
+    "build": "gulp build",
+    "lint": "eslint --ext .js,.jsx src"
   },
   "repository": {
     "type": "git",
