@@ -17,10 +17,11 @@ export default class ImageGallery extends React.Component {
     super(props);
     this.state = {
       currentIndex: props.startIndex,
-      thumbsTranslateX: 0,
+      thumbsTranslate: 0,
       offsetPercentage: 0,
       galleryWidth: 0,
-      thumbnailWidth: 0,
+      thumbnailsWrapperWidth: 0,
+      thumbnailsWrapperHeight: 0,
       isFullscreen: false,
       isPlaying: false
     };
@@ -43,6 +44,7 @@ export default class ImageGallery extends React.Component {
     disableSwipe: React.PropTypes.bool,
     defaultImage: React.PropTypes.string,
     indexSeparator: React.PropTypes.string,
+    thumbnailPosition: React.PropTypes.string,
     startIndex: React.PropTypes.number,
     slideInterval: React.PropTypes.number,
     onSlide: React.PropTypes.func,
@@ -73,6 +75,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: false,
     disableSwipe: false,
     indexSeparator: ' / ',
+    thumbnailPosition: '',
     startIndex: 0,
     slideInterval: 3000,
   };
@@ -88,14 +91,8 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.thumbnailWidth !== this.state.thumbnailWidth ||
-        prevProps.showThumbnails !== this.props.showThumbnails) {
-
-      // adjust thumbnail container when thumbnail width is adjusted
-      this._setThumbsTranslateX(
-        -this._getThumbsTranslateX(
-          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
-
+    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition) {
+      window.setTimeout(() => this._handleResize(), 600);
     }
 
     if (prevState.currentIndex !== this.state.currentIndex) {
@@ -103,7 +100,7 @@ export default class ImageGallery extends React.Component {
         this.props.onSlide(this.state.currentIndex);
       }
 
-      this._updateThumbnailTranslateX(prevState);
+      this._updateThumbnailTranslate(prevState);
     }
   }
 
@@ -118,7 +115,7 @@ export default class ImageGallery extends React.Component {
 
   componentDidMount() {
     // delay initial resize to get the accurate this._imageGallery.offsetWidth
-    window.setTimeout(() => this._handleResize(), 500);
+    window.setTimeout(() => this._handleResize(), 600);
 
     if (this.props.autoPlay) {
       this.play();
@@ -302,12 +299,34 @@ export default class ImageGallery extends React.Component {
 
   _handleResize() {
     if (this._imageGallery) {
-      this.setState({galleryWidth: this._imageGallery.offsetWidth});
+      this.setState({
+        galleryWidth: this._imageGallery.offsetWidth
+      });
     }
 
-    if (this._imageGalleryThumbnail) {
-      this.setState({thumbnailWidth: this._imageGalleryThumbnail.offsetWidth});
+    // adjust thumbnail container when thumbnail width or height is adjusted
+    this._setThumbsTranslate(
+      -this._getThumbsTranslate(
+        this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+
+    if (this._imageGallerySlideWrapper) {
+      this.setState({
+        gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
+      });
     }
+
+    if (this._thumbnailsWrapper) {
+      if (this._isThumbnailHorizontal()) {
+        this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
+      } else {
+        this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
+      }
+    }
+  }
+
+  _isThumbnailHorizontal() {
+    const { thumbnailPosition } = this.props;
+    return thumbnailPosition === 'left' || thumbnailPosition === 'right';
   }
 
   _handleKeyDown(event) {
@@ -416,47 +435,58 @@ export default class ImageGallery extends React.Component {
       this.state.currentIndex < this.props.items.length - 1;
   }
 
-  _updateThumbnailTranslateX(prevState) {
+  _updateThumbnailTranslate(prevState) {
     if (this.state.currentIndex === 0) {
-      this._setThumbsTranslateX(0);
+      this._setThumbsTranslate(0);
     } else {
       let indexDifference = Math.abs(
         prevState.currentIndex - this.state.currentIndex);
-      let scrollX = this._getThumbsTranslateX(indexDifference);
-      if (scrollX > 0) {
+      let scroll = this._getThumbsTranslate(indexDifference);
+      if (scroll > 0) {
         if (prevState.currentIndex < this.state.currentIndex) {
-          this._setThumbsTranslateX(
-            this.state.thumbsTranslateX - scrollX);
+          this._setThumbsTranslate(
+            this.state.thumbsTranslate - scroll);
         } else if (prevState.currentIndex > this.state.currentIndex) {
-          this._setThumbsTranslateX(
-            this.state.thumbsTranslateX + scrollX);
+          this._setThumbsTranslate(
+            this.state.thumbsTranslate + scroll);
         }
       }
     }
   }
 
-  _setThumbsTranslateX(thumbsTranslateX) {
-    this.setState({thumbsTranslateX});
+  _setThumbsTranslate(thumbsTranslate) {
+    this.setState({thumbsTranslate});
   }
 
-  _getThumbsTranslateX(indexDifference) {
+  _getThumbsTranslate(indexDifference) {
     if (this.props.disableThumbnailScroll) {
       return 0;
     }
 
-    const {thumbnailWidth} = this.state;
+    const {thumbnailsWrapperWidth, thumbnailsWrapperHeight} = this.state;
+    let totalScroll;
 
     if (this._thumbnails) {
-      if (this._thumbnails.scrollWidth <= thumbnailWidth) {
-        return 0;
-      }
-      let totalThumbnails = this._thumbnails.children.length;
-      // total scroll-x required to see the last thumbnail
-      let totalScrollX = this._thumbnails.scrollWidth - thumbnailWidth;
-      // scroll-x required per index change
-      let perIndexScrollX = totalScrollX / (totalThumbnails - 1);
 
-      return indexDifference * perIndexScrollX;
+      // total scroll required to see the last thumbnail
+      if (this._isThumbnailHorizontal()) {
+        if (this._thumbnails.scrollHeight <= thumbnailsWrapperHeight) {
+          return 0;
+        }
+        totalScroll = this._thumbnails.scrollHeight - thumbnailsWrapperHeight;
+      } else {
+        if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth) {
+          return 0;
+        }
+        totalScroll = this._thumbnails.scrollWidth - thumbnailsWrapperWidth;
+      }
+
+      let totalThumbnails = this._thumbnails.children.length;
+      // scroll-x required per index change
+      let perIndexScroll = totalScroll / (totalThumbnails - 1);
+
+      return indexDifference * perIndexScroll;
+
     }
   }
 
@@ -536,6 +566,15 @@ export default class ImageGallery extends React.Component {
     return translateX;
   }
 
+  _getThumbnailBarHeight() {
+    if (this._isThumbnailHorizontal()) {
+      return {
+        height: this.state.gallerySlideWrapperHeight
+      };
+    }
+    return {};
+  }
+
   _getSlideStyle(index) {
     const {currentIndex, offsetPercentage} = this.state;
     const {infinite, items} = this.props;
@@ -583,7 +622,13 @@ export default class ImageGallery extends React.Component {
   }
 
   _getThumbnailStyle() {
-    const translate3d = `translate3d(${this.state.thumbsTranslateX}px, 0, 0)`;
+    let translate3d;
+
+    if (this._isThumbnailHorizontal()) {
+      translate3d = `translate3d(0, ${this.state.thumbsTranslate}px, 0)`;
+    } else {
+      translate3d = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
+    }
     return {
       WebkitTransform: translate3d,
       MozTransform: translate3d,
@@ -633,6 +678,7 @@ export default class ImageGallery extends React.Component {
     } = this.state;
 
     const thumbnailStyle = this._getThumbnailStyle();
+    const thumbnailPosition = this.props.thumbnailPosition;
 
     const slideLeft = this._slideLeft.bind(this);
     const slideRight = this._slideRight.bind(this);
@@ -714,114 +760,136 @@ export default class ImageGallery extends React.Component {
       }
     });
 
+    const slideWrapper = (
+      <div
+        ref={i => this._imageGallerySlideWrapper = i}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
+      >
+
+        {this.props.renderCustomControls && this.props.renderCustomControls()}
+
+        {
+          this.props.showFullscreenButton &&
+            <a
+              className={
+                `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+              onClick={this._toggleFullScreen.bind(this)}/>
+        }
+
+        {
+          this.props.showPlayButton &&
+            <a
+              ref={p => this._playButton = p}
+              className={
+                `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+              onClick={this._togglePlay.bind(this)}/>
+        }
+
+        {
+          this._canNavigate() ?
+            [
+              this.props.showNav &&
+                <span key='navigation'>
+                  <button
+                    type='button'
+                    className='image-gallery-left-nav'
+                    disabled={!this._canSlideLeft()}
+                    onClick={slideLeft}/>
+
+                  <button
+                    type='button'
+                    className='image-gallery-right-nav'
+                    disabled={!this._canSlideRight()}
+                    onClick={slideRight}/>
+                </span>,
+
+                this.props.disableSwipe ?
+                  <div className='image-gallery-slides' key='slides'>
+                    {slides}
+                  </div>
+                :
+                  <Swipeable
+                    className='image-gallery-swipe'
+                    key='swipeable'
+                    delta={1}
+                    onSwipingLeft={this._handleSwiping.bind(this, -1)}
+                    onSwipingRight={this._handleSwiping.bind(this, 1)}
+                    onSwiped={this._handleOnSwiped.bind(this)}
+                    onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
+                    onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
+                  >
+                    <div className='image-gallery-slides'>
+                      {slides}
+                    </div>
+                </Swipeable>
+            ]
+          :
+            <div className='image-gallery-slides'>
+              {slides}
+            </div>
+        }
+        {
+          this.props.showBullets &&
+            <div className='image-gallery-bullets'>
+              <ul className='image-gallery-bullets-container'>
+                {bullets}
+              </ul>
+            </div>
+        }
+        {
+          this.props.showIndex &&
+            <div className='image-gallery-index'>
+              <span className='image-gallery-index-current'>
+                {this.state.currentIndex + 1}
+              </span>
+              <span className='image-gallery-index-separator'>
+                {this.props.indexSeparator}
+              </span>
+              <span className='image-gallery-index-total'>
+                {this.props.items.length}
+              </span>
+            </div>
+        }
+      </div>
+    );
+
     return (
       <section
         ref={i => this._imageGallery = i}
         className={
-          `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}>
+          `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
+      >
 
-        <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
-          <div className='image-gallery-slide-wrapper'>
+        <div
+          className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}
+        >
 
-            {this.props.renderCustomControls && this.props.renderCustomControls()}
-
-            {
-              this.props.showFullscreenButton &&
-                <a
-                  className={
-                    `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
-                  onClick={this._toggleFullScreen.bind(this)}/>
-            }
-
-            {
-              this.props.showPlayButton &&
-                <a
-                  ref={p => this._playButton = p}
-                  className={
-                    `image-gallery-play-button${isPlaying ? ' active' : ''}`}
-                  onClick={this._togglePlay.bind(this)}/>
-            }
-
-            {
-              this._canNavigate() ?
-                [
-                  this.props.showNav &&
-                    <span key='navigation'>
-                      <button
-                        type='button'
-                        className='image-gallery-left-nav'
-                        disabled={!this._canSlideLeft()}
-                        onClick={slideLeft}/>
-
-                      <button
-                        type='button'
-                        className='image-gallery-right-nav'
-                        disabled={!this._canSlideRight()}
-                        onClick={slideRight}/>
-                    </span>,
-
-                    this.props.disableSwipe ?
-                      <div className='image-gallery-slides' key='slides'>
-                        {slides}
-                      </div>
-                    :
-                      <Swipeable
-                        className='image-gallery-swipe'
-                        key='swipeable'
-                        delta={1}
-                        onSwipingLeft={this._handleSwiping.bind(this, -1)}
-                        onSwipingRight={this._handleSwiping.bind(this, 1)}
-                        onSwiped={this._handleOnSwiped.bind(this)}
-                        onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
-                        onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
-                      >
-                        <div className='image-gallery-slides'>
-                          {slides}
-                        </div>
-                    </Swipeable>
-                ]
-              :
-                <div className='image-gallery-slides'>
-                  {slides}
-                </div>
-            }
-            {
-              this.props.showBullets &&
-                <div className='image-gallery-bullets'>
-                  <ul className='image-gallery-bullets-container'>
-                    {bullets}
-                  </ul>
-                </div>
-            }
-            {
-              this.props.showIndex &&
-                <div className='image-gallery-index'>
-                  <span className='image-gallery-index-current'>
-                    {this.state.currentIndex + 1}
-                  </span>
-                  <span className='image-gallery-index-separator'>
-                    {this.props.indexSeparator}
-                  </span>
-                  <span className='image-gallery-index-total'>
-                    {this.props.items.length}
-                  </span>
-                </div>
-            }
-          </div>
-
+          {
+            (thumbnailPosition === 'bottom' || thumbnailPosition === 'right') &&
+              slideWrapper
+          }
           {
             this.props.showThumbnails &&
               <div
-                className='image-gallery-thumbnails'
-                ref={i => this._imageGalleryThumbnail = i}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition}`}
+                style={this._getThumbnailBarHeight()}
               >
                 <div
-                  ref={t => this._thumbnails = t}
-                  className='image-gallery-thumbnails-container'
-                  style={thumbnailStyle}>
-                  {thumbnails}
+                  className='image-gallery-thumbnails'
+                  ref={i => this._thumbnailsWrapper = i}
+                >
+                  <div
+                    ref={t => this._thumbnails = t}
+                    className='image-gallery-thumbnails-container'
+                    style={thumbnailStyle}>
+                    {thumbnails}
+                  </div>
                 </div>
               </div>
+          }
+          {
+            (thumbnailPosition === 'top' || thumbnailPosition === 'left') &&
+              slideWrapper
           }
 
         </div>

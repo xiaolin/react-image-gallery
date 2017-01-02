@@ -30,7 +30,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     z-index: 5;
 
     .image-gallery-content {
-      position: relative;
       top: 50%;
       transform: translateY(-50%);
     }
@@ -39,6 +38,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-content {
+  position: relative;
   top: 0;
 
   &.fullscreen {
@@ -48,6 +48,16 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-slide-wrapper {
   position: relative;
+
+  &.left,
+  &.right {
+    display: inline-block;
+    width: calc(100% - 112px); // 100px + 8px for border + 4px for padding
+
+    @media (max-width: $ig-screen-sm-min) {
+      width: calc(100% - 84px); // 75px + 6px for border + 3px for padding
+    }
+  }
 }
 
 .image-gallery-fullscreen-button,
@@ -259,6 +269,50 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 }
 
+.image-gallery-thumbnails-wrapper {
+  position: relative;
+
+  &.left,
+  &.right {
+    display: inline-block;
+    vertical-align: top;
+    width: 108px; // 100px + 8px for border
+
+    @media (max-width: $ig-screen-sm-min) {
+      width: 81px; // 75px + 6px for border
+    }
+
+    .image-gallery-thumbnails {
+      height: 100%;
+      left: 0;
+      padding: 0;
+      position: absolute;
+      top: 0;
+
+      .image-gallery-thumbnail {
+        display: block;
+        padding: 0;
+      }
+    }
+  }
+
+  &.left {
+    margin-right: 4px;
+
+    @media (max-width: $ig-screen-sm-min) {
+      margin-right: 3px;
+    }
+  }
+
+  &.right {
+    margin-left: 4px;
+
+    @media (max-width: $ig-screen-sm-min) {
+      margin-left: 3px;
+    }
+  }
+}
+
 .image-gallery-thumbnails {
   overflow: hidden;
   padding: 5px 0;
@@ -274,28 +328,30 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnail {
   display: inline-block;
-  padding-right: 5px;
+  margin-right: 5px;
+  border: 4px solid transparent;
+  transition: border .3s ease-out;
+  width: 100px;
+
+  @media (max-width: $ig-screen-sm-min) {
+    border: 3px solid transparent;
+    width: 75px;
+  }
 
   img {
-    border: 4px solid transparent;
-    transition: border .3s ease-out;
     vertical-align: middle;
-    width: 100px;
-
-    @media (max-width: $ig-screen-sm-min) {
-      border: 3px solid transparent;
-      width: 75px;
-    }
+    width: 100%;
   }
 
   &.active {
-    img {
-      border: 4px solid $ig-blue;
+    border: 4px solid $ig-blue;
 
-      @media (max-width: $ig-screen-sm-min) {
-        border: 3px solid $ig-blue;
-      }
+    @media (max-width: $ig-screen-sm-min) {
+      border: 3px solid $ig-blue;
     }
+    // img {
+
+    // }
   }
 }
 
