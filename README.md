@@ -95,6 +95,8 @@ class MyComponent extends React.Component {
 * `lazyLoad`: Boolean, default `false`
 * `showNav`: Boolean, default `true`
 * `showThumbnails`: Boolean, default `true`
+* `thumbnailPosition`: String, default `bottom`
+  * available positions: `top, right, bottom, left`
 * `showFullscreenButton`: Boolean, default `true`
 * `showPlayButton`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
