@@ -75,7 +75,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: false,
     disableSwipe: false,
     indexSeparator: ' / ',
-    thumbnailPosition: '',
+    thumbnailPosition: 'bottom',
     startIndex: 0,
     slideInterval: 3000,
   };
