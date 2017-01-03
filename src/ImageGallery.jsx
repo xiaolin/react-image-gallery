@@ -91,8 +91,10 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition) {
-      window.setTimeout(() => this._handleResize(), 600);
+    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition ||
+        prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
+        prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth) {
+      this._handleResize();
     }
 
     if (prevState.currentIndex !== this.state.currentIndex) {
@@ -107,15 +109,14 @@ export default class ImageGallery extends React.Component {
   componentWillMount() {
     this._slideLeft = throttle(this._slideLeft.bind(this), MIN_INTERVAL, true);
     this._slideRight = throttle(this._slideRight.bind(this), MIN_INTERVAL, true);
-    this._handleResize = this._handleResize.bind(this);
+    this._handleResize = throttle(this._handleResize.bind(this), MIN_INTERVAL, true);
     this._handleScreenChange = this._handleScreenChange.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._thumbnailDelay = 300;
   }
 
   componentDidMount() {
-    // delay initial resize to get the accurate this._imageGallery.offsetWidth
-    window.setTimeout(() => this._handleResize(), 600);
+    this._handleResize();
 
     if (this.props.autoPlay) {
       this.play();
@@ -298,30 +299,33 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleResize() {
-    if (this._imageGallery) {
-      this.setState({
-        galleryWidth: this._imageGallery.offsetWidth
-      });
-    }
-
-    // adjust thumbnail container when thumbnail width or height is adjusted
-    this._setThumbsTranslate(
-      -this._getThumbsTranslate(
-        this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
-
-    if (this._imageGallerySlideWrapper) {
-      this.setState({
-        gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
-      });
-    }
-
-    if (this._thumbnailsWrapper) {
-      if (this._isThumbnailHorizontal()) {
-        this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
-      } else {
-        this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
+    // delay initial resize to get the accurate this._imageGallery height/width
+    window.setTimeout(() => {
+      if (this._imageGallery) {
+        this.setState({
+          galleryWidth: this._imageGallery.offsetWidth
+        });
       }
-    }
+
+      // adjust thumbnail container when thumbnail width or height is adjusted
+      this._setThumbsTranslate(
+        -this._getThumbsTranslate(
+          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+
+      if (this._imageGallerySlideWrapper) {
+        this.setState({
+          gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
+        });
+      }
+
+      if (this._thumbnailsWrapper) {
+        if (this._isThumbnailHorizontal()) {
+          this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
+        } else {
+          this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
+        }
+      }
+    }, 500);
   }
 
   _isThumbnailHorizontal() {
