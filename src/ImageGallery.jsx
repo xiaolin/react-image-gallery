@@ -92,6 +92,7 @@ export default class ImageGallery extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     if (prevProps.thumbnailPosition !== this.props.thumbnailPosition ||
+        prevProps.showThumbnails !== this.props.showThumbnails ||
         prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
         prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth) {
       this._handleResize();
