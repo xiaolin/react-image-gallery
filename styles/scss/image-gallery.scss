@@ -43,6 +43,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
   &.fullscreen {
     background: $ig-black;
+
+    .image-gallery-slide {
+      background: $ig-black;
+    }
   }
 }
 
