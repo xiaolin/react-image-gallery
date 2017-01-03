@@ -113,11 +113,7 @@ label {
 }
 
 .app-buttons li {
-  display: table-cell;
-}
-
-.app-buttons li + li {
-  padding-left: 10px;
+  display: block;
 }
 
 @media (max-width: 768px) {
@@ -188,9 +184,14 @@ label {
   border-radius: 5px;
   font-size: 14px;
   border: 3px solid #ccc;
-  width: 65px;
+  background: #fff;
+  width: 100%;
   border-top-left-radius: 0;
   border-bottom-left-radius: 0;
+}
+
+input.app-interval-input {
+  width: 65px;
 }
 
 .app-checkboxes {

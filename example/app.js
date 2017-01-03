@@ -21,6 +21,7 @@ class App extends React.Component {
       showGalleryPlayButton: true,
       showNav: true,
       slideInterval: 2000,
+      thumbnailPosition: 'bottom',
       showVideo: {},
     };
   }
@@ -64,6 +65,10 @@ class App extends React.Component {
 
   _handleCheckboxChange(state, event) {
     this.setState({[state]: event.target.checked});
+  }
+
+  _handleThumbnailPositionChange(event) {
+    this.setState({thumbnailPosition: event.target.value});
   }
 
   _getStaticImages() {
@@ -190,6 +195,7 @@ class App extends React.Component {
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
+          thumbnailPosition={this.state.thumbnailPosition}
           slideInterval={parseInt(this.state.slideInterval)}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
         />
@@ -208,6 +214,22 @@ class App extends React.Component {
                     type='text'
                     onChange={this._handleInputChange.bind(this, 'slideInterval')}
                     value={this.state.slideInterval}/>
+                </div>
+              </li>
+
+              <li>
+                <div className='app-interval-input-group'>
+                  <span className='app-interval-label'>Thumbnail Bar Position</span>
+                  <select
+                    className='app-interval-input'
+                    value={this.state.thumbnailPosition}
+                    onChange={this._handleThumbnailPositionChange.bind(this)}
+                  >
+                    <option value='bottom'>Bottom</option>
+                    <option value='top'>Top</option>
+                    <option value='left'>Left</option>
+                    <option value='right'>Right</option>
+                  </select>
                 </div>
               </li>
             </ul>
