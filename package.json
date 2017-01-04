@@ -1,7 +1,7 @@
 {
   "name": "react-image-gallery",
-  "version": "0.7.8",
-  "description": "React Carousel, React Image gallery, React Slide Show component",
+  "version": "0.7.9",
+  "description": "Responsive and flexible carousel component with thumbnail support",
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev",
