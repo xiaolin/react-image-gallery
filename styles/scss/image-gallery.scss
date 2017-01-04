@@ -39,6 +39,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-content {
   position: relative;
+  line-height: 0;
   top: 0;
 
   &.fullscreen {
@@ -320,7 +321,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnails {
   overflow: hidden;
-  padding: 5px 0;
+  padding: 5px 0 0;
 
   .image-gallery-thumbnails-container {
     cursor: pointer;
