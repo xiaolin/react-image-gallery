@@ -17,6 +17,7 @@
         "no-underscore-dangle": 0,
         "no-unused-vars": 2,
         "no-undef": 2,
+        "no-trailing-spaces": 2,
 
         "react/jsx-uses-vars": 1
     }

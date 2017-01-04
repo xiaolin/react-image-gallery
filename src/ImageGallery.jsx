@@ -24,7 +24,7 @@ export default class ImageGallery extends React.Component {
       isFullscreen: false,
       isPlaying: false
     };
-    
+
     if (props.lazyLoad) {
       this.lazyLoaded = [];
     }
