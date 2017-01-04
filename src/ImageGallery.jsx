@@ -26,7 +26,7 @@ export default class ImageGallery extends React.Component {
     };
 
     if (props.lazyLoad) {
-      this.lazyLoaded = [];
+      this._lazyLoaded = [];
     }
   }
 
@@ -94,7 +94,7 @@ export default class ImageGallery extends React.Component {
 
     if (nextProps.lazyLoad &&
       (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
-      this.lazyLoaded = [];
+      this._lazyLoaded = [];
     }
   }
 
@@ -722,9 +722,9 @@ export default class ImageGallery extends React.Component {
       );
 
       if (this.props.lazyLoad) {
-        if (alignment || this.lazyLoaded[index]) {
+        if (alignment || this._lazyLoaded[index]) {
           slides.push(slide);
-          this.lazyLoaded[index] = true;
+          this._lazyLoaded[index] = true;
         }
       } else {
         slides.push(slide);
