@@ -2,7 +2,6 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
 
-const MIN_INTERVAL = 500;
 const screenChangeEvents = [
   'fullscreenchange',
   'msfullscreenchange',
@@ -115,12 +114,31 @@ export default class ImageGallery extends React.Component {
 
       this._updateThumbnailTranslate(prevState);
     }
+
+    if (prevProps.slideDuration !== this.props.slideDuration) {
+      this._slideLeft = throttle(this._unthrottledSlideLeft,
+                                 this.props.slideDuration,
+                                 {trailing: false});
+      this._slideRight = throttle(this._unthrottledSlideRight,
+                                  this.props.slideDuration,
+                                  {trailing: false});
+    }
   }
 
   componentWillMount() {
-    this._slideLeft = throttle(this._slideLeft.bind(this), MIN_INTERVAL, true);
-    this._slideRight = throttle(this._slideRight.bind(this), MIN_INTERVAL, true);
-    this._handleResize = throttle(this._handleResize.bind(this), MIN_INTERVAL, true);
+    // Used to update the throttle if slideDuration changes
+    this._unthrottledSlideLeft = this._slideLeft.bind(this);
+    this._unthrottledSlideRight = this._slideRight.bind(this);
+
+    this._slideLeft = throttle(this._unthrottledSlideLeft,
+                               this.props.slideDuration,
+                               {trailing: false});
+
+    this._slideRight = throttle(this._unthrottledSlideRight,
+                                this.props.slideDuration,
+                                {trailing: false});
+
+    this._handleResize = this._handleResize.bind(this);
     this._handleScreenChange = this._handleScreenChange.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._thumbnailDelay = 300;
@@ -154,6 +172,7 @@ export default class ImageGallery extends React.Component {
 
   play(callback = true) {
     if (!this._intervalId) {
+      const MIN_INTERVAL = 500;
       this.setState({isPlaying: true});
       const {slideInterval} = this.props;
       this._intervalId = window.setInterval(() => {
