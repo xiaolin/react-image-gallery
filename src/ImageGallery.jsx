@@ -172,9 +172,8 @@ export default class ImageGallery extends React.Component {
 
   play(callback = true) {
     if (!this._intervalId) {
-      const MIN_INTERVAL = 500;
+      const {slideInterval, slideDuration} = this.props;
       this.setState({isPlaying: true});
-      const {slideInterval} = this.props;
       this._intervalId = window.setInterval(() => {
         if (!this.state.hovering) {
           if (!this.props.infinite && !this._canSlideRight()) {
@@ -183,7 +182,7 @@ export default class ImageGallery extends React.Component {
             this.slideToIndex(this.state.currentIndex + 1);
           }
         }
-      }, slideInterval > MIN_INTERVAL ? slideInterval : MIN_INTERVAL);
+      }, Math.max(slideInterval, slideDuration));
 
       if (this.props.onPlay && callback) {
         this.props.onPlay(this.state.currentIndex);

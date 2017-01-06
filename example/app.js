@@ -51,7 +51,8 @@ class App extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (this.state.slideInterval !== prevState.slideInterval) {
+    if (this.state.slideInterval !== prevState.slideInterval ||
+        this.state.slideDuration !== prevState.slideDuration) {
       // refresh setInterval
       this._imageGallery.pause();
       this._imageGallery.play();
