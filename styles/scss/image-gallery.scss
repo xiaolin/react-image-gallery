@@ -57,7 +57,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   &.left,
   &.right {
     display: inline-block;
-    width: calc(100% - 112px); // 100px + 8px for border + 4px for padding
+    width: calc(100% - 113px); // 100px + 8px for border + 5px for padding
 
     @media (max-width: $ig-screen-sm-min) {
       width: calc(100% - 84px); // 75px + 6px for border + 3px for padding
@@ -291,7 +291,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       height: 100%;
       width: 100%;
       left: 0;
-      padding: 0;
+      margin: 0;
       position: absolute;
       top: 0;
 
@@ -303,7 +303,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   &.left {
-    margin-right: 4px;
+    margin-right: 5px;
 
     @media (max-width: $ig-screen-sm-min) {
       margin-right: 3px;
@@ -311,7 +311,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   &.right {
-    margin-left: 4px;
+    margin-left: 5px;
 
     @media (max-width: $ig-screen-sm-min) {
       margin-left: 3px;
@@ -321,7 +321,11 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnails {
   overflow: hidden;
-  padding: 5px 0 0;
+  margin: 5px 0;
+
+  @media (max-width: $ig-screen-sm-min) {
+    margin: 3px 0;
+  }
 
   .image-gallery-thumbnails-container {
     cursor: pointer;
