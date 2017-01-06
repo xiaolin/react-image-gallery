@@ -49,6 +49,7 @@ export default class ImageGallery extends React.Component {
     indexSeparator: React.PropTypes.string,
     thumbnailPosition: React.PropTypes.string,
     startIndex: React.PropTypes.number,
+    slideDuration: React.PropTypes.number,
     slideInterval: React.PropTypes.number,
     onSlide: React.PropTypes.func,
     onScreenChange: React.PropTypes.func,
@@ -80,6 +81,7 @@ export default class ImageGallery extends React.Component {
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
     startIndex: 0,
+    slideDuration: 450,
     slideInterval: 3000,
   };
 
@@ -254,7 +256,7 @@ export default class ImageGallery extends React.Component {
       currentIndex: currentIndex,
       offsetPercentage: 0,
       style: {
-        transition: 'transform .45s ease-out'
+        transition: `transform ${this.props.slideDuration}ms ease-out`
       }
     });
   }
