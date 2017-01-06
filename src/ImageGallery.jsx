@@ -59,6 +59,8 @@ export default class ImageGallery extends React.Component {
     onImageError: React.PropTypes.func,
     onThumbnailError: React.PropTypes.func,
     renderCustomControls: React.PropTypes.func,
+    renderLeftNav: React.PropTypes.func,
+    renderRightNav: React.PropTypes.func,
     renderItem: React.PropTypes.func,
   };
 
@@ -81,6 +83,24 @@ export default class ImageGallery extends React.Component {
     thumbnailPosition: 'bottom',
     startIndex: 0,
     slideInterval: 3000,
+    renderLeftNav: (onClick, disabled) => {
+      return (
+        <button
+          type='button'
+          className='image-gallery-left-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      );
+    },
+    renderRightNav: (onClick, disabled) => {
+      return (
+        <button
+          type='button'
+          className='image-gallery-right-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      );
+    }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -804,17 +824,8 @@ export default class ImageGallery extends React.Component {
             [
               this.props.showNav &&
                 <span key='navigation'>
-                  <button
-                    type='button'
-                    className='image-gallery-left-nav'
-                    disabled={!this._canSlideLeft()}
-                    onClick={slideLeft}/>
-
-                  <button
-                    type='button'
-                    className='image-gallery-right-nav'
-                    disabled={!this._canSlideRight()}
-                    onClick={slideRight}/>
+                  {this.props.renderLeftNav(slideLeft, !this._canSlideLeft())}
+                  {this.props.renderRightNav(slideRight, !this._canSlideRight())}
                 </span>,
 
                 this.props.disableSwipe ?
