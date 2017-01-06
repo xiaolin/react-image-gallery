@@ -160,6 +160,32 @@ class MyComponent extends React.Component {
         )
       }
     ```
+* `renderLeftNav`: Function, custom left nav component
+  * Use this to render a custom left nav control
+  * Passes `onClick` callback that will slide to the previous item and `disabled` argument for when to disable the nav
+  ```javascript
+    _renderLeftNav(onClick, disabled) {
+      return (
+        <button
+          className='image-gallery-custom-left-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      )
+    }
+  ```
+* `renderRightNav`: Function, custom right nav component
+  * Use this to render a custom right nav control
+  * Passes `onClick` callback that will slide to the next item and `disabled` argument for when to disable the nav
+  ```javascript
+    _renderRightNav(onClick, disabled) {
+      return (
+        <button
+          className='image-gallery-custom-right-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      )
+    }
+  ```
 
 
 # Functions
