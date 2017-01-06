@@ -20,6 +20,7 @@ class App extends React.Component {
       showPlayButton: true,
       showGalleryPlayButton: true,
       showNav: true,
+      slideDuration: 800,
       slideInterval: 2000,
       thumbnailPosition: 'bottom',
       showVideo: {},
@@ -196,6 +197,7 @@ class App extends React.Component {
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
           thumbnailPosition={this.state.thumbnailPosition}
+          slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
           slideOnThumbnailHover={this.state.slideOnThumbnailHover}
         />
@@ -214,6 +216,17 @@ class App extends React.Component {
                     type='text'
                     onChange={this._handleInputChange.bind(this, 'slideInterval')}
                     value={this.state.slideInterval}/>
+                </div>
+              </li>
+
+              <li>
+                <div className='app-interval-input-group'>
+                  <span className='app-interval-label'>Slide Duration</span>
+                  <input
+                    className='app-interval-input'
+                    type='text'
+                    onChange={this._handleInputChange.bind(this, 'slideDuration')}
+                    value={this.state.slideDuration}/>
                 </div>
               </li>
 
@@ -309,4 +322,3 @@ class App extends React.Component {
 }
 
 ReactDOM.render(<App/>, document.getElementById('container'));
-
