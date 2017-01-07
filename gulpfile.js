@@ -34,6 +34,14 @@ gulp.task('sass', function () {
     .pipe(livereload());
 });
 
+gulp.task('sass-no-icon', function () {
+  gulp.src('./styles/scss/image-gallery-no-icon.scss')
+    .pipe(sass())
+    .pipe(rename('image-gallery-no-icon.css'))
+    .pipe(gulp.dest('./styles/css/'))
+    .pipe(livereload());
+});
+
 gulp.task('scripts', function() {
   watchify(browserify({
     entries: './example/app.js',
@@ -80,5 +88,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'sass']);
+gulp.task('build', ['source-js', 'sass', 'sass-no-icon']);
 gulp.task('demo', ['demo-src']);
