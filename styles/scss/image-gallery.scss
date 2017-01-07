@@ -69,7 +69,11 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-play-button,
 .image-gallery-left-nav,
 .image-gallery-right-nav {
+  appearance: none;
+  background-color: transparent;
+  border: 0;
   cursor: pointer;
+  outline: none;
   position: absolute;
   z-index: 4;
 
@@ -95,16 +99,16 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   bottom: 0;
 
   &::before {
-    font-size: 1.7em;
+    font-size: 2.7em;
     padding: 15px 20px;
     text-shadow: 0 1px 1px lighten($ig-black, 10%);
 
     @media (max-width: $ig-screen-sm-min) {
-      font-size: 1.4em;
+      font-size: 2.4em;
     }
 
     @media (max-width: $ig-screen-xsm-min) {
-      font-size: 1em;
+      font-size: 2em;
     }
   }
 
@@ -150,12 +154,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  appearance: none;
-  background-color: transparent;
-  border: 0;
   color: $ig-white;
   font-size: 5em;
-  outline: none;
   padding: 50px 15px;
   top: 50%;
   transform: translateY(-50%);
@@ -291,12 +291,13 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       height: 100%;
       width: 100%;
       left: 0;
-      margin: 0;
+      padding: 0;
       position: absolute;
       top: 0;
 
       .image-gallery-thumbnail {
         display: block;
+        margin-right: 0;
         padding: 0;
       }
     }
@@ -321,10 +322,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnails {
   overflow: hidden;
-  margin: 5px 0;
+  padding: 5px 0;
 
   @media (max-width: $ig-screen-sm-min) {
-    margin: 3px 0;
+    padding: 3px 0;
   }
 
   .image-gallery-thumbnails-container {
