@@ -28,14 +28,17 @@ npm install react-image-gallery
 
 ```
 # SCSS
-@import "../node_modules/react-image-gallery/styles/scss/image-gallery.scss";
+@import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
 
 # CSS
-@import "../node_modules/react-image-gallery/styles/css/image-gallery.css";
+@import "node_modules/react-image-gallery/styles/css/image-gallery.css";
 
 # Webpack
 import "react-image-gallery/styles/css/image-gallery";
 
+# Stylesheet with no icons
+node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
+node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
 
 

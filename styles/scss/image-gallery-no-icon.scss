@@ -1,5 +1,3 @@
-@import './ionicons';
-
 $ig-screen-sm-min: 768px !default;
 $ig-screen-xsm-min: 480px !default;
 $ig-white: #fff !default;
@@ -76,80 +74,19 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   outline: none;
   position: absolute;
   z-index: 4;
-
-  &::before {
-    @extend %ion;
-    color: $ig-white;
-    line-height: .7;
-    text-shadow: 0 2px 2px lighten($ig-black, 10%);
-    transition: color .2s ease-out;
-  }
-
-  &:hover::before {
-    color: $ig-blue;
-
-    @media (max-width: $ig-screen-sm-min) {
-      color: $ig-white;
-    }
-  }
 }
 
 .image-gallery-fullscreen-button,
 .image-gallery-play-button {
   bottom: 0;
-
-  &::before {
-    font-size: 2.7em;
-    padding: 15px 20px;
-    text-shadow: 0 1px 1px lighten($ig-black, 10%);
-
-    @media (max-width: $ig-screen-sm-min) {
-      font-size: 2.4em;
-    }
-
-    @media (max-width: $ig-screen-xsm-min) {
-      font-size: 2em;
-    }
-  }
-
-  &:hover::before {
-    color: $ig-white;
-    transform: scale(1.1);
-
-    @media (max-width: $ig-screen-sm-min) {
-      transform: none;
-    }
-  }
-
 }
 
 .image-gallery-fullscreen-button {
   right: 0;
-
-  &::before {
-    content: $ionicon-var-android-expand;
-  }
-
-  &.active::before {
-    content: $ionicon-var-android-contract;
-  }
-
-  &.active:hover::before {
-    transform: scale(.9);
-  }
 }
 
 .image-gallery-play-button {
   left: 0;
-
-  &::before {
-    content: $ionicon-var-ios-play;
-  }
-
-  &.active::before {
-    content: $ionicon-var-ios-pause;
-  }
-
 }
 
 .image-gallery-left-nav,
@@ -177,18 +114,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-left-nav {
   left: 0;
-
-  &::before {
-    content: $ionicon-var-ios-arrow-left;
-  }
 }
 
 .image-gallery-right-nav {
   right: 0;
-
-  &::before {
-    content: $ionicon-var-ios-arrow-right;
-  }
 }
 
 .image-gallery-slides {
