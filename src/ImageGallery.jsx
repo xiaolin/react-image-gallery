@@ -61,6 +61,8 @@ export default class ImageGallery extends React.Component {
     renderCustomControls: React.PropTypes.func,
     renderLeftNav: React.PropTypes.func,
     renderRightNav: React.PropTypes.func,
+    renderPlayPauseButton: React.PropTypes.func,
+    renderFullscreenButton: React.PropTypes.func,
     renderItem: React.PropTypes.func,
   };
 
@@ -90,7 +92,8 @@ export default class ImageGallery extends React.Component {
           type='button'
           className='image-gallery-left-nav'
           disabled={disabled}
-          onClick={onClick}/>
+          onClick={onClick}
+        />
       );
     },
     renderRightNav: (onClick, disabled) => {
@@ -99,9 +102,30 @@ export default class ImageGallery extends React.Component {
           type='button'
           className='image-gallery-right-nav'
           disabled={disabled}
-          onClick={onClick}/>
+          onClick={onClick}
+        />
       );
-    }
+    },
+    renderPlayPauseButton: (onClick, isPlaying) => {
+      return (
+        <button
+          type='button'
+          className={
+            `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+          onClick={onClick}
+        />
+      );
+    },
+    renderFullscreenButton: (onClick, isFullscreen) => {
+      return (
+        <button
+          type='button'
+          className={
+            `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+          onClick={onClick}
+        />
+      );
+    },
   };
 
   componentWillReceiveProps(nextProps) {
@@ -824,19 +848,12 @@ export default class ImageGallery extends React.Component {
 
         {
           this.props.showFullscreenButton &&
-            <a
-              className={
-                `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
-              onClick={this._toggleFullScreen.bind(this)}/>
+            this.props.renderFullscreenButton(this._toggleFullScreen.bind(this), isFullscreen)
         }
 
         {
           this.props.showPlayButton &&
-            <a
-              ref={p => this._playButton = p}
-              className={
-                `image-gallery-play-button${isPlaying ? ' active' : ''}`}
-              onClick={this._togglePlay.bind(this)}/>
+            this.props.renderPlayPauseButton(this._togglePlay.bind(this), isPlaying)
         }
 
         {

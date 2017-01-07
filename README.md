@@ -56,14 +56,6 @@ class MyComponent extends React.Component {
       {
         original: 'http://lorempixel.com/1000/600/nature/1/',
         thumbnail: 'http://lorempixel.com/250/150/nature/1/',
-        originalClass: 'featured-slide',
-        thumbnailClass: 'featured-thumb',
-        originalAlt: 'original-alt',
-        thumbnailAlt: 'thumbnail-alt',
-        thumbnailLabel: 'Optional',
-        description: 'Optional description...',
-        srcSet: 'Optional srcset (responsive images src)',
-        sizes: 'Optional sizes (image sizes relative to the breakpoint)'
       },
       {
         original: 'http://lorempixel.com/1000/600/nature/2/',
@@ -77,7 +69,6 @@ class MyComponent extends React.Component {
 
     return (
       <ImageGallery
-        ref={i => this._imageGallery = i}
         items={images}
         slideInterval={2000}
         onImageLoad={this.handleImageLoad}/>
@@ -90,6 +81,17 @@ class MyComponent extends React.Component {
 # Props
 
 * `items`: (required) Array of objects, see example above,
+  * Available Properties
+    * `original` - image src url
+    * `thumbnail` - image thumbnail src url
+    * `originalClass` - custom image class
+    * `thumbnailClass` - custom thumbnail class
+    * `originalAlt` - image alt
+    * `thumbnailAlt` - thumbnail image alt
+    * `thumbnailLabel` - label for thumbnail
+    * `description` - description for image
+    * `srcSet` - image srcSet
+    * `sizes` - image sizes
 * `infinite`: Boolean, default `true`
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
@@ -164,7 +166,7 @@ class MyComponent extends React.Component {
   * Use this to render a custom left nav control
   * Passes `onClick` callback that will slide to the previous item and `disabled` argument for when to disable the nav
   ```javascript
-    _renderLeftNav(onClick, disabled) {
+    renderLeftNav(onClick, disabled) {
       return (
         <button
           className='image-gallery-custom-left-nav'
@@ -177,7 +179,7 @@ class MyComponent extends React.Component {
   * Use this to render a custom right nav control
   * Passes `onClick` callback that will slide to the next item and `disabled` argument for when to disable the nav
   ```javascript
-    _renderRightNav(onClick, disabled) {
+    renderRightNav(onClick, disabled) {
       return (
         <button
           className='image-gallery-custom-right-nav'
@@ -185,6 +187,36 @@ class MyComponent extends React.Component {
           onClick={onClick}/>
       )
     }
+  ```
+* `renderPlayPauseButton`: Function, play pause button component
+  * Use this to render a custom play pause button
+  * Passes `onClick` callback that will toggle play/pause and `isPlaying` argument for when gallery is playing
+  ```javascript
+    renderPlayPauseButton: (onClick, isPlaying) => {
+      return (
+        <button
+          type='button'
+          className={
+            `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+          onClick={onClick}
+        />
+      );
+    }
+  ```
+* `renderFullscreenButton`: Function, custom fullscreen button component
+  * Use this to render a custom fullscreen button
+  * Passes `onClick` callback that will toggle fullscreen and `isFullscreen` argument for when fullscreen is active
+  ```javascript
+    renderFullscreenButton: (onClick, isFullscreen) => {
+      return (
+        <button
+          type='button'
+          className={
+            `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+          onClick={onClick}
+        />
+      );
+    },
   ```
 
 
