@@ -4,6 +4,9 @@ React Image Gallery
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
 
+## Live Demo (try it on mobile)
+Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
+
 ![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery.gif)
 
 React image gallery is a React component for building image galleries and carousels
@@ -14,9 +17,6 @@ Features of `react-image-gallery`
 * Fullscreen support
 * Custom rendered slides
 * Responsive design
-
-## Live Demo (try it on mobile)
-Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
 ## Getting started
 
