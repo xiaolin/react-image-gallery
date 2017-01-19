@@ -664,12 +664,22 @@ export default class ImageGallery extends React.Component {
     // adjust zIndex so that only the current slide and the slide were going
     // to is at the top layer, this prevents transitions from flying in the
     // background when swiping before the first slide or beyond the last slide
+    const isLastSlide = (slide) => {
+      return slide === (items.length - 1);
+    };
+    const isFirstSlide = (slide) => {
+      return slide === 0;
+    };
     let zIndex = 1;
     if (index === currentIndex) {
       zIndex = 3;
+    } else if (isLastSlide(index) && !isLastSlide(currentIndex) && (isFirstSlide(this.state.previousIndex) || (isFirstSlide(currentIndex) && !isLastSlide(this.state.previousIndex)))) {
+      // If going to first item, except if coming from last item
+      // Or going to any item from first item, except first or last item
+      // Then set the index z-index of the last item to 0
+      zIndex = 0;
     } else if (index === this.state.previousIndex) {
       zIndex = 2;
-    }
 
     if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
