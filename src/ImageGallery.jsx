@@ -773,6 +773,11 @@ export default class ImageGallery extends React.Component {
       const renderItem = item.renderItem ||
         this.props.renderItem || this._renderItem.bind(this);
 
+      const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
+      if (showItem && this.props.lazyLoad) {
+          this._lazyLoaded[index] = true;
+      }
+
       const slide = (
         <div
           key={index}
@@ -780,18 +785,11 @@ export default class ImageGallery extends React.Component {
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
         >
-          {renderItem(item)}
+          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
       );
 
-      if (this.props.lazyLoad) {
-        if (alignment || this._lazyLoaded[index]) {
-          slides.push(slide);
-          this._lazyLoaded[index] = true;
-        }
-      } else {
-        slides.push(slide);
-      }
+      slides.push(slide);
 
       let onThumbnailError = this._handleImageError;
       if (this.props.onThumbnailError) {
