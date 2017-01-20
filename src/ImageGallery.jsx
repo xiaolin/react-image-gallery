@@ -160,26 +160,17 @@ export default class ImageGallery extends React.Component {
     }
 
     if (prevProps.slideDuration !== this.props.slideDuration) {
-      this._slideLeft = throttle(this._unthrottledSlideLeft,
-                                 this.props.slideDuration,
-                                 {trailing: false});
-      this._slideRight = throttle(this._unthrottledSlideRight,
-                                  this.props.slideDuration,
-                                  {trailing: false});
+      this.slideToIndex = throttle(this._unthrottledSlideToIndex,
+                                   this.props.slideDuration,
+                                   {trailing: false});
     }
   }
 
   componentWillMount() {
     // Used to update the throttle if slideDuration changes
-    this._unthrottledSlideLeft = this._slideLeft.bind(this);
-    this._unthrottledSlideRight = this._slideRight.bind(this);
-
-    this._slideLeft = throttle(this._unthrottledSlideLeft,
-                               this.props.slideDuration,
-                               {trailing: false});
-
-    this._slideRight = throttle(this._unthrottledSlideRight,
-                                this.props.slideDuration,
+    this._unthrottledSlideToIndex = this.slideToIndex.bind(this);
+    this.slideToIndex = throttle(this._unthrottledSlideToIndex,
+                                 this.props.slideDuration,
                                 {trailing: false});
 
     this._handleResize = this._handleResize.bind(this);
@@ -296,6 +287,8 @@ export default class ImageGallery extends React.Component {
   }
 
   slideToIndex(index, event) {
+    const {currentIndex} = this.state;
+
     if (event) {
       if (this._intervalId) {
         // user triggered event while ImageGallery is playing, reset interval
@@ -305,22 +298,23 @@ export default class ImageGallery extends React.Component {
     }
 
     let slideCount = this.props.items.length - 1;
-    let currentIndex = index;
+    let nextIndex = index;
 
     if (index < 0) {
-      currentIndex = slideCount;
+      nextIndex = slideCount;
     } else if (index > slideCount) {
-      currentIndex = 0;
+      nextIndex = 0;
     }
 
     this.setState({
-      previousIndex: this.state.currentIndex,
-      currentIndex: currentIndex,
+      previousIndex: currentIndex,
+      currentIndex: nextIndex,
       offsetPercentage: 0,
       style: {
         transition: `transform ${this.props.slideDuration}ms ease-out`
       }
     });
+
   }
 
   getCurrentIndex() {
@@ -488,7 +482,7 @@ export default class ImageGallery extends React.Component {
       }
     }
 
-    this.slideToIndex(slideTo);
+    this._unthrottledSlideToIndex(slideTo);
   }
 
   _handleSwiping(index, _, delta) {
@@ -496,7 +490,10 @@ export default class ImageGallery extends React.Component {
     if (Math.abs(offsetPercentage) >= 100) {
       offsetPercentage = index * 100;
     }
-    this.setState({offsetPercentage: offsetPercentage, style: {}});
+    this.setState({
+      offsetPercentage: offsetPercentage,
+      style: {}
+    });
   }
 
   _canNavigate() {
@@ -669,6 +666,8 @@ export default class ImageGallery extends React.Component {
       zIndex = 3;
     } else if (index === this.state.previousIndex) {
       zIndex = 2;
+    } else if (index === 0 || index === totalSlides) {
+      zIndex = 0;
     }
 
     if (infinite && items.length > 2) {
