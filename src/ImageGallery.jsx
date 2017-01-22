@@ -785,7 +785,7 @@ export default class ImageGallery extends React.Component {
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
         >
-          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
+          {showItem && renderItem(item)}
         </div>
       );
 
