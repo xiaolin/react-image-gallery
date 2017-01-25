@@ -203,6 +203,10 @@ export default class ImageGallery extends React.Component {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
     }
+
+    if (this._resizeTimer) {
+      window.clearTimeout(this._resizeTimer);
+    }
   }
 
   play(callback = true) {
@@ -367,7 +371,7 @@ export default class ImageGallery extends React.Component {
 
   _handleResize() {
     // delay initial resize to get the accurate this._imageGallery height/width
-    window.setTimeout(() => {
+    this._resizeTimer = window.setTimeout(() => {
       if (this._imageGallery) {
         this.setState({
           galleryWidth: this._imageGallery.offsetWidth
