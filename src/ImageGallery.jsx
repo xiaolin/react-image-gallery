@@ -93,6 +93,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-left-nav'
           disabled={disabled}
           onClick={onClick}
+          aria-label='Previous Slide'
         />
       );
     },
@@ -103,6 +104,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-right-nav'
           disabled={disabled}
           onClick={onClick}
+          aria-label='Next Slide'
         />
       );
     },
@@ -113,6 +115,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-play-button${isPlaying ? ' active' : ''}`}
           onClick={onClick}
+          aria-label='Play or Pause Slideshow'
         />
       );
     },
@@ -123,6 +126,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
           onClick={onClick}
+          aria-label='Open Fullscreen'
         />
       );
     },
@@ -806,6 +810,9 @@ export default class ImageGallery extends React.Component {
             onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
             onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
             key={index}
+            role='button'
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
             className={
               'image-gallery-thumbnail' +
               (currentIndex === index ? ' active' : '') +
@@ -833,7 +840,10 @@ export default class ImageGallery extends React.Component {
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
 
-            onClick={event => this.slideToIndex.call(this, index, event)}>
+            onClick={event => this.slideToIndex.call(this, index, event)}
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+          >
           </button>
         );
       }
@@ -894,7 +904,11 @@ export default class ImageGallery extends React.Component {
         {
           this.props.showBullets &&
             <div className='image-gallery-bullets'>
-              <ul className='image-gallery-bullets-container'>
+              <ul 
+                className='image-gallery-bullets-container' 
+                role='navigation'
+                aria-label='Bullet Navigation'
+              >
                 {bullets}
               </ul>
             </div>
@@ -921,6 +935,7 @@ export default class ImageGallery extends React.Component {
         ref={i => this._imageGallery = i}
         className={
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
+        aria-live='polite'
       >
 
         <div
@@ -944,8 +959,11 @@ export default class ImageGallery extends React.Component {
                   <div
                     ref={t => this._thumbnails = t}
                     className='image-gallery-thumbnails-container'
-                    style={thumbnailStyle}>
+                    style={thumbnailStyle}
+                    role='navigation'
+                    aria-label='Thumbnail Navigation'
                     {thumbnails}
+                  >
                   </div>
                 </div>
               </div>
