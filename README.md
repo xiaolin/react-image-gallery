@@ -240,6 +240,7 @@ class MyComponent extends React.Component {
 
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
+cd react-image-gallery
 npm install
 npm start
 ```
