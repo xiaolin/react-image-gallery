@@ -904,8 +904,8 @@ export default class ImageGallery extends React.Component {
         {
           this.props.showBullets &&
             <div className='image-gallery-bullets'>
-              <ul 
-                className='image-gallery-bullets-container' 
+              <ul
+                className='image-gallery-bullets-container'
                 role='navigation'
                 aria-label='Bullet Navigation'
               >
@@ -962,8 +962,8 @@ export default class ImageGallery extends React.Component {
                     style={thumbnailStyle}
                     role='navigation'
                     aria-label='Thumbnail Navigation'
-                    {thumbnails}
                   >
+                    {thumbnails}
                   </div>
                 </div>
               </div>
