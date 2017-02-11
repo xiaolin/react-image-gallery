@@ -63,7 +63,7 @@ export default class ImageGallery extends React.Component {
     renderRightNav: React.PropTypes.func,
     renderPlayPauseButton: React.PropTypes.func,
     renderFullscreenButton: React.PropTypes.func,
-    renderItem: React.PropTypes.func,
+    renderItem: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -129,7 +129,7 @@ export default class ImageGallery extends React.Component {
           aria-label='Open Fullscreen'
         />
       );
-    },
+    }
   };
 
   componentWillReceiveProps(nextProps) {
@@ -961,9 +961,8 @@ export default class ImageGallery extends React.Component {
                     className='image-gallery-thumbnails-container'
                     style={thumbnailStyle}
                     role='navigation'
-                    aria-label='Thumbnail Navigation'
+                    aria-label='Thumbnail Navigation'>
                     {thumbnails}
-                  >
                   </div>
                 </div>
               </div>
