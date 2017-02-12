@@ -26,6 +26,7 @@ export default class ImageGallery extends React.Component {
 
     if (props.lazyLoad) {
       this._lazyLoaded = [];
+      this._lazyLoadedThumbnails = [];
     }
   }
 
@@ -144,6 +145,7 @@ export default class ImageGallery extends React.Component {
     if (nextProps.lazyLoad &&
       (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
       this._lazyLoaded = [];
+      this._lazyLoadedThumbnails = [];
     }
   }
 
@@ -545,31 +547,85 @@ export default class ImageGallery extends React.Component {
       return 0;
     }
 
-    const {thumbnailsWrapperWidth, thumbnailsWrapperHeight} = this.state;
-    let totalScroll;
+    const totalScroll = this._getThumbnailsTotalScrollSize();
 
     if (this._thumbnails) {
+      const totalThumbnails = this._thumbnails.children.length;
+      // scroll-x required per index change
+      const perIndexScroll = totalScroll / (totalThumbnails - 1);
 
+      return indexDifference * perIndexScroll;
+    }
+  }
+
+  _getThumbsVisibleRange() {
+    const {currentIndex} = this.state;
+
+    if (this._thumbnails) {
+      const totalScroll = this._getThumbnailsTotalScrollSize();
+      if (totalScroll === 0 ||
+        (this._isThumbnailHorizontal() && this.state.thumbnailsWrapperHeight === 0) ||
+        (!this._isThumbnailHorizontal() && this.state.thumbnailsWrapperWidth === 0)) {
+        return {
+          min: 0,
+          max: 0
+        };
+      }
+
+      const totalThumbnails = this._thumbnails.children.length;
+      const perIndexScroll = totalScroll / (totalThumbnails - 1);
+      const loadThumbnailsCount =
+        (Math.floor(this.state.thumbnailsWrapperWidth / perIndexScroll) - 1) * 2;
+
+      if (loadThumbnailsCount * 2 >= totalThumbnails) {
+        return {
+          min: 0,
+          max: totalThumbnails
+        };
+      }
+
+      let minRangeValue = currentIndex - (loadThumbnailsCount - 1);
+      minRangeValue = minRangeValue < 0
+        ? (this.props.infinite ? (this._thumbnails.children.length - 1) + minRangeValue : 0)
+        : minRangeValue;
+
+      let maxRangeValue = currentIndex + (loadThumbnailsCount - 1);
+      maxRangeValue = maxRangeValue > (this._thumbnails.children.length - 1)
+        ? (this.props.infinite
+          ? maxRangeValue - (this._thumbnails.children.length - 1)
+          : (this._thumbnails.children.length - 1))
+        : maxRangeValue;
+
+      return {
+        min: minRangeValue,
+        max: maxRangeValue
+      };
+    }
+
+    return {
+      min: 0,
+      max: 0
+    };
+  }
+
+  _getThumbnailsTotalScrollSize() {
+    const {thumbnailsWrapperWidth, thumbnailsWrapperHeight} = this.state;
+
+    if (this._thumbnails) {
       // total scroll required to see the last thumbnail
       if (this._isThumbnailHorizontal()) {
         if (this._thumbnails.scrollHeight <= thumbnailsWrapperHeight) {
           return 0;
         }
-        totalScroll = this._thumbnails.scrollHeight - thumbnailsWrapperHeight;
+        return this._thumbnails.scrollHeight - thumbnailsWrapperHeight;
       } else {
         if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth) {
           return 0;
         }
-        totalScroll = this._thumbnails.scrollWidth - thumbnailsWrapperWidth;
+        return this._thumbnails.scrollWidth - thumbnailsWrapperWidth;
       }
-
-      let totalThumbnails = this._thumbnails.children.length;
-      // scroll-x required per index change
-      let perIndexScroll = totalScroll / (totalThumbnails - 1);
-
-      return indexDifference * perIndexScroll;
-
     }
+    return 0;
   }
 
   _getAlignmentClassName(index) {
@@ -771,6 +827,8 @@ export default class ImageGallery extends React.Component {
     let thumbnails = [];
     let bullets = [];
 
+    const thumbnailsVisibleRange = this._getThumbsVisibleRange();
+
     this.props.items.map((item, index) => {
       const alignment = this._getAlignmentClassName(index);
       const originalClass = item.originalClass ?
@@ -805,6 +863,17 @@ export default class ImageGallery extends React.Component {
       }
 
       if (this.props.showThumbnails) {
+        const showThumbnail = !this.props.lazyLoad ||
+          this._lazyLoadedThumbnails[index] ||
+          (index >= thumbnailsVisibleRange.min && index <= thumbnailsVisibleRange.max) ||
+          (thumbnailsVisibleRange.min > thumbnailsVisibleRange.max &&
+            ((index >= thumbnailsVisibleRange.min && index <= this.props.items.length) ||
+            (index >= 0 && index <= thumbnailsVisibleRange.max)));
+
+        if (showThumbnail && this.props.lazyLoad) {
+          this._lazyLoadedThumbnails[index] = true;
+        }
+
         thumbnails.push(
           <a
             onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
@@ -821,7 +890,7 @@ export default class ImageGallery extends React.Component {
 
             onClick={event => this.slideToIndex.call(this, index, event)}>
               <img
-                src={item.thumbnail}
+                src={showThumbnail ? item.thumbnail : ""}
                 alt={item.thumbnailAlt}
                 onError={onThumbnailError.bind(this)}/>
               <div className='image-gallery-thumbnail-label'>
