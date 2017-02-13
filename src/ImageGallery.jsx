@@ -1,6 +1,7 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
+import equal from 'deep-equal';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -26,6 +27,7 @@ export default class ImageGallery extends React.Component {
 
     if (props.lazyLoad) {
       this._lazyLoaded = [];
+      this._isItemLazyLoadedSuccessfully = [];
       this._lazyLoadedThumbnails = [];
     }
   }
@@ -143,9 +145,18 @@ export default class ImageGallery extends React.Component {
     }
 
     if (nextProps.lazyLoad &&
-      (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
+      (!this.props.lazyLoad || !equal(this.props.items, nextProps.items))) {
       this._lazyLoaded = [];
       this._lazyLoadedThumbnails = [];
+
+      // Keep progress for equal items.
+      this.props.items.forEach((item, i) => {
+        if (true !== this._isItemLazyLoadedSuccessfully[i] ||
+          !equal(item.original, nextProps.items[i].original)) {
+          this._isItemLazyLoadedSuccessfully[i] = false;
+        }
+      });
+
     }
   }
 
@@ -391,6 +402,7 @@ export default class ImageGallery extends React.Component {
 
       if (this._imageGallerySlideWrapper) {
         this.setState({
+          gallerySlideWrapperWidth: this._imageGallerySlideWrapper.offsetWidth,
           gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
         });
       }
@@ -584,12 +596,12 @@ export default class ImageGallery extends React.Component {
         };
       }
 
-      let minRangeValue = currentIndex - (loadThumbnailsCount - 1);
+      let minRangeValue = currentIndex - loadThumbnailsCount;
       minRangeValue = minRangeValue < 0
         ? (this.props.infinite ? (this._thumbnails.children.length - 1) + minRangeValue : 0)
         : minRangeValue;
 
-      let maxRangeValue = currentIndex + (loadThumbnailsCount - 1);
+      let maxRangeValue = currentIndex + loadThumbnailsCount;
       maxRangeValue = maxRangeValue > (this._thumbnails.children.length - 1)
         ? (this.props.infinite
           ? maxRangeValue - (this._thumbnails.children.length - 1)
@@ -786,7 +798,21 @@ export default class ImageGallery extends React.Component {
     this.slideToIndex(this.state.currentIndex + 1, event);
   }
 
-  _renderItem(item) {
+  _onImageLoad(index, event) {
+    const { currentIndex } = this.state;
+    this._isItemLazyLoadedSuccessfully[index] = true;
+    if (currentIndex === index) {
+      this.setState({
+        gallerySlideWrapperWidth: event.target.offsetWidth,
+        gallerySlideWrapperHeight: event.target.offsetHeight
+      });
+    }
+    if (this.props.onImageLoad != null) {
+      this.props.onImageLoad(event);
+    }
+  }
+
+  _renderItem(item, onLoad) {
     const onImageError = this.props.onImageError || this._handleImageError;
 
     return (
@@ -796,7 +822,7 @@ export default class ImageGallery extends React.Component {
             alt={item.originalAlt}
             srcSet={item.srcSet}
             sizes={item.sizes}
-            onLoad={this.props.onImageLoad}
+            onLoad={onLoad}
             onError={onImageError.bind(this)}
         />
         {
@@ -841,17 +867,24 @@ export default class ImageGallery extends React.Component {
 
       const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
       if (showItem && this.props.lazyLoad) {
-          this._lazyLoaded[index] = true;
+        this._lazyLoaded[index] = true;
       }
+
+      const imageSize = this.props.lazyLoad && this._isItemLazyLoadedSuccessfully[index] !== true
+        ? {
+            width: this.state.gallerySlideWrapperWidth,
+            height: this.state.gallerySlideWrapperHeight
+          }
+        : {};
 
       const slide = (
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          style={Object.assign(this._getSlideStyle(index), this.state.style)}
+          style={Object.assign(this._getSlideStyle(index), this.state.style, imageSize)}
           onClick={this.props.onClick}
         >
-          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
+          {showItem ? renderItem(item, this._onImageLoad.bind(this, index)) : <div style={{ height: '100%' }}></div>}
         </div>
       );
 
