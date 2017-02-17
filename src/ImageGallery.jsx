@@ -152,7 +152,7 @@ export default class ImageGallery extends React.Component {
       // Keep progress for equal items.
       this.props.items.forEach((item, i) => {
         if (true !== this._isItemLazyLoadedSuccessfully[i] ||
-          !equal(item.original, nextProps.items[i].original)) {
+          item.original !== nextProps.items[i].original) {
           this._isItemLazyLoadedSuccessfully[i] = false;
         }
       });
@@ -396,9 +396,9 @@ export default class ImageGallery extends React.Component {
       }
 
       // adjust thumbnail container when thumbnail width or height is adjusted
-      this._setThumbsTranslate(
-        -this._getThumbsTranslate(
-          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+      if (this.state.currentIndex > 0) {
+        this._setThumbsTranslate(-this._getThumbsTranslate(this.state.currentIndex));
+      }
 
       if (this._imageGallerySlideWrapper) {
         this.setState({
