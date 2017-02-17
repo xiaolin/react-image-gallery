@@ -44,6 +44,7 @@ export default class ImageGallery extends React.Component {
     disableThumbnailScroll: React.PropTypes.bool,
     disableArrowKeys: React.PropTypes.bool,
     disableSwipe: React.PropTypes.bool,
+    useBrowserFullscreen: React.PropTypes.bool,
     defaultImage: React.PropTypes.string,
     indexSeparator: React.PropTypes.string,
     thumbnailPosition: React.PropTypes.string,
@@ -63,7 +64,7 @@ export default class ImageGallery extends React.Component {
     renderRightNav: React.PropTypes.func,
     renderPlayPauseButton: React.PropTypes.func,
     renderFullscreenButton: React.PropTypes.func,
-    renderItem: React.PropTypes.func,
+    renderItem: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -81,6 +82,7 @@ export default class ImageGallery extends React.Component {
     disableThumbnailScroll: false,
     disableArrowKeys: false,
     disableSwipe: false,
+    useBrowserFullscreen: true,
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
     startIndex: 0,
@@ -246,24 +248,32 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  setModalFullscreen(state) {
+      this.setState({modalFullscreen: state});
+      // manually call because browser does not support screenchange events
+      if (this.props.onScreenChange) {
+        this.props.onScreenChange(state);
+      }
+  }
+
   fullScreen() {
     const gallery = this._imageGallery;
 
-    if (gallery.requestFullscreen) {
-      gallery.requestFullscreen();
-    } else if (gallery.msRequestFullscreen) {
-      gallery.msRequestFullscreen();
-    } else if (gallery.mozRequestFullScreen) {
-      gallery.mozRequestFullScreen();
-    } else if (gallery.webkitRequestFullscreen) {
-      gallery.webkitRequestFullscreen();
-    } else {
-      // fallback to fullscreen modal for unsupported browsers
-      this.setState({modalFullscreen: true});
-      // manually call because browser does not support screenchange events
-      if (this.props.onScreenChange) {
-        this.props.onScreenChange(true);
+    if (this.props.useBrowserFullscreen) {
+      if (gallery.requestFullscreen) {
+        gallery.requestFullscreen();
+      } else if (gallery.msRequestFullscreen) {
+        gallery.msRequestFullscreen();
+      } else if (gallery.mozRequestFullScreen) {
+        gallery.mozRequestFullScreen();
+      } else if (gallery.webkitRequestFullscreen) {
+        gallery.webkitRequestFullscreen();
+      } else {
+        // fallback to fullscreen modal for unsupported browsers
+        this.setModalFullscreen(true);
       }
+    } else {
+      this.setModalFullscreen(true);
     }
 
     this.setState({isFullscreen: true});
@@ -272,21 +282,21 @@ export default class ImageGallery extends React.Component {
 
   exitFullScreen() {
     if (this.state.isFullscreen) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      } else {
-        // fallback to fullscreen modal for unsupported browsers
-        this.setState({modalFullscreen: false});
-        // manually call because browser does not support screenchange events
-        if (this.props.onScreenChange) {
-          this.props.onScreenChange(false);
+      if (this.props.useBrowserFullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        } else {
+          // fallback to fullscreen modal for unsupported browsers
+          this.setModalFullscreen(false);
         }
+      } else {
+        this.setModalFullscreen(false);
       }
 
       this.setState({isFullscreen: false});
