@@ -234,9 +234,12 @@ class MyComponent extends React.Component {
 * `slideToIndex(index)`: slides to a specific index
 * `getCurrentIndex()`: returns the current index
 
-# Notes
+# Contributing
 
-* Feel free to contribute and or provide feedback!
+* Follow eslint provided
+* Comment your code
+* Describe your feature/implementation in the pullrequest
+* Write [clean](https://github.com/ryanmcdermott/clean-code-javascript) code
 
 # Build the example locally
 
