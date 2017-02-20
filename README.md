@@ -103,6 +103,8 @@ class MyComponent extends React.Component {
 * `thumbnailPosition`: String, default `bottom`
   * available positions: `top, right, bottom, left`
 * `showFullscreenButton`: Boolean, default `true`
+* `useBrowserFullscreen`: Boolean, default `true`
+  * if false, fullscreen will be done via css within the browser
 * `showPlayButton`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
