@@ -27,7 +27,9 @@ export default class ImageGallery extends React.Component {
 
     if (props.lazyLoad) {
       this._lazyLoaded = [];
-      this._isItemLazyLoadedSuccessfully = [];
+      // an array of URLs to images that were loaded successfully
+      this._itemsLazyLoadedSuccessfully = [];
+      // an array of thumbnails that were lazyloaded
       this._lazyLoadedThumbnails = [];
     }
   }
@@ -148,15 +150,6 @@ export default class ImageGallery extends React.Component {
       (!this.props.lazyLoad || !equal(this.props.items, nextProps.items))) {
       this._lazyLoaded = [];
       this._lazyLoadedThumbnails = [];
-
-      // Keep progress for equal items.
-      this.props.items.forEach((item, i) => {
-        if (true !== this._isItemLazyLoadedSuccessfully[i] ||
-          item.original !== nextProps.items[i].original) {
-          this._isItemLazyLoadedSuccessfully[i] = false;
-        }
-      });
-
     }
   }
 
@@ -574,40 +567,47 @@ export default class ImageGallery extends React.Component {
     const {currentIndex} = this.state;
 
     if (this._thumbnails) {
-      const totalScroll = this._getThumbnailsTotalScrollSize();
-      if (totalScroll === 0 ||
-        (this._isThumbnailHorizontal() && this.state.thumbnailsWrapperHeight === 0) ||
-        (!this._isThumbnailHorizontal() && this.state.thumbnailsWrapperWidth === 0)) {
+      // check that thumbnailsWrapper is not an empty
+      if ((this._isThumbnailHorizontal() && this.state.thumbnailsWrapperHeight === 0) ||
+          (!this._isThumbnailHorizontal() && this.state.thumbnailsWrapperWidth === 0)) {
         return {
           min: 0,
           max: 0
         };
       }
 
+      const totalScroll = this._getThumbnailsTotalScrollSize();
       const totalThumbnails = this._thumbnails.children.length;
-      const perIndexScroll = totalScroll / (totalThumbnails - 1);
-      const loadThumbnailsCount =
-        (Math.floor(this.state.thumbnailsWrapperWidth / perIndexScroll) - 1) * 2;
-
-      if (loadThumbnailsCount * 2 >= totalThumbnails) {
+      // if all thumbnails are visible
+      if (totalScroll === 0) {
         return {
           min: 0,
-          max: totalThumbnails
+          max: totalThumbnails - 1
         };
       }
 
+      // we need to multiply the count of required thumbnails by 2
+      // because a user can click on last visible thumbnail for the current state
+      // and we don't want to show a lot of default pictures in this case
+      const perIndexScroll = totalScroll / (totalThumbnails - 1);
+      const loadThumbnailsCount =
+        (Math.round(this.state.thumbnailsWrapperWidth / perIndexScroll) - 1) * 2;
+
       let minRangeValue = currentIndex - loadThumbnailsCount;
+      // adjust the lower boundary of the range of images to load
       minRangeValue = minRangeValue < 0
         ? (this.props.infinite ? (this._thumbnails.children.length - 1) + minRangeValue : 0)
         : minRangeValue;
 
       let maxRangeValue = currentIndex + loadThumbnailsCount;
+      // adjust the upper boundary of the range of images to load
       maxRangeValue = maxRangeValue > (this._thumbnails.children.length - 1)
         ? (this.props.infinite
           ? maxRangeValue - (this._thumbnails.children.length - 1)
           : (this._thumbnails.children.length - 1))
         : maxRangeValue;
 
+      // we will load only part of thumbnails, lazyload works in this case
       return {
         min: minRangeValue,
         max: maxRangeValue
@@ -799,13 +799,18 @@ export default class ImageGallery extends React.Component {
   }
 
   _onImageLoad(index, event) {
-    const { currentIndex } = this.state;
-    this._isItemLazyLoadedSuccessfully[index] = true;
-    if (currentIndex === index) {
-      this.setState({
-        gallerySlideWrapperWidth: event.target.offsetWidth,
-        gallerySlideWrapperHeight: event.target.offsetHeight
-      });
+    // when lazyload is enabled, we need to know
+    // that the image was successfully loaded (to avoid content jumping).
+    if (this.props.lazyLoad) {
+      const { currentIndex } = this.state;
+      this._itemsLazyLoadedSuccessfully.push(this.props.items[index].original);
+      if (currentIndex === index) {
+        // save the size of active image, it's equal to the gallerySlideWrapper size
+        this.setState({
+          gallerySlideWrapperWidth: event.target.offsetWidth,
+          gallerySlideWrapperHeight: event.target.offsetHeight
+        });
+      }
     }
     if (this.props.onImageLoad != null) {
       this.props.onImageLoad(event);
@@ -870,7 +875,10 @@ export default class ImageGallery extends React.Component {
         this._lazyLoaded[index] = true;
       }
 
-      const imageSize = this.props.lazyLoad && this._isItemLazyLoadedSuccessfully[index] !== true
+      // If lazyload is enabled and an image was not loaded,
+      // we set the size of the container is equal to the size of the last active element
+      // to avoid content jumping.
+      const imageSize = this.props.lazyLoad && !this._itemsLazyLoadedSuccessfully.includes(item.original)
         ? {
             width: this.state.gallerySlideWrapperWidth,
             height: this.state.gallerySlideWrapperHeight
@@ -898,7 +906,9 @@ export default class ImageGallery extends React.Component {
       if (this.props.showThumbnails) {
         const showThumbnail = !this.props.lazyLoad ||
           this._lazyLoadedThumbnails[index] ||
+          // infinite scroll is disabled
           (index >= thumbnailsVisibleRange.min && index <= thumbnailsVisibleRange.max) ||
+          // infinite scroll is enabled, e.g. min = 34, max = 16
           (thumbnailsVisibleRange.min > thumbnailsVisibleRange.max &&
             ((index >= thumbnailsVisibleRange.min && index <= this.props.items.length) ||
             (index >= 0 && index <= thumbnailsVisibleRange.max)));
