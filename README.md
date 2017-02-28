@@ -93,8 +93,8 @@ class MyComponent extends React.Component {
     * `thumbnailAlt` - thumbnail image alt
     * `thumbnailLabel` - label for thumbnail
     * `description` - description for image
-    * `srcSet` - image srcSet
-    * `sizes` - image sizes
+    * `srcSet` - image srcset (html5 attribute)
+    * `sizes` - image sizes (html5 attribute)
 * `infinite`: Boolean, default `true`
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
