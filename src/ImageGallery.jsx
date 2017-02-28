@@ -128,7 +128,7 @@ export default class ImageGallery extends React.Component {
       return (
         <button
           type='button'
-          aria-label='Toggle Full Screen Mode'
+          aria-label={isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}
           className={
             `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
           onClick={onClick}
