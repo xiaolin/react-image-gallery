@@ -61,6 +61,7 @@
     "watchify": "^3.8.0"
   },
   "dependencies": {
+    "deep-equal": "^1.0.1",
     "lodash.throttle": "^4.1.1",
     "react-swipeable": "^3.5.1"
   }
