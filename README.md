@@ -34,7 +34,7 @@ npm install react-image-gallery
 @import "node_modules/react-image-gallery/styles/css/image-gallery.css";
 
 # Webpack
-import "react-image-gallery/styles/css/image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css";
 
 # Stylesheet with no icons
 node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
@@ -93,8 +93,8 @@ class MyComponent extends React.Component {
     * `thumbnailAlt` - thumbnail image alt
     * `thumbnailLabel` - label for thumbnail
     * `description` - description for image
-    * `srcSet` - image srcSet
-    * `sizes` - image sizes
+    * `srcSet` - image srcset (html5 attribute)
+    * `sizes` - image sizes (html5 attribute)
 * `infinite`: Boolean, default `true`
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
@@ -103,6 +103,8 @@ class MyComponent extends React.Component {
 * `thumbnailPosition`: String, default `bottom`
   * available positions: `top, right, bottom, left`
 * `showFullscreenButton`: Boolean, default `true`
+* `useBrowserFullscreen`: Boolean, default `true`
+  * if false, fullscreen will be done via css within the browser
 * `showPlayButton`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
@@ -232,14 +234,18 @@ class MyComponent extends React.Component {
 * `slideToIndex(index)`: slides to a specific index
 * `getCurrentIndex()`: returns the current index
 
-# Notes
+# Contributing
 
-* Feel free to contribute and or provide feedback!
+* Follow eslint provided
+* Comment your code
+* Describe your feature/implementation in the pullrequest
+* Write [clean](https://github.com/ryanmcdermott/clean-code-javascript) code
 
 # Build the example locally
 
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
+cd react-image-gallery
 npm install
 npm start
 ```

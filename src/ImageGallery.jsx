@@ -44,6 +44,7 @@ export default class ImageGallery extends React.Component {
     disableThumbnailScroll: React.PropTypes.bool,
     disableArrowKeys: React.PropTypes.bool,
     disableSwipe: React.PropTypes.bool,
+    useBrowserFullscreen: React.PropTypes.bool,
     defaultImage: React.PropTypes.string,
     indexSeparator: React.PropTypes.string,
     thumbnailPosition: React.PropTypes.string,
@@ -63,7 +64,7 @@ export default class ImageGallery extends React.Component {
     renderRightNav: React.PropTypes.func,
     renderPlayPauseButton: React.PropTypes.func,
     renderFullscreenButton: React.PropTypes.func,
-    renderItem: React.PropTypes.func,
+    renderItem: React.PropTypes.func
   };
 
   static defaultProps = {
@@ -81,6 +82,7 @@ export default class ImageGallery extends React.Component {
     disableThumbnailScroll: false,
     disableArrowKeys: false,
     disableSwipe: false,
+    useBrowserFullscreen: true,
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
     startIndex: 0,
@@ -93,6 +95,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-left-nav'
           disabled={disabled}
           onClick={onClick}
+          aria-label='Previous Slide'
         />
       );
     },
@@ -103,6 +106,7 @@ export default class ImageGallery extends React.Component {
           className='image-gallery-right-nav'
           disabled={disabled}
           onClick={onClick}
+          aria-label='Next Slide'
         />
       );
     },
@@ -113,6 +117,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-play-button${isPlaying ? ' active' : ''}`}
           onClick={onClick}
+          aria-label='Play or Pause Slideshow'
         />
       );
     },
@@ -123,6 +128,7 @@ export default class ImageGallery extends React.Component {
           className={
             `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
           onClick={onClick}
+          aria-label='Open Fullscreen'
         />
       );
     },
@@ -242,24 +248,32 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  setModalFullscreen(state) {
+      this.setState({modalFullscreen: state});
+      // manually call because browser does not support screenchange events
+      if (this.props.onScreenChange) {
+        this.props.onScreenChange(state);
+      }
+  }
+
   fullScreen() {
     const gallery = this._imageGallery;
 
-    if (gallery.requestFullscreen) {
-      gallery.requestFullscreen();
-    } else if (gallery.msRequestFullscreen) {
-      gallery.msRequestFullscreen();
-    } else if (gallery.mozRequestFullScreen) {
-      gallery.mozRequestFullScreen();
-    } else if (gallery.webkitRequestFullscreen) {
-      gallery.webkitRequestFullscreen();
-    } else {
-      // fallback to fullscreen modal for unsupported browsers
-      this.setState({modalFullscreen: true});
-      // manually call because browser does not support screenchange events
-      if (this.props.onScreenChange) {
-        this.props.onScreenChange(true);
+    if (this.props.useBrowserFullscreen) {
+      if (gallery.requestFullscreen) {
+        gallery.requestFullscreen();
+      } else if (gallery.msRequestFullscreen) {
+        gallery.msRequestFullscreen();
+      } else if (gallery.mozRequestFullScreen) {
+        gallery.mozRequestFullScreen();
+      } else if (gallery.webkitRequestFullscreen) {
+        gallery.webkitRequestFullscreen();
+      } else {
+        // fallback to fullscreen modal for unsupported browsers
+        this.setModalFullscreen(true);
       }
+    } else {
+      this.setModalFullscreen(true);
     }
 
     this.setState({isFullscreen: true});
@@ -268,21 +282,21 @@ export default class ImageGallery extends React.Component {
 
   exitFullScreen() {
     if (this.state.isFullscreen) {
-      if (document.exitFullscreen) {
-        document.exitFullscreen();
-      } else if (document.webkitExitFullscreen) {
-        document.webkitExitFullscreen();
-      } else if (document.mozCancelFullScreen) {
-        document.mozCancelFullScreen();
-      } else if (document.msExitFullscreen) {
-        document.msExitFullscreen();
-      } else {
-        // fallback to fullscreen modal for unsupported browsers
-        this.setState({modalFullscreen: false});
-        // manually call because browser does not support screenchange events
-        if (this.props.onScreenChange) {
-          this.props.onScreenChange(false);
+      if (this.props.useBrowserFullscreen) {
+        if (document.exitFullscreen) {
+          document.exitFullscreen();
+        } else if (document.webkitExitFullscreen) {
+          document.webkitExitFullscreen();
+        } else if (document.mozCancelFullScreen) {
+          document.mozCancelFullScreen();
+        } else if (document.msExitFullscreen) {
+          document.msExitFullscreen();
+        } else {
+          // fallback to fullscreen modal for unsupported browsers
+          this.setModalFullscreen(false);
         }
+      } else {
+        this.setModalFullscreen(false);
       }
 
       this.setState({isFullscreen: false});
@@ -789,7 +803,7 @@ export default class ImageGallery extends React.Component {
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
         >
-          {showItem && renderItem(item)}
+          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
       );
 
@@ -806,6 +820,9 @@ export default class ImageGallery extends React.Component {
             onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
             onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
             key={index}
+            role='button'
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
             className={
               'image-gallery-thumbnail' +
               (currentIndex === index ? ' active' : '') +
@@ -833,7 +850,10 @@ export default class ImageGallery extends React.Component {
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
 
-            onClick={event => this.slideToIndex.call(this, index, event)}>
+            onClick={event => this.slideToIndex.call(this, index, event)}
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+          >
           </button>
         );
       }
@@ -894,7 +914,11 @@ export default class ImageGallery extends React.Component {
         {
           this.props.showBullets &&
             <div className='image-gallery-bullets'>
-              <ul className='image-gallery-bullets-container'>
+              <ul
+                className='image-gallery-bullets-container'
+                role='navigation'
+                aria-label='Bullet Navigation'
+              >
                 {bullets}
               </ul>
             </div>
@@ -921,6 +945,7 @@ export default class ImageGallery extends React.Component {
         ref={i => this._imageGallery = i}
         className={
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
+        aria-live='polite'
       >
 
         <div
@@ -944,7 +969,10 @@ export default class ImageGallery extends React.Component {
                   <div
                     ref={t => this._thumbnails = t}
                     className='image-gallery-thumbnails-container'
-                    style={thumbnailStyle}>
+                    style={thumbnailStyle}
+                    role='navigation'
+                    aria-label='Thumbnail Navigation'
+                  >
                     {thumbnails}
                   </div>
                 </div>
