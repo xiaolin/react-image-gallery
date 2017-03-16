@@ -125,6 +125,8 @@ class MyComponent extends React.Component {
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideDuration`: Integer, default `450`
   * transition duration during image slide in milliseconds
+* `swipingTransitionDuration`: Integer, default `0`
+  * transition duration while swiping in milliseconds
 * `slideInterval`: Integer, default `3000`
 * `startIndex`: Integer, default `0`
 * `onImageLoad`: Function, `callback(event)`

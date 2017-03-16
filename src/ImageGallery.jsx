@@ -52,6 +52,7 @@ export default class ImageGallery extends React.Component {
     startIndex: React.PropTypes.number,
     slideDuration: React.PropTypes.number,
     slideInterval: React.PropTypes.number,
+    swipingTransitionDuration: React.PropTypes.number,
     onSlide: React.PropTypes.func,
     onScreenChange: React.PropTypes.func,
     onPause: React.PropTypes.func,
@@ -88,6 +89,7 @@ export default class ImageGallery extends React.Component {
     thumbnailPosition: 'bottom',
     startIndex: 0,
     slideDuration: 450,
+    swipingTransitionDuration: 0,
     slideInterval: 3000,
     renderLeftNav: (onClick, disabled) => {
       return (
@@ -510,13 +512,21 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping(index, _, delta) {
-    let offsetPercentage = index * (delta / this.state.galleryWidth * 100);
+    const { swipingTransitionDuration } = this.props;
+    const { galleryWidth } = this.state;
+
+    let offsetPercentage = index * (delta / galleryWidth * 100);
     if (Math.abs(offsetPercentage) >= 100) {
       offsetPercentage = index * 100;
     }
+
+    const swipingTransition = {
+      transition: `transform ${swipingTransitionDuration}ms ease-out`
+    };
+
     this.setState({
       offsetPercentage: offsetPercentage,
-      style: {}
+      style: swipingTransition
     });
   }
 
