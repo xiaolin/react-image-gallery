@@ -181,6 +181,7 @@ export default class ImageGallery extends React.Component {
                                 {trailing: false});
 
     this._handleResize = this._handleResize.bind(this);
+    this._debounceResize = debounce(this._handleResize, 500);
     this._handleScreenChange = this._handleScreenChange.bind(this);
     this._handleKeyDown = this._handleKeyDown.bind(this);
     this._thumbnailDelay = 300;
@@ -188,7 +189,6 @@ export default class ImageGallery extends React.Component {
 
   componentDidMount() {
     this._handleResize();
-    this._debounceResize = debounce(() => this._handleResize(), 500);
 
     if (this.props.autoPlay) {
       this.play();
