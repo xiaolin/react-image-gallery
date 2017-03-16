@@ -1,6 +1,7 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -187,6 +188,7 @@ export default class ImageGallery extends React.Component {
 
   componentDidMount() {
     this._handleResize();
+    this._debounceResize = debounce(() => this._handleResize(), 500);
 
     if (this.props.autoPlay) {
       this.play();
@@ -194,7 +196,7 @@ export default class ImageGallery extends React.Component {
     if (!this.props.disableArrowKeys) {
       window.addEventListener('keydown', this._handleKeyDown);
     }
-    window.addEventListener('resize', this._handleResize);
+    window.addEventListener('resize', this._debounceResize);
     this._onScreenChangeEvent();
   }
 
@@ -202,7 +204,11 @@ export default class ImageGallery extends React.Component {
     if (!this.props.disableArrowKeys) {
       window.removeEventListener('keydown', this._handleKeyDown);
     }
-    window.removeEventListener('resize', this._handleResize);
+
+    if (this._debounceResize) {
+      window.removeEventListener('resize', this._debounceResize);
+    }
+
     this._offScreenChangeEvent();
 
     if (this._intervalId) {
