@@ -337,7 +337,7 @@ export default class ImageGallery extends React.Component {
       currentIndex: nextIndex,
       offsetPercentage: 0,
       style: {
-        transition: `transform ${this.props.slideDuration}ms ease-out`
+        transition: `all ${this.props.slideDuration}ms ease-out`
       }
     });
 
