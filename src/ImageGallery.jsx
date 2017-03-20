@@ -150,6 +150,10 @@ export default class ImageGallery extends React.Component {
       (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
       this._lazyLoaded = [];
     }
+
+    if (this.state.currentIndex >= nextProps.items.length) {
+      this.slideToIndex(0);
+    }
   }
 
   componentDidUpdate(prevProps, prevState) {
