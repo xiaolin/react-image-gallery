@@ -740,7 +740,7 @@ export default class ImageGallery extends React.Component {
       translate = `translate(0, ${this.state.thumbsTranslate}px)`;
     } else {
       translate3d = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
-      translate = `translate3d(${this.state.thumbsTranslate}px, 0)`;
+      translate = `translate(${this.state.thumbsTranslate}px, 0)`;
     }
     return {
       WebkitTransform: translate3d,
