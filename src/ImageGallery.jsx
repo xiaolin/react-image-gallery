@@ -723,32 +723,32 @@ export default class ImageGallery extends React.Component {
       translateX = this._getTranslateXForTwoSlide(index);
     }
 
-    const translate3d = `translate3d(${translateX}%, 0, 0)`;
+    const translate = `translate(${translateX}%, 0)`;
 
     return {
-      WebkitTransform: translate3d,
-      MozTransform: translate3d,
-      msTransform: translate3d,
-      OTransform: translate3d,
-      transform: translate3d,
+      WebkitTransform: translate,
+      MozTransform: translate,
+      msTransform: translate,
+      OTransform: translate,
+      transform: translate,
       zIndex: zIndex
     };
   }
 
   _getThumbnailStyle() {
-    let translate3d;
+    let translate;
 
     if (this._isThumbnailHorizontal()) {
-      translate3d = `translate3d(0, ${this.state.thumbsTranslate}px, 0)`;
+      translate = `translate(0, ${this.state.thumbsTranslate}px)`;
     } else {
-      translate3d = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
+      translate = `translate(${this.state.thumbsTranslate}px, 0)`;
     }
     return {
-      WebkitTransform: translate3d,
-      MozTransform: translate3d,
-      msTransform: translate3d,
-      OTransform: translate3d,
-      transform: translate3d
+      WebkitTransform: translate,
+      MozTransform: translate,
+      msTransform: translate,
+      OTransform: translate,
+      transform: translate
     };
   }
 
