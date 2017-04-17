@@ -143,32 +143,14 @@ class MyComponent extends React.Component {
     }
   ```
 * `renderItem`: Function, custom item rendering
-  * As a prop on a specific item `[{thumbnail: '...', renderItem: '...'}]`
-  * As a prop passed into `ImageGallery` to completely override `_renderItem`, see original below
-    ```javascript
-      _renderItem(item) {
-        const onImageError = this.props.onImageError || this._handleImageError
+  * On a specific item `[{thumbnail: '...', renderItem: this.myRenderItem}]`
+  or
+  * As a prop passed into `ImageGallery` to completely override `_renderItem`, see source for reference
+* `renderThumbInner`: Function, custom thumbnail rendering
+  * On a specific item `[{thumbnail: '...', renderThumbInner: this.myRenderThumbInner}]`
+  or
+  * As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
 
-        return (
-          <div className='image-gallery-image'>
-            <img
-                src={item.original}
-                alt={item.originalAlt}
-                srcSet={item.srcSet}
-                sizes={item.sizes}
-                onLoad={this.props.onImageLoad}
-                onError={onImageError.bind(this)}
-            />
-            {
-              item.description &&
-                <span className='image-gallery-description'>
-                  {item.description}
-                </span>
-            }
-          </div>
-        )
-      }
-    ```
 * `renderLeftNav`: Function, custom left nav component
   * Use this to render a custom left nav control
   * Passes `onClick` callback that will slide to the previous item and `disabled` argument for when to disable the nav
