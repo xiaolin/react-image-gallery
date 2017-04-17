@@ -788,18 +788,19 @@ export default class ImageGallery extends React.Component {
     if (this.props.onThumbnailError) {
       onThumbnailError = this.props.onThumbnailError;
     }
-    
+
     return (
       <div>
         <img
           src={item.thumbnail}
           alt={item.thumbnailAlt}
-          onError={onThumbnailError.bind(this)}/>
+          onError={onThumbnailError.bind(this)}
+        />
         <div className='image-gallery-thumbnail-label'>
           {item.thumbnailLabel}
         </div>
       </div>
-    )
+    );
   }
 
   render() {
@@ -831,11 +832,11 @@ export default class ImageGallery extends React.Component {
         this.props.renderItem || this._renderItem.bind(this);
 
       const renderThumbInner = item.renderThumbInner ||
-              this.props.renderThumbInner || this._renderThumbInner.bind(this);
+        this.props.renderThumbInner || this._renderThumbInner.bind(this);
 
       const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
       if (showItem && this.props.lazyLoad) {
-          this._lazyLoaded[index] = true;
+        this._lazyLoaded[index] = true;
       }
 
       const slide = (
@@ -865,9 +866,9 @@ export default class ImageGallery extends React.Component {
               (currentIndex === index ? ' active' : '') +
               thumbnailClass
             }
-
-            onClick={event => this.slideToIndex.call(this, index, event)}>
-              {renderThumbInner(item)}
+            onClick={event => this.slideToIndex.call(this, index, event)}
+          >
+            {renderThumbInner(item)}
           </a>
         );
       }
