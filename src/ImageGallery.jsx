@@ -719,7 +719,7 @@ export default class ImageGallery extends React.Component {
       translateX = this._getTranslateXForTwoSlide(index);
     }
 
-    const = `translate(${translateX}%, 0)`;
+    const translate = `translate(${translateX}%, 0)`;
 
     return {
       WebkitTransform: translate,
