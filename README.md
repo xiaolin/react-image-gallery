@@ -211,7 +211,7 @@ class MyComponent extends React.Component {
 
 # Functions
 
-* `play()`: continuous plays if image is not hovered
+* `play()`: plays the slides
 * `pause()`: pauses the slides
 * `fullScreen()`: activates full screen
 * `exitFullScreen()`: deactivates full screen
