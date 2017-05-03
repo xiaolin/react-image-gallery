@@ -715,7 +715,7 @@ export default class ImageGallery extends React.Component {
   _getThumbnailBarHeight() {
     if (this._isThumbnailHorizontal()) {
       return {
-        height: this.props.showThumbnailsNav
+        height: this.props.showThumbnailsNav && this._showThumbnailsNav()
           ? this.state.gallerySlideWrapperHeight - 50
           : this.state.gallerySlideWrapperHeight
       };
@@ -839,6 +839,21 @@ export default class ImageGallery extends React.Component {
     );
   }
 
+  _showThumbnailsNav() {
+    const {thumbnailsWrapperWidth, thumbnailsWrapperHeight} = this.state;
+
+    if (this._thumbnails) {
+
+      if (this._isThumbnailHorizontal()) {
+        return (this._thumbnails.scrollHeight > thumbnailsWrapperHeight);
+      }
+
+      return (this._thumbnails.scrollWidth > thumbnailsWrapperWidth);
+    }
+
+    return false;
+  }
+
   slideThumbnailsToIndex(index) {
     const slideCount = this.props.items.length - 1;
     let nextIndex = index;
@@ -879,7 +894,7 @@ export default class ImageGallery extends React.Component {
 
     const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
-    const thumbnailNavClass = this.props.showThumbnailsNav ? ' navigation' : '';
+    const thumbnailNavClass = this.props.showThumbnailsNav && this._showThumbnailsNav() ? ' navigation' : '';
 
     const slideLeft = this._slideLeft.bind(this);
     const slideRight = this._slideRight.bind(this);
@@ -1066,7 +1081,7 @@ export default class ImageGallery extends React.Component {
                 style={this._getThumbnailBarHeight()}
               >
                 {
-                  this.props.showThumbnailsNav &&
+                  this.props.showThumbnailsNav && this._showThumbnailsNav() &&
                     <span>
                       {this.props.renderThumbnailsLeftNav(
                         slideThumbnailsLeft, !this._canSlideThumbnailsLeft(), this._isThumbnailHorizontal()
