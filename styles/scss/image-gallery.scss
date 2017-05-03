@@ -218,10 +218,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-thumbnails-left-nav {
-  left: -25px;
+  left: -0.8em;
 
   &.horizontal {
-    top: -35px;
+    top: -1.1em;
   }
 
   &::before {
@@ -230,10 +230,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-thumbnails-right-nav {
-  right: -25px;
+  right: -0.8em;
 
   &.horizontal {
-    bottom: -35px;
+    bottom: -1.1em;
   }
 
   &::before {
@@ -331,14 +331,14 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
     &.left,
     &.right {
-      margin-top: 25px;
-      margin-bottom: 25px;
+      margin-top: 1.5em;
+      margin-bottom: 1.5em;
     }
 
     &.top,
     &.bottom {
-      margin-left: 25px;
-      margin-right: 25px;
+      margin-left: 1.5em;
+      margin-right: 1.5em;
     }
   }
 
