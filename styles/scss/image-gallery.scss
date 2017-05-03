@@ -68,7 +68,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-fullscreen-button,
 .image-gallery-play-button,
 .image-gallery-left-nav,
-.image-gallery-right-nav {
+.image-gallery-right-nav,
+.image-gallery-thumbnails-left-nav,
+.image-gallery-thumbnails-right-nav {
   appearance: none;
   background-color: transparent;
   border: 0;
@@ -175,6 +177,30 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 }
 
+.image-gallery-thumbnails-left-nav,
+.image-gallery-thumbnails-right-nav {
+  color: $ig-white;
+  font-size: 2em;
+  top: 50%;
+  transform: translateY(-50%);
+  
+  &.horizontal {
+    top: auto;
+    left: 50%;
+    transform: translateX(-50%) rotateZ(90deg);
+
+    &::before {
+      text-shadow: 1px 0 1px lighten($ig-black, 10%);
+    }
+  }
+
+  &[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none;
+  }
+}
+
 .image-gallery-left-nav {
   left: 0;
 
@@ -185,6 +211,30 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-right-nav {
   right: 0;
+
+  &::before {
+    content: $ionicon-var-ios-arrow-right;
+  }
+}
+
+.image-gallery-thumbnails-left-nav {
+  left: -25px;
+
+  &.horizontal {
+    top: -35px;
+  }
+
+  &::before {
+    content: $ionicon-var-ios-arrow-left;
+  }
+}
+
+.image-gallery-thumbnails-right-nav {
+  right: -25px;
+
+  &.horizontal {
+    bottom: -35px;
+  }
 
   &::before {
     content: $ionicon-var-ios-arrow-right;
@@ -276,6 +326,21 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnails-wrapper {
   position: relative;
+
+  &.navigation {
+
+    &.left,
+    &.right {
+      margin-top: 25px;
+      margin-bottom: 25px;
+    }
+
+    &.top,
+    &.bottom {
+      margin-left: 25px;
+      margin-right: 25px;
+    }
+  }
 
   &.left,
   &.right {
