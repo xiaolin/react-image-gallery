@@ -853,11 +853,11 @@ export default class ImageGallery extends React.Component {
   }
 
   _slideThumbnailsLeft() {
-    this.slideThumbnailsToIndex(this.state.currentThumbnailIndex - 2);
+    this.slideThumbnailsToIndex(this.state.currentThumbnailIndex - 1);
   }
 
   _slideThumbnailsRight() {
-    this.slideThumbnailsToIndex(this.state.currentThumbnailIndex + 2);
+    this.slideThumbnailsToIndex(this.state.currentThumbnailIndex + 1);
   }
 
   _canSlideThumbnailsLeft() {
