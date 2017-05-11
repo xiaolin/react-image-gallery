@@ -54,8 +54,8 @@
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^1.5.3",
-    "react": "^15.3.0",
-    "react-dom": "^15.2.1",
+    "react": "^15.5.4",
+    "react-dom": "^15.5.4",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.8.0"
