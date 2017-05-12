@@ -217,8 +217,12 @@ export default class ImageGallery extends React.Component {
     // Used to update the throttle if slideDuration changes
     this._unthrottledSlideToIndex = this.slideToIndex.bind(this);
     this.slideToIndex = throttle(this._unthrottledSlideToIndex,
-                                 this.props.slideDuration,
+                                this.props.slideDuration,
                                 {trailing: false});
+    this._unthrottledSlideThumbnailsToIndex = this.slideThumbnailsToIndex.bind(this);
+    this.slideThumbnailsToIndex = throttle(this._unthrottledSlideThumbnailsToIndex,
+                                          this.props.slideDuration,
+                                          {trailing: false});
 
     this._handleResize = this._handleResize.bind(this);
     this._debounceResize = debounce(this._handleResize, 500);
@@ -635,6 +639,23 @@ export default class ImageGallery extends React.Component {
       return indexDifference * perIndexScroll;
 
     }
+  }
+
+  _handleOnSwipedThumbnailsTo(index) {
+    let slideTo = this.state.currentThumbnailIndex;
+    slideTo += index;
+
+    if (index < 0) {
+      if (!this._canSlideThumbnailsLeft()) {
+        slideTo = this.state.currentThumbnailIndex;
+      }
+    } else {
+      if (!this._canSlideThumbnailsRight()) {
+        slideTo = this.state.currentThumbnailIndex;
+      }
+    }
+
+    this._unthrottledSlideThumbnailsToIndex(slideTo);
   }
 
   _getAlignmentClassName(index) {
@@ -1092,20 +1113,48 @@ export default class ImageGallery extends React.Component {
                       )}
                     </span>
                 }
-                <div
-                  className='image-gallery-thumbnails'
-                  ref={i => this._thumbnailsWrapper = i}
-                >
-                  <div
-                    ref={t => this._thumbnails = t}
-                    className='image-gallery-thumbnails-container'
-                    style={thumbnailStyle}
-                    role='navigation'
-                    aria-label='Thumbnail Navigation'
-                  >
-                    {thumbnails}
-                  </div>
-                </div>
+                {
+                  !this.props.disableSwipe && this._showThumbnailsNav() ?
+                    <Swipeable
+                      className='image-gallery-thumbnails-swipe'
+                      delta={1}
+                      onSwiped={this._handleOnSwipedThumbnailsTo.bind(this)}
+                      onSwipedLeft={this._handleOnSwipedThumbnailsTo.bind(this, 1)}
+                      onSwipedRight={this._handleOnSwipedThumbnailsTo.bind(this, -1)}
+                      onSwipedDown={this._handleOnSwipedThumbnailsTo.bind(this, -1)}
+                      onSwipedUp={this._handleOnSwipedThumbnailsTo.bind(this, 1)}
+                      >
+                      <div
+                        className='image-gallery-thumbnails'
+                        ref={i => this._thumbnailsWrapper = i}
+                        >
+                        <div
+                          ref={t => this._thumbnails = t}
+                          className='image-gallery-thumbnails-container'
+                          style={thumbnailStyle}
+                          role='navigation'
+                          aria-label='Thumbnail Navigation'
+                          >
+                          {thumbnails}
+                        </div>
+                      </div>
+                    </Swipeable>
+                    :
+                    <div
+                      className='image-gallery-thumbnails'
+                      ref={i => this._thumbnailsWrapper = i}
+                      >
+                      <div
+                        ref={t => this._thumbnails = t}
+                        className='image-gallery-thumbnails-container'
+                        style={thumbnailStyle}
+                        role='navigation'
+                        aria-label='Thumbnail Navigation'
+                        >
+                        {thumbnails}
+                      </div>
+                    </div>
+                }
               </div>
           }
           {
