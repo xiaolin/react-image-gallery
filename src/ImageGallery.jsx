@@ -846,10 +846,10 @@ export default class ImageGallery extends React.Component {
     if (this._thumbnails) {
 
       if (this._isThumbnailHorizontal()) {
-        return (this._thumbnails.scrollHeight > thumbnailsWrapperHeight);
+        return (thumbnailsWrapperHeight && this._thumbnails.scrollHeight > thumbnailsWrapperHeight);
       }
 
-      return (this._thumbnails.scrollWidth > thumbnailsWrapperWidth);
+      return (thumbnailsWrapperWidth && this._thumbnails.scrollWidth > thumbnailsWrapperWidth);
     }
 
     return false;
