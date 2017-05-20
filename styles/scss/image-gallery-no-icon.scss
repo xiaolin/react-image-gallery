@@ -105,10 +105,12 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
   @media (max-width: $ig-screen-sm-min) {
     font-size: 3.4em;
+    padding: 20px 15px;
   }
 
   @media (max-width: $ig-screen-xsm-min) {
     font-size: 2.4em;
+    padding: 0 15px;
   }
 }
 
