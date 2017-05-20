@@ -91,6 +91,8 @@ class MyComponent extends React.Component {
     * `thumbnailClass` - custom thumbnail class
     * `originalAlt` - image alt
     * `thumbnailAlt` - thumbnail image alt
+    * `originalTitle` - image title
+    * `thumbnailTitle` - thumbnail image title
     * `thumbnailLabel` - label for thumbnail
     * `description` - description for image
     * `srcSet` - image srcset (html5 attribute)
