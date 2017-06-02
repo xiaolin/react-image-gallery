@@ -935,6 +935,7 @@ export default class ImageGallery extends React.Component {
                     onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
                     onSwipedDown={this._handleOnSwipedTo.bind(this, 0)}
                     onSwipedUp={this._handleOnSwipedTo.bind(this, 0)}
+                    preventDefaultTouchmoveEvent={false}
                   >
                     <div className='image-gallery-slides'>
                       {slides}
