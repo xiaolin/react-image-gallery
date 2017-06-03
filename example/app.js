@@ -20,6 +20,7 @@ class App extends React.Component {
       showPlayButton: true,
       showGalleryPlayButton: true,
       showNav: true,
+      showThumbnailsNav: false,
       slideDuration: 450,
       slideInterval: 2000,
       thumbnailPosition: 'bottom',
@@ -197,6 +198,7 @@ class App extends React.Component {
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
+          showThumbnailsNav={this.state.showThumbnailsNav}
           thumbnailPosition={this.state.thumbnailPosition}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
@@ -296,6 +298,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'showNav')}
                   checked={this.state.showNav}/>
                   <label htmlFor='show_navigation'>show navigation</label>
+              </li>
+              <li>
+                <input
+                  id='show_thumbnails_navigation'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'showThumbnailsNav')}
+                  checked={this.state.showThumbnailsNav}/>
+                <label htmlFor='show_thumbnails_navigation'>show thumbnails navigation</label>
               </li>
               <li>
                 <input

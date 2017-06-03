@@ -101,6 +101,7 @@ class MyComponent extends React.Component {
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
 * `showNav`: Boolean, default `true`
+* `showThumbnailsNav`: Boolean, default `false`
 * `showThumbnails`: Boolean, default `true`
 * `thumbnailPosition`: String, default `bottom`
   * available positions: `top, right, bottom, left`
@@ -175,6 +176,32 @@ class MyComponent extends React.Component {
       return (
         <button
           className='image-gallery-custom-right-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      )
+    }
+  ```
+* `renderThumbnailsLeftNav`: Function, custom thumbnails left nav component
+  * Use this to render a custom thumbnails left nav control
+  * Passes `onClick` callback that will slide to the previous item and `disabled` argument for when to disable the nav
+  ```javascript
+    renderThumbnailsLeftNav(onClick, disabled) {
+      return (
+        <button
+          className='image-gallery-thumbnails-left-nav'
+          disabled={disabled}
+          onClick={onClick}/>
+      )
+    }
+  ```
+* `renderThumbnailsRightNav`: Function, custom thumbnails right nav component
+  * Use this to render a custom thumbnails right nav control
+  * Passes `onClick` callback that will slide to the next item and `disabled` argument for when to disable the nav
+  ```javascript
+    renderThumbnailsRightNav(onClick, disabled) {
+      return (
+        <button
+          className='image-gallery-thumbnails-right-nav'
           disabled={disabled}
           onClick={onClick}/>
       )
