@@ -846,6 +846,7 @@ export default class ImageGallery extends React.Component {
           className={'image-gallery-slide' + alignment + originalClass}
           style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
+          onTouchMove={this.props.onTouchMove}
         >
           {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
