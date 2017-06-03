@@ -434,6 +434,7 @@ export default class ImageGallery extends React.Component {
   _handleKeyDown(event) {
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
+    const ESC_KEY = 27;
     const key = parseInt(event.keyCode || event.which || 0);
 
     switch(key) {
@@ -447,6 +448,10 @@ export default class ImageGallery extends React.Component {
           this._slideRight();
         }
         break;
+      case ESC_KEY:
+        if (this.state.isFullscreen && !this.props.useBrowserFullscreen) {
+          this.exitFullScreen();
+        }
     }
   }
 
