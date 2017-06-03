@@ -135,6 +135,7 @@ class MyComponent extends React.Component {
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`
+* `onTouchMove`: Function, `callback(event)`
 * `renderCustomControls`: Function, custom controls rendering
   * Use this to render custom controls or other elements on the currently displayed image (like the fullscreen button)
   ```javascript
