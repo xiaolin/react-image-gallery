@@ -320,6 +320,7 @@ export default class ImageGallery extends React.Component {
   slideToIndex(index, event) {
     const {currentIndex} = this.state;
 
+
     if (event) {
       if (this._intervalId) {
         // user triggered event while ImageGallery is playing, reset interval
@@ -340,13 +341,25 @@ export default class ImageGallery extends React.Component {
     this.setState({
       previousIndex: currentIndex,
       currentIndex: nextIndex,
+      isFlick: false, // reset isFlick state after slide
+      isTransitioning: currentIndex !== nextIndex,
       offsetPercentage: 0,
       style: {
         transition: `all ${this.props.slideDuration}ms ease-out`
       }
-    });
+    }, this._onSliding);
 
   }
+
+  _onSliding = () => {
+    const { isTransitioning } = this.state;
+
+    window.setTimeout(() => {
+      if (isTransitioning) {
+        this.setState({isTransitioning: !isTransitioning});
+      }
+    }, this.props.slideDuration);
+  };
 
   getCurrentIndex() {
     return this.state.currentIndex;
@@ -490,15 +503,12 @@ export default class ImageGallery extends React.Component {
     this.setState({isFlick: isFlick});
   }
 
-  _shouldSlideOnSwipe() {
-    const shouldSlide = Math.abs(this.state.offsetPercentage) > 30 ||
-      this.state.isFlick;
+  _sufficientSwipeOffset() {
+    return Math.abs(this.state.offsetPercentage) > 30;
+  }
 
-    if (shouldSlide) {
-      // reset isFlick state after so data is not persisted
-      this.setState({isFlick: false});
-    }
-    return shouldSlide;
+  _shouldSlideOnSwipe() {
+    return this._sufficientSwipeOffset() || this.state.isFlick;
   }
 
   _handleOnSwipedTo(index) {
@@ -523,7 +533,7 @@ export default class ImageGallery extends React.Component {
 
   _handleSwiping(index, _, delta) {
     const { swipingTransitionDuration } = this.props;
-    const { galleryWidth } = this.state;
+    const { galleryWidth, isTransitioning } = this.state;
 
     let offsetPercentage = index * (delta / galleryWidth * 100);
     if (Math.abs(offsetPercentage) >= 100) {
@@ -534,10 +544,12 @@ export default class ImageGallery extends React.Component {
       transition: `transform ${swipingTransitionDuration}ms ease-out`
     };
 
-    this.setState({
-      offsetPercentage: offsetPercentage,
-      style: swipingTransition
-    });
+    if (!isTransitioning) {
+      this.setState({
+        offsetPercentage: offsetPercentage,
+        style: swipingTransition,
+      });
+    }
   }
 
   _canNavigate() {
@@ -641,6 +653,18 @@ export default class ImageGallery extends React.Component {
     return alignment;
   }
 
+  _isGoingFromFirstToLast() {
+    const {currentIndex, previousIndex} = this.state;
+    const totalSlides = this.props.items.length - 1;
+    return previousIndex === 0 && currentIndex === totalSlides;
+  }
+
+  _isGoingFromLastToFirst() {
+    const {currentIndex, previousIndex} = this.state;
+    const totalSlides = this.props.items.length - 1;
+    return previousIndex === totalSlides && currentIndex === 0;
+  }
+
   _getTranslateXForTwoSlide(index) {
     // For taking care of infinite swipe when there are only two slides
     const {currentIndex, offsetPercentage, previousIndex} = this.state;
@@ -693,6 +717,21 @@ export default class ImageGallery extends React.Component {
     return {};
   }
 
+  _slideIsTransitioning(index) {
+    const { isTransitioning, previousIndex, currentIndex } = this.state;
+    return isTransitioning &&
+      !(index === previousIndex || index == currentIndex);
+  }
+
+  _ignoreIsTransitioning() {
+    // Ignore isTransitioning because were not going to sibling slides
+    // e.g. center to left or center to right
+    const { previousIndex, currentIndex } = this.state;
+    return Math.abs(previousIndex - currentIndex) > 1 &&
+      !this._isGoingFromFirstToLast() &&
+      !this._isGoingFromLastToFirst();
+  }
+
   _getSlideStyle(index) {
     const {currentIndex, offsetPercentage} = this.state;
     const {infinite, items} = this.props;
@@ -701,18 +740,6 @@ export default class ImageGallery extends React.Component {
 
     // calculates where the other slides belong based on currentIndex
     let translateX = baseTranslateX + (index * 100) + offsetPercentage;
-
-    // adjust zIndex so that only the current slide and the slide were going
-    // to is at the top layer, this prevents transitions from flying in the
-    // background when swiping before the first slide or beyond the last slide
-    let zIndex = 1;
-    if (index === currentIndex) {
-      zIndex = 3;
-    } else if (index === this.state.previousIndex) {
-      zIndex = 2;
-    } else if (index === 0 || index === totalSlides) {
-      zIndex = 0;
-    }
 
     if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
@@ -737,7 +764,6 @@ export default class ImageGallery extends React.Component {
       msTransform: translate,
       OTransform: translate,
       transform: translate,
-      zIndex: zIndex
     };
   }
 
@@ -816,8 +842,10 @@ export default class ImageGallery extends React.Component {
       currentIndex,
       isFullscreen,
       modalFullscreen,
-      isPlaying
+      isPlaying,
     } = this.state;
+
+    const { infinite } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
@@ -847,11 +875,12 @@ export default class ImageGallery extends React.Component {
         this._lazyLoaded[index] = true;
       }
 
+      let slideStyle = this._getSlideStyle(index);
       const slide = (
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          style={Object.assign(this._getSlideStyle(index), this.state.style)}
+          style={Object.assign(slideStyle, this.state.style)}
           onClick={this.props.onClick}
           onTouchMove={this.props.onTouchMove}
         >
@@ -859,7 +888,14 @@ export default class ImageGallery extends React.Component {
         </div>
       );
 
-      slides.push(slide);
+      if (infinite) {
+        // don't add some slides while transitioning to avoid background transitions
+        if (!this._slideIsTransitioning(index) || this._ignoreIsTransitioning()) {
+          slides.push(slide);
+        }
+      } else {
+        slides.push(slide);
+      }
 
       if (this.props.showThumbnails) {
         thumbnails.push(
