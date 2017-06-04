@@ -270,7 +270,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-thumbnail {
   display: inline-block;
-  margin-right: 5px;
   border: 4px solid transparent;
   transition: border .3s ease-out;
   width: 100px;
@@ -278,6 +277,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   @media (max-width: $ig-screen-sm-min) {
     border: 3px solid transparent;
     width: 75px;
+  }
+
+  + .image-gallery-thumbnail {
+    margin-left: 5px;
   }
 
   img {
