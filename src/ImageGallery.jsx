@@ -993,13 +993,13 @@ export default class ImageGallery extends React.Component {
         {
           this.props.showBullets &&
             <div className='image-gallery-bullets'>
-              <ul
+              <div
                 className='image-gallery-bullets-container'
                 role='navigation'
                 aria-label='Bullet Navigation'
               >
                 {bullets}
-              </ul>
+              </div>
             </div>
         }
         {
@@ -1020,7 +1020,7 @@ export default class ImageGallery extends React.Component {
     );
 
     return (
-      <section
+      <div
         ref={i => this._imageGallery = i}
         className={
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
@@ -1049,7 +1049,6 @@ export default class ImageGallery extends React.Component {
                     ref={t => this._thumbnails = t}
                     className='image-gallery-thumbnails-container'
                     style={thumbnailStyle}
-                    role='navigation'
                     aria-label='Thumbnail Navigation'
                   >
                     {thumbnails}
@@ -1064,7 +1063,7 @@ export default class ImageGallery extends React.Component {
 
         </div>
 
-      </section>
+      </div>
     );
   }
 
