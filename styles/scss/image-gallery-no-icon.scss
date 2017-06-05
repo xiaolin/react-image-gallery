@@ -230,6 +230,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
         display: block;
         margin-right: 0;
         padding: 0;
+
+        + .image-gallery-thumbnail {
+          margin-left: 0;
+        }
       }
     }
   }
@@ -280,7 +284,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   + .image-gallery-thumbnail {
-    margin-left: 5px;
+    margin-left: 2px;
   }
 
   img {
