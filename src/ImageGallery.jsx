@@ -96,6 +96,7 @@ export default class ImageGallery extends React.Component {
       return (
         <button
           type='button'
+          aria-label='Previous Slide'
           className='image-gallery-left-nav'
           disabled={disabled}
           onClick={onClick}
@@ -107,6 +108,7 @@ export default class ImageGallery extends React.Component {
       return (
         <button
           type='button'
+          aria-label='Next Slide'
           className='image-gallery-right-nav'
           disabled={disabled}
           onClick={onClick}
@@ -118,6 +120,7 @@ export default class ImageGallery extends React.Component {
       return (
         <button
           type='button'
+          aria-label={isPlaying ? 'Pause' : 'Play'}
           className={
             `image-gallery-play-button${isPlaying ? ' active' : ''}`}
           onClick={onClick}
@@ -129,6 +132,7 @@ export default class ImageGallery extends React.Component {
       return (
         <button
           type='button'
+          aria-label={isFullscreen ? 'Exit Full Screen' : 'Enter Full Screen'}
           className={
             `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
           onClick={onClick}
@@ -923,6 +927,7 @@ export default class ImageGallery extends React.Component {
           <button
             key={index}
             type='button'
+            aria-label={`Slide ${index}`}
             className={
               'image-gallery-bullet ' + (
                 currentIndex === index ? 'active' : '')}
