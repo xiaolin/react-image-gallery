@@ -214,6 +214,7 @@ export default class ImageGallery extends React.Component {
 
     if (this._debounceResize) {
       window.removeEventListener('resize', this._debounceResize);
+      this._debounceResize.cancel();
     }
 
     this._offScreenChangeEvent();
