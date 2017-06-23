@@ -65,6 +65,7 @@ export default class ImageGallery extends React.Component {
     onTouchEnd: PropTypes.func,
     onTouchStart: PropTypes.func,
     onThumbnailError: PropTypes.func,
+    onThumbnailClick: PropTypes.func,
     renderCustomControls: PropTypes.func,
     renderLeftNav: PropTypes.func,
     renderRightNav: PropTypes.func,
@@ -917,7 +918,12 @@ export default class ImageGallery extends React.Component {
               (currentIndex === index ? ' active' : '') +
               thumbnailClass
             }
-            onClick={event => this.slideToIndex.call(this, index, event)}
+            onClick={event => {
+              this.slideToIndex.call(this, index, event);
+              if (this.props.onThumbnailClick) {
+                this.props.onThumbnailClick(event, index);
+              }
+            }}
           >
             {renderThumbInner(item)}
           </a>
