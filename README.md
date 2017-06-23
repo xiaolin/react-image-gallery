@@ -124,6 +124,7 @@ class MyComponent extends React.Component {
   * overrides defaultImage
 * `onThumbnailError`: Function, `callback(event)`
   * overrides defaultImage
+* `onThumbnailClick`: Function, `callback(event, index)`
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideDuration`: Integer, default `450`
   * transition duration during image slide in milliseconds
