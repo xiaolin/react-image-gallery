@@ -61,6 +61,9 @@ export default class ImageGallery extends React.Component {
     onClick: PropTypes.func,
     onImageLoad: PropTypes.func,
     onImageError: PropTypes.func,
+    onTouchMove: PropTypes.func,
+    onTouchEnd: PropTypes.func,
+    onTouchStart: PropTypes.func,
     onThumbnailError: PropTypes.func,
     renderCustomControls: PropTypes.func,
     renderLeftNav: PropTypes.func,
@@ -884,6 +887,8 @@ export default class ImageGallery extends React.Component {
           style={Object.assign(slideStyle, this.state.style)}
           onClick={this.props.onClick}
           onTouchMove={this.props.onTouchMove}
+          onTouchEnd={this.props.onTouchEnd}
+          onTouchStart={this.props.onTouchStart}
         >
           {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
