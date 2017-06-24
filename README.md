@@ -120,11 +120,6 @@ class MyComponent extends React.Component {
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
-* `onImageError`: Function, `callback(event)`
-  * overrides defaultImage
-* `onThumbnailError`: Function, `callback(event)`
-  * overrides defaultImage
-* `onThumbnailClick`: Function, `callback(event, index)`
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
 * `slideDuration`: Integer, default `450`
   * transition duration during image slide in milliseconds
@@ -132,6 +127,11 @@ class MyComponent extends React.Component {
   * transition duration while swiping in milliseconds
 * `slideInterval`: Integer, default `3000`
 * `startIndex`: Integer, default `0`
+* `onImageError`: Function, `callback(event)`
+  * overrides defaultImage
+* `onThumbnailError`: Function, `callback(event)`
+  * overrides defaultImage
+* `onThumbnailClick`: Function, `callback(event, index)`
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
 * `onScreenChange`: Function, `callback(fullscreenElement)`
@@ -139,6 +139,8 @@ class MyComponent extends React.Component {
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`
 * `onTouchMove`: Function, `callback(event)`
+* `onTouchEnd`: Function, `callback(event)`
+* `onTouchStart`: Function, `callback(event)`
 * `renderCustomControls`: Function, custom controls rendering
   * Use this to render custom controls or other elements on the currently displayed image (like the fullscreen button)
   ```javascript
