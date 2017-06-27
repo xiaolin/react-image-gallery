@@ -443,7 +443,7 @@ export default class ImageGallery extends React.Component {
           this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
         }
       }
-    }, 500);
+    }, 50);
   }
 
   _isThumbnailHorizontal() {
@@ -612,7 +612,7 @@ export default class ImageGallery extends React.Component {
         }
         totalScroll = this._thumbnails.scrollHeight - thumbnailsWrapperHeight;
       } else {
-        if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth) {
+        if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth || thumbnailsWrapperWidth <= 0) {
           return 0;
         }
         totalScroll = this._thumbnails.scrollWidth - thumbnailsWrapperWidth;
