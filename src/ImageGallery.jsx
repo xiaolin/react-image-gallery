@@ -564,7 +564,7 @@ export default class ImageGallery extends React.Component {
   }
 
   _getThumbsVisibleRange() {
-    const {currentIndex} = this.state;
+    const {currentIndex, thumbsTranslate} = this.state;
 
     if (this._thumbnails) {
       // check that thumbnailsWrapper is not an empty
@@ -591,20 +591,34 @@ export default class ImageGallery extends React.Component {
       // and we don't want to show a lot of default pictures in this case
       const perIndexScroll = totalScroll / (totalThumbnails - 1);
       const loadThumbnailsCount =
-        (Math.round(this.state.thumbnailsWrapperWidth / perIndexScroll) - 1) * 2;
+        (Math.round(this.state.thumbnailsWrapperWidth / perIndexScroll) - 2) * 2;
 
-      let minRangeValue = currentIndex - loadThumbnailsCount;
+      const offsetBefore = Math.abs(thumbsTranslate * 100 / totalScroll);
+      const offsetAfter = 100 - offsetBefore;
+      const bufferBefore = this.props.infinite && currentIndex === 0 ? loadThumbnailsCount / 2 : 0;
+      const bufferAfter = this.props.infinite && (currentIndex === totalThumbnails - 1) ? loadThumbnailsCount / 2 : 0;
+      const thumbnailsBefore = Math.ceil(bufferBefore + offsetBefore * loadThumbnailsCount / 100);
+      const thumbnailsAfter = Math.ceil(bufferAfter + offsetAfter * loadThumbnailsCount / 100);
+
+      if (thumbnailsBefore + thumbnailsAfter + 1 >= totalThumbnails) {
+        return {
+          min: 0,
+          max: totalThumbnails - 1
+        };
+      }
+
+      let minRangeValue = currentIndex - thumbnailsBefore;
       // adjust the lower boundary of the range of images to load
       minRangeValue = minRangeValue < 0
-        ? (this.props.infinite ? (this._thumbnails.children.length - 1) + minRangeValue : 0)
+        ? (this.props.infinite ? (totalThumbnails - 1) + minRangeValue : 0)
         : minRangeValue;
 
-      let maxRangeValue = currentIndex + loadThumbnailsCount;
+      let maxRangeValue = currentIndex + thumbnailsAfter;
       // adjust the upper boundary of the range of images to load
-      maxRangeValue = maxRangeValue > (this._thumbnails.children.length - 1)
+      maxRangeValue = maxRangeValue > (totalThumbnails - 1)
         ? (this.props.infinite
-          ? maxRangeValue - (this._thumbnails.children.length - 1)
-          : (this._thumbnails.children.length - 1))
+          ? maxRangeValue - (totalThumbnails - 1)
+          : (totalThumbnails - 1))
         : maxRangeValue;
 
       // we will load only part of thumbnails, lazyload works in this case
