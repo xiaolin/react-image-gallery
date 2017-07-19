@@ -6,7 +6,7 @@ import PropTypes from 'prop-types';
 
 const screenChangeEvents = [
   'fullscreenchange',
-  'MSFullscreenChange',
+  'msfullscreenchange',
   'mozfullscreenchange',
   'webkitfullscreenchange'
 ];
