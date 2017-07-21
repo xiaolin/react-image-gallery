@@ -801,7 +801,7 @@ export default class ImageGallery extends React.Component {
     const onImageError = this.props.onImageError || this._handleImageError;
 
     return (
-      <div className='image-gallery-image'>
+      <div>
         <img
             src={item.original}
             alt={item.originalAlt}
