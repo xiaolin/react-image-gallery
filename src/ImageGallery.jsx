@@ -954,7 +954,7 @@ export default class ImageGallery extends React.Component {
     let thumbnails = [];
     let bullets = [];
 
-    this.props.items.map((item, index) => {
+    this.props.items.forEach((item, index) => {
       const alignment = this._getAlignmentClassName(index);
       const originalClass = item.originalClass ?
         ` ${item.originalClass}` : '';
@@ -1027,15 +1027,22 @@ export default class ImageGallery extends React.Component {
       }
 
       if (this.props.showBullets) {
+        const bulletOnClick = event => {
+          if(item.bulletOnClick){
+            item.bulletOnClick({item, itemIndex: index, currentIndex});
+          }
+          return this.slideToIndex.call(this, index, event);
+        };
         bullets.push(
           <button
             key={index}
             type='button'
-            className={
-              'image-gallery-bullet ' + (
-                currentIndex === index ? 'active' : '')}
-
-            onClick={event => this.slideToIndex.call(this, index, event)}
+            className={[
+              'image-gallery-bullet',
+              currentIndex === index ? 'active' : '',
+              item.bulletClass || ''
+            ].join(' ')}
+            onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
             aria-label={`Go to Slide ${index + 1}`}
           >
