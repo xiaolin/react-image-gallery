@@ -94,6 +94,9 @@ class MyComponent extends React.Component {
     * `description` - description for image
     * `srcSet` - image srcset (html5 attribute)
     * `sizes` - image sizes (html5 attribute)
+    * `bulletClass` - extra class for the bullet of the item
+    * `bulletOnClick` - `callback({item, itemIndex, currentIndex})`
+        * A function that will be called upon bullet click.
 * `infinite`: Boolean, default `true`
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
