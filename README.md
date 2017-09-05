@@ -126,6 +126,7 @@ class MyComponent extends React.Component {
 * `swipingTransitionDuration`: Integer, default `0`
   * transition duration while swiping in milliseconds
 * `slideInterval`: Integer, default `3000`
+* `swipeThreshold`: Integer, default `30`
 * `startIndex`: Integer, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
