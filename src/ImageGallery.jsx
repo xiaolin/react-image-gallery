@@ -53,6 +53,7 @@ export default class ImageGallery extends React.Component {
     startIndex: PropTypes.number,
     slideDuration: PropTypes.number,
     slideInterval: PropTypes.number,
+    swipeThreshold: PropTypes.number,
     swipingTransitionDuration: PropTypes.number,
     onSlide: PropTypes.func,
     onScreenChange: PropTypes.func,
@@ -96,6 +97,7 @@ export default class ImageGallery extends React.Component {
     slideDuration: 450,
     swipingTransitionDuration: 0,
     slideInterval: 3000,
+    swipeThreshold: 30,
     renderLeftNav: (onClick, disabled) => {
       return (
         <button
@@ -509,7 +511,7 @@ export default class ImageGallery extends React.Component {
   }
 
   _sufficientSwipeOffset() {
-    return Math.abs(this.state.offsetPercentage) > 30;
+    return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
   }
 
   _shouldSlideOnSwipe() {

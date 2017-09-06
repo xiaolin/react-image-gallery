@@ -126,6 +126,9 @@ class MyComponent extends React.Component {
 * `swipingTransitionDuration`: Integer, default `0`
   * transition duration while swiping in milliseconds
 * `slideInterval`: Integer, default `3000`
+* `swipeThreshold`: Integer, default `30`
+  * A percentage of how far the offset of the current slide is swiped to trigger a slide event.
+    e.g. If the current slide is swiped less than 30% to the left or right, it will not trigger a slide event.
 * `startIndex`: Integer, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
