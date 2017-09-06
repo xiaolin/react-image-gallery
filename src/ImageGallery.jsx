@@ -443,7 +443,8 @@ export default class ImageGallery extends React.Component {
           this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
         }
       }
-    }, 500);
+      /*TODO, reducing the delay to 50, we have enought time to get all the widths and the effect looks even better*/
+    }, 50);
   }
 
   _isThumbnailHorizontal() {
@@ -612,7 +613,8 @@ export default class ImageGallery extends React.Component {
         }
         totalScroll = this._thumbnails.scrollHeight - thumbnailsWrapperHeight;
       } else {
-        if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth) {
+        //TODO added a conditional here, if the thumbnailsWrapperWidth is equal to 0, return 0
+        if (this._thumbnails.scrollWidth <= thumbnailsWrapperWidth || thumbnailsWrapperWidth <= 0) {
           return 0;
         }
         totalScroll = this._thumbnails.scrollWidth - thumbnailsWrapperWidth;
