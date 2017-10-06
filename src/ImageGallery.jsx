@@ -72,7 +72,8 @@ export default class ImageGallery extends React.Component {
     renderRightNav: PropTypes.func,
     renderPlayPauseButton: PropTypes.func,
     renderFullscreenButton: PropTypes.func,
-    renderItem: PropTypes.func
+    renderItem: PropTypes.func,
+    stopPropagation: PropTypes.bool
   };
 
   static defaultProps = {
