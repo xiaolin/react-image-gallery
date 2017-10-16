@@ -743,7 +743,7 @@ var ImageGallery = function (_React$Component) {
         translateX = this._getTranslateXForTwoSlide(index);
       }
 
-      var translate = 'translate(' + translateX + '%, 0)';
+      var translate = 'translate3d(' + translateX + '%, 0, 0)';
 
       return {
         WebkitTransform: translate,
@@ -759,9 +759,9 @@ var ImageGallery = function (_React$Component) {
       var translate = void 0;
 
       if (this._isThumbnailHorizontal()) {
-        translate = 'translate(0, ' + this.state.thumbsTranslate + 'px)';
+        translate = 'translate3d(0, ' + this.state.thumbsTranslate + 'px, 0)';
       } else {
-        translate = 'translate(' + this.state.thumbsTranslate + 'px, 0)';
+        translate = 'translate3d(' + this.state.thumbsTranslate + 'px, 0, 0)';
       }
       return {
         WebkitTransform: translate,
