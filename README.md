@@ -89,6 +89,8 @@ class MyComponent extends React.Component {
     * `thumbnail` - image thumbnail src url
     * `originalClass` - custom image class
     * `thumbnailClass` - custom thumbnail class
+    * `renderItem` - Function for custom renderer (see renderItem below)
+    * `renderThumbInner` - Function for custom thumbnail renderer (see renderThumbInner below)
     * `originalAlt` - image alt
     * `thumbnailAlt` - thumbnail image alt
     * `originalTitle` - image title
