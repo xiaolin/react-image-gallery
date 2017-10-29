@@ -1,4 +1,4 @@
-React Image Gallery
+React Carousel Image Gallery
 ===
 
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
