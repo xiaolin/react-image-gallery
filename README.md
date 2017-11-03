@@ -134,7 +134,7 @@ class MyComponent extends React.Component {
 * `stopPropagation`: Boolean, default `false`
     * Automatically calls stopPropagation on all 'swipe' events.
 * `preventDefaultTouchmoveEvent`: Boolean, default `false`
-    * An option to prevent the browser's touchmove event
+    * An option to prevent the browser's touchmove event (stops the gallery from scrolling up or down when swiping)
 * `startIndex`: Integer, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
