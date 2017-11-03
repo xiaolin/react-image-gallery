@@ -133,6 +133,8 @@ class MyComponent extends React.Component {
     e.g. If the current slide is swiped less than 30% to the left or right, it will not trigger a slide event.
 * `stopPropagation`: Boolean, default `false`
     * Automatically calls stopPropagation on all 'swipe' events.
+* `preventDefaultTouchmoveEvent`: Boolean, default `false`
+    * An option to prevent the browser's touchmove event
 * `startIndex`: Integer, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
