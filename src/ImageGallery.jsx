@@ -72,7 +72,8 @@ export default class ImageGallery extends React.Component {
     renderRightNav: PropTypes.func,
     renderPlayPauseButton: PropTypes.func,
     renderFullscreenButton: PropTypes.func,
-    renderItem: PropTypes.func
+    renderItem: PropTypes.func,
+    stopPropagation: PropTypes.bool
   };
 
   static defaultProps = {
@@ -993,6 +994,7 @@ export default class ImageGallery extends React.Component {
                     onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
                     onSwipedDown={this._handleOnSwipedTo.bind(this, 0)}
                     onSwipedUp={this._handleOnSwipedTo.bind(this, 0)}
+                    stopPropagation={this.props.stopPropagation}
                   >
                     <div className='image-gallery-slides'>
                       {slides}
