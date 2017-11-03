@@ -47,6 +47,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: PropTypes.bool,
     disableSwipe: PropTypes.bool,
     useBrowserFullscreen: PropTypes.bool,
+    preventDefaultTouchmoveEvent: PropTypes.bool,
     defaultImage: PropTypes.string,
     indexSeparator: PropTypes.string,
     thumbnailPosition: PropTypes.string,
@@ -92,6 +93,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: false,
     disableSwipe: false,
     useBrowserFullscreen: true,
+    preventDefaultTouchmoveEvent: false,
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
     startIndex: 0,
@@ -995,6 +997,7 @@ export default class ImageGallery extends React.Component {
                     onSwipedDown={this._handleOnSwipedTo.bind(this, 0)}
                     onSwipedUp={this._handleOnSwipedTo.bind(this, 0)}
                     stopPropagation={this.props.stopPropagation}
+		    preventDefaultTouchmoveEvent={this.props.preventDefaultTouchmoveEvent}
                   >
                     <div className='image-gallery-slides'>
                       {slides}
