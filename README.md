@@ -131,6 +131,7 @@ class MyComponent extends React.Component {
 * `swipeThreshold`: Integer, default `30`
   * A percentage of how far the offset of the current slide is swiped to trigger a slide event.
     e.g. If the current slide is swiped less than 30% to the left or right, it will not trigger a slide event.
+* `stopPropagation`: Boolean, default `false`
 * `startIndex`: Integer, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
