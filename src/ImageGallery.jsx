@@ -727,19 +727,54 @@ export default class ImageGallery extends React.Component {
     return {};
   }
 
+  _shouldPushSlideOnInfiniteMode(index) {
+    /*
+      Push(show) slide if slide is the current slide, and the next slide
+      OR
+      The slide is going more than 1 slide left, or right, but not going from
+      first to last and not going from last to first
+
+      There is an edge case where if you go to the first or last slide, when they're
+      not left, or right of each other they will try to catch up in the background
+      so unless were going from first to last or vice versa we don't want the first
+      or last slide to show up during our transition
+    */
+    return !this._slideIsTransitioning(index) ||
+      (this._ignoreIsTransitioning() && !this._isFirstOrLastSlide(index));
+  }
+
   _slideIsTransitioning(index) {
+    /*
+    returns true if the gallery is transitioning and the index is not the
+    previous or currentIndex
+    */
     const { isTransitioning, previousIndex, currentIndex } = this.state;
-    return isTransitioning &&
-      !(index === previousIndex || index == currentIndex);
+    const indexIsNotPreviousOrNextSlide = !(index === previousIndex || index === currentIndex);
+    return isTransitioning && indexIsNotPreviousOrNextSlide;
+  }
+
+  _isFirstOrLastSlide(index) {
+    const totalSlides = this.props.items.length - 1;
+    const isLastSlide = index === totalSlides;
+    const isFirstSlide = index === 0;
+    return isLastSlide || isFirstSlide;
   }
 
   _ignoreIsTransitioning() {
-    // Ignore isTransitioning because were not going to sibling slides
-    // e.g. center to left or center to right
+    /*
+      Ignore isTransitioning because were not going to sibling slides
+      e.g. center to left or center to right
+    */
     const { previousIndex, currentIndex } = this.state;
-    return Math.abs(previousIndex - currentIndex) > 1 &&
-      !this._isGoingFromFirstToLast() &&
-      !this._isGoingFromLastToFirst();
+    const totalSlides = this.props.items.length - 1;
+    // we want to show the in between slides transition
+    const slidingMoreThanOneSlideLeftOrRight = Math.abs(previousIndex - currentIndex) > 1;
+    const notGoingFromFirstToLast = !(previousIndex === 0 && currentIndex === totalSlides);
+    const notGoingFromLastToFirst = !(previousIndex === totalSlides && currentIndex === 0);
+
+    return slidingMoreThanOneSlideLeftOrRight &&
+      notGoingFromFirstToLast &&
+      notGoingFromLastToFirst;
   }
 
   _getSlideStyle(index) {
@@ -902,7 +937,7 @@ export default class ImageGallery extends React.Component {
 
       if (infinite) {
         // don't add some slides while transitioning to avoid background transitions
-        if (!this._slideIsTransitioning(index) || this._ignoreIsTransitioning()) {
+        if (this._shouldPushSlideOnInfiniteMode(index)) {
           slides.push(slide);
         }
       } else {
