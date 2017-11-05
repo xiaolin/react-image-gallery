@@ -123,19 +123,21 @@ class MyComponent extends React.Component {
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
-* `slideDuration`: Integer, default `450`
+* `slideDuration`: Number, default `450`
   * transition duration during image slide in milliseconds
-* `swipingTransitionDuration`: Integer, default `0`
+* `swipingTransitionDuration`: Number, default `0`
   * transition duration while swiping in milliseconds
-* `slideInterval`: Integer, default `3000`
-* `swipeThreshold`: Integer, default `30`
+* `slideInterval`: Number, default `3000`
+* `flickThreshold`: Number (float), default `0.4`
+  * Determines the max velocity of a swipe before it's considered a flick (lower = more sensitive)
+* `swipeThreshold`: Number, default `30`
   * A percentage of how far the offset of the current slide is swiped to trigger a slide event.
     e.g. If the current slide is swiped less than 30% to the left or right, it will not trigger a slide event.
 * `stopPropagation`: Boolean, default `false`
     * Automatically calls stopPropagation on all 'swipe' events.
 * `preventDefaultTouchmoveEvent`: Boolean, default `false`
     * An option to prevent the browser's touchmove event (stops the gallery from scrolling up or down when swiping)
-* `startIndex`: Integer, default `0`
+* `startIndex`: Number, default `0`
 * `onImageError`: Function, `callback(event)`
   * overrides defaultImage
 * `onThumbnailError`: Function, `callback(event)`

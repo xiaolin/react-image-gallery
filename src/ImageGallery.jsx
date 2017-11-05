@@ -32,6 +32,7 @@ export default class ImageGallery extends React.Component {
   }
 
   static propTypes = {
+    flickThreshold: PropTypes.number,
     items: PropTypes.array.isRequired,
     showNav: PropTypes.bool,
     autoPlay: PropTypes.bool,
@@ -94,6 +95,7 @@ export default class ImageGallery extends React.Component {
     disableSwipe: false,
     useBrowserFullscreen: true,
     preventDefaultTouchmoveEvent: false,
+    flickThreshold: 0.4,
     stopPropagation: false,
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
@@ -192,15 +194,14 @@ export default class ImageGallery extends React.Component {
 
   componentWillMount() {
     // Used to update the throttle if slideDuration changes
-    this._unthrottledSlideToIndex = this.slideToIndex.bind(this);
+    this._unthrottledSlideToIndex = this.slideToIndex;
     this.slideToIndex = throttle(this._unthrottledSlideToIndex,
                                  this.props.slideDuration,
                                 {trailing: false});
 
-    this._handleResize = this._handleResize.bind(this);
+    this._handleResize = this._handleResize;
     this._debounceResize = debounce(this._handleResize, 500);
-    this._handleScreenChange = this._handleScreenChange.bind(this);
-    this._handleKeyDown = this._handleKeyDown.bind(this);
+    this._handleScreenChange = this._handleScreenChange;
     this._thumbnailDelay = 300;
   }
 
@@ -328,7 +329,7 @@ export default class ImageGallery extends React.Component {
     }
   }
 
-  slideToIndex(index, event) {
+  slideToIndex = (index, event) => {
     const {currentIndex} = this.state;
 
 
@@ -359,8 +360,7 @@ export default class ImageGallery extends React.Component {
         transition: `all ${this.props.slideDuration}ms ease-out`
       }
     }, this._onSliding);
-
-  }
+  };
 
   _onSliding = () => {
     const { isTransitioning } = this.state;
@@ -376,7 +376,7 @@ export default class ImageGallery extends React.Component {
     return this.state.currentIndex;
   }
 
-  _handleScreenChange() {
+  _handleScreenChange = () => {
     /*
       handles screen change events that the browser triggers e.g. esc key
     */
@@ -390,7 +390,7 @@ export default class ImageGallery extends React.Component {
     }
 
     this.setState({isFullscreen: !!fullScreenElement});
-  }
+  };
 
   _onScreenChangeEvent() {
     screenChangeEvents.map(eventName => {
@@ -404,23 +404,23 @@ export default class ImageGallery extends React.Component {
     });
   }
 
-  _toggleFullScreen() {
+  _toggleFullScreen = () => {
     if (this.state.isFullscreen) {
       this.exitFullScreen();
     } else {
       this.fullScreen();
     }
-  }
+  };
 
-  _togglePlay() {
+  _togglePlay = () => {
     if (this._intervalId) {
       this.pause();
     } else {
       this.play();
     }
-  }
+  };
 
-  _handleResize() {
+  _handleResize = () => {
     // delay initial resize to get the accurate this._imageGallery height/width
     this._resizeTimer = window.setTimeout(() => {
       if (this._imageGallery) {
@@ -448,14 +448,14 @@ export default class ImageGallery extends React.Component {
         }
       }
     }, 50);
-  }
+  };
 
   _isThumbnailHorizontal() {
     const { thumbnailPosition } = this.props;
     return thumbnailPosition === 'left' || thumbnailPosition === 'right';
   }
 
-  _handleKeyDown(event) {
+  _handleKeyDown = (event) => {
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
     const ESC_KEY = 27;
@@ -477,7 +477,7 @@ export default class ImageGallery extends React.Component {
           this.exitFullScreen();
         }
     }
-  }
+  };
 
   _handleMouseOverThumbnails(index) {
     if (this.props.slideOnThumbnailHover) {
@@ -492,7 +492,7 @@ export default class ImageGallery extends React.Component {
     }
   }
 
-  _handleMouseLeaveThumbnails() {
+  _handleMouseLeaveThumbnails = () => {
     if (this._thumbnailTimer) {
       window.clearTimeout(this._thumbnailTimer);
       this._thumbnailTimer = null;
@@ -501,35 +501,29 @@ export default class ImageGallery extends React.Component {
       }
     }
     this.setState({hovering: false});
-  }
+  };
 
-  _handleImageError(event) {
+  _handleImageError = (event) => {
     if (this.props.defaultImage &&
         event.target.src.indexOf(this.props.defaultImage) === -1) {
       event.target.src = this.props.defaultImage;
     }
-  }
+  };
 
-  _handleOnSwiped(ev, x, y, isFlick) {
-    this.setState({isFlick: isFlick});
-  }
+  _handleOnSwiped = (e, deltaX, deltaY, isFlick, velocity) => {
+    // swiped left vs right
+    const side = deltaX > 0 ? 1 : -1;
+    this.setState({isFlick: isFlick}, () => this._handleOnSwipedTo(side));
+  };
 
-  _sufficientSwipeOffset() {
-    return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
-  }
-
-  _shouldSlideOnSwipe() {
-    return this._sufficientSwipeOffset() || this.state.isFlick;
-  }
-
-  _handleOnSwipedTo(index) {
+  _handleOnSwipedTo(side) {
     let slideTo = this.state.currentIndex;
 
     if (this._shouldSlideOnSwipe()) {
-      slideTo += index;
+      slideTo += side;
     }
 
-    if (index < 0) {
+    if (side < 0) {
       if (!this._canSlideLeft()) {
         slideTo = this.state.currentIndex;
       }
@@ -542,26 +536,38 @@ export default class ImageGallery extends React.Component {
     this._unthrottledSlideToIndex(slideTo);
   }
 
-  _handleSwiping(index, _, delta) {
+  _sufficientSwipeOffset() {
+    return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
+  }
+
+  _shouldSlideOnSwipe() {
+    return this._sufficientSwipeOffset() || this.state.isFlick;
+  }
+
+
+  _handleSwiping = (e, deltaX, deltaY, delta) => {
     const { swipingTransitionDuration } = this.props;
     const { galleryWidth, isTransitioning } = this.state;
+    // swiping left vs right
+    const side = deltaX > 0 ? -1 : 1;
 
-    let offsetPercentage = index * (delta / galleryWidth * 100);
+    let offsetPercentage = (delta / galleryWidth * 100);
     if (Math.abs(offsetPercentage) >= 100) {
-      offsetPercentage = index * 100;
+      offsetPercentage = 100;
     }
 
     const swipingTransition = {
       transition: `transform ${swipingTransitionDuration}ms ease-out`
     };
 
+
     if (!isTransitioning) {
       this.setState({
-        offsetPercentage: offsetPercentage,
+        offsetPercentage: side * offsetPercentage,
         style: swipingTransition,
       });
     }
-  }
+  };
 
   _canNavigate() {
     return this.props.items.length >= 2;
@@ -830,15 +836,15 @@ export default class ImageGallery extends React.Component {
     };
   }
 
-  _slideLeft(event) {
+  _slideLeft = (event) => {
     this.slideToIndex(this.state.currentIndex - 1, event);
-  }
+  };
 
-  _slideRight(event) {
+  _slideRight = (event) => {
     this.slideToIndex(this.state.currentIndex + 1, event);
-  }
+  };
 
-  _renderItem(item) {
+  _renderItem = (item) => {
     const onImageError = this.props.onImageError || this._handleImageError;
 
     return (
@@ -850,7 +856,7 @@ export default class ImageGallery extends React.Component {
             sizes={item.sizes}
             title={item.originalTitle}
             onLoad={this.props.onImageLoad}
-            onError={onImageError.bind(this)}
+            onError={onImageError}
         />
         {
           item.description &&
@@ -860,13 +866,10 @@ export default class ImageGallery extends React.Component {
         }
       </div>
     );
-  }
+  };
 
-  _renderThumbInner(item) {
-    let onThumbnailError = this._handleImageError;
-    if (this.props.onThumbnailError) {
-      onThumbnailError = this.props.onThumbnailError;
-    }
+  _renderThumbInner = (item) => {
+    let onThumbnailError = this.props.onThumbnailError || this._handleImageError;
 
     return (
       <div>
@@ -874,14 +877,14 @@ export default class ImageGallery extends React.Component {
           src={item.thumbnail}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
-          onError={onThumbnailError.bind(this)}
+          onError={onThumbnailError}
         />
         <div className='image-gallery-thumbnail-label'>
           {item.thumbnailLabel}
         </div>
       </div>
     );
-  }
+  };
 
   render() {
     const {
@@ -896,8 +899,8 @@ export default class ImageGallery extends React.Component {
     const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
 
-    const slideLeft = this._slideLeft.bind(this);
-    const slideRight = this._slideRight.bind(this);
+    const slideLeft = this._slideLeft;
+    const slideRight = this._slideRight;
 
     let slides = [];
     let thumbnails = [];
@@ -911,10 +914,10 @@ export default class ImageGallery extends React.Component {
         ` ${item.thumbnailClass}` : '';
 
       const renderItem = item.renderItem ||
-        this.props.renderItem || this._renderItem.bind(this);
+        this.props.renderItem || this._renderItem;
 
       const renderThumbInner = item.renderThumbInner ||
-        this.props.renderThumbInner || this._renderThumbInner.bind(this);
+        this.props.renderThumbInner || this._renderThumbInner;
 
       const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
       if (showItem && this.props.lazyLoad) {
@@ -922,6 +925,7 @@ export default class ImageGallery extends React.Component {
       }
 
       let slideStyle = this._getSlideStyle(index);
+
       const slide = (
         <div
           key={index}
@@ -949,7 +953,7 @@ export default class ImageGallery extends React.Component {
         thumbnails.push(
           <a
             onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
-            onMouseLeave={this._handleMouseLeaveThumbnails.bind(this, index)}
+            onMouseLeave={this._handleMouseLeaveThumbnails}
             key={index}
             role='button'
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -999,12 +1003,12 @@ export default class ImageGallery extends React.Component {
 
         {
           this.props.showFullscreenButton &&
-            this.props.renderFullscreenButton(this._toggleFullScreen.bind(this), isFullscreen)
+            this.props.renderFullscreenButton(this._toggleFullScreen, isFullscreen)
         }
 
         {
           this.props.showPlayButton &&
-            this.props.renderPlayPauseButton(this._togglePlay.bind(this), isPlaying)
+            this.props.renderPlayPauseButton(this._togglePlay, isPlaying)
         }
 
         {
@@ -1024,14 +1028,10 @@ export default class ImageGallery extends React.Component {
                   <Swipeable
                     className='image-gallery-swipe'
                     key='swipeable'
-                    delta={1}
-                    onSwipingLeft={this._handleSwiping.bind(this, -1)}
-                    onSwipingRight={this._handleSwiping.bind(this, 1)}
-                    onSwiped={this._handleOnSwiped.bind(this)}
-                    onSwipedLeft={this._handleOnSwipedTo.bind(this, 1)}
-                    onSwipedRight={this._handleOnSwipedTo.bind(this, -1)}
-                    onSwipedDown={this._handleOnSwipedTo.bind(this, 0)}
-                    onSwipedUp={this._handleOnSwipedTo.bind(this, 0)}
+                    delta={0}
+                    flickThreshold={this.props.flickThreshold}
+                    onSwiping={this._handleSwiping}
+                    onSwiped={this._handleOnSwiped}
                     stopPropagation={this.props.stopPropagation}
                     preventDefaultTouchmoveEvent={this.props.preventDefaultTouchmoveEvent}
                   >
