@@ -353,7 +353,6 @@ export default class ImageGallery extends React.Component {
     this.setState({
       previousIndex: currentIndex,
       currentIndex: nextIndex,
-      isFlick: false, // reset isFlick state after slide
       isTransitioning: currentIndex !== nextIndex,
       offsetPercentage: 0,
       style: {
@@ -513,23 +512,25 @@ export default class ImageGallery extends React.Component {
   _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
     // swiped left vs right
     const side = deltaX > 0 ? 1 : -1;
-    this.setState({isFlick: isFlick}, () => this._handleOnSwipedTo(side));
+    // this.setState({isFlick: isFlick});
+    this._handleOnSwipedTo(side, isFlick);
   };
 
-  _handleOnSwipedTo(side) {
-    let slideTo = this.state.currentIndex;
+  _handleOnSwipedTo(side, isFlick) {
+    const { currentIndex, isTransitioning } = this.state;
+    let slideTo = currentIndex;
 
-    if (this._shouldSlideOnSwipe()) {
+    if (this._sufficientSwipeOffset() || (isFlick && !isTransitioning)) {
       slideTo += side;
     }
 
     if (side < 0) {
       if (!this._canSlideLeft()) {
-        slideTo = this.state.currentIndex;
+        slideTo = currentIndex;
       }
     } else {
       if (!this._canSlideRight()) {
-        slideTo = this.state.currentIndex;
+        slideTo = currentIndex;
       }
     }
 
@@ -538,10 +539,6 @@ export default class ImageGallery extends React.Component {
 
   _sufficientSwipeOffset() {
     return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
-  }
-
-  _shouldSlideOnSwipe() {
-    return this._sufficientSwipeOffset() || this.state.isFlick;
   }
 
   _onSwipingNoOp() {
@@ -564,7 +561,6 @@ export default class ImageGallery extends React.Component {
     const swipingTransition = {
       transition: `transform ${swipingTransitionDuration}ms ease-out`
     };
-
 
     if (!isTransitioning) {
       this.setState({
