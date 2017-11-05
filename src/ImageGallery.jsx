@@ -94,6 +94,7 @@ export default class ImageGallery extends React.Component {
     disableSwipe: false,
     useBrowserFullscreen: true,
     preventDefaultTouchmoveEvent: false,
+    stopPropagation: false,
     indexSeparator: ' / ',
     thumbnailPosition: 'bottom',
     startIndex: 0,
