@@ -330,40 +330,40 @@ export default class ImageGallery extends React.Component {
   }
 
   slideToIndex = (index, event) => {
-    const {currentIndex} = this.state;
+    const {currentIndex, isTransitioning} = this.state;
 
-
-    if (event) {
-      if (this._intervalId) {
-        // user triggered event while ImageGallery is playing, reset interval
-        this.pause(false);
-        this.play(false);
+    if (!isTransitioning) {
+      if (event) {
+        if (this._intervalId) {
+          // user triggered event while ImageGallery is playing, reset interval
+          this.pause(false);
+          this.play(false);
+        }
       }
-    }
 
-    let slideCount = this.props.items.length - 1;
-    let nextIndex = index;
+      let slideCount = this.props.items.length - 1;
+      let nextIndex = index;
 
-    if (index < 0) {
-      nextIndex = slideCount;
-    } else if (index > slideCount) {
-      nextIndex = 0;
-    }
-
-    this.setState({
-      previousIndex: currentIndex,
-      currentIndex: nextIndex,
-      isTransitioning: currentIndex !== nextIndex,
-      offsetPercentage: 0,
-      style: {
-        transition: `all ${this.props.slideDuration}ms ease-out`
+      if (index < 0) {
+        nextIndex = slideCount;
+      } else if (index > slideCount) {
+        nextIndex = 0;
       }
-    }, this._onSliding);
+
+      this.setState({
+        previousIndex: currentIndex,
+        currentIndex: nextIndex,
+        isTransitioning: nextIndex !== currentIndex,
+        offsetPercentage: 0,
+        style: {
+          transition: `all ${this.props.slideDuration}ms ease-out`
+        }
+      }, this._onSliding);
+    }
   };
 
   _onSliding = () => {
     const { isTransitioning } = this.state;
-
     window.setTimeout(() => {
       if (isTransitioning) {
         this.setState({isTransitioning: !isTransitioning});
@@ -520,7 +520,7 @@ export default class ImageGallery extends React.Component {
     const { currentIndex, isTransitioning } = this.state;
     let slideTo = currentIndex;
 
-    if (this._sufficientSwipeOffset() || (isFlick && !isTransitioning)) {
+    if ((this._sufficientSwipeOffset() || isFlick) && !isTransitioning) {
       slideTo += side;
     }
 
@@ -548,21 +548,21 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping = (e, deltaX, deltaY, delta) => {
-    const { swipingTransitionDuration } = this.props;
     const { galleryWidth, isTransitioning } = this.state;
-    // swiping left vs right
-    const side = deltaX > 0 ? -1 : 1;
-
-    let offsetPercentage = (delta / galleryWidth * 100);
-    if (Math.abs(offsetPercentage) >= 100) {
-      offsetPercentage = 100;
-    }
-
-    const swipingTransition = {
-      transition: `transform ${swipingTransitionDuration}ms ease-out`
-    };
-
+    const { swipingTransitionDuration } = this.props;
     if (!isTransitioning) {
+      // swiping left vs right
+      const side = deltaX > 0 ? -1 : 1;
+
+      let offsetPercentage = (delta / galleryWidth * 100);
+      if (Math.abs(offsetPercentage) >= 100) {
+        offsetPercentage = 100;
+      }
+
+      const swipingTransition = {
+        transition: `transform ${swipingTransitionDuration}ms ease-out`
+      };
+
       this.setState({
         offsetPercentage: side * offsetPercentage,
         style: swipingTransition,
