@@ -49,10 +49,6 @@ import ImageGallery from 'react-image-gallery';
 
 class MyComponent extends React.Component {
 
-  handleImageLoad(event) {
-    console.log('Image loaded ', event.target)
-  }
-
   render() {
 
     const images = [
@@ -71,10 +67,7 @@ class MyComponent extends React.Component {
     ]
 
     return (
-      <ImageGallery
-        items={images}
-        slideInterval={2000}
-        onImageLoad={this.handleImageLoad}/>
+      <ImageGallery items={images} />
     );
   }
 
