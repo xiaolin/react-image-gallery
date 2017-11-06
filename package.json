@@ -1,7 +1,7 @@
 {
   "name": "react-image-gallery",
   "version": "0.8.5",
-  "description": "Responsive and flexible carousel component with thumbnail support",
+  "description": "React carousel component with thumbnail and mobile support",
   "main": "./build/image-gallery",
   "scripts": {
     "start": "gulp dev",
