@@ -67,6 +67,8 @@ export default class ImageGallery extends React.Component {
     onTouchMove: PropTypes.func,
     onTouchEnd: PropTypes.func,
     onTouchStart: PropTypes.func,
+    onMouseOver: PropTypes.func,
+    onMouseLeave: PropTypes.func,
     onThumbnailError: PropTypes.func,
     onThumbnailClick: PropTypes.func,
     renderCustomControls: PropTypes.func,
@@ -936,6 +938,8 @@ export default class ImageGallery extends React.Component {
           onTouchMove={this.props.onTouchMove}
           onTouchEnd={this.props.onTouchEnd}
           onTouchStart={this.props.onTouchStart}
+          onMouseOver={this.props.onMouseOver}
+          onMouseLeave={this.props.onMouseLeave}
         >
           {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
