@@ -511,11 +511,35 @@ export default class ImageGallery extends React.Component {
     }
   };
 
+  _setScrollDirection(deltaX, deltaY) {
+    const { scrollingUpDown, scrollingLeftRight } = this.state;
+    const x = Math.abs(deltaX);
+    const y = Math.abs(deltaY);
+
+    // If y > x the user is scrolling up and down
+    if (y > x && !scrollingUpDown && !scrollingLeftRight) {
+      this.setState({ scrollingUpDown: true });
+    } else if (!scrollingLeftRight && !scrollingUpDown) {
+      this.setState({ scrollingLeftRight: true });
+    }
+  };
+
   _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
-    // swiped left vs right
-    const side = deltaX > 0 ? 1 : -1;
-    // this.setState({isFlick: isFlick});
-    this._handleOnSwipedTo(side, isFlick);
+    const { scrollingUpDown, scrollingLeftRight } = this.state;
+    if (scrollingUpDown) {
+      // user stopped scrollingUpDown
+      this.setState({ scrollingUpDown: false });
+    }
+
+    if (scrollingLeftRight) {
+      // user stopped scrollingLeftRight
+      this.setState({ scrollingLeftRight: false });
+    }
+
+    if (!scrollingUpDown) { // don't swipe if user is scrolling
+      const side = deltaX > 0 ? 1 : -1;
+      this._handleOnSwipedTo(side, isFlick);
+    }
   };
 
   _handleOnSwipedTo(side, isFlick) {
@@ -550,11 +574,11 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping = (e, deltaX, deltaY, delta) => {
-    const { galleryWidth, isTransitioning } = this.state;
+    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     const { swipingTransitionDuration } = this.props;
-    if (!isTransitioning) {
-      // swiping left vs right
-      const side = deltaX > 0 ? -1 : 1;
+    this._setScrollDirection(deltaX, deltaY);
+    if (!isTransitioning && !scrollingUpDown) {
+      const side = deltaX < 0 ? 1 : -1;
 
       let offsetPercentage = (delta / galleryWidth * 100);
       if (Math.abs(offsetPercentage) >= 100) {
@@ -569,6 +593,9 @@ export default class ImageGallery extends React.Component {
         offsetPercentage: side * offsetPercentage,
         style: swipingTransition,
       });
+    } else {
+      // don't move the slide
+      this.setState({ offsetPercentage: 0 });
     }
   };
 
@@ -895,9 +922,13 @@ export default class ImageGallery extends React.Component {
       isFullscreen,
       modalFullscreen,
       isPlaying,
+      scrollingLeftRight,
     } = this.state;
 
-    const { infinite } = this.props;
+    const {
+      infinite,
+      preventDefaultTouchmoveEvent,
+    } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
@@ -1042,7 +1073,7 @@ export default class ImageGallery extends React.Component {
                     onSwipingDown={this._onSwipingNoOp}
                     onSwiped={this._handleOnSwiped}
                     stopPropagation={this.props.stopPropagation}
-                    preventDefaultTouchmoveEvent={this.props.preventDefaultTouchmoveEvent}
+                    preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
                   >
                     <div className='image-gallery-slides'>
                       {slides}
