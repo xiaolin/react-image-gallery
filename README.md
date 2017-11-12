@@ -17,6 +17,7 @@ Features of `react-image-gallery`
 * Fullscreen support
 * Custom rendered slides
 * Responsive design
+* lightweight ~8kb (gzipped, excluding react)
 
 ## Getting started
 
