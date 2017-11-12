@@ -12,12 +12,12 @@ Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/re
 React image gallery is a React component for building image galleries and carousels
 
 Features of `react-image-gallery`
-* Mobile friendly
-* Thumbnail navigation
-* Fullscreen support
-* Custom rendered slides
-* Responsive design
-* lightweight ~8kb (gzipped, excluding react)
+* Mobile Swipe Gestures
+* Thumbnail Navigation
+* Fullscreen Support
+* Custom Rendered Slides
+* Responsive Design
+* Lightweight ~8kb (gzipped, excluding react)
 
 ## Getting started
 
