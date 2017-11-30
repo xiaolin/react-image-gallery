@@ -3,7 +3,6 @@ import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
-import classNames from 'classnames';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -79,7 +78,7 @@ export default class ImageGallery extends React.Component {
     renderFullscreenButton: PropTypes.func,
     renderItem: PropTypes.func,
     stopPropagation: PropTypes.bool,
-    className: PropTypes.string
+    additionalClass: PropTypes.string
   };
 
   static defaultProps = {
@@ -1116,10 +1115,16 @@ export default class ImageGallery extends React.Component {
       </div>
     );
 
+    const classNames = [
+      'image-gallery',
+      this.props.additionalClass,
+      modalFullscreen && 'fullscreen-modal'
+    ].filter(name => !!name).join(' ');
+
     return (
       <div
         ref={i => this._imageGallery = i}
-        className={classNames('image-gallery', this.props.className, { 'fullscreen-modal': modalFullscreen })}
+        className={classNames}
         aria-live='polite'
       >
 

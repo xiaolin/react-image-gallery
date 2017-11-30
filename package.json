@@ -61,7 +61,6 @@
     "watchify": "^3.8.0"
   },
   "dependencies": {
-    "classnames": "^2.2.5",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
