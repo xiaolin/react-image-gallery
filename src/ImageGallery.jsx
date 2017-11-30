@@ -62,6 +62,7 @@ export default class ImageGallery extends React.Component {
     onPause: PropTypes.func,
     onPlay: PropTypes.func,
     onClick: PropTypes.func,
+    onModalClick: PropTypes.func,
     onImageLoad: PropTypes.func,
     onImageError: PropTypes.func,
     onTouchMove: PropTypes.func,
@@ -1119,6 +1120,7 @@ export default class ImageGallery extends React.Component {
         ref={i => this._imageGallery = i}
         className={
           `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
+        onClick={this.props.onModalClick}
         aria-live='polite'
       >
 
