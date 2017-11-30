@@ -2,7 +2,7 @@
 
 import { Component } from 'react'
 
-export interface ImageGalleryItem {
+interface ImageGalleryItem {
     original: string
     thumbnail?: string
     originalClass?: string
@@ -19,7 +19,7 @@ export interface ImageGalleryItem {
     sizes?: string
 }
 
-export interface ImageGalleryProps {
+interface ImageGalleryProps {
     items: ImageGalleryItem[]
     flickThreshold?: number
     showNav?: boolean
@@ -68,5 +68,5 @@ export interface ImageGalleryProps {
     stopPropagation?: boolean
 }
 
-export class ImageGallery extends Component<ImageGalleryProps> {
+export default class ImageGallery extends Component<ImageGalleryProps> {
 }
