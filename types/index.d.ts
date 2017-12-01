@@ -2,7 +2,7 @@
 
 import { Component } from 'react'
 
-interface ImageGalleryItem {
+export interface ImageGalleryItem {
     original: string
     thumbnail?: string
     originalClass?: string
