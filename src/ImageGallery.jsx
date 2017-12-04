@@ -370,7 +370,7 @@ export default class ImageGallery extends React.Component {
       if (isTransitioning) {
         this.setState({isTransitioning: !isTransitioning});
       }
-    }, this.props.slideDuration);
+    }, this.props.slideDuration + 50);
   };
 
   getCurrentIndex() {
