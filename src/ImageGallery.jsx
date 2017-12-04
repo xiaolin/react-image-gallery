@@ -77,7 +77,8 @@ export default class ImageGallery extends React.Component {
     renderPlayPauseButton: PropTypes.func,
     renderFullscreenButton: PropTypes.func,
     renderItem: PropTypes.func,
-    stopPropagation: PropTypes.bool
+    stopPropagation: PropTypes.bool,
+    additionalClass: PropTypes.string
   };
 
   static defaultProps = {
@@ -1114,11 +1115,16 @@ export default class ImageGallery extends React.Component {
       </div>
     );
 
+    const classNames = [
+      'image-gallery',
+      this.props.additionalClass,
+      modalFullscreen && 'fullscreen-modal'
+    ].filter(name => !!name).join(' ');
+
     return (
       <div
         ref={i => this._imageGallery = i}
-        className={
-          `image-gallery${modalFullscreen ? ' fullscreen-modal' : ''}`}
+        className={classNames}
         aria-live='polite'
       >
 
