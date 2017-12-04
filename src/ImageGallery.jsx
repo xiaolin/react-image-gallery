@@ -1118,8 +1118,8 @@ export default class ImageGallery extends React.Component {
     const classNames = [
       'image-gallery',
       this.props.additionalClass,
-      modalFullscreen && 'fullscreen-modal'
-    ].filter(name => !!name).join(' ');
+      modalFullscreen ? 'fullscreen-modal' : '',
+    ].filter(name => typeof name === 'string').join(' ');
 
     return (
       <div

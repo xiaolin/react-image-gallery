@@ -149,8 +149,8 @@ class MyComponent extends React.Component {
 * `onTouchStart`: Function, `callback(event) on gallery slide`
 * `onMouseOver`: Function, `callback(event) on gallery slide`
 * `onMouseLeave`: Function, `callback(event) on gallery slide`
-* `additionalClass`: String, 
-    * An additional className that will be added to the root node of this component.
+* `additionalClass`: String,
+    * Additional class that will be added to the root node of the component.
 * `renderCustomControls`: Function, custom controls rendering
   * Use this to render custom controls or other elements on the currently displayed image (like the fullscreen button)
   ```javascript
