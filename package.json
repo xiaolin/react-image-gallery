@@ -3,9 +3,11 @@
   "version": "0.8.6",
   "description": "React carousel image gallery component with thumbnail and mobile support",
   "main": "./build/image-gallery",
+  "typings": "./types/index.d.ts",
   "scripts": {
     "start": "gulp dev",
     "build": "gulp build",
+    "dtslint": "dtslint types",
     "lint": "eslint --ext .js,.jsx src"
   },
   "repository": {
@@ -43,6 +45,7 @@
     "babel-preset-stage-0": "^6.16.0",
     "babelify": "^7.3.0",
     "browserify": "^13.1.1",
+    "dtslint": "^0.2.0",
     "eslint": "^2.10.2",
     "eslint-plugin-react": "^5.1.1",
     "gulp": "^3.8.11",
@@ -64,6 +67,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
+    "react": "^15.5.4",
     "react-swipeable": "^4.0.0"
   }
 }
