@@ -78,7 +78,8 @@ export default class ImageGallery extends React.Component {
     renderFullscreenButton: PropTypes.func,
     renderItem: PropTypes.func,
     stopPropagation: PropTypes.bool,
-    additionalClass: PropTypes.string
+    additionalClass: PropTypes.string,
+    useTranslate3D: PropTypes.bool,
   };
 
   static defaultProps = {
@@ -96,6 +97,7 @@ export default class ImageGallery extends React.Component {
     disableThumbnailScroll: false,
     disableArrowKeys: false,
     disableSwipe: false,
+    useTranslate3D: true,
     useBrowserFullscreen: true,
     preventDefaultTouchmoveEvent: false,
     flickThreshold: 0.4,
@@ -816,8 +818,8 @@ export default class ImageGallery extends React.Component {
   }
 
   _getSlideStyle(index) {
-    const {currentIndex, offsetPercentage} = this.state;
-    const {infinite, items} = this.props;
+    const { currentIndex, offsetPercentage } = this.state;
+    const { infinite, items, useTranslate3D } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
@@ -839,7 +841,11 @@ export default class ImageGallery extends React.Component {
       translateX = this._getTranslateXForTwoSlide(index);
     }
 
-    const translate = `translate(${translateX}%, 0)`;
+    let translate = `translate(${translateX}%, 0)`;
+
+    if (useTranslate3D) {
+      translate = `translate3d(${translateX}%, 0, 0)`;
+    }
 
     return {
       WebkitTransform: translate,
@@ -852,11 +858,18 @@ export default class ImageGallery extends React.Component {
 
   _getThumbnailStyle() {
     let translate;
+    const { useTranslate3D } = this.props;
 
     if (this._isThumbnailHorizontal()) {
       translate = `translate(0, ${this.state.thumbsTranslate}px)`;
+      if (useTranslate3D) {
+        translate = `translate3d(0, ${this.state.thumbsTranslate}px, 0)`;
+      }
     } else {
       translate = `translate(${this.state.thumbsTranslate}px, 0)`;
+      if (useTranslate3D) {
+        translate = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
+      }
     }
     return {
       WebkitTransform: translate,

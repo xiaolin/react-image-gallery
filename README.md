@@ -104,6 +104,8 @@ class MyComponent extends React.Component {
 * `showFullscreenButton`: Boolean, default `true`
 * `useBrowserFullscreen`: Boolean, default `true`
   * if false, fullscreen will be done via css within the browser
+* `useTranslate3D`: Boolean, default `true`
+  * if false, will use `translate` instead of `translate3d` css property to transition slides
 * `showPlayButton`: Boolean, default `true`
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
