@@ -985,6 +985,7 @@ export default class ImageGallery extends React.Component {
           onTouchStart={this.props.onTouchStart}
           onMouseOver={this.props.onMouseOver}
           onMouseLeave={this.props.onMouseLeave}
+          role={this.props.onClick && 'button'}
         >
           {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
         </div>
