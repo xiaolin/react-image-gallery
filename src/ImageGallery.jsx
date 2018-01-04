@@ -893,15 +893,38 @@ export default class ImageGallery extends React.Component {
 
     return (
       <div className='image-gallery-image'>
-        <img
-            src={item.original}
-            alt={item.originalAlt}
-            srcSet={item.srcSet}
-            sizes={item.sizes}
-            title={item.originalTitle}
-            onLoad={this.props.onImageLoad}
-            onError={onImageError}
-        />
+        {
+          item.imgSet ? (
+            <picture
+              onLoad={this.props.onImageLoad}
+              onError={onImageError}
+            >
+              {item.imgSet.map((source, index) => (
+                  <source
+                    key={index}
+                    media={source.media}
+                    srcSet={source.srcSet}
+                  />
+                )
+              )}
+              <img
+                alt={item.originalAlt}
+                src={item.original}
+              />
+            </picture>
+          ) : (
+            <img
+                src={item.original}
+                alt={item.originalAlt}
+                srcSet={item.srcSet}
+                sizes={item.sizes}
+                title={item.originalTitle}
+                onLoad={this.props.onImageLoad}
+                onError={onImageError}
+            />
+          )
+        }
+
         {
           item.description &&
             <span className='image-gallery-description'>
