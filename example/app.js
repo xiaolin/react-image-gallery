@@ -37,13 +37,13 @@ class App extends React.Component {
       {
         original: `${PREFIX_URL}image_set_default.jpg`,
         thumbnail: `${PREFIX_URL}image_set_thumb.jpg`,
-        imgSet: [
+        imageSet: [
           {
-            srcSet: `${PREFIX_URL}image_set_default.jpg`,
+            srcSet: `${PREFIX_URL}image_set_cropped.jpg`,
             media : '(max-width: 1280px)',
           },
           {
-            srcSet: `${PREFIX_URL}image_set_cropped.jpg`,
+            srcSet: `${PREFIX_URL}image_set_default.jpg`,
             media : '(min-width: 1280px)',
           }
         ]
