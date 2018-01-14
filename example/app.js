@@ -35,15 +35,15 @@ class App extends React.Component {
         renderItem: this._renderVideo.bind(this)
       },
       {
-        original: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Salar_de_Atacama.jpg',
-        thumbnail: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Salar_de_Atacama.jpg',
+        original: `${PREFIX_URL}image_set_default.jpg`,
+        thumbnail: `${PREFIX_URL}image_set_thumb.jpg`,
         imgSet: [
           {
-            srcSet: 'https://upload.wikimedia.org/wikipedia/commons/a/a2/Kodaikanal_lake_Mirror_view.jpg',
+            srcSet: `${PREFIX_URL}image_set_default.jpg`,
             media : '(max-width: 1280px)',
           },
           {
-            srcSet: 'https://upload.wikimedia.org/wikipedia/commons/0/0e/Salar_de_Atacama.jpg',
+            srcSet: `${PREFIX_URL}image_set_cropped.jpg`,
             media : '(min-width: 1280px)',
           }
         ]

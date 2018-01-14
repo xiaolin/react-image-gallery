@@ -92,6 +92,7 @@ class MyComponent extends React.Component {
     * `thumbnailTitle` - thumbnail image title
     * `thumbnailLabel` - label for thumbnail
     * `description` - description for image
+    * `imageSet` - array of `<source>` using `<picture>` element (see [`app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js) for example)
     * `srcSet` - image srcset (html5 attribute)
     * `sizes` - image sizes (html5 attribute)
     * `bulletClass` - extra class for the bullet of the item
