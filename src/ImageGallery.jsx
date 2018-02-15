@@ -465,6 +465,10 @@ export default class ImageGallery extends React.Component {
     const ESC_KEY = 27;
     const key = parseInt(event.keyCode || event.which || 0);
 
+    if('TEXTAREA, INPUT'.indexOf(event.target.tagName) !== -1) {
+      return;
+    }
+
     switch(key) {
       case LEFT_ARROW:
         if (this._canSlideLeft() && !this._intervalId) {
