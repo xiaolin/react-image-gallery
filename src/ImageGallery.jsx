@@ -465,23 +465,25 @@ export default class ImageGallery extends React.Component {
     const ESC_KEY = 27;
     const key = parseInt(event.keyCode || event.which || 0);
 
-    if('TEXTAREA, INPUT'.indexOf(event.target.tagName) === -1) {
-      switch(key) {
-        case LEFT_ARROW:
-          if (this._canSlideLeft() && !this._intervalId) {
-            this._slideLeft();
-          }
-          break;
-        case RIGHT_ARROW:
-          if (this._canSlideRight() && !this._intervalId) {
-            this._slideRight();
-          }
-          break;
-        case ESC_KEY:
-          if (this.state.isFullscreen && !this.props.useBrowserFullscreen) {
-            this.exitFullScreen();
-          }
-      }
+    if('TEXTAREA, INPUT'.indexOf(event.target.tagName) !== -1) {
+      return;
+    }
+
+    switch(key) {
+      case LEFT_ARROW:
+        if (this._canSlideLeft() && !this._intervalId) {
+          this._slideLeft();
+        }
+        break;
+      case RIGHT_ARROW:
+        if (this._canSlideRight() && !this._intervalId) {
+          this._slideRight();
+        }
+        break;
+      case ESC_KEY:
+        if (this.state.isFullscreen && !this.props.useBrowserFullscreen) {
+          this.exitFullScreen();
+        }
     }
   };
 
