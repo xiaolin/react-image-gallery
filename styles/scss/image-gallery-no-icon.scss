@@ -16,6 +16,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   @include vendor-prefix('user-select', none);
   -webkit-tap-highlight-color: $ig-transparent;
 
+  &.image-gallery-rtl {
+    direction: rtl;
+  }
   &.fullscreen-modal {
     background: $ig-black;
     bottom: 0;

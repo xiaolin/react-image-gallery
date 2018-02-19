@@ -858,17 +858,19 @@ export default class ImageGallery extends React.Component {
 
   _getThumbnailStyle() {
     let translate;
-    const { useTranslate3D } = this.props;
+    const { useTranslate3D, isRTL } = this.props;
+    const { thumbsTranslate } = this.state;
+    const verticalTranslateValue = isRTL ? thumbsTranslate * -1 : thumbsTranslate;
 
     if (this._isThumbnailHorizontal()) {
-      translate = `translate(0, ${this.state.thumbsTranslate}px)`;
+      translate = `translate(0, ${thumbsTranslate}px)`;
       if (useTranslate3D) {
-        translate = `translate3d(0, ${this.state.thumbsTranslate}px, 0)`;
+        translate = `translate3d(0, ${thumbsTranslate}px, 0)`;
       }
     } else {
-      translate = `translate(${this.state.thumbsTranslate}px, 0)`;
+      translate = `translate(${verticalTranslateValue}px, 0)`;
       if (useTranslate3D) {
-        translate = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
+        translate = `translate3d(${verticalTranslateValue}px, 0, 0)`;
       }
     }
     return {
@@ -965,6 +967,7 @@ export default class ImageGallery extends React.Component {
     const {
       infinite,
       preventDefaultTouchmoveEvent,
+      isRTL,
     } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
@@ -1097,8 +1100,8 @@ export default class ImageGallery extends React.Component {
             [
               this.props.showNav &&
                 <span key='navigation'>
-                  {this.props.renderLeftNav(slideLeft, !this._canSlideLeft())}
-                  {this.props.renderRightNav(slideRight, !this._canSlideRight())}
+                  {this.props.renderLeftNav(isRTL ? slideRight : slideLeft, !this._canSlideLeft())}
+                  {this.props.renderRightNav(isRTL ? slideLeft : slideRight, !this._canSlideRight())}
                 </span>,
 
                 this.props.disableSwipe ?
@@ -1162,6 +1165,7 @@ export default class ImageGallery extends React.Component {
     const classNames = [
       'image-gallery',
       this.props.additionalClass,
+      isRTL ? 'image-gallery-rtl' : '',
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 

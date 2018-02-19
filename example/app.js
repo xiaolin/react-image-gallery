@@ -20,6 +20,7 @@ class App extends React.Component {
       showPlayButton: true,
       showGalleryPlayButton: true,
       showNav: true,
+      isRTL: false,
       slideDuration: 450,
       slideInterval: 2000,
       thumbnailPosition: 'bottom',
@@ -205,6 +206,7 @@ class App extends React.Component {
           showThumbnails={this.state.showThumbnails}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
+          isRTL={this.state.isRTL}
           thumbnailPosition={this.state.thumbnailPosition}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
@@ -321,6 +323,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
                   checked={this.state.slideOnThumbnailHover}/>
                   <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
+              </li>
+              <li>
+                <input
+                  id='is_rtl'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'isRTL')}
+                  checked={this.state.isRTL}/>
+                  <label htmlFor='is_rtl'>is right to left</label>
               </li>
             </ul>
           </div>
