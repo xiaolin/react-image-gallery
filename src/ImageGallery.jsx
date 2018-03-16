@@ -80,6 +80,7 @@ export default class ImageGallery extends React.Component {
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
+    isRTL: PropTypes.bool
   };
 
   static defaultProps = {
@@ -98,6 +99,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: false,
     disableSwipe: false,
     useTranslate3D: true,
+    isRTL: false,
     useBrowserFullscreen: true,
     preventDefaultTouchmoveEvent: false,
     flickThreshold: 0.4,
@@ -856,6 +858,17 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  _getThumbnailContainerClassName() {
+    let className;
+    const { isRTL, thumbnailPosition } = this.props;
+
+    if (this._isThumbnailHorizontal() && isRTL) {
+      return thumbnailPosition==='left' ? 'right' : 'left';
+    } else {
+      return thumbnailPosition;
+    }
+  }
+
   _getThumbnailStyle() {
     let translate;
     const { useTranslate3D, isRTL } = this.props;
@@ -1187,7 +1200,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition}`}
+                className={`image-gallery-thumbnails-wrapper ${this._getThumbnailContainerClassName()}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div
