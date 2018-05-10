@@ -1,8 +1,8 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
-import debounce from 'lodash.debounce';
 import PropTypes from 'prop-types';
+import ReactResizeDetector from 'react-resize-detector';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -31,7 +31,6 @@ export default class ImageGallery extends React.Component {
     this.slideToIndex = throttle(this._unthrottledSlideToIndex,
                                  props.slideDuration,
                                 {trailing: false});
-    this._debounceResize = debounce(this._handleResize, 500);
 
     if (props.lazyLoad) {
       this._lazyLoaded = [];
@@ -180,13 +179,6 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition ||
-        prevProps.showThumbnails !== this.props.showThumbnails ||
-        prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
-        prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth) {
-      this._handleResize();
-    }
-
     if (prevState.currentIndex !== this.state.currentIndex) {
       if (this.props.onSlide) {
         this.props.onSlide(this.state.currentIndex);
@@ -203,15 +195,12 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-    this._handleResize();
-
     if (this.props.autoPlay) {
       this.play();
     }
     if (!this.props.disableArrowKeys) {
       window.addEventListener('keydown', this._handleKeyDown);
     }
-    window.addEventListener('resize', this._debounceResize);
     this._onScreenChangeEvent();
   }
 
@@ -220,20 +209,11 @@ export default class ImageGallery extends React.Component {
       window.removeEventListener('keydown', this._handleKeyDown);
     }
 
-    if (this._debounceResize) {
-      window.removeEventListener('resize', this._debounceResize);
-      this._debounceResize.cancel();
-    }
-
     this._offScreenChangeEvent();
 
     if (this._intervalId) {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
-    }
-
-    if (this._resizeTimer) {
-      window.clearTimeout(this._resizeTimer);
     }
   }
 
@@ -416,34 +396,31 @@ export default class ImageGallery extends React.Component {
     }
   };
 
-  _handleResize = () => {
-    // delay initial resize to get the accurate this._imageGallery height/width
-    this._resizeTimer = window.setTimeout(() => {
-      if (this._imageGallery) {
-        this.setState({
-          galleryWidth: this._imageGallery.offsetWidth
-        });
-      }
+  _handleResize = (width, height) => {
+    if (this._imageGallery) {
+      this.setState({
+        galleryWidth: this._imageGallery.offsetWidth
+      });
+    }
 
-      // adjust thumbnail container when thumbnail width or height is adjusted
-      this._setThumbsTranslate(
-        -this._getThumbsTranslate(
-          this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+    if (this._imageGallerySlideWrapper) {
+      this.setState({
+        gallerySlideWrapperHeight: height
+      });
+    }
 
-      if (this._imageGallerySlideWrapper) {
-        this.setState({
-          gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
-        });
+    if (this._thumbnailsWrapper) {
+      if (this._isThumbnailHorizontal()) {
+        this.setState({thumbnailsWrapperHeight: height});
+      } else {
+        this.setState({thumbnailsWrapperWidth: width});
       }
+    }
 
-      if (this._thumbnailsWrapper) {
-        if (this._isThumbnailHorizontal()) {
-          this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
-        } else {
-          this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
-        }
-      }
-    }, 50);
+    // adjust thumbnail container when thumbnail width or height is adjusted
+    this._setThumbsTranslate(
+      -this._getThumbsTranslate(
+        this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
   };
 
   _isThumbnailHorizontal() {
@@ -1047,6 +1024,8 @@ export default class ImageGallery extends React.Component {
         ref={i => this._imageGallerySlideWrapper = i}
         className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
       >
+
+        <ReactResizeDetector handleWidth handleHeight refreshMode="debounce" refreshRate={500} onResize={this._handleResize}  />
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
 
