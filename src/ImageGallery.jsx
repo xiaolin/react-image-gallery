@@ -26,6 +26,13 @@ export default class ImageGallery extends React.Component {
       isPlaying: false
     };
 
+    // Used to update the throttle if slideDuration changes
+    this._unthrottledSlideToIndex = this.slideToIndex;
+    this.slideToIndex = throttle(this._unthrottledSlideToIndex,
+                                 props.slideDuration,
+                                {trailing: false});
+    this._debounceResize = debounce(this._handleResize, 500);
+
     if (props.lazyLoad) {
       this._lazyLoaded = [];
     }
@@ -43,7 +50,6 @@ export default class ImageGallery extends React.Component {
     showThumbnails: PropTypes.bool,
     showPlayButton: PropTypes.bool,
     showFullscreenButton: PropTypes.bool,
-    slideOnThumbnailHover: PropTypes.bool,
     disableThumbnailScroll: PropTypes.bool,
     disableArrowKeys: PropTypes.bool,
     disableSwipe: PropTypes.bool,
@@ -93,7 +99,6 @@ export default class ImageGallery extends React.Component {
     showThumbnails: true,
     showPlayButton: true,
     showFullscreenButton: true,
-    slideOnThumbnailHover: false,
     disableThumbnailScroll: false,
     disableArrowKeys: false,
     disableSwipe: false,
@@ -195,19 +200,6 @@ export default class ImageGallery extends React.Component {
                                    this.props.slideDuration,
                                    {trailing: false});
     }
-  }
-
-  componentWillMount() {
-    // Used to update the throttle if slideDuration changes
-    this._unthrottledSlideToIndex = this.slideToIndex;
-    this.slideToIndex = throttle(this._unthrottledSlideToIndex,
-                                 this.props.slideDuration,
-                                {trailing: false});
-
-    this._handleResize = this._handleResize;
-    this._debounceResize = debounce(this._handleResize, 500);
-    this._handleScreenChange = this._handleScreenChange;
-    this._thumbnailDelay = 300;
   }
 
   componentDidMount() {
@@ -481,30 +473,6 @@ export default class ImageGallery extends React.Component {
           this.exitFullScreen();
         }
     }
-  };
-
-  _handleMouseOverThumbnails(index) {
-    if (this.props.slideOnThumbnailHover) {
-      this.setState({hovering: true});
-      if (this._thumbnailTimer) {
-        window.clearTimeout(this._thumbnailTimer);
-        this._thumbnailTimer = null;
-      }
-      this._thumbnailTimer = window.setTimeout(() => {
-        this.slideToIndex(index);
-      }, this._thumbnailDelay);
-    }
-  }
-
-  _handleMouseLeaveThumbnails = () => {
-    if (this._thumbnailTimer) {
-      window.clearTimeout(this._thumbnailTimer);
-      this._thumbnailTimer = null;
-      if (this.props.autoPlay === true) {
-        this.play(false);
-      }
-    }
-    this.setState({hovering: false});
   };
 
   _handleImageError = (event) => {
@@ -953,6 +921,13 @@ export default class ImageGallery extends React.Component {
     );
   };
 
+  _onThumbnailClick = (event, index) => {
+    this.slideToIndex(index, event);
+    if (this.props.onThumbnailClick) {
+      this.props.onThumbnailClick(event, index);
+    }
+  };
+
   render() {
     const {
       currentIndex,
@@ -1026,8 +1001,6 @@ export default class ImageGallery extends React.Component {
       if (this.props.showThumbnails) {
         thumbnails.push(
           <a
-            onMouseOver={this._handleMouseOverThumbnails.bind(this, index)}
-            onMouseLeave={this._handleMouseLeaveThumbnails}
             key={index}
             role='button'
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -1037,12 +1010,7 @@ export default class ImageGallery extends React.Component {
               (currentIndex === index ? ' active' : '') +
               thumbnailClass
             }
-            onClick={event => {
-              this.slideToIndex.call(this, index, event);
-              if (this.props.onThumbnailClick) {
-                this.props.onThumbnailClick(event, index);
-              }
-            }}
+            onClick={event => this._onThumbnailClick(event, index)}
           >
             {renderThumbInner(item)}
           </a>

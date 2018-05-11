@@ -116,8 +116,6 @@ class MyComponent extends React.Component {
 * `autoPlay`: Boolean, default `false`
 * `disableThumbnailScroll`: Boolean, default `false`
   * disables the thumbnail container from adjusting
-* `slideOnThumbnailHover`: Boolean, default `false`
-  * slides to the currently hovered thumbnail
 * `disableArrowKeys`: Boolean, default `false`
 * `disableSwipe`: Boolean, default `false`
 * `defaultImage`: String, default `undefined`
