@@ -11,7 +11,6 @@ class App extends React.Component {
     super();
     this.state = {
       showIndex: false,
-      slideOnThumbnailHover: false,
       showBullets: true,
       infinite: true,
       showThumbnails: true,
@@ -208,7 +207,6 @@ class App extends React.Component {
           thumbnailPosition={this.state.thumbnailPosition}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
-          slideOnThumbnailHover={this.state.slideOnThumbnailHover}
           additionalClass="app-image-gallery"
         />
 
@@ -313,14 +311,6 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'showIndex')}
                   checked={this.state.showIndex}/>
                   <label htmlFor='show_index'>show index</label>
-              </li>
-              <li>
-                <input
-                  id='slide_on_thumbnail_hover'
-                  type='checkbox'
-                  onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
-                  checked={this.state.slideOnThumbnailHover}/>
-                  <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
               </li>
             </ul>
           </div>
