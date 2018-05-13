@@ -419,7 +419,6 @@ export default class ImageGallery extends React.Component {
     });
   };
 
-
   _handleResize = (width, height) => {
     if (this._imageGallery) {
       this.setState({
