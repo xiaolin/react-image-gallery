@@ -1,8 +1,10 @@
 import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
+import debounce from 'lodash.debounce';
+import forEach from 'lodash.foreach';
+import ResizeObserver from 'resize-observer-polyfill';
 import PropTypes from 'prop-types';
-import ReactResizeDetector from 'react-resize-detector';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -215,6 +217,10 @@ export default class ImageGallery extends React.Component {
       window.clearInterval(this._intervalId);
       this._intervalId = null;
     }
+
+    if(this.resizeObserver && this._imageGallerySlideWrapper) {
+      this.resizeObserver.unobserve(this._imageGallerySlideWrapper);
+    }
   }
 
   play(callback = true) {
@@ -395,6 +401,24 @@ export default class ImageGallery extends React.Component {
       this.play();
     }
   };
+
+  _initGalleryResizing = el => {
+    this._imageGallerySlideWrapper = el;
+
+    const debouncedResizeObserver = debounce(this._createResizeObserver, 300);
+
+    this.resizeObserver = new ResizeObserver(debouncedResizeObserver);
+
+    this.resizeObserver.observe(el);
+  };
+
+  _createResizeObserver = (entries) => {
+    forEach(entries, entry => {
+      const {width, height} = entry.contentRect;
+      this._handleResize(width, height);
+    });
+  };
+
 
   _handleResize = (width, height) => {
     if (this._imageGallery) {
@@ -1021,11 +1045,9 @@ export default class ImageGallery extends React.Component {
 
     const slideWrapper = (
       <div
-        ref={i => this._imageGallerySlideWrapper = i}
+        ref={this._initGalleryResizing}
         className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
       >
-
-        <ReactResizeDetector handleWidth handleHeight refreshMode="debounce" refreshRate={500} onResize={this._handleResize}  />
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
 
