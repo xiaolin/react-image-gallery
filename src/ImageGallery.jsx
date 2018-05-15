@@ -235,6 +235,10 @@ export default class ImageGallery extends React.Component {
     if (this._resizeTimer) {
       window.clearTimeout(this._resizeTimer);
     }
+
+    if (this._transitionTimer) {
+      window.clearTimeout(this._transitionTimer);
+    }
   }
 
   play(callback = true) {
@@ -361,7 +365,7 @@ export default class ImageGallery extends React.Component {
 
   _onSliding = () => {
     const { isTransitioning } = this.state;
-    window.setTimeout(() => {
+    this._transitionTimer = window.setTimeout(() => {
       if (isTransitioning) {
         this.setState({isTransitioning: !isTransitioning});
       }
