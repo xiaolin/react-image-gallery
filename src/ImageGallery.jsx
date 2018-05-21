@@ -976,7 +976,7 @@ export default class ImageGallery extends React.Component {
 
       let slideStyle = this._getSlideStyle(index);
 
-      const slide = (
+      const slide = showItem && (
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
@@ -989,7 +989,7 @@ export default class ImageGallery extends React.Component {
           onMouseLeave={this.props.onMouseLeave}
           role={this.props.onClick && 'button'}
         >
-          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
+          {renderItem(item)}
         </div>
       );
 
