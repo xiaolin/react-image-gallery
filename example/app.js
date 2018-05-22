@@ -10,6 +10,7 @@ class App extends React.Component {
   constructor() {
     super();
     this.state = {
+      disableSwipe: false,
       showIndex: false,
       showBullets: true,
       infinite: true,
@@ -188,6 +189,7 @@ class App extends React.Component {
 
       <section className='app'>
         <ImageGallery
+          disableSwipe={this.state.disableSwipe}
           ref={i => this._imageGallery = i}
           items={this.images}
           lazyLoad={false}
@@ -311,6 +313,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'showIndex')}
                   checked={this.state.showIndex}/>
                   <label htmlFor='show_index'>show index</label>
+              </li>
+              <li>
+                <input
+                  id='disableSwipe'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'disableSwipe')}
+                  checked={this.state.disableSwipe}/>
+                  <label htmlFor='disableSwipe'>disable swipe (supported only on mobile device mode)</label>
               </li>
             </ul>
           </div>
