@@ -1076,29 +1076,25 @@ export default class ImageGallery extends React.Component {
                   {this.props.renderRightNav(slideRight, !this._canSlideRight())}
                 </span>,
 
-                this.props.disableSwipe ?
-                  <div className='image-gallery-slides' key='slides'>
+                <Swipeable
+                  className='image-gallery-swipe'
+                  disabled={this.props.disableSwipe}
+                  key='swipeable'
+                  delta={0}
+                  flickThreshold={this.props.flickThreshold}
+                  onSwiping={this._handleSwiping}
+                  onSwipingLeft={this._onSwipingNoOp}
+                  onSwipingRight={this._onSwipingNoOp}
+                  onSwipingUp={this._onSwipingNoOp}
+                  onSwipingDown={this._onSwipingNoOp}
+                  onSwiped={this._handleOnSwiped}
+                  stopPropagation={this.props.stopPropagation}
+                  preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
+                >
+                  <div className='image-gallery-slides'>
                     {slides}
                   </div>
-                :
-                  <Swipeable
-                    className='image-gallery-swipe'
-                    key='swipeable'
-                    delta={0}
-                    flickThreshold={this.props.flickThreshold}
-                    onSwiping={this._handleSwiping}
-                    onSwipingLeft={this._onSwipingNoOp}
-                    onSwipingRight={this._onSwipingNoOp}
-                    onSwipingUp={this._onSwipingNoOp}
-                    onSwipingDown={this._onSwipingNoOp}
-                    onSwiped={this._handleOnSwiped}
-                    stopPropagation={this.props.stopPropagation}
-                    preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
-                  >
-                    <div className='image-gallery-slides'>
-                      {slides}
-                    </div>
-                </Swipeable>
+              </Swipeable>
             ]
           :
             <div className='image-gallery-slides'>
