@@ -180,10 +180,13 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition ||
-        prevProps.showThumbnails !== this.props.showThumbnails ||
-        prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
-        prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth) {
+    const thumbnailPosChanged = prevProps.thumbnailPosition !== this.props.thumbnailPosition;
+    const showThumbChanged = prevProps.showThumbnails !== this.props.showThumbnails;
+    const thumbWrapperChanged = prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
+      prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth;
+    const itemsChanged = prevProps.items.length !== this.props.items.length;
+
+    if (thumbnailPosChanged || showThumbChanged || thumbWrapperChanged || itemsChanged) {
       this._handleResize();
     }
 
