@@ -64,6 +64,6 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
-    "react-swipeable": "^4.0.0"
+    "react-swipeable": "^4.2.2"
   }
 }
