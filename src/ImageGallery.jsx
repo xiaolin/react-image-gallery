@@ -180,10 +180,13 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevProps.thumbnailPosition !== this.props.thumbnailPosition ||
-        prevProps.showThumbnails !== this.props.showThumbnails ||
-        prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
-        prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth) {
+    const thumbnailPosChanged = prevProps.thumbnailPosition !== this.props.thumbnailPosition;
+    const showThumbChanged = prevProps.showThumbnails !== this.props.showThumbnails;
+    const thumbWrapperChanged = prevState.thumbnailsWrapperHeight !== this.state.thumbnailsWrapperHeight ||
+      prevState.thumbnailsWrapperWidth !== this.state.thumbnailsWrapperWidth;
+    const itemsChanged = prevProps.items.length !== this.props.items.length;
+
+    if (thumbnailPosChanged || showThumbChanged || thumbWrapperChanged || itemsChanged) {
       this._handleResize();
     }
 
@@ -1067,25 +1070,21 @@ export default class ImageGallery extends React.Component {
                   {this.props.renderRightNav(slideRight, !this._canSlideRight())}
                 </span>,
 
-                this.props.disableSwipe ?
-                  <div className='image-gallery-slides' key='slides'>
+                <Swipeable
+                  className='image-gallery-swipe'
+                  disabled={this.props.disableSwipe}
+                  key='swipeable'
+                  delta={0}
+                  flickThreshold={this.props.flickThreshold}
+                  onSwiping={this._handleSwiping}
+                  onSwiped={this._handleOnSwiped}
+                  stopPropagation={this.props.stopPropagation}
+                  preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
+                >
+                  <div className='image-gallery-slides'>
                     {slides}
                   </div>
-                :
-                  <Swipeable
-                    className='image-gallery-swipe'
-                    key='swipeable'
-                    delta={0}
-                    flickThreshold={this.props.flickThreshold}
-                    onSwiping={this._handleSwiping}
-                    onSwiped={this._handleOnSwiped}
-                    stopPropagation={this.props.stopPropagation}
-                    preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
-                  >
-                    <div className='image-gallery-slides'>
-                      {slides}
-                    </div>
-                </Swipeable>
+              </Swipeable>
             ]
           :
             <div className='image-gallery-slides'>
