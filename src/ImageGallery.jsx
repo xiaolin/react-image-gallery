@@ -545,12 +545,6 @@ export default class ImageGallery extends React.Component {
     return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
   }
 
-  _onSwipingNoOp() {
-    /*
-    Do nothing, only defined so preventDefaultTouchmoveEvent works
-    */
-  }
-
   _handleSwiping = (e, deltaX, deltaY, delta) => {
     const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     const { swipingTransitionDuration } = this.props;
@@ -1080,10 +1074,6 @@ export default class ImageGallery extends React.Component {
                   delta={0}
                   flickThreshold={this.props.flickThreshold}
                   onSwiping={this._handleSwiping}
-                  onSwipingLeft={this._onSwipingNoOp}
-                  onSwipingRight={this._onSwipingNoOp}
-                  onSwipingUp={this._onSwipingNoOp}
-                  onSwipingDown={this._onSwipingNoOp}
                   onSwiped={this._handleOnSwiped}
                   stopPropagation={this.props.stopPropagation}
                   preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
