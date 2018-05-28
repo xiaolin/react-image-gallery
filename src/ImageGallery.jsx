@@ -2,7 +2,6 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
-import forEach from 'lodash.foreach';
 import ResizeObserver from 'resize-observer-polyfill';
 import PropTypes from 'prop-types';
 
@@ -186,7 +185,7 @@ export default class ImageGallery extends React.Component {
         this.props.onSlide(this.state.currentIndex);
       }
 
-      this._updateThumbnailTranslate(prevState);
+      this._updateThumbnailTranslate(prevState.currentIndex);
     }
 
     if (prevProps.slideDuration !== this.props.slideDuration) {
@@ -406,24 +405,27 @@ export default class ImageGallery extends React.Component {
     }
   };
 
-  _initGalleryResizing = el => {
-    this._imageGallerySlideWrapper = el;
+  _initGalleryResizing = debounce((element) => {
+    /*
+      When image-gallery-slide-wrapper unmounts and mounts again ref is called twice,
+      once with null and another with the element.
+      Use debounce to prevent the null call.
+      https://reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
+    */
+    this._imageGallerySlideWrapper = element;
+    this.resizeObserver = new ResizeObserver(this._createResizeObserver);
+    this.resizeObserver.observe(element);
+  }, 100);
 
-    const debouncedResizeObserver = debounce(this._createResizeObserver, 300);
-
-    this.resizeObserver = new ResizeObserver(debouncedResizeObserver);
-
-    this.resizeObserver.observe(el);
-  };
-
-  _createResizeObserver = (entries) => {
-    forEach(entries, entry => {
+  _createResizeObserver = debounce((entries) => {
+    entries.forEach(entry => {
       const {width, height} = entry.contentRect;
       this._handleResize(width, height);
     });
-  };
+  }, 300);
 
   _handleResize = (width, height) => {
+    const { currentIndex } = this.state;
     if (this._imageGallery) {
       this.setState({
         galleryWidth: this._imageGallery.offsetWidth
@@ -444,10 +446,8 @@ export default class ImageGallery extends React.Component {
       }
     }
 
-    // adjust thumbnail container when thumbnail width or height is adjusted
-    this._setThumbsTranslate(
-      -this._getThumbsTranslate(
-        this.state.currentIndex > 0 ? 1 : 0) * this.state.currentIndex);
+    // Adjust thumbnail container when thumbnail width or height is adjusted
+    this._setThumbsTranslate(-this._getThumbsTranslate(currentIndex));
   };
 
   _isThumbnailHorizontal() {
@@ -587,20 +587,18 @@ export default class ImageGallery extends React.Component {
       this.state.currentIndex < this.props.items.length - 1;
   }
 
-  _updateThumbnailTranslate(prevState) {
+  _updateThumbnailTranslate(previousIndex) {
+    const { thumbsTranslate, currentIndex } = this.state;
     if (this.state.currentIndex === 0) {
       this._setThumbsTranslate(0);
     } else {
-      let indexDifference = Math.abs(
-        prevState.currentIndex - this.state.currentIndex);
+      let indexDifference = Math.abs(previousIndex - currentIndex);
       let scroll = this._getThumbsTranslate(indexDifference);
       if (scroll > 0) {
-        if (prevState.currentIndex < this.state.currentIndex) {
-          this._setThumbsTranslate(
-            this.state.thumbsTranslate - scroll);
-        } else if (prevState.currentIndex > this.state.currentIndex) {
-          this._setThumbsTranslate(
-            this.state.thumbsTranslate + scroll);
+        if (previousIndex < currentIndex) {
+          this._setThumbsTranslate(thumbsTranslate - scroll);
+        } else if (previousIndex > currentIndex) {
+          this._setThumbsTranslate(thumbsTranslate + scroll);
         }
       }
     }
@@ -619,7 +617,6 @@ export default class ImageGallery extends React.Component {
     let totalScroll;
 
     if (this._thumbnails) {
-
       // total scroll required to see the last thumbnail
       if (this._isThumbnailHorizontal()) {
         if (this._thumbnails.scrollHeight <= thumbnailsWrapperHeight) {
