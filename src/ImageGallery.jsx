@@ -180,6 +180,10 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidUpdate(prevProps, prevState) {
+    const itemsChanged = prevProps.items.length !== this.props.items.length;
+    if (itemsChanged) {
+      this._handleResize();
+    }
     if (prevState.currentIndex !== this.state.currentIndex) {
       if (this.props.onSlide) {
         this.props.onSlide(this.state.currentIndex);
@@ -418,13 +422,12 @@ export default class ImageGallery extends React.Component {
   }, 100);
 
   _createResizeObserver = debounce((entries) => {
-    entries.forEach(entry => {
-      const {width, height} = entry.contentRect;
-      this._handleResize(width, height);
+    entries.forEach(() => {
+      this._handleResize();
     });
   }, 300);
 
-  _handleResize = (width, height) => {
+  _handleResize = () => {
     const { currentIndex } = this.state;
     if (this._imageGallery) {
       this.setState({
@@ -434,15 +437,15 @@ export default class ImageGallery extends React.Component {
 
     if (this._imageGallerySlideWrapper) {
       this.setState({
-        gallerySlideWrapperHeight: height
+        gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
       });
     }
 
     if (this._thumbnailsWrapper) {
       if (this._isThumbnailHorizontal()) {
-        this.setState({thumbnailsWrapperHeight: height});
+        this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
       } else {
-        this.setState({thumbnailsWrapperWidth: width});
+        this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
       }
     }
 
