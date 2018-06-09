@@ -868,6 +868,17 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  _getThumbnailContainerClassName() {
+    let className;
+    const { thumbnailPosition } = this.props;
+
+    if (this._isThumbnailHorizontal()) {
+      return thumbnailPosition==='left' ? 'right' : 'left';
+    } else {
+      return thumbnailPosition;
+    }
+  }
+
   _getThumbnailStyle() {
     let translate;
     const { useTranslate3D, isRTL } = this.props;
@@ -1100,7 +1111,7 @@ export default class ImageGallery extends React.Component {
     const slideWrapper = (
       <div
         ref={i => this._imageGallerySlideWrapper = i}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
       >
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
@@ -1185,6 +1196,7 @@ export default class ImageGallery extends React.Component {
     const classNames = [
       'image-gallery',
       this.props.additionalClass,
+      isRTL ? 'image-gallery-rtl' : '',
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 
@@ -1206,7 +1218,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div

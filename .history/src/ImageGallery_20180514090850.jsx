@@ -1206,7 +1206,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() ? 'thumbnails-wrapper-rtl' : ''}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div

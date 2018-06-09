@@ -868,6 +868,17 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  _getThumbnailContainerClassName() {
+    let className;
+    const { thumbnailPosition } = this.props;
+
+    if (this._isThumbnailHorizontal()) {
+      return thumbnailPosition==='left' ? 'right' : 'left';
+    } else {
+      return thumbnailPosition;
+    }
+  }
+
   _getThumbnailStyle() {
     let translate;
     const { useTranslate3D, isRTL } = this.props;
@@ -1206,7 +1217,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div

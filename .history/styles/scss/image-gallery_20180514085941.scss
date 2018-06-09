@@ -282,9 +282,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-thumbnails-wrapper {
   position: relative;
 
-  &.thumbnails-wrapper-rtl {
-    direction: rtl;
-  }
   &.left,
   &.right {
     display: inline-block;

@@ -119,11 +119,10 @@ export default class ImageGallery extends React.Component {
           disabled={disabled}
           onClick={onClick}
           aria-label='Previous Slide'
-        />
+        >left</button>
       );
     },
     renderRightNav: (onClick, disabled) => {
-      console.log({disabled})
       return (
         <button
           type='button'
@@ -131,7 +130,7 @@ export default class ImageGallery extends React.Component {
           disabled={disabled}
           onClick={onClick}
           aria-label='Next Slide'
-        />
+        >right</button>
       );
     },
     renderPlayPauseButton: (onClick, isPlaying) => {
@@ -463,8 +462,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleKeyDown = (event) => {
-    const LEFT_ARROW = 37;
-    const RIGHT_ARROW = 39;
+    const { isRTL } = this.props;
+    const LEFT_ARROW = isRTL ? 39 : 37;
+    const RIGHT_ARROW = isRTL ? 37 : 39;
     const ESC_KEY = 27;
     const key = parseInt(event.keyCode || event.which || 0);
 
@@ -610,21 +610,14 @@ export default class ImageGallery extends React.Component {
   }
 
   _canSlideLeft() {
-    return this.props.infinite ||
-      (this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious());
+    console.log('_canSlideLeft', this.props.infinite || this.state.currentIndex > 0)
+    return this.props.infinite || this.props.isRTL ? (this.state.currentIndex < this.props.items.length - 1) : this.state.currentIndex > 0;
   }
 
   _canSlideRight() {
+    console.log('_canSlideRight', this.props.infinite || this.state.currentIndex < this.props.items.length - 1)
     return this.props.infinite ||
-      (this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext());
-  }
-
-  _canSlidePrevious() {
-    return this.state.currentIndex > 0;
-  }
-
-  _canSlideNext() {
-    return this.state.currentIndex < this.props.items.length - 1;
+      this.state.currentIndex < this.props.items.length - 1;
   }
 
   _updateThumbnailTranslate(prevState) {
@@ -868,6 +861,17 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  _getThumbnailContainerClassName() {
+    let className;
+    const { isRTL, thumbnailPosition } = this.props;
+
+    if (this._isThumbnailHorizontal() && isRTL) {
+      return thumbnailPosition==='left' ? 'right' : 'left';
+    } else {
+      return thumbnailPosition;
+    }
+  }
+
   _getThumbnailStyle() {
     let translate;
     const { useTranslate3D, isRTL } = this.props;
@@ -895,18 +899,10 @@ export default class ImageGallery extends React.Component {
   }
 
   _slideLeft = (event) => {
-    this.props.isRTL ? this._slideNext() : this.ـslidePrevious();
-  };
-
-  _slideRight = (event) => {
-    this.props.isRTL ? this.ـslidePrevious() : this._slideNext();
-  };
-
-  ـslidePrevious = (event) => {
     this.slideToIndex(this.state.currentIndex - 1, event);
   };
 
-  _slideNext = (event) => {
+  _slideRight = (event) => {
     this.slideToIndex(this.state.currentIndex + 1, event);
   };
 
@@ -993,8 +989,8 @@ export default class ImageGallery extends React.Component {
     const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
 
-    const slideLeft = this._slideLeft;
-    const slideRight = this._slideRight;
+    const slideLeft = isRTL ? this._slideRight : this._slideLeft;
+    const slideRight = isRTL ? this._slideLeft : this._slideRight;
 
     let slides = [];
     let thumbnails = [];
@@ -1097,10 +1093,12 @@ export default class ImageGallery extends React.Component {
       }
     });
 
+    const previousNav = 
+
     const slideWrapper = (
       <div
         ref={i => this._imageGallerySlideWrapper = i}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
       >
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
@@ -1185,6 +1183,7 @@ export default class ImageGallery extends React.Component {
     const classNames = [
       'image-gallery',
       this.props.additionalClass,
+      isRTL ? 'image-gallery-rtl' : '',
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 
@@ -1206,7 +1205,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${this._getThumbnailContainerClassName()}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div
