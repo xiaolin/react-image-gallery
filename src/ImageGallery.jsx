@@ -123,7 +123,6 @@ export default class ImageGallery extends React.Component {
       );
     },
     renderRightNav: (onClick, disabled) => {
-      console.log({disabled})
       return (
         <button
           type='button'
