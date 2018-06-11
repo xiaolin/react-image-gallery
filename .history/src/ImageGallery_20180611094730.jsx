@@ -1064,8 +1064,13 @@ export default class ImageGallery extends React.Component {
 
     const slideWrapper = (
       <div
-        ref={this._initGalleryResizing}
+<<<<<<< HEAD
+        ref={i => this._imageGallerySlideWrapper = i}
         className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
+=======
+        ref={this._initGalleryResizing}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
+>>>>>>> f6312b41d0ef78ac2ba924cadaa3b97a96ec98ad
       >
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}

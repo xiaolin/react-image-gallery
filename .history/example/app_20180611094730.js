@@ -314,6 +314,7 @@ class App extends React.Component {
                   checked={this.state.showIndex}/>
                   <label htmlFor='show_index'>show index</label>
               </li>
+<<<<<<< HEAD
               <li>
                 <input
                   id='slide_on_thumbnail_hover'
@@ -330,6 +331,8 @@ class App extends React.Component {
                   checked={this.state.isRTL}/>
                   <label htmlFor='is_rtl'>is right to left</label>
               </li>
+=======
+>>>>>>> f6312b41d0ef78ac2ba924cadaa3b97a96ec98ad
             </ul>
           </div>
 
