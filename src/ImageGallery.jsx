@@ -409,17 +409,18 @@ export default class ImageGallery extends React.Component {
     }
   };
 
-  _initGalleryResizing = debounce((element) => {
+  _initGalleryResizing = (element) => {
     /*
-      When image-gallery-slide-wrapper unmounts and mounts again ref is called twice,
-      once with null and another with the element.
-      Use debounce to prevent the null call.
-      https://reactjs.org/docs/refs-and-the-dom.html#caveats-with-callback-refs
+      When image-gallery-slide-wrapper unmounts and mounts when thumbnail bar position is changed
+      ref is called twice, once with null and another with the element.
+      Make sure element is available before calling observe.
     */
-    this._imageGallerySlideWrapper = element;
-    this.resizeObserver = new ResizeObserver(this._createResizeObserver);
-    this.resizeObserver.observe(element);
-  }, 100);
+    if (element) {
+      this._imageGallerySlideWrapper = element;
+      this.resizeObserver = new ResizeObserver(this._createResizeObserver);
+      this.resizeObserver.observe(element);
+    }
+  };
 
   _createResizeObserver = debounce((entries) => {
     entries.forEach(() => {
