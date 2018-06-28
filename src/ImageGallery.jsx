@@ -906,18 +906,18 @@ export default class ImageGallery extends React.Component {
     let onThumbnailError = this.props.onThumbnailError || this._handleImageError;
 
     return (
-      <div>
+      <div className='image-gallery-thumbnail-label-wrapper'>
         <img
           src={item.thumbnail}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
           onError={onThumbnailError}
         />
-        {item.thumbnailLabel && (
+        {item.thumbnailLabel &&
           <div className='image-gallery-thumbnail-label'>
             {item.thumbnailLabel}
           </div>
-        )}
+        }
       </div>
     );
   };
