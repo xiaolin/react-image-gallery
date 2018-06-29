@@ -287,6 +287,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     margin-left: 2px;
   }
 
+  .image-gallery-thumbnail-inner {
+    position: relative;
+  }
+
   img {
     vertical-align: middle;
     width: 100%;
@@ -302,11 +306,22 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-thumbnail-label {
-  color: lighten($ig-black, 10%);
+  box-sizing: border-box;
+  color: white;
   font-size: 1em;
+  left: 0;
+  line-height: 1em;
+  padding: 5%;
+  position: absolute;
+  top: 50%;
+  text-shadow: 1px 1px 0 black;
+  transform: translateY(-50%);
+  white-space: normal;
+  width: 100%;
 
   @media(max-width: $ig-screen-sm-min) {
     font-size: .8em;
+    line-height: .8em;
   }
 }
 
