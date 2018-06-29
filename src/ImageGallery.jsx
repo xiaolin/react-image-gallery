@@ -971,13 +971,11 @@ export default class ImageGallery extends React.Component {
         this._lazyLoaded[index] = true;
       }
 
-      let slideStyle = this._getSlideStyle(index);
-
-      const slide = (
+      const slide = showItem && (
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          style={Object.assign(slideStyle, this.state.style)}
+          style={Object.assign(this._getSlideStyle(index), this.state.style)}
           onClick={this.props.onClick}
           onTouchMove={this.props.onTouchMove}
           onTouchEnd={this.props.onTouchEnd}
@@ -986,7 +984,7 @@ export default class ImageGallery extends React.Component {
           onMouseLeave={this.props.onMouseLeave}
           role={this.props.onClick && 'button'}
         >
-          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
+          {renderItem(item)}
         </div>
       );
 
