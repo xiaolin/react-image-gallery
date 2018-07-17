@@ -872,6 +872,7 @@ export default class ImageGallery extends React.Component {
                     key={index}
                     media={source.media}
                     srcSet={source.srcSet}
+                    type={source.type}
                   />
                 ))
               }
