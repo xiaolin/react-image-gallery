@@ -2,6 +2,7 @@ import React from 'react';
 import Swipeable from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
+import Lightbox from 'react-image-lightbox';
 import ResizeObserver from 'resize-observer-polyfill';
 import PropTypes from 'prop-types';
 
@@ -939,6 +940,7 @@ export default class ImageGallery extends React.Component {
     } = this.state;
 
     const {
+      items,
       infinite,
       preventDefaultTouchmoveEvent,
     } = this.props;
@@ -953,7 +955,7 @@ export default class ImageGallery extends React.Component {
     let thumbnails = [];
     let bullets = [];
 
-    this.props.items.forEach((item, index) => {
+    items.forEach((item, index) => {
       const alignment = this._getAlignmentClassName(index);
       const originalClass = item.originalClass ?
         ` ${item.originalClass}` : '';
@@ -1122,8 +1124,7 @@ export default class ImageGallery extends React.Component {
 
     const classNames = [
       'image-gallery',
-      this.props.additionalClass,
-      modalFullscreen ? 'fullscreen-modal' : '',
+      this.props.additionalClass
     ].filter(name => typeof name === 'string').join(' ');
 
     return (
@@ -1132,6 +1133,17 @@ export default class ImageGallery extends React.Component {
         className={classNames}
         aria-live='polite'
       >
+
+        {modalFullscreen && (
+          <Lightbox
+            mainSrc={items[currentIndex].original}
+            nextSrc={items[(currentIndex + 1) % items.length].original}
+            prevSrc={items[(currentIndex + items.length - 1) % items.length].original}
+            onCloseRequest={() => this.setModalFullscreen(false)} // eslint-disable-line
+            onMovePrevRequest={slideLeft}
+            onMoveNextRequest={slideRight}
+          />
+        )}
 
         <div
           className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}
