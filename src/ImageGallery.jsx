@@ -200,6 +200,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
+    this._isMounted = true;
     if (this.props.autoPlay) {
       this.play();
     }
@@ -210,6 +211,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
+    this._isMounted = false;
     if (!this.props.disableArrowKeys) {
       window.removeEventListener('keydown', this._handleKeyDown);
     }
@@ -429,24 +431,27 @@ export default class ImageGallery extends React.Component {
   }, 300);
 
   _handleResize = () => {
+    if (!this._isMounted) {
+      return;
+    }
     const { currentIndex } = this.state;
     if (this._imageGallery) {
-      this.setState({
+      this.setState(() => ({
         galleryWidth: this._imageGallery.offsetWidth
-      });
+      }));
     }
 
     if (this._imageGallerySlideWrapper) {
-      this.setState({
+      this.setState(() => ({
         gallerySlideWrapperHeight: this._imageGallerySlideWrapper.offsetHeight
-      });
+      }));
     }
 
     if (this._thumbnailsWrapper) {
       if (this._isThumbnailHorizontal()) {
-        this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
+        this.setState(() => ({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight}));
       } else {
-        this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
+        this.setState(() => ({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth}));
       }
     }
 
