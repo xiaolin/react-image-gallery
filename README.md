@@ -112,6 +112,8 @@ class MyComponent extends React.Component {
 * `useTranslate3D`: Boolean, default `true`
   * if false, will use `translate` instead of `translate3d` css property to transition slides
 * `showPlayButton`: Boolean, default `true`
+* `isRTL`: Boolean, default `false`
+  * if true, gallery's direction will be from right-to-left (to support right-to-left languages)
 * `showBullets`: Boolean, default `false`
 * `showIndex`: Boolean, default `false`
 * `autoPlay`: Boolean, default `false`
