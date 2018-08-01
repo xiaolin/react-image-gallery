@@ -86,6 +86,7 @@ export default class ImageGallery extends React.Component {
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
+    isRTL: PropTypes.bool
   };
 
   static defaultProps = {
@@ -103,6 +104,7 @@ export default class ImageGallery extends React.Component {
     disableArrowKeys: false,
     disableSwipe: false,
     useTranslate3D: true,
+    isRTL: false,
     useBrowserFullscreen: true,
     preventDefaultTouchmoveEvent: false,
     flickThreshold: 0.4,
@@ -577,12 +579,21 @@ export default class ImageGallery extends React.Component {
   }
 
   _canSlideLeft() {
-    return this.props.infinite || this.state.currentIndex > 0;
+    return this.props.infinite ||
+      (this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious());
   }
 
   _canSlideRight() {
     return this.props.infinite ||
-      this.state.currentIndex < this.props.items.length - 1;
+      (this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext());
+  }
+
+  _canSlidePrevious() {
+    return this.state.currentIndex > 0;
+  }
+
+  _canSlideNext() {
+    return this.state.currentIndex < this.props.items.length - 1;
   }
 
   _updateThumbnailTranslate(previousIndex) {
@@ -825,17 +836,19 @@ export default class ImageGallery extends React.Component {
 
   _getThumbnailStyle() {
     let translate;
-    const { useTranslate3D } = this.props;
+    const { useTranslate3D, isRTL } = this.props;
+    const { thumbsTranslate } = this.state;
+    const verticalTranslateValue = isRTL ? thumbsTranslate * -1 : thumbsTranslate;
 
     if (this._isThumbnailHorizontal()) {
-      translate = `translate(0, ${this.state.thumbsTranslate}px)`;
+      translate = `translate(0, ${thumbsTranslate}px)`;
       if (useTranslate3D) {
-        translate = `translate3d(0, ${this.state.thumbsTranslate}px, 0)`;
+        translate = `translate3d(0, ${thumbsTranslate}px, 0)`;
       }
     } else {
-      translate = `translate(${this.state.thumbsTranslate}px, 0)`;
+      translate = `translate(${verticalTranslateValue}px, 0)`;
       if (useTranslate3D) {
-        translate = `translate3d(${this.state.thumbsTranslate}px, 0, 0)`;
+        translate = `translate3d(${verticalTranslateValue}px, 0, 0)`;
       }
     }
     return {
@@ -848,10 +861,18 @@ export default class ImageGallery extends React.Component {
   }
 
   _slideLeft = (event) => {
-    this.slideToIndex(this.state.currentIndex - 1, event);
+    this.props.isRTL ? this._slideNext() : this.ـslidePrevious();
   };
 
   _slideRight = (event) => {
+    this.props.isRTL ? this.ـslidePrevious() : this._slideNext();
+  };
+
+  ـslidePrevious = (event) => {
+    this.slideToIndex(this.state.currentIndex - 1, event);
+  };
+
+  _slideNext = (event) => {
     this.slideToIndex(this.state.currentIndex + 1, event);
   };
 
@@ -942,6 +963,7 @@ export default class ImageGallery extends React.Component {
     const {
       infinite,
       preventDefaultTouchmoveEvent,
+      isRTL,
     } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
@@ -1047,7 +1069,7 @@ export default class ImageGallery extends React.Component {
     const slideWrapper = (
       <div
         ref={this._initGalleryResizing}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition}`}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
       >
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
@@ -1145,7 +1167,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div

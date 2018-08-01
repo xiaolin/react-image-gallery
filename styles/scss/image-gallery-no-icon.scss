@@ -61,6 +61,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       width: calc(100% - 84px); // 75px + 6px for border + 3px for padding
     }
   }
+  &.image-gallery-rtl {
+    direction: rtl;
+  }
 }
 
 .image-gallery-fullscreen-button,
@@ -208,6 +211,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-thumbnails-wrapper {
   position: relative;
 
+  &.thumbnails-wrapper-rtl {
+    direction: rtl;
+  }
   &.left,
   &.right {
     display: inline-block;
