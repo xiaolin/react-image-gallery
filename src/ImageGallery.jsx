@@ -549,9 +549,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping = (e, deltaX, deltaY, delta) => {
-    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     const { swipingTransitionDuration } = this.props;
     this._setScrollDirection(deltaX, deltaY);
+    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     if (!isTransitioning && !scrollingUpDown) {
       const side = deltaX < 0 ? 1 : -1;
 
