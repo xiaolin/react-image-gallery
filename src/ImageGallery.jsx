@@ -503,6 +503,7 @@ export default class ImageGallery extends React.Component {
 
   _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
     const { scrollingUpDown, scrollingLeftRight } = this.state;
+    const { isRTL } = this.props;
     if (scrollingUpDown) {
       // user stopped scrollingUpDown
       this.setState({ scrollingUpDown: false });
@@ -514,7 +515,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (!scrollingUpDown) { // don't swipe if user is scrolling
-      const side = deltaX > 0 ? 1 : -1;
+      const side = (deltaX > 0 ? 1 : -1) * (isRTL ? -1 : 1);//if it is RTL the direction is reversed
       this._handleOnSwipedTo(side, isFlick);
     }
   };
@@ -793,20 +794,23 @@ export default class ImageGallery extends React.Component {
 
   _getSlideStyle(index) {
     const { currentIndex, offsetPercentage } = this.state;
-    const { infinite, items, useTranslate3D } = this.props;
+    const { infinite, items, useTranslate3D, isRTL } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
     // calculates where the other slides belong based on currentIndex
-    let translateX = baseTranslateX + (index * 100) + offsetPercentage;
+    // if it is RTL the base line should be reversed
+    let translateX = (baseTranslateX + (index * 100)) * (isRTL ? -1 : 1) + offsetPercentage;
 
     if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
-        translateX = -100 + offsetPercentage;
+        // if it is RTL the base line should be reversed
+        translateX = -100 * (isRTL ? -1 : 1) + offsetPercentage;
       } else if (currentIndex === totalSlides && index === 0) {
         // make the first slide the slide after the last
-        translateX = 100 + offsetPercentage;
+        // if it is RTL the base line should be reversed
+        translateX = 100 * (isRTL ? -1 : 1) + offsetPercentage;
       }
     }
 
