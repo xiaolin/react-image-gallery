@@ -316,14 +316,6 @@ class App extends React.Component {
               </li>
               <li>
                 <input
-                  id='slide_on_thumbnail_hover'
-                  type='checkbox'
-                  onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailHover')}
-                  checked={this.state.slideOnThumbnailHover}/>
-                  <label htmlFor='slide_on_thumbnail_hover'>slide on thumbnail hover (desktop)</label>
-              </li>
-              <li>
-                <input
                   id='is_rtl'
                   type='checkbox'
                   onChange={this._handleCheckboxChange.bind(this, 'isRTL')}
