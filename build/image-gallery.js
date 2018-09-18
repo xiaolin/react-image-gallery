@@ -80,7 +80,7 @@ var ImageGallery = function (_React$Component) {
           isTransitioning: nextIndex !== currentIndex,
           offsetPercentage: 0,
           style: {
-            transition: 'all ' + _this.props.slideDuration + 'ms ease-out'
+            transition: 'all ' + _this.props.slideDuration + 'ms ease'
           }
         }, _this._onSliding);
       }
@@ -205,6 +205,7 @@ var ImageGallery = function (_React$Component) {
       var _this$state2 = _this.state,
           scrollingUpDown = _this$state2.scrollingUpDown,
           scrollingLeftRight = _this$state2.scrollingLeftRight;
+      var isRTL = _this.props.isRTL;
 
       if (scrollingUpDown) {
         // user stopped scrollingUpDown
@@ -218,20 +219,19 @@ var ImageGallery = function (_React$Component) {
 
       if (!scrollingUpDown) {
         // don't swipe if user is scrolling
-        var side = deltaX > 0 ? 1 : -1;
+        var side = (deltaX > 0 ? 1 : -1) * (isRTL ? -1 : 1); //if it is RTL the direction is reversed
         _this._handleOnSwipedTo(side, isFlick);
       }
     };
 
     _this._handleSwiping = function (e, deltaX, deltaY, delta) {
-      var swipingTransitionDuration = _this.props.swipingTransitionDuration;
-
-      _this._setScrollDirection(deltaX, deltaY);
       var _this$state3 = _this.state,
           galleryWidth = _this$state3.galleryWidth,
           isTransitioning = _this$state3.isTransitioning,
           scrollingUpDown = _this$state3.scrollingUpDown;
+      var swipingTransitionDuration = _this.props.swipingTransitionDuration;
 
+      _this._setScrollDirection(deltaX, deltaY);
       if (!isTransitioning && !scrollingUpDown) {
         var side = deltaX < 0 ? 1 : -1;
 
@@ -241,7 +241,7 @@ var ImageGallery = function (_React$Component) {
         }
 
         var swipingTransition = {
-          transition: 'transform ' + swipingTransitionDuration + 'ms ease-out'
+          transition: 'all ' + swipingTransitionDuration + 'ms ease'
         };
 
         _this.setState({
@@ -373,10 +373,6 @@ var ImageGallery = function (_React$Component) {
       if (nextProps.lazyLoad && (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
         this._lazyLoaded = [];
       }
-
-      if (this.state.currentIndex >= nextProps.items.length) {
-        this.slideToIndex(0);
-      }
     }
   }, {
     key: 'componentDidUpdate',
@@ -445,11 +441,7 @@ var ImageGallery = function (_React$Component) {
         this.setState({ isPlaying: true });
         this._intervalId = window.setInterval(function () {
           if (!_this2.state.hovering) {
-            if (!_this2.props.infinite && !_this2._canSlideRight()) {
-              _this2.pause();
-            } else {
-              _this2.slideToIndex(_this2.state.currentIndex + 1);
-            }
+            _this2.slideToIndex(_this2.state.currentIndex + 1);
           }
         }, Math.max(slideInterval, slideDuration));
 
@@ -615,12 +607,12 @@ var ImageGallery = function (_React$Component) {
   }, {
     key: '_canSlideLeft',
     value: function _canSlideLeft() {
-      return this.props.infinite || (this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious());
+      return this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious();
     }
   }, {
     key: '_canSlideRight',
     value: function _canSlideRight() {
-      return this.props.infinite || (this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext());
+      return this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext();
     }
   }, {
     key: '_canSlidePrevious',
@@ -715,7 +707,7 @@ var ImageGallery = function (_React$Component) {
           break;
       }
 
-      if (this.props.items.length >= 3 && this.props.infinite) {
+      if (this.props.items.length >= 3) {
         if (index === 0 && currentIndex === this.props.items.length - 1) {
           // set first slide as right slide if were sliding right from last slide
           alignment = ' ' + RIGHT;
@@ -802,21 +794,6 @@ var ImageGallery = function (_React$Component) {
       return {};
     }
   }, {
-    key: '_shouldPushSlideOnInfiniteMode',
-    value: function _shouldPushSlideOnInfiniteMode(index) {
-      /*
-        Push(show) slide if slide is the current slide, and the next slide
-        OR
-        The slide is going more than 1 slide left, or right, but not going from
-        first to last and not going from last to first
-         There is an edge case where if you go to the first or last slide, when they're
-        not left, or right of each other they will try to catch up in the background
-        so unless were going from first to last or vice versa we don't want the first
-        or last slide to show up during our transition
-      */
-      return !this._slideIsTransitioning(index) || this._ignoreIsTransitioning() && !this._isFirstOrLastSlide(index);
-    }
-  }, {
     key: '_slideIsTransitioning',
     value: function _slideIsTransitioning(index) {
       /*
@@ -860,40 +837,36 @@ var ImageGallery = function (_React$Component) {
     }
   }, {
     key: '_getSlideStyle',
-    value: function _getSlideStyle(index) {
+    value: function _getSlideStyle() {
+      return {
+        Width: this.state.galleryWidth
+      };
+    }
+  }, {
+    key: '_getSlidesStyle',
+    value: function _getSlidesStyle() {
       var _state10 = this.state,
           currentIndex = _state10.currentIndex,
           offsetPercentage = _state10.offsetPercentage;
-      var _props2 = this.props,
-          infinite = _props2.infinite,
-          items = _props2.items,
-          useTranslate3D = _props2.useTranslate3D;
+      var useTranslate3D = this.props.useTranslate3D;
 
-      var baseTranslateX = -100 * currentIndex;
-      var totalSlides = items.length - 1;
+      // let translateX = currentIndex * -100 + offsetPercentage;
 
-      // calculates where the other slides belong based on currentIndex
-      var translateX = baseTranslateX + index * 100 + offsetPercentage;
+      var translateX = currentIndex * -100;
 
-      if (infinite && items.length > 2) {
-        if (currentIndex === 0 && index === totalSlides) {
-          // make the last slide the slide before the first
-          translateX = -100 + offsetPercentage;
-        } else if (currentIndex === totalSlides && index === 0) {
-          // make the first slide the slide after the last
-          translateX = 100 + offsetPercentage;
-        }
+      if (!this._canSlideLeft() && offsetPercentage > 0) {
+        translateX += offsetPercentage / 3;
+      } else if (!this._canSlideRight() && offsetPercentage < 0) {
+        translateX += offsetPercentage / 3;
+      } else {
+        translateX += offsetPercentage;
       }
+      // console.log(translateX, offsetPercentage);
 
-      // Special case when there are only 2 items with infinite on
-      if (infinite && items.length === 2) {
-        translateX = this._getTranslateXForTwoSlide(index);
-      }
-
-      var translate = 'translate(' + translateX + '%, 0)';
+      var translate = 'translate(' + translateX * this.state.galleryWidth + 'px, 0)';
 
       if (useTranslate3D) {
-        translate = 'translate3d(' + translateX + '%, 0, 0)';
+        translate = 'translate3d(' + translateX / 100 * this.state.galleryWidth + 'px, 0, 0)';
       }
 
       return {
@@ -908,9 +881,9 @@ var ImageGallery = function (_React$Component) {
     key: '_getThumbnailStyle',
     value: function _getThumbnailStyle() {
       var translate = void 0;
-      var _props3 = this.props,
-          useTranslate3D = _props3.useTranslate3D,
-          isRTL = _props3.isRTL;
+      var _props2 = this.props,
+          useTranslate3D = _props2.useTranslate3D,
+          isRTL = _props2.isRTL;
       var thumbsTranslate = this.state.thumbsTranslate;
 
       var verticalTranslateValue = isRTL ? thumbsTranslate * -1 : thumbsTranslate;
@@ -945,10 +918,9 @@ var ImageGallery = function (_React$Component) {
           modalFullscreen = _state11.modalFullscreen,
           isPlaying = _state11.isPlaying,
           scrollingLeftRight = _state11.scrollingLeftRight;
-      var _props4 = this.props,
-          infinite = _props4.infinite,
-          preventDefaultTouchmoveEvent = _props4.preventDefaultTouchmoveEvent,
-          isRTL = _props4.isRTL;
+      var _props3 = this.props,
+          preventDefaultTouchmoveEvent = _props3.preventDefaultTouchmoveEvent,
+          isRTL = _props3.isRTL;
 
 
       var thumbnailStyle = this._getThumbnailStyle();
@@ -975,14 +947,12 @@ var ImageGallery = function (_React$Component) {
           _this5._lazyLoaded[index] = true;
         }
 
-        var slideStyle = _this5._getSlideStyle(index);
-
         var slide = _react2.default.createElement(
           'div',
           {
             key: index,
             className: 'image-gallery-slide' + alignment + originalClass,
-            style: _extends(slideStyle, _this5.state.style),
+            style: { 'width': _this5.state.galleryWidth },
             onClick: _this5.props.onClick,
             onTouchMove: _this5.props.onTouchMove,
             onTouchEnd: _this5.props.onTouchEnd,
@@ -994,15 +964,7 @@ var ImageGallery = function (_React$Component) {
           showItem ? renderItem(item) : _react2.default.createElement('div', { style: { height: '100%' } })
         );
 
-        if (infinite) {
-          // don't add some slides while transitioning to avoid background transitions
-          if (_this5._shouldPushSlideOnInfiniteMode(index)) {
-            slides.push(slide);
-          }
-        } else {
-          slides.push(slide);
-        }
-
+        slides.push(slide);
         if (_this5.props.showThumbnails) {
           thumbnails.push(_react2.default.createElement(
             'a',
@@ -1067,12 +1029,18 @@ var ImageGallery = function (_React$Component) {
           },
           _react2.default.createElement(
             'div',
-            { className: 'image-gallery-slides' },
+            {
+              className: 'image-gallery-slides',
+              style: _extends(this._getSlidesStyle(), this.state.style)
+            },
             slides
           )
         )] : _react2.default.createElement(
           'div',
-          { className: 'image-gallery-slides' },
+          {
+            className: 'image-gallery-slides',
+            style: this._getSlidesStyle()
+          },
           slides
         ),
         this.props.showBullets && _react2.default.createElement(
@@ -1171,7 +1139,6 @@ ImageGallery.propTypes = {
   showNav: _propTypes2.default.bool,
   autoPlay: _propTypes2.default.bool,
   lazyLoad: _propTypes2.default.bool,
-  infinite: _propTypes2.default.bool,
   showIndex: _propTypes2.default.bool,
   showBullets: _propTypes2.default.bool,
   showThumbnails: _propTypes2.default.bool,
@@ -1220,7 +1187,6 @@ ImageGallery.defaultProps = {
   showNav: true,
   autoPlay: false,
   lazyLoad: false,
-  infinite: true,
   showIndex: false,
   showBullets: false,
   showThumbnails: true,

@@ -44,7 +44,6 @@ export default class ImageGallery extends React.Component {
     showNav: PropTypes.bool,
     autoPlay: PropTypes.bool,
     lazyLoad: PropTypes.bool,
-    infinite: PropTypes.bool,
     showIndex: PropTypes.bool,
     showBullets: PropTypes.bool,
     showThumbnails: PropTypes.bool,
@@ -94,7 +93,6 @@ export default class ImageGallery extends React.Component {
     showNav: true,
     autoPlay: false,
     lazyLoad: false,
-    infinite: true,
     showIndex: false,
     showBullets: false,
     showThumbnails: true,
@@ -175,10 +173,6 @@ export default class ImageGallery extends React.Component {
       (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
       this._lazyLoaded = [];
     }
-
-    if (this.state.currentIndex >= nextProps.items.length) {
-      this.slideToIndex(0);
-    }
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -238,11 +232,7 @@ export default class ImageGallery extends React.Component {
       this.setState({isPlaying: true});
       this._intervalId = window.setInterval(() => {
         if (!this.state.hovering) {
-          if (!this.props.infinite && !this._canSlideRight()) {
-            this.pause();
-          } else {
-            this.slideToIndex(this.state.currentIndex + 1);
-          }
+          this.slideToIndex(this.state.currentIndex + 1);
         }
       }, Math.max(slideInterval, slideDuration));
 
@@ -348,7 +338,7 @@ export default class ImageGallery extends React.Component {
         isTransitioning: nextIndex !== currentIndex,
         offsetPercentage: 0,
         style: {
-          transition: `all ${this.props.slideDuration}ms ease-out`
+          transition: `all ${this.props.slideDuration}ms ease`
         }
       }, this._onSliding);
     }
@@ -507,6 +497,7 @@ export default class ImageGallery extends React.Component {
 
   _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
     const { scrollingUpDown, scrollingLeftRight } = this.state;
+    const { isRTL } = this.props;
     if (scrollingUpDown) {
       // user stopped scrollingUpDown
       this.setState({ scrollingUpDown: false });
@@ -518,7 +509,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (!scrollingUpDown) { // don't swipe if user is scrolling
-      const side = deltaX > 0 ? 1 : -1;
+      const side = (deltaX > 0 ? 1 : -1) * (isRTL ? -1 : 1);//if it is RTL the direction is reversed
       this._handleOnSwipedTo(side, isFlick);
     }
   };
@@ -549,9 +540,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleSwiping = (e, deltaX, deltaY, delta) => {
+    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     const { swipingTransitionDuration } = this.props;
     this._setScrollDirection(deltaX, deltaY);
-    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     if (!isTransitioning && !scrollingUpDown) {
       const side = deltaX < 0 ? 1 : -1;
 
@@ -561,7 +552,7 @@ export default class ImageGallery extends React.Component {
       }
 
       const swipingTransition = {
-        transition: `transform ${swipingTransitionDuration}ms ease-out`
+        transition: `all ${swipingTransitionDuration}ms ease`
       };
 
       this.setState({
@@ -579,13 +570,11 @@ export default class ImageGallery extends React.Component {
   }
 
   _canSlideLeft() {
-    return this.props.infinite ||
-      (this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious());
+    return this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious();
   }
 
   _canSlideRight() {
-    return this.props.infinite ||
-      (this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext());
+    return this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext();
   }
 
   _canSlidePrevious() {
@@ -668,7 +657,7 @@ export default class ImageGallery extends React.Component {
         break;
     }
 
-    if (this.props.items.length >= 3 && this.props.infinite) {
+    if (this.props.items.length >= 3) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
         alignment = ` ${RIGHT}`;
@@ -745,22 +734,6 @@ export default class ImageGallery extends React.Component {
     return {};
   }
 
-  _shouldPushSlideOnInfiniteMode(index) {
-    /*
-      Push(show) slide if slide is the current slide, and the next slide
-      OR
-      The slide is going more than 1 slide left, or right, but not going from
-      first to last and not going from last to first
-
-      There is an edge case where if you go to the first or last slide, when they're
-      not left, or right of each other they will try to catch up in the background
-      so unless were going from first to last or vice versa we don't want the first
-      or last slide to show up during our transition
-    */
-    return !this._slideIsTransitioning(index) ||
-      (this._ignoreIsTransitioning() && !this._isFirstOrLastSlide(index));
-  }
-
   _slideIsTransitioning(index) {
     /*
     returns true if the gallery is transitioning and the index is not the
@@ -795,43 +768,43 @@ export default class ImageGallery extends React.Component {
       notGoingFromLastToFirst;
   }
 
-  _getSlideStyle(index) {
-    const { currentIndex, offsetPercentage } = this.state;
-    const { infinite, items, useTranslate3D } = this.props;
-    const baseTranslateX = -100 * currentIndex;
-    const totalSlides = items.length - 1;
-
-    // calculates where the other slides belong based on currentIndex
-    let translateX = baseTranslateX + (index * 100) + offsetPercentage;
-
-    if (infinite && items.length > 2) {
-      if (currentIndex === 0 && index === totalSlides) {
-        // make the last slide the slide before the first
-        translateX = -100 + offsetPercentage;
-      } else if (currentIndex === totalSlides && index === 0) {
-        // make the first slide the slide after the last
-        translateX = 100 + offsetPercentage;
-      }
-    }
-
-    // Special case when there are only 2 items with infinite on
-    if (infinite && items.length === 2) {
-      translateX = this._getTranslateXForTwoSlide(index);
-    }
-
-    let translate = `translate(${translateX}%, 0)`;
-
-    if (useTranslate3D) {
-      translate = `translate3d(${translateX}%, 0, 0)`;
-    }
-
+  _getSlideStyle() {
     return {
-      WebkitTransform: translate,
-      MozTransform: translate,
-      msTransform: translate,
-      OTransform: translate,
-      transform: translate,
+        Width: this.state.galleryWidth
     };
+  }
+
+  _getSlidesStyle() {
+      const { currentIndex, offsetPercentage } = this.state;
+      const { useTranslate3D } = this.props;
+
+      // let translateX = currentIndex * -100 + offsetPercentage;
+      let translateX = currentIndex * -100;
+
+      if (!this._canSlideLeft() && offsetPercentage > 0) {
+          translateX += (offsetPercentage / 3);
+      }
+      else if (!this._canSlideRight() && offsetPercentage < 0) {
+          translateX += (offsetPercentage / 3);
+      }
+      else {
+          translateX += offsetPercentage;
+      }
+      // console.log(translateX, offsetPercentage);
+
+      let translate = `translate(${translateX * this.state.galleryWidth }px, 0)`;
+
+      if (useTranslate3D) {
+        translate = `translate3d(${(translateX / 100) * this.state.galleryWidth}px, 0, 0)`;
+      }
+
+      return {
+          WebkitTransform: translate,
+          MozTransform: translate,
+          msTransform: translate,
+          OTransform: translate,
+          transform: translate,
+      };
   }
 
   _getThumbnailStyle() {
@@ -961,7 +934,6 @@ export default class ImageGallery extends React.Component {
     } = this.state;
 
     const {
-      infinite,
       preventDefaultTouchmoveEvent,
       isRTL,
     } = this.props;
@@ -994,13 +966,11 @@ export default class ImageGallery extends React.Component {
         this._lazyLoaded[index] = true;
       }
 
-      let slideStyle = this._getSlideStyle(index);
-
       const slide = (
         <div
           key={index}
           className={'image-gallery-slide' + alignment + originalClass}
-          style={Object.assign(slideStyle, this.state.style)}
+          style={{'width': this.state.galleryWidth}}
           onClick={this.props.onClick}
           onTouchMove={this.props.onTouchMove}
           onTouchEnd={this.props.onTouchEnd}
@@ -1013,15 +983,7 @@ export default class ImageGallery extends React.Component {
         </div>
       );
 
-      if (infinite) {
-        // don't add some slides while transitioning to avoid background transitions
-        if (this._shouldPushSlideOnInfiniteMode(index)) {
-          slides.push(slide);
-        }
-      } else {
-        slides.push(slide);
-      }
-
+      slides.push(slide);
       if (this.props.showThumbnails) {
         thumbnails.push(
           <a
@@ -1104,13 +1066,19 @@ export default class ImageGallery extends React.Component {
                   stopPropagation={this.props.stopPropagation}
                   preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
                 >
-                  <div className='image-gallery-slides'>
+                  <div
+                      className='image-gallery-slides'
+                      style={Object.assign(this._getSlidesStyle(), this.state.style)}
+                  >
                     {slides}
                   </div>
               </Swipeable>
             ]
           :
-            <div className='image-gallery-slides'>
+            <div
+                className='image-gallery-slides'
+                style={this._getSlidesStyle()}
+            >
               {slides}
             </div>
         }
