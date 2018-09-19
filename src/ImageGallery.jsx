@@ -865,11 +865,11 @@ export default class ImageGallery extends React.Component {
     };
   }
 
-  _slideLeft = (event) => {
+  _slideLeft = () => {
     this.props.isRTL ? this._slideNext() : this.ـslidePrevious();
   };
 
-  _slideRight = (event) => {
+  _slideRight = () => {
     this.props.isRTL ? this.ـslidePrevious() : this._slideNext();
   };
 
