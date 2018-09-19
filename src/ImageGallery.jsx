@@ -226,6 +226,10 @@ export default class ImageGallery extends React.Component {
     if (this._transitionTimer) {
       window.clearTimeout(this._transitionTimer);
     }
+
+    if (this._createResizeObserver) {
+      this._createResizeObserver();
+    }
   }
 
   play(callback = true) {
@@ -421,6 +425,7 @@ export default class ImageGallery extends React.Component {
   };
 
   _createResizeObserver = debounce((entries) => {
+    if (!entries) return;
     entries.forEach(() => {
       this._handleResize();
     });
