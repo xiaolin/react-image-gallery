@@ -164,11 +164,7 @@ export default class ImageGallery extends React.Component {
 
   componentWillReceiveProps(nextProps) {
     if (this.props.disableArrowKeys !== nextProps.disableArrowKeys) {
-      if (nextProps.disableArrowKeys) {
-        window.removeEventListener('keydown', this._handleKeyDown);
-      } else {
-        window.addEventListener('keydown', this._handleKeyDown);
-      }
+      window[`${nextProps.disableArrowKeys ? 'remove' : 'add'}EventListener`]('keydown', this._handleKeyDown);
     }
 
     if (nextProps.lazyLoad &&
@@ -391,21 +387,9 @@ export default class ImageGallery extends React.Component {
     });
   }
 
-  _toggleFullScreen = () => {
-    if (this.state.isFullscreen) {
-      this.exitFullScreen();
-    } else {
-      this.fullScreen();
-    }
-  };
+  _toggleFullScreen = () => this[`${this.state.isFullscreen ? 'exitFull' : 'full'}Screen`]();
 
-  _togglePlay = () => {
-    if (this._intervalId) {
-      this.pause();
-    } else {
-      this.play();
-    }
-  };
+  _togglePlay = () => this[this._intervalId ? 'pause' : 'play']();
 
   _initGalleryResizing = (element) => {
     /*
@@ -441,11 +425,9 @@ export default class ImageGallery extends React.Component {
     }
 
     if (this._thumbnailsWrapper) {
-      if (this._isThumbnailHorizontal()) {
-        this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
-      } else {
-        this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
-      }
+      this.setState(this._isThumbnailHorizontal() ?
+          {thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight} :
+          {thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
     }
 
     // Adjust thumbnail container when thumbnail width or height is adjusted
@@ -459,17 +441,21 @@ export default class ImageGallery extends React.Component {
 
   _handleKeyDown = (event) => {
     const LEFT_ARROW = 37;
+    const H_KEY = 72;
     const RIGHT_ARROW = 39;
+    const L_KEY = 76;
     const ESC_KEY = 27;
     const key = parseInt(event.keyCode || event.which || 0);
 
     switch(key) {
       case LEFT_ARROW:
+      case H_KEY:
         if (this._canSlideLeft() && !this._intervalId) {
           this._slideLeft();
         }
         break;
       case RIGHT_ARROW:
+      case L_KEY:
         if (this._canSlideRight() && !this._intervalId) {
           this._slideRight();
         }
@@ -576,13 +562,11 @@ export default class ImageGallery extends React.Component {
   }
 
   _canSlideLeft() {
-    return this.props.infinite ||
-      (this.props.isRTL ? this._canSlideNext() : this._canSlidePrevious());
+    return this.props.infinite || (this[`_canSlide${this.props.isRTL ? 'Next' : 'Previous'}`]());
   }
 
   _canSlideRight() {
-    return this.props.infinite ||
-      (this.props.isRTL ? this._canSlidePrevious() : this._canSlideNext());
+    return this.props.infinite || (this[`_canSlide${this.props.isRTL ? 'Previous' : 'Next'}`]());
   }
 
   _canSlidePrevious() {
@@ -860,15 +844,11 @@ export default class ImageGallery extends React.Component {
     };
   }
 
-  _slideLeft = (event) => {
-    this.props.isRTL ? this._slideNext() : this.ـslidePrevious();
-  };
+  _slideLeft = (event) => this[`_slide${this.props.isRTL ? 'Next' : 'Previous'}`](event);
 
-  _slideRight = (event) => {
-    this.props.isRTL ? this.ـslidePrevious() : this._slideNext();
-  };
+  _slideRight = (event) => this[`_slide${this.props.isRTL ? 'Previous' : 'Next'}`](event);
 
-  ـslidePrevious = (event) => {
+  _slidePrevious = (event) => {
     this.slideToIndex(this.state.currentIndex - 1, event);
   };
 
@@ -1155,7 +1135,6 @@ export default class ImageGallery extends React.Component {
         className={classNames}
         aria-live='polite'
       >
-
         <div
           className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}
         >
@@ -1189,11 +1168,8 @@ export default class ImageGallery extends React.Component {
             (thumbnailPosition === 'top' || thumbnailPosition === 'left') &&
               slideWrapper
           }
-
         </div>
-
       </div>
     );
   }
-
 }
