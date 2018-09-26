@@ -174,6 +174,23 @@ class MyComponent extends React.Component {
   * On a specific item `[{thumbnail: '...', renderThumbInner: this.myRenderThumbInner}]`
   or
   * As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
+* `renderThumbnailsContainer`: Function, custom thumbnails container rendering
+  * Use this to render a custom thumbnails immediate parent
+  * You must assign ref for this to work
+  ```javascript
+    renderThumbnailsContainer(ref, thumbsTranslate, thumbnails) {
+      return (
+        <div
+          ref={ref}
+          className="image-gallery-thumbnails-container"
+          style={{ transform: `translateX(${thumbsTranslate}px)` }}
+          aria-label="Thumbnail Navigation"
+        >
+          {thumbnails}
+        </div>
+      );
+    }
+  ```
 
 * `renderLeftNav`: Function, custom left nav component
   * Use this to render a custom left nav control

@@ -83,6 +83,7 @@ export default class ImageGallery extends React.Component {
     renderPlayPauseButton: PropTypes.func,
     renderFullscreenButton: PropTypes.func,
     renderItem: PropTypes.func,
+    renderThumbnailsContainer: PropTypes.func,
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
@@ -944,6 +945,21 @@ export default class ImageGallery extends React.Component {
     );
   };
 
+  _renderThumbnailsContainer = (ref, thumbsTranslate, thumbnails) => {
+    const thumbnailStyle = this._getThumbnailStyle();
+
+    return (
+      <div
+        ref={ref}
+        className="image-gallery-thumbnails-container"
+        style={thumbnailStyle}
+        aria-label="Thumbnail Navigation"
+      >
+        {thumbnails}
+      </div>
+    );
+  }
+
   _onThumbnailClick = (event, index) => {
     this.slideToIndex(index, event);
     if (this.props.onThumbnailClick) {
@@ -966,7 +982,6 @@ export default class ImageGallery extends React.Component {
       isRTL,
     } = this.props;
 
-    const thumbnailStyle = this._getThumbnailStyle();
     const thumbnailPosition = this.props.thumbnailPosition;
 
     const slideLeft = this._slideLeft;
@@ -1149,6 +1164,9 @@ export default class ImageGallery extends React.Component {
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 
+    const renderThumbnailsContainer =
+      this.props.renderThumbnailsContainer || this._renderThumbnailsContainer;
+
     return (
       <div
         ref={i => this._imageGallery = i}
@@ -1174,14 +1192,11 @@ export default class ImageGallery extends React.Component {
                   className='image-gallery-thumbnails'
                   ref={i => this._thumbnailsWrapper = i}
                 >
-                  <div
-                    ref={t => this._thumbnails = t}
-                    className='image-gallery-thumbnails-container'
-                    style={thumbnailStyle}
-                    aria-label='Thumbnail Navigation'
-                  >
-                    {thumbnails}
-                  </div>
+                  {renderThumbnailsContainer(
+                    t => (this._thumbnails = t),
+                    this.state.thumbsTranslate,
+                    thumbnails
+                  )}
                 </div>
               </div>
           }
