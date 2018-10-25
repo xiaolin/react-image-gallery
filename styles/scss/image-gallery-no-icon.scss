@@ -38,6 +38,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-content {
   position: relative;
   line-height: 0;
+  overflow: hidden;
   top: 0;
 
   &.fullscreen {
@@ -127,7 +128,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-slides {
   line-height: 0;
-  overflow: hidden;
   position: relative;
   white-space: nowrap;
 }

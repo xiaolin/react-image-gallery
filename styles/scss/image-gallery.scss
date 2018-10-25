@@ -17,6 +17,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery {
   @include vendor-prefix('user-select', none);
   -webkit-tap-highlight-color: $ig-transparent;
+  -webkit-transform: translate3d(0,0,0);
 
   &.fullscreen-modal {
     background: $ig-black;
@@ -39,6 +40,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-content {
   position: relative;
+  overflow: hidden;
   line-height: 0;
   top: 0;
 
@@ -198,17 +200,16 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-slides {
   line-height: 0;
-  overflow: hidden;
   position: relative;
   white-space: nowrap;
+  display: inline-flex;
 }
 
 .image-gallery-slide {
   background: $ig-white;
   left: 0;
-  position: absolute;
+  // position: absolute;
   top: 0;
-  width: 100%;
 
   &.center {
     position: relative;
@@ -216,6 +217,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
   img {
     width: 100%;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform-style: preserve-3d;
   }
 
   .image-gallery-description {
