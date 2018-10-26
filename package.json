@@ -65,6 +65,7 @@
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
     "react-swipeable": "^4.2.2",
-    "resize-observer-polyfill": "^1.5.0"
+    "resize-observer-polyfill": "^1.5.0",
+    "styled-components": "^4.0.2"
   }
 }
