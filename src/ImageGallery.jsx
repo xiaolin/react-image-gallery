@@ -45,6 +45,7 @@ export default class ImageGallery extends React.Component {
     autoPlay: PropTypes.bool,
     lazyLoad: PropTypes.bool,
     infinite: PropTypes.bool,
+    heightOfThumbnails: PropTypes.number,
     showIndex: PropTypes.bool,
     showBullets: PropTypes.bool,
     showThumbnails: PropTypes.bool,
@@ -95,6 +96,7 @@ export default class ImageGallery extends React.Component {
     autoPlay: false,
     lazyLoad: false,
     infinite: true,
+    heightOfThumbnails: 100,
     showIndex: false,
     showBullets: false,
     showThumbnails: true,
@@ -929,12 +931,13 @@ export default class ImageGallery extends React.Component {
     );
   };
 
-  _renderThumbInner = (item) => {
+  _renderThumbInner = (item, heightOfThumbnails) => {
     let onThumbnailError = this.props.onThumbnailError || this._handleImageError;
 
     return (
       <div className='image-gallery-thumbnail-inner'>
         <img
+          style={{ height: `${heightOfThumbnails}px`, width: 'auto' }}
           src={item.thumbnail}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
@@ -1030,6 +1033,7 @@ export default class ImageGallery extends React.Component {
       if (this.props.showThumbnails) {
         thumbnails.push(
           <a
+            style={{ width: 'auto' }}
             key={index}
             role='button'
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -1041,7 +1045,7 @@ export default class ImageGallery extends React.Component {
             }
             onClick={event => this._onThumbnailClick(event, index)}
           >
-            {renderThumbInner(item)}
+            {renderThumbInner(item, this.props.heightOfThumbnails)}
           </a>
         );
       }
