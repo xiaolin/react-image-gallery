@@ -58,6 +58,8 @@ class App extends React.Component {
     ].concat(this._getStaticImages());
   }
 
+
+
   componentDidUpdate(prevProps, prevState) {
     if (this.state.slideInterval !== prevState.slideInterval ||
         this.state.slideDuration !== prevState.slideDuration) {
@@ -185,12 +187,27 @@ class App extends React.Component {
   }
 
   render() {
+    const imgs = [
+        {
+          original:
+            "https://media-cdn.tripadvisor.com/media/photo-s/0d/f5/45/ed/southern-iceland-glaciers.jpg",
+          thumbnail:
+            "https://media-cdn.tripadvisor.com/media/photo-s/0d/f5/45/ed/southern-iceland-glaciers.jpg"
+        },
+
+        {
+          original:
+            "https://www.rockhall.com/sites/default/files/styles/header_image_portrait/public/nina_simone.jpg?itok=Vcf8SvQs",
+          thumbnail:
+            "https://www.rockhall.com/sites/default/files/styles/header_image_portrait/public/nina_simone.jpg?itok=Vcf8SvQs"
+        }
+      ];
     return (
 
       <section className='app'>
         <ImageGallery
           ref={i => this._imageGallery = i}
-          items={this.images}
+          items={imgs}
           lazyLoad={false}
           onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
