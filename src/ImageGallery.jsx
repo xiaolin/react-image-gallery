@@ -1161,6 +1161,7 @@ export default class ImageGallery extends React.Component {
                 <div
                   className='image-gallery-thumbnails'
                   ref={i => this._thumbnailsWrapper = i}
+                  data-tag_section="preview_carousel"
                 >
                   <div
                     ref={t => this._thumbnails = t}
