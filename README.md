@@ -154,6 +154,7 @@ class MyComponent extends React.Component {
 * `onTouchMove`: Function, `callback(event) on gallery slide`
 * `onTouchEnd`: Function, `callback(event) on gallery slide`
 * `onTouchStart`: Function, `callback(event) on gallery slide`
+* `onReadyToDisplay`: Function, `callback() when gallery is going to be displayed`
 * `onMouseOver`: Function, `callback(event) on gallery slide`
 * `onMouseLeave`: Function, `callback(event) on gallery slide`
 * `additionalClass`: String,

@@ -74,6 +74,7 @@ export default class ImageGallery extends React.Component {
     onTouchStart: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
+    onReadyToDisplay: PropTypes.func,
     onThumbnailError: PropTypes.func,
     onThumbnailClick: PropTypes.func,
     renderCustomControls: PropTypes.func,
@@ -423,9 +424,13 @@ export default class ImageGallery extends React.Component {
   _handleResize = () => {
     const { currentIndex } = this.state;
     if (this._imageGallery) {
+      const previousGalleryWidth = this.state.galleryWidth;
       this.setState({
         galleryWidth: this._imageGallery.offsetWidth
       });
+      if (this.props.onReadyToDisplay && this._imageGallery.offsetWidth > 0 && previousGalleryWidth === 0) {
+        this.props.onReadyToDisplay();
+      }
     }
 
     if (this._imageGallerySlideWrapper) {
