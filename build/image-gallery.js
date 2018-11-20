@@ -139,6 +139,7 @@ var ImageGallery = function (_React$Component) {
     };
 
     _this._createResizeObserver = (0, _lodash4.default)(function (entries) {
+      if (!entries) return;
       entries.forEach(function () {
         _this._handleResize();
       });
@@ -429,6 +430,10 @@ var ImageGallery = function (_React$Component) {
 
       if (this._transitionTimer) {
         window.clearTimeout(this._transitionTimer);
+      }
+
+      if (this._createResizeObserver) {
+        this._createResizeObserver();
       }
     }
   }, {
