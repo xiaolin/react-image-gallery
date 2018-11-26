@@ -154,9 +154,8 @@ var ImageGallery = function (_React$Component) {
         _this.setState({
           galleryWidth: _this._imageGallery.offsetWidth
         });
-
-        if (_this.props.onReadyToDisplay && previousGalleryWidth === 0) {
-          _this.props.onReadyToDisplay();
+        if (_this.props.onImageGalleryWidthInitialized && _this._imageGallery.offsetWidth > 0 && previousGalleryWidth === 0) {
+          _this.props.onImageGalleryWidthInitialized();
         }
       }
 
@@ -1179,7 +1178,7 @@ ImageGallery.propTypes = {
   onTouchStart: _propTypes2.default.func,
   onMouseOver: _propTypes2.default.func,
   onMouseLeave: _propTypes2.default.func,
-  onReadyToDisplay: _propTypes2.default.func,
+  onImageGalleryWidthInitialized: _propTypes2.default.func,
   onThumbnailError: _propTypes2.default.func,
   onThumbnailClick: _propTypes2.default.func,
   renderCustomControls: _propTypes2.default.func,
