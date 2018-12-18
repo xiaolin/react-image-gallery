@@ -147,12 +147,14 @@ var ImageGallery = function (_React$Component) {
     _this._handleResize = function () {
       var currentIndex = _this.state.currentIndex;
 
-      if (_this._imageGallery) {
-        var previousGalleryWidth = _this.state.galleryWidth;
+
+      var previousGalleryWidth = _this.state.galleryWidth;
+      if (_this._imageGallery && _this._imageGallery.offsetWidth > 0) {
         _this.setState({
           galleryWidth: _this._imageGallery.offsetWidth
         });
-        if (_this.props.onReadyToDisplay && _this._imageGallery.offsetWidth > 0 && previousGalleryWidth === 0) {
+
+        if (_this.props.onReadyToDisplay && previousGalleryWidth === 0) {
           _this.props.onReadyToDisplay();
         }
       }
@@ -163,16 +165,15 @@ var ImageGallery = function (_React$Component) {
         });
       }
 
-      if (_this._thumbnailsWrapper) {
+      if (_this._thumbnailsWrapper && _this._thumbnailsWrapper.offsetHeight != 0 && _this._thumbnailsWrapper.offsetWidth != 0) {
         if (_this._isThumbnailHorizontal()) {
           _this.setState({ thumbnailsWrapperHeight: _this._thumbnailsWrapper.offsetHeight });
         } else {
           _this.setState({ thumbnailsWrapperWidth: _this._thumbnailsWrapper.offsetWidth });
         }
+        // Adjust thumbnail container when thumbnail width or height is adjusted
+        _this._setThumbsTranslate(-_this._getThumbsTranslate(currentIndex));
       }
-
-      // Adjust thumbnail container when thumbnail width or height is adjusted
-      _this._setThumbsTranslate(-_this._getThumbsTranslate(currentIndex));
     };
 
     _this._handleKeyDown = function (event) {
