@@ -36,6 +36,8 @@ export default class ImageGallery extends React.Component {
     if (props.lazyLoad) {
       this._lazyLoaded = [];
     }
+
+    window.addEventListener('keydown', this._handleKeyDown);
   }
 
   static propTypes = {
@@ -163,14 +165,6 @@ export default class ImageGallery extends React.Component {
   };
 
   componentWillReceiveProps(nextProps) {
-    if (this.props.disableArrowKeys !== nextProps.disableArrowKeys) {
-      if (nextProps.disableArrowKeys) {
-        window.removeEventListener('keydown', this._handleKeyDown);
-      } else {
-        window.addEventListener('keydown', this._handleKeyDown);
-      }
-    }
-
     if (nextProps.lazyLoad &&
       (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
       this._lazyLoaded = [];
@@ -208,9 +202,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
-    if (!this.props.disableArrowKeys) {
-      window.removeEventListener('keydown', this._handleKeyDown);
-    }
+    window.removeEventListener('keydown', this._handleKeyDown);
 
     this._offScreenChangeEvent();
 
@@ -463,6 +455,9 @@ export default class ImageGallery extends React.Component {
   }
 
   _handleKeyDown = (event) => {
+    if (this.props.disableArrowKeys) {
+      return;
+    }
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
     const ESC_KEY = 27;
