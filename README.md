@@ -102,6 +102,8 @@ class MyComponent extends React.Component {
   * infinite sliding
 * `lazyLoad`: Boolean, default `false`
 * `showNav`: Boolean, default `true`
+* `autohideControls`: Boolean, default `false`
+  * All control buttons appear only when mouse is over the component
 * `showThumbnails`: Boolean, default `true`
 * `thumbnailPosition`: String, default `bottom`
   * available positions: `top, right, bottom, left`

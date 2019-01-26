@@ -24,6 +24,7 @@ class App extends React.Component {
       slideInterval: 2000,
       thumbnailPosition: 'bottom',
       showVideo: {},
+      autohideControls: false,
     };
 
     this.images = [
@@ -210,6 +211,7 @@ class App extends React.Component {
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
           additionalClass="app-image-gallery"
+          autohideControls={this.state.autohideControls}
         />
 
         <div className='app-sandbox'>
@@ -321,6 +323,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'isRTL')}
                   checked={this.state.isRTL}/>
                   <label htmlFor='is_rtl'>is right to left</label>
+              </li>
+              <li>
+                <input
+                  id='autohide_controls'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'autohideControls')}
+                  checked={this.state.autohideControls}/>
+                  <label htmlFor='autohide_controls'>autohide control buttons</label>
               </li>
             </ul>
           </div>
