@@ -54,6 +54,15 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-slide-wrapper {
   position: relative;
 
+  button {
+    opacity: 0.0;
+    transition: opacity 450ms;
+  }
+
+  &:hover button {
+    opacity: 1.0;
+  }
+
   &.left,
   &.right {
     display: inline-block;
