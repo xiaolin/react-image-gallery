@@ -88,7 +88,8 @@ export default class ImageGallery extends React.Component {
     stopPropagation: PropTypes.bool,
     additionalClass: PropTypes.string,
     useTranslate3D: PropTypes.bool,
-    isRTL: PropTypes.bool
+    isRTL: PropTypes.bool,
+    autohideControls: PropTypes.bool
   };
 
   static defaultProps = {
@@ -118,6 +119,7 @@ export default class ImageGallery extends React.Component {
     swipingTransitionDuration: 0,
     slideInterval: 3000,
     swipeThreshold: 30,
+    autohideControls: false,
     renderLeftNav: (onClick, disabled) => {
       return (
         <button
@@ -964,6 +966,7 @@ export default class ImageGallery extends React.Component {
       infinite,
       preventDefaultTouchmoveEvent,
       isRTL,
+      autohideControls,
     } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
@@ -1069,7 +1072,7 @@ export default class ImageGallery extends React.Component {
     const slideWrapper = (
       <div
         ref={this._initGalleryResizing}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
+        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''} ${autohideControls ? 'autohide-controls' : ''}`}
       >
 
         {this.props.renderCustomControls && this.props.renderCustomControls()}
