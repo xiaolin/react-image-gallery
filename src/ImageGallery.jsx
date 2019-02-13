@@ -183,10 +183,6 @@ export default class ImageGallery extends React.Component {
       this._handleResize();
     }
     if (prevState.currentIndex !== this.state.currentIndex) {
-      if (this.props.onSlide) {
-        this.props.onSlide(this.state.currentIndex);
-      }
-
       this._updateThumbnailTranslate(prevState.currentIndex);
     }
 
@@ -359,6 +355,9 @@ export default class ImageGallery extends React.Component {
     this._transitionTimer = window.setTimeout(() => {
       if (isTransitioning) {
         this.setState({isTransitioning: !isTransitioning});
+        if (this.props.onSlide) {
+          this.props.onSlide(this.state.currentIndex);
+        }
       }
     }, this.props.slideDuration + 50);
   };
