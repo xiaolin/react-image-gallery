@@ -36,8 +36,6 @@ export default class ImageGallery extends React.Component {
     if (props.lazyLoad) {
       this._lazyLoaded = [];
     }
-
-    window.addEventListener('keydown', this._handleKeyDown);
   }
 
   static propTypes = {
@@ -191,9 +189,7 @@ export default class ImageGallery extends React.Component {
     if (this.props.autoPlay) {
       this.play();
     }
-    if (!this.props.disableArrowKeys) {
-      window.addEventListener('keydown', this._handleKeyDown);
-    }
+    window.addEventListener('keydown', this._handleKeyDown);
     this._onScreenChangeEvent();
   }
 
