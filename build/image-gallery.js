@@ -139,6 +139,7 @@ var ImageGallery = function (_React$Component) {
     };
 
     _this._createResizeObserver = (0, _lodash4.default)(function (entries) {
+      if (!entries) return;
       entries.forEach(function () {
         _this._handleResize();
       });
@@ -153,9 +154,8 @@ var ImageGallery = function (_React$Component) {
         _this.setState({
           galleryWidth: _this._imageGallery.offsetWidth
         });
-
-        if (_this.props.onReadyToDisplay && previousGalleryWidth === 0) {
-          _this.props.onReadyToDisplay();
+        if (_this.props.onImageGalleryReady && _this._imageGallery.offsetWidth > 0 && previousGalleryWidth === 0) {
+          _this.props.onImageGalleryReady();
         }
       }
 
@@ -429,6 +429,10 @@ var ImageGallery = function (_React$Component) {
 
       if (this._transitionTimer) {
         window.clearTimeout(this._transitionTimer);
+      }
+
+      if (this._createResizeObserver) {
+        this._createResizeObserver();
       }
     }
   }, {
@@ -1174,7 +1178,7 @@ ImageGallery.propTypes = {
   onTouchStart: _propTypes2.default.func,
   onMouseOver: _propTypes2.default.func,
   onMouseLeave: _propTypes2.default.func,
-  onReadyToDisplay: _propTypes2.default.func,
+  onImageGalleryReady: _propTypes2.default.func,
   onThumbnailError: _propTypes2.default.func,
   onThumbnailClick: _propTypes2.default.func,
   renderCustomControls: _propTypes2.default.func,

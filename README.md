@@ -120,6 +120,7 @@ class MyComponent extends React.Component {
 * `disableThumbnailScroll`: Boolean, default `false`
   * disables the thumbnail container from adjusting
 * `disableArrowKeys`: Boolean, default `false`
+  * disables keydown listener for left and right keyboard arrow keys
 * `disableSwipe`: Boolean, default `false`
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load

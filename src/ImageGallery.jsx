@@ -74,7 +74,7 @@ export default class ImageGallery extends React.Component {
     onTouchStart: PropTypes.func,
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
-    onReadyToDisplay: PropTypes.func,
+    onImageGalleryReady: PropTypes.func,
     onThumbnailError: PropTypes.func,
     onThumbnailClick: PropTypes.func,
     renderCustomControls: PropTypes.func,
@@ -224,6 +224,10 @@ export default class ImageGallery extends React.Component {
 
     if (this._transitionTimer) {
       window.clearTimeout(this._transitionTimer);
+    }
+
+    if (this._createResizeObserver) {
+      this._createResizeObserver();
     }
   }
 
@@ -416,6 +420,7 @@ export default class ImageGallery extends React.Component {
   };
 
   _createResizeObserver = debounce((entries) => {
+    if (!entries) return;
     entries.forEach(() => {
       this._handleResize();
     });
@@ -427,11 +432,10 @@ export default class ImageGallery extends React.Component {
     const previousGalleryWidth = this.state.galleryWidth;
     if (this._imageGallery && this._imageGallery.offsetWidth > 0) {
       this.setState({
-              galleryWidth: this._imageGallery.offsetWidth
-          });
-
-      if (this.props.onReadyToDisplay && previousGalleryWidth === 0) {
-        this.props.onReadyToDisplay();
+        galleryWidth: this._imageGallery.offsetWidth
+      });
+      if (this.props.onImageGalleryReady && this._imageGallery.offsetWidth > 0 && previousGalleryWidth === 0) {
+        this.props.onImageGalleryReady();
       }
     }
 
