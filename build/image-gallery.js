@@ -384,6 +384,13 @@ var ImageGallery = function (_React$Component) {
     value: function componentDidUpdate(prevProps, prevState) {
       var itemsChanged = prevProps.items.length !== this.props.items.length;
       if (itemsChanged) {
+        //if items have changed go to the startIndex (transition is not visible)
+        this.setState({
+          currentIndex: this.props.startIndex,
+          style: {
+            transition: 'all 0ms ease'
+          }
+        });
         this._handleResize();
       }
       if (prevState.currentIndex !== this.state.currentIndex) {
