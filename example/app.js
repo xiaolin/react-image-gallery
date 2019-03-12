@@ -22,6 +22,7 @@ class App extends React.Component {
       isRTL: false,
       slideDuration: 450,
       slideInterval: 2000,
+      slideOnThumbnailOver: false,
       thumbnailPosition: 'bottom',
       showVideo: {},
     };
@@ -209,6 +210,7 @@ class App extends React.Component {
           thumbnailPosition={this.state.thumbnailPosition}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
+          slideOnThumbnailOver={this.state.slideOnThumbnailOver}
           additionalClass="app-image-gallery"
         />
 
@@ -321,6 +323,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'isRTL')}
                   checked={this.state.isRTL}/>
                   <label htmlFor='is_rtl'>is right to left</label>
+              </li>
+              <li>
+                <input
+                  id='slide_on_thumbnail_hover'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailOver')}
+                  checked={this.state.slideOnThumbnailOver}/>
+                  <label htmlFor='slide_on_thumbnail_hover'>slide on mouse over thumbnails</label>
               </li>
             </ul>
           </div>

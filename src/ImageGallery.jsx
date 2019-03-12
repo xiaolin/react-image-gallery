@@ -61,6 +61,7 @@ export default class ImageGallery extends React.Component {
     startIndex: PropTypes.number,
     slideDuration: PropTypes.number,
     slideInterval: PropTypes.number,
+    slideOnThumbnailOver: PropTypes.bool,
     swipeThreshold: PropTypes.number,
     swipingTransitionDuration: PropTypes.number,
     onSlide: PropTypes.func,
@@ -939,6 +940,10 @@ export default class ImageGallery extends React.Component {
     );
   };
 
+  _onThumbnailMouseOver = (event, index) => {
+    this.slideToIndex(index, event);
+  };
+
   _onThumbnailClick = (event, index) => {
     this.slideToIndex(index, event);
     if (this.props.onThumbnailClick) {
@@ -1029,6 +1034,7 @@ export default class ImageGallery extends React.Component {
               (currentIndex === index ? ' active' : '') +
               thumbnailClass
             }
+            onMouseOver={this.props.slideOnThumbnailOver ? (event) => this._onThumbnailMouseOver(event, index) : undefined}
             onClick={event => this._onThumbnailClick(event, index)}
           >
             {renderThumbInner(item)}
