@@ -75,6 +75,7 @@ export default class ImageGallery extends React.Component {
     onMouseOver: PropTypes.func,
     onMouseLeave: PropTypes.func,
     onImageGalleryReady: PropTypes.func,
+    onItemsGalleryChange: PropTypes.func,
     onThumbnailError: PropTypes.func,
     onThumbnailClick: PropTypes.func,
     renderCustomControls: PropTypes.func,
@@ -179,7 +180,18 @@ export default class ImageGallery extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const itemsChanged = prevProps.items.length !== this.props.items.length;
     if (itemsChanged) {
-      this._handleResize();
+        if (this.props.onItemsGalleryChange) {
+            // if the items have changed, call the callback function
+            this.props.onItemsGalleryChange();
+        }
+        //if items have changed go to the startIndex (transition is not visible)
+        this.setState({
+            currentIndex: this.props.startIndex,
+            style: {
+                transition: 'all 0ms ease'
+            }
+        });
+        this._handleResize();
     }
     if (prevState.currentIndex !== this.state.currentIndex) {
       if (this.props.onSlide) {

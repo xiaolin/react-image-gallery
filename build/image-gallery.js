@@ -384,6 +384,17 @@ var ImageGallery = function (_React$Component) {
     value: function componentDidUpdate(prevProps, prevState) {
       var itemsChanged = prevProps.items.length !== this.props.items.length;
       if (itemsChanged) {
+        if (this.props.onItemsGalleryChange) {
+          // if the items have changed, call the callback function
+          this.props.onItemsGalleryChange();
+        }
+        //if items have changed go to the startIndex (transition is not visible)
+        this.setState({
+          currentIndex: this.props.startIndex,
+          style: {
+            transition: 'all 0ms ease'
+          }
+        });
         this._handleResize();
       }
       if (prevState.currentIndex !== this.state.currentIndex) {
@@ -1179,6 +1190,7 @@ ImageGallery.propTypes = {
   onMouseOver: _propTypes2.default.func,
   onMouseLeave: _propTypes2.default.func,
   onImageGalleryReady: _propTypes2.default.func,
+  onItemsGalleryChange: _propTypes2.default.func,
   onThumbnailError: _propTypes2.default.func,
   onThumbnailClick: _propTypes2.default.func,
   renderCustomControls: _propTypes2.default.func,
