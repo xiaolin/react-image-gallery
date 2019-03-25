@@ -43,6 +43,7 @@ export default class ImageGallery extends React.Component {
     items: PropTypes.array.isRequired,
     showNav: PropTypes.bool,
     autoPlay: PropTypes.bool,
+	bulletProps: PropTypes.object,
     lazyLoad: PropTypes.bool,
     infinite: PropTypes.bool,
     showIndex: PropTypes.bool,
@@ -92,6 +93,7 @@ export default class ImageGallery extends React.Component {
     items: [],
     showNav: true,
     autoPlay: false,
+	bulletProps: {},
     lazyLoad: false,
     infinite: true,
     showIndex: false,
@@ -1040,6 +1042,7 @@ export default class ImageGallery extends React.Component {
             onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
             aria-label={`Go to Slide ${index + 1}`}
+            {...this.props.bulletProps}
           >
           </button>
         );

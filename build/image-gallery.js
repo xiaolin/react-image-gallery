@@ -993,14 +993,14 @@ var ImageGallery = function (_React$Component) {
             }
             return _this5.slideToIndex.call(_this5, index, event);
           };
-          bullets.push(_react2.default.createElement('button', {
+          bullets.push(_react2.default.createElement('button', _extends({
             key: index,
             type: 'button',
             className: ['image-gallery-bullet', currentIndex === index ? 'active' : '', item.bulletClass || ''].join(' '),
             onClick: bulletOnClick,
             'aria-pressed': currentIndex === index ? 'true' : 'false',
             'aria-label': 'Go to Slide ' + (index + 1)
-          }));
+          }, _this5.props.bulletProps)));
         }
       });
 
@@ -1115,7 +1115,8 @@ var ImageGallery = function (_React$Component) {
                 className: 'image-gallery-thumbnails',
                 ref: function ref(i) {
                   return _this5._thumbnailsWrapper = i;
-                }
+                },
+                'data-tag_section': 'preview_carousel'
               },
               _react2.default.createElement(
                 'div',
@@ -1145,6 +1146,7 @@ ImageGallery.propTypes = {
   items: _propTypes2.default.array.isRequired,
   showNav: _propTypes2.default.bool,
   autoPlay: _propTypes2.default.bool,
+  bulletProps: _propTypes2.default.object,
   lazyLoad: _propTypes2.default.bool,
   infinite: _propTypes2.default.bool,
   showIndex: _propTypes2.default.bool,
@@ -1193,6 +1195,7 @@ ImageGallery.defaultProps = {
   items: [],
   showNav: true,
   autoPlay: false,
+  bulletProps: {},
   lazyLoad: false,
   infinite: true,
   showIndex: false,
