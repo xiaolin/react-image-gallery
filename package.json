@@ -12,6 +12,7 @@
     "type": "git",
     "url": "https://github.com/xiaolin/react-image-gallery.git"
   },
+  "style": "styles/css/image-gallery.css",
   "keywords": [
     "react",
     "carousel",
