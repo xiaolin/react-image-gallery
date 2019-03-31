@@ -222,12 +222,10 @@ export default class ImageGallery extends React.Component {
       const {slideInterval, slideDuration} = this.props;
       this.setState({isPlaying: true});
       this._intervalId = window.setInterval(() => {
-        if (!this.state.hovering) {
-          if (!this.props.infinite && !this._canSlideRight()) {
-            this.pause();
-          } else {
-            this.slideToIndex(this.state.currentIndex + 1);
-          }
+        if (!this.props.infinite && !this._canSlideRight()) {
+          this.pause();
+        } else {
+          this.slideToIndex(this.state.currentIndex + 1);
         }
       }, Math.max(slideInterval, slideDuration));
 
@@ -940,14 +938,31 @@ export default class ImageGallery extends React.Component {
     );
   };
 
-  _onThumbnailMouseOver = (event, index) => {
-    this.slideToIndex(index, event);
-  };
-
   _onThumbnailClick = (event, index) => {
     this.slideToIndex(index, event);
     if (this.props.onThumbnailClick) {
       this.props.onThumbnailClick(event, index);
+    }
+  };
+
+  _onThumbnailMouseOver = (event, index) => {
+    if (this._thumbnailMouseOverTimer) {
+      window.clearTimeout(this._thumbnailMouseOverTimer);
+      this._thumbnailMouseOverTimer = null;
+    }
+    this._thumbnailMouseOverTimer = window.setTimeout(() => {
+      this.slideToIndex(index);
+      this.pause();
+    }, 300);
+  };
+
+   _onThumbnailMouseLeave = () => {
+    if (this._thumbnailMouseOverTimer) {
+      window.clearTimeout(this._thumbnailMouseOverTimer);
+      this._thumbnailMouseOverTimer = null;
+      if (this.props.autoPlay) {
+        this.play();
+      }
     }
   };
 
@@ -963,6 +978,7 @@ export default class ImageGallery extends React.Component {
     const {
       infinite,
       preventDefaultTouchmoveEvent,
+      slideOnThumbnailOver,
       isRTL,
     } = this.props;
 
@@ -1034,7 +1050,8 @@ export default class ImageGallery extends React.Component {
               (currentIndex === index ? ' active' : '') +
               thumbnailClass
             }
-            onMouseOver={this.props.slideOnThumbnailOver ? (event) => this._onThumbnailMouseOver(event, index) : undefined}
+            onMouseLeave={slideOnThumbnailOver ? this._onThumbnailMouseLeave : undefined}
+            onMouseOver={event => slideOnThumbnailOver ? this._onThumbnailMouseOver(event, index) : undefined}
             onClick={event => this._onThumbnailClick(event, index)}
           >
             {renderThumbInner(item)}
