@@ -49,6 +49,20 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 }
 
+.image-gallery-content.fullscreen {
+  .image-gallery-slide img {
+    width: auto;
+    height: 100vh;
+  }
+}
+
+.image-gallery-content.fullscreen.thumbnails-horizontal {
+  .image-gallery-slide img {
+    width: auto;
+    height: calc(100vh - 85px); // 85px for thumbnail container
+  }
+}
+
 .image-gallery-slide-wrapper {
   position: relative;
 
@@ -164,6 +178,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     }
 
   }
+}
+
+.image-gallery-image {
+  text-align: center;
 }
 
 .image-gallery-bullets {
