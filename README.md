@@ -130,6 +130,7 @@ class MyComponent extends React.Component {
 * `swipingTransitionDuration`: Number, default `0`
   * transition duration while swiping in milliseconds
 * `slideInterval`: Number, default `3000`
+* `slideOnThumbnailOver`: Boolean, default `false`
 * `flickThreshold`: Number (float), default `0.4`
   * Determines the max velocity of a swipe before it's considered a flick (lower = more sensitive)
 * `swipeThreshold`: Number, default `30`
