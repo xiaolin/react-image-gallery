@@ -1026,7 +1026,7 @@ export default class ImageGallery extends React.Component {
           onMouseLeave={this.props.onMouseLeave}
           role={this.props.onClick && 'button'}
         >
-          {showItem ? renderItem(item) : <div style={{ height: '100%' }}></div>}
+          {showItem ? renderItem(item, this) : <div style={{ height: '100%' }}></div>}
         </div>
       );
 
