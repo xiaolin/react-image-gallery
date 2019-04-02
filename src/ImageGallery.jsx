@@ -495,9 +495,11 @@ export default class ImageGallery extends React.Component {
     }
   };
 
-  _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
+  _handleOnSwiped = ({ event, deltaX, velocity }) => {
+    if (this.props.disableSwipe) return;
     const { scrollingUpDown, scrollingLeftRight } = this.state;
     const { isRTL } = this.props;
+    if (this.props.stopPropagation) event.stopPropagation();
     if (scrollingUpDown) {
       // user stopped scrollingUpDown
       this.setState({ scrollingUpDown: false });
@@ -510,6 +512,7 @@ export default class ImageGallery extends React.Component {
 
     if (!scrollingUpDown) { // don't swipe if user is scrolling
       const side = (deltaX > 0 ? 1 : -1) * (isRTL ? -1 : 1);//if it is RTL the direction is reversed
+      const isFlick = velocity > this.props.flickThreshold;
       this._handleOnSwipedTo(side, isFlick);
     }
   };
@@ -539,14 +542,16 @@ export default class ImageGallery extends React.Component {
     return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
   }
 
-  _handleSwiping = (e, deltaX, deltaY, delta) => {
+  _handleSwiping = ({ event, deltaX, deltaY, absX }) => {
+    if (this.props.disableSwipe) return;
     const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
     const { swipingTransitionDuration } = this.props;
     this._setScrollDirection(deltaX, deltaY);
+    if (this.props.stopPropagation) event.stopPropagation();
     if (!isTransitioning && !scrollingUpDown) {
       const side = deltaX < 0 ? 1 : -1;
 
-      let offsetPercentage = (delta / galleryWidth * 100);
+      let offsetPercentage = (absX / galleryWidth * 100);
       if (Math.abs(offsetPercentage) >= 100) {
         offsetPercentage = 100;
       }
@@ -1085,6 +1090,8 @@ export default class ImageGallery extends React.Component {
       }
     });
 
+
+
     const slideWrapper = (
       <div
         ref={this._initGalleryResizing}
@@ -1114,13 +1121,10 @@ export default class ImageGallery extends React.Component {
 
                 <Swipeable
                   className='image-gallery-swipe'
-                  disabled={this.props.disableSwipe}
                   key='swipeable'
                   delta={0}
-                  flickThreshold={this.props.flickThreshold}
                   onSwiping={this._handleSwiping}
                   onSwiped={this._handleOnSwiped}
-                  stopPropagation={this.props.stopPropagation}
                   preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
                 >
                   <div className='image-gallery-slides'>
