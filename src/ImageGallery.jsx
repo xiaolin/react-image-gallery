@@ -432,7 +432,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (this._thumbnailsWrapper) {
-      if (this._isThumbnailVertical()) {
+      if (this._isThumbnailHorizontal()) {
         this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
       } else {
         this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
@@ -443,7 +443,7 @@ export default class ImageGallery extends React.Component {
     this._setThumbsTranslate(-this._getThumbsTranslate(currentIndex));
   };
 
-  _isThumbnailVertical() {
+  _isThumbnailHorizontal() {
     const { thumbnailPosition } = this.props;
     return thumbnailPosition === 'left' || thumbnailPosition === 'right';
   }
@@ -618,7 +618,7 @@ export default class ImageGallery extends React.Component {
 
     if (this._thumbnails) {
       // total scroll required to see the last thumbnail
-      if (this._isThumbnailVertical()) {
+      if (this._isThumbnailHorizontal()) {
         if (this._thumbnails.scrollHeight <= thumbnailsWrapperHeight) {
           return 0;
         }
@@ -728,7 +728,7 @@ export default class ImageGallery extends React.Component {
   }
 
   _getThumbnailBarHeight() {
-    if (this._isThumbnailVertical()) {
+    if (this._isThumbnailHorizontal()) {
       return {
         height: this.state.gallerySlideWrapperHeight
       };
@@ -834,7 +834,7 @@ export default class ImageGallery extends React.Component {
     const { thumbsTranslate } = this.state;
     const verticalTranslateValue = isRTL ? thumbsTranslate * -1 : thumbsTranslate;
 
-    if (this._isThumbnailVertical()) {
+    if (this._isThumbnailHorizontal()) {
       translate = `translate(0, ${thumbsTranslate}px)`;
       if (useTranslate3D) {
         translate = `translate3d(0, ${thumbsTranslate}px, 0)`;
@@ -980,7 +980,6 @@ export default class ImageGallery extends React.Component {
       preventDefaultTouchmoveEvent,
       slideOnThumbnailOver,
       isRTL,
-      showThumbnails,
     } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
@@ -1039,7 +1038,7 @@ export default class ImageGallery extends React.Component {
         slides.push(slide);
       }
 
-      if (showThumbnails) {
+      if (this.props.showThumbnails) {
         thumbnails.push(
           <a
             key={index}
@@ -1168,12 +1167,6 @@ export default class ImageGallery extends React.Component {
       modalFullscreen ? 'fullscreen-modal' : '',
     ].filter(name => typeof name === 'string').join(' ');
 
-    const contentClassNames = [
-      'image-gallery-content',
-      isFullscreen ? 'fullscreen' : '',
-      showThumbnails && this._isThumbnailVertical() ? 'thumbnails-vertical' : '',
-      showThumbnails && !this._isThumbnailVertical() ? 'thumbnails-horizontal' : '',
-    ].join(' ');
     return (
       <div
         ref={i => this._imageGallery = i}
@@ -1182,7 +1175,7 @@ export default class ImageGallery extends React.Component {
       >
 
         <div
-          className={contentClassNames}
+          className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}
         >
 
           {
@@ -1190,9 +1183,9 @@ export default class ImageGallery extends React.Component {
               slideWrapper
           }
           {
-            showThumbnails &&
+            this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailVertical() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div
