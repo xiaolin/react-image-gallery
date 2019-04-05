@@ -432,7 +432,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (this._thumbnailsWrapper) {
-      if (this._isThumbnailHorizontal()) {
+      if (this._isThumbnailVertical()) {
         this.setState({thumbnailsWrapperHeight: this._thumbnailsWrapper.offsetHeight});
       } else {
         this.setState({thumbnailsWrapperWidth: this._thumbnailsWrapper.offsetWidth});
@@ -443,7 +443,7 @@ export default class ImageGallery extends React.Component {
     this._setThumbsTranslate(-this._getThumbsTranslate(currentIndex));
   };
 
-  _isThumbnailHorizontal() {
+  _isThumbnailVertical() {
     const { thumbnailPosition } = this.props;
     return thumbnailPosition === 'left' || thumbnailPosition === 'right';
   }
@@ -618,7 +618,7 @@ export default class ImageGallery extends React.Component {
 
     if (this._thumbnails) {
       // total scroll required to see the last thumbnail
-      if (this._isThumbnailHorizontal()) {
+      if (this._isThumbnailVertical()) {
         if (this._thumbnails.scrollHeight <= thumbnailsWrapperHeight) {
           return 0;
         }
@@ -728,7 +728,7 @@ export default class ImageGallery extends React.Component {
   }
 
   _getThumbnailBarHeight() {
-    if (this._isThumbnailHorizontal()) {
+    if (this._isThumbnailVertical()) {
       return {
         height: this.state.gallerySlideWrapperHeight
       };
@@ -834,7 +834,7 @@ export default class ImageGallery extends React.Component {
     const { thumbsTranslate } = this.state;
     const verticalTranslateValue = isRTL ? thumbsTranslate * -1 : thumbsTranslate;
 
-    if (this._isThumbnailHorizontal()) {
+    if (this._isThumbnailVertical()) {
       translate = `translate(0, ${thumbsTranslate}px)`;
       if (useTranslate3D) {
         translate = `translate3d(0, ${thumbsTranslate}px, 0)`;
@@ -1185,7 +1185,7 @@ export default class ImageGallery extends React.Component {
           {
             this.props.showThumbnails &&
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailHorizontal() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this._isThumbnailVertical() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
                 style={this._getThumbnailBarHeight()}
               >
                 <div
