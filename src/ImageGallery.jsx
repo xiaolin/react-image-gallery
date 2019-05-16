@@ -1091,8 +1091,6 @@ export default class ImageGallery extends React.Component {
       }
     });
 
-
-
     const slideWrapper = (
       <div
         ref={this._initGalleryResizing}
