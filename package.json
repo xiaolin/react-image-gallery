@@ -65,7 +65,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
-    "react-swipeable": "^4.3.2",
+    "react-swipeable": "^5.2.0",
     "resize-observer-polyfill": "^1.5.0"
   }
 }
