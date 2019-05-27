@@ -1,5 +1,5 @@
 import React from 'react';
-import Swipeable from 'react-swipeable';
+import { Swipeable, LEFT, RIGHT } from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import ResizeObserver from 'resize-observer-polyfill';
@@ -482,22 +482,23 @@ export default class ImageGallery extends React.Component {
     }
   };
 
-  _setScrollDirection(deltaX, deltaY) {
+  _setScrollDirection(dir) {
     const { scrollingUpDown, scrollingLeftRight } = this.state;
-    const x = Math.abs(deltaX);
-    const y = Math.abs(deltaY);
 
-    // If y > x the user is scrolling up and down
-    if (y > x && !scrollingUpDown && !scrollingLeftRight) {
-      this.setState({ scrollingUpDown: true });
-    } else if (!scrollingLeftRight && !scrollingUpDown) {
-      this.setState({ scrollingLeftRight: true });
+    if (!scrollingUpDown && !scrollingLeftRight) {
+      if (dir === LEFT || dir === RIGHT) {
+        this.setState({ scrollingLeftRight: true });
+      } else {
+        this.setState({ scrollingUpDown: true });
+      }
     }
   };
 
-  _handleOnSwiped = (e, deltaX, deltaY, isFlick) => {
+  _handleOnSwiped = ({ event, dir, velocity }) => {
+    if (this.props.disableSwipe) return;
     const { scrollingUpDown, scrollingLeftRight } = this.state;
     const { isRTL } = this.props;
+    if (this.props.stopPropagation) event.stopPropagation();
     if (scrollingUpDown) {
       // user stopped scrollingUpDown
       this.setState({ scrollingUpDown: false });
@@ -509,7 +510,8 @@ export default class ImageGallery extends React.Component {
     }
 
     if (!scrollingUpDown) { // don't swipe if user is scrolling
-      const side = (deltaX > 0 ? 1 : -1) * (isRTL ? -1 : 1);//if it is RTL the direction is reversed
+      const side = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1); // if it is RTL the direction is reversed
+      const isFlick = velocity > this.props.flickThreshold;
       this._handleOnSwipedTo(side, isFlick);
     }
   };
@@ -539,14 +541,20 @@ export default class ImageGallery extends React.Component {
     return Math.abs(this.state.offsetPercentage) > this.props.swipeThreshold;
   }
 
-  _handleSwiping = (e, deltaX, deltaY, delta) => {
-    const { galleryWidth, isTransitioning, scrollingUpDown } = this.state;
+  _handleSwiping = ({ event, absX, dir }) => {
+    if (this.props.disableSwipe) return;
+    const { galleryWidth, isTransitioning, scrollingUpDown, scrollingLeftRight } = this.state;
     const { swipingTransitionDuration } = this.props;
-    this._setScrollDirection(deltaX, deltaY);
+    this._setScrollDirection(dir);
+    if (this.props.stopPropagation) event.stopPropagation();
+    if (
+      (this.props.preventDefaultTouchmoveEvent || scrollingLeftRight)
+      && event.cancelable
+    ) event.preventDefault();
     if (!isTransitioning && !scrollingUpDown) {
-      const side = deltaX < 0 ? 1 : -1;
+      const side = dir === RIGHT ? 1 : -1;
 
-      let offsetPercentage = (delta / galleryWidth * 100);
+      let offsetPercentage = (absX / galleryWidth * 100);
       if (Math.abs(offsetPercentage) >= 100) {
         offsetPercentage = 100;
       }
@@ -972,12 +980,10 @@ export default class ImageGallery extends React.Component {
       isFullscreen,
       modalFullscreen,
       isPlaying,
-      scrollingLeftRight,
     } = this.state;
 
     const {
       infinite,
-      preventDefaultTouchmoveEvent,
       slideOnThumbnailOver,
       isRTL,
     } = this.props;
@@ -1113,14 +1119,10 @@ export default class ImageGallery extends React.Component {
 
                 <Swipeable
                   className='image-gallery-swipe'
-                  disabled={this.props.disableSwipe}
                   key='swipeable'
                   delta={0}
-                  flickThreshold={this.props.flickThreshold}
                   onSwiping={this._handleSwiping}
                   onSwiped={this._handleOnSwiped}
-                  stopPropagation={this.props.stopPropagation}
-                  preventDefaultTouchmoveEvent={preventDefaultTouchmoveEvent || scrollingLeftRight}
                 >
                   <div className='image-gallery-slides'>
                     {slides}
