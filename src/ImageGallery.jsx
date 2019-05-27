@@ -648,32 +648,34 @@ export default class ImageGallery extends React.Component {
   }
 
   _getAlignmentClassName(index) {
-    // LEFT, and RIGHT alignments are necessary for lazyLoad
+    /*
+      Necessary for lazing loading
+    */
     let {currentIndex} = this.state;
     let alignment = '';
-    const LEFT = 'left';
-    const CENTER = 'center';
-    const RIGHT = 'right';
+    const leftClassName = 'left';
+    const centerClassName = 'center';
+    const rightClassName = 'right';
 
     switch (index) {
       case (currentIndex - 1):
-        alignment = ` ${LEFT}`;
+        alignment = ` ${leftClassName}`;
         break;
       case (currentIndex):
-        alignment = ` ${CENTER}`;
+        alignment = ` ${centerClassName}`;
         break;
       case (currentIndex + 1):
-        alignment = ` ${RIGHT}`;
+        alignment = ` ${rightClassName}`;
         break;
     }
 
     if (this.props.items.length >= 3 && this.props.infinite) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
-        alignment = ` ${RIGHT}`;
+        alignment = ` ${rightClassName}`;
       } else if (index === this.props.items.length - 1 && currentIndex === 0) {
         // set last slide as left slide if were sliding left from first slide
-        alignment = ` ${LEFT}`;
+        alignment = ` ${leftClassName}`;
       }
     }
 
