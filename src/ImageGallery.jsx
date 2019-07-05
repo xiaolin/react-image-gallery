@@ -163,27 +163,29 @@ export default class ImageGallery extends React.Component {
     },
   };
 
-  componentWillReceiveProps(nextProps) {
-    if (nextProps.lazyLoad &&
-      (!this.props.lazyLoad || this.props.items !== nextProps.items)) {
-      this._lazyLoaded = [];
-    }
-  }
-
   componentDidUpdate(prevProps, prevState) {
-    const itemsChanged = prevProps.items.length !== this.props.items.length;
-    if (itemsChanged) {
+    const itemsSizeChanged = prevProps.items.length !== this.props.items.length;
+    const itemsChanged = prevProps.items !== this.props.items;
+    if (itemsSizeChanged) {
       this._handleResize();
     }
     if (prevState.currentIndex !== this.state.currentIndex) {
       this._updateThumbnailTranslate(prevState.currentIndex);
     }
 
+    // if slideDuration changes, update slideToIndex throttle
     if (prevProps.slideDuration !== this.props.slideDuration) {
       this.slideToIndex = throttle(this._unthrottledSlideToIndex,
                                    this.props.slideDuration,
                                    {trailing: false});
     }
+
+    // if lazyLoad is true, reset this._lazyLoaded array if items changed or
+    // if lazyLoad was previously false
+    if (this.props.lazyLoad && (!prevProps.lazyLoad || itemsChanged)) {
+      this._lazyLoaded = [];
+    }
+
   }
 
   componentDidMount() {
@@ -988,6 +990,7 @@ export default class ImageGallery extends React.Component {
       infinite,
       slideOnThumbnailOver,
       isRTL,
+      lazyLoad,
     } = this.props;
 
     const thumbnailStyle = this._getThumbnailStyle();
@@ -1002,10 +1005,8 @@ export default class ImageGallery extends React.Component {
 
     this.props.items.forEach((item, index) => {
       const alignment = this._getAlignmentClassName(index);
-      const originalClass = item.originalClass ?
-        ` ${item.originalClass}` : '';
-      const thumbnailClass = item.thumbnailClass ?
-        ` ${item.thumbnailClass}` : '';
+      const originalClass = item.originalClass ? ` ${item.originalClass}` : '';
+      const thumbnailClass = item.thumbnailClass ? ` ${item.thumbnailClass}` : '';
 
       const renderItem = item.renderItem ||
         this.props.renderItem || this._renderItem;
@@ -1013,8 +1014,8 @@ export default class ImageGallery extends React.Component {
       const renderThumbInner = item.renderThumbInner ||
         this.props.renderThumbInner || this._renderThumbInner;
 
-      const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
-      if (showItem && this.props.lazyLoad) {
+      const showItem = !lazyLoad || alignment || this._lazyLoaded[index];
+      if (showItem && lazyLoad && !this._lazyLoaded[index]) {
         this._lazyLoaded[index] = true;
       }
 
