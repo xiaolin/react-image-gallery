@@ -166,26 +166,26 @@ export default class ImageGallery extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const itemsSizeChanged = prevProps.items.length !== this.props.items.length;
     const itemsChanged = prevProps.items !== this.props.items;
+    const startIndexUpdated = prevProps.startIndex !== this.props.startIndex;
     if (itemsSizeChanged) {
       this._handleResize();
     }
     if (prevState.currentIndex !== this.state.currentIndex) {
-      this._updateThumbnailTranslate(prevState.currentIndex);
+      this._slideThumbnailBar(prevState.currentIndex);
     }
-
     // if slideDuration changes, update slideToIndex throttle
     if (prevProps.slideDuration !== this.props.slideDuration) {
       this.slideToIndex = throttle(this._unthrottledSlideToIndex,
                                    this.props.slideDuration,
                                    {trailing: false});
     }
-
-    // if lazyLoad is true, reset this._lazyLoaded array if items changed or
-    // if lazyLoad was previously false
     if (this.props.lazyLoad && (!prevProps.lazyLoad || itemsChanged)) {
       this._lazyLoaded = [];
     }
 
+    if (startIndexUpdated || itemsChanged) {
+      this.setState({ currentIndex: this.props.startIndex });
+    }
   }
 
   componentDidMount() {
@@ -597,7 +597,7 @@ export default class ImageGallery extends React.Component {
     return this.state.currentIndex < this.props.items.length - 1;
   }
 
-  _updateThumbnailTranslate(previousIndex) {
+  _slideThumbnailBar(previousIndex) {
     const { thumbsTranslate, currentIndex } = this.state;
     if (this.state.currentIndex === 0) {
       this._setThumbsTranslate(0);
