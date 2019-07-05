@@ -7,6 +7,7 @@ npm-debug.log
 build/
 example/example.js
 example/example.js.map
+package-lock.json
 demo/
 styles/css/
 yarn.lock

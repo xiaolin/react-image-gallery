@@ -9,7 +9,7 @@ const screenChangeEvents = [
   'fullscreenchange',
   'MSFullscreenChange',
   'mozfullscreenchange',
-  'webkitfullscreenchange'
+  'webkitfullscreenchange',
 ];
 
 export default class ImageGallery extends React.Component {
