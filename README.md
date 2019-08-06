@@ -235,6 +235,8 @@ class MyComponent extends React.Component {
 
 # Functions
 
+The following functions can be accessed using [refs](https://reactjs.org/docs/refs-and-the-dom.html)
+
 * `play()`: plays the slides
 * `pause()`: pauses the slides
 * `fullScreen()`: activates full screen
