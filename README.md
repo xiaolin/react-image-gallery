@@ -23,7 +23,13 @@ Features of `react-image-gallery`
 ## Getting started
 
 ```
+npm install react
 npm install react-image-gallery
+```
+
+or
+```
+npm install react react-image-gallery
 ```
 
 ### Style import
@@ -42,6 +48,8 @@ import "react-image-gallery/styles/css/image-gallery.css";
 node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
 node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
+
+> When using webpack with css-loader, use `@import "~react-image-gallery/styles/scss/image-gallery.scss"` notation. [Read more abou it](https://github.com/webpack-contrib/css-loader#url)
 
 
 ### Example
