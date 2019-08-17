@@ -58,13 +58,16 @@
     "gulp-rename": "^1.2.0",
     "gulp-sass": "^2.3.2",
     "gulp-uglify": "^1.5.3",
-    "react-dom": "^16.4.0",
+    "react": "^16.9.0",
+    "react-dom": "^16.9.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.8.0"
   },
+  "peerDependencies": {
+    "react": "^16.9.0"
+  },
   "dependencies": {
-    "react": "^16.4.0",
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
