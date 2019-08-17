@@ -22,10 +22,11 @@ Features of `react-image-gallery`
 
 ## Getting started
 
+> `react-image-gallery` requires React 16.8.0 and above.
+
 ```
 npm install react-image-gallery
 ```
-
 ### Style import
 
 ```
@@ -42,6 +43,8 @@ import "react-image-gallery/styles/css/image-gallery.css";
 node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
 node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
+
+> When using webpack with css-loader, use `@import "~react-image-gallery/styles/scss/image-gallery.scss"` notation. [Read more abou it](https://github.com/webpack-contrib/css-loader#url)
 
 
 ### Example
