@@ -22,7 +22,7 @@ Features of `react-image-gallery`
 
 ## Getting started
 
-> `react-image-gallery` requires React 16.8.0 and above.
+> `react-image-gallery` requires React 16.0.0 and above.
 
 ```
 npm install react-image-gallery
