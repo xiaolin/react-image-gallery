@@ -27,25 +27,19 @@ React Image Gallery requires **React 16.0.0 or later.**
 ```
 npm install react-image-gallery
 ```
-### Style import
 
+### Style import (with webpack)
 ```
 # SCSS
-@import "node_modules/react-image-gallery/styles/scss/image-gallery.scss";
+@import "~react-image-gallery/styles/scss/image-gallery.scss";
 
 # CSS
-@import "node_modules/react-image-gallery/styles/css/image-gallery.css";
-
-# Webpack
-import "react-image-gallery/styles/css/image-gallery.css";
+@import "~react-image-gallery/styles/css/image-gallery.css";
 
 # Stylesheet with no icons
 node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
 node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
-
-> When using webpack with css-loader, use `@import "~react-image-gallery/styles/scss/image-gallery.scss"` notation. [Read more abou it](https://github.com/webpack-contrib/css-loader#url)
-
 
 ### Example
 Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js)
@@ -58,18 +52,18 @@ class MyComponent extends React.Component {
 
     const images = [
       {
-        original: 'http://lorempixel.com/1000/600/nature/1/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/1/',
+        original: 'https://picsum.photos/id/1018/1000/600/',
+        thumbnail: 'https://picsum.photos/id/1018/250/150/',
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/2/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/2/'
+        original: 'https://picsum.photos/id/1015/1000/600/',
+        thumbnail: 'https://picsum.photos/id/1015/250/150/',
       },
       {
-        original: 'http://lorempixel.com/1000/600/nature/3/',
-        thumbnail: 'http://lorempixel.com/250/150/nature/3/'
-      }
-    ]
+        original: 'https://picsum.photos/id/1019/1000/600/',
+        thumbnail: 'https://picsum.photos/id/1019/250/150/',
+      },
+    ];
 
     return (
       <ImageGallery items={images} />
