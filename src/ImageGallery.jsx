@@ -163,9 +163,17 @@ export default class ImageGallery extends React.Component {
     },
   };
 
+  componentDidMount() {
+    if (this.props.autoPlay) {
+      this.play();
+    }
+    window.addEventListener('keydown', this._handleKeyDown);
+    this._onScreenChangeEvent();
+  }
+
   componentDidUpdate(prevProps, prevState) {
     const itemsSizeChanged = prevProps.items.length !== this.props.items.length;
-    const itemsChanged = prevProps.items !== this.props.items;
+    const itemsChanged = JSON.stringify(prevProps.items) !== JSON.stringify(this.props.items);
     const startIndexUpdated = prevProps.startIndex !== this.props.startIndex;
     if (itemsSizeChanged) {
       this._handleResize();
@@ -186,14 +194,6 @@ export default class ImageGallery extends React.Component {
     if (startIndexUpdated || itemsChanged) {
       this.setState({ currentIndex: this.props.startIndex });
     }
-  }
-
-  componentDidMount() {
-    if (this.props.autoPlay) {
-      this.play();
-    }
-    window.addEventListener('keydown', this._handleKeyDown);
-    this._onScreenChangeEvent();
   }
 
   componentWillUnmount() {
