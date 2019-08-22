@@ -384,17 +384,21 @@ var ImageGallery = function (_React$Component) {
     value: function componentDidUpdate(prevProps, prevState) {
       var itemsChanged = prevProps.items.length !== this.props.items.length;
       if (itemsChanged) {
-        if (this.props.onItemsGalleryChange) {
-          // if the items have changed, call the callback function
+        var coverPhotoChange = prevProps.items[prevProps.startIndex].id !== this.props.items[this.props.startIndex].id;
+        if (coverPhotoChange && this.props.onItemsGalleryChange) {
+          // call the callback function
           this.props.onItemsGalleryChange();
         }
-        //if items have changed go to the startIndex (transition is not visible)
-        this.setState({
-          currentIndex: this.props.startIndex,
-          style: {
-            transition: 'all 0ms ease'
-          }
-        });
+        //if index has changed go to the startIndex (transition is not visible)
+        var indexChange = this.props.startIndex !== prevState.currentIndex;
+        if (indexChange) {
+          this.setState({
+            currentIndex: this.props.startIndex,
+            style: {
+              transition: 'all 0ms ease'
+            }
+          });
+        }
         this._handleResize();
       }
       if (prevState.currentIndex !== this.state.currentIndex) {
@@ -622,7 +626,7 @@ var ImageGallery = function (_React$Component) {
   }, {
     key: '_canNavigate',
     value: function _canNavigate() {
-      return this.props.items.length >= 2;
+      return this.props.items.length >= 2 && !this.props.disableNavigation;
     }
   }, {
     key: '_canSlideLeft',
@@ -1202,7 +1206,8 @@ ImageGallery.propTypes = {
   stopPropagation: _propTypes2.default.bool,
   additionalClass: _propTypes2.default.string,
   useTranslate3D: _propTypes2.default.bool,
-  isRTL: _propTypes2.default.bool
+  isRTL: _propTypes2.default.bool,
+  disableNavigation: _propTypes2.default.bool
 };
 ImageGallery.defaultProps = {
   items: [],

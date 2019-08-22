@@ -122,6 +122,7 @@ class MyComponent extends React.Component {
 * `disableArrowKeys`: Boolean, default `false`
   * disables keydown listener for left and right keyboard arrow keys
 * `disableSwipe`: Boolean, default `false`
+* `disableGalleryNav`: Boolean, default `false`
 * `defaultImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
@@ -155,7 +156,8 @@ class MyComponent extends React.Component {
 * `onTouchMove`: Function, `callback(event) on gallery slide`
 * `onTouchEnd`: Function, `callback(event) on gallery slide`
 * `onTouchStart`: Function, `callback(event) on gallery slide`
-* `onReadyToDisplay`: Function, `callback() when gallery is going to be displayed`
+* `onImageGalleryReady`: Function, `callback() when gallery is going to be displayed`
+* `onItemsGalleryChange`: Function, `callback() when items have changed`
 * `onMouseOver`: Function, `callback(event) on gallery slide`
 * `onMouseLeave`: Function, `callback(event) on gallery slide`
 * `additionalClass`: String,
