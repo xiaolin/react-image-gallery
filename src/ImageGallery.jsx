@@ -182,10 +182,6 @@ export default class ImageGallery extends React.Component {
     if (this.props.lazyLoad && (!prevProps.lazyLoad || itemsChanged)) {
       this._lazyLoaded = [];
     }
-
-    if (startIndexUpdated || itemsChanged) {
-      this.setState({ currentIndex: this.props.startIndex });
-    }
   }
 
   componentDidMount() {
