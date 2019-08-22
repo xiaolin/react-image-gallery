@@ -181,7 +181,10 @@ export default class ImageGallery extends React.Component {
   componentDidUpdate(prevProps, prevState) {
     const itemsChanged = prevProps.items.length !== this.props.items.length;
     if (itemsChanged) {
-      const coverPhotoChange = prevProps.items[prevProps.startIndex].id !== this.props.items[this.props.startIndex].id;
+        const prevCoverPhoto = prevProps.items[prevProps.startIndex] || {};
+        const newCoverPhoto = this.props.items[this.props.startIndex] || {};
+        const coverPhotoChanged = prevCoverPhoto.id !== newCoverPhoto.id;
+
         if (coverPhotoChange && this.props.onItemsGalleryChange) {
             // call the callback function
             this.props.onItemsGalleryChange();
