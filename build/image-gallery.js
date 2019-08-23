@@ -388,7 +388,7 @@ var ImageGallery = function (_React$Component) {
         var newCoverPhoto = this.props.items[this.props.startIndex] || {};
         var coverPhotoChanged = prevCoverPhoto.id !== newCoverPhoto.id;
 
-        if (coverPhotoChange && this.props.onItemsGalleryChange) {
+        if (coverPhotoChanged && this.props.onItemsGalleryChange) {
           // call the callback function
           this.props.onItemsGalleryChange();
         }

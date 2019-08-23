@@ -185,7 +185,7 @@ export default class ImageGallery extends React.Component {
         const newCoverPhoto = this.props.items[this.props.startIndex] || {};
         const coverPhotoChanged = prevCoverPhoto.id !== newCoverPhoto.id;
 
-        if (coverPhotoChange && this.props.onItemsGalleryChange) {
+        if (coverPhotoChanged && this.props.onItemsGalleryChange) {
             // call the callback function
             this.props.onItemsGalleryChange();
         }
