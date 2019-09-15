@@ -118,7 +118,7 @@ class MyComponent extends React.Component {
 * `disableArrowKeys`: Boolean, default `false`
   * disables keydown listener for left and right keyboard arrow keys
 * `disableSwipe`: Boolean, default `false`
-* `defaultImage`: String, default `undefined`
+* `onErrorImage`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
 * `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
@@ -139,9 +139,9 @@ class MyComponent extends React.Component {
     * An option to prevent the browser's touchmove event (stops the gallery from scrolling up or down when swiping)
 * `startIndex`: Number, default `0`
 * `onImageError`: Function, `callback(event)`
-  * overrides defaultImage
+  * overrides onErrorImage
 * `onThumbnailError`: Function, `callback(event)`
-  * overrides defaultImage
+  * overrides onErrorImage
 * `onThumbnailClick`: Function, `callback(event, index)`
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
