@@ -61,14 +61,10 @@ const images = [
   },
 ];
 
-class MyComponent extends React.Component {
-
+class MyGallery extends React.Component {
   render() {
-    return (
-      <ImageGallery items={images} />
-    );
+    return <ImageGallery items={images} />;
   }
-
 }
 ```
 
