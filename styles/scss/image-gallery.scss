@@ -88,12 +88,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     transition: color .2s ease-out;
   }
 
-  &:hover::before {
+  &:hover::before, &:focus::before {
     color: $ig-blue;
-
-    @media (max-width: $ig-screen-sm-min) {
-      color: $ig-white;
-    }
+    transform: scale(1.1);
   }
 }
 
@@ -115,15 +112,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     }
   }
 
-  &:hover::before {
-    color: $ig-white;
-    transform: scale(1.1);
-
-    @media (max-width: $ig-screen-sm-min) {
-      transform: none;
-    }
-  }
-
 }
 
 .image-gallery-fullscreen-button {
@@ -137,7 +125,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     content: $ionicon-var-android-contract;
   }
 
-  &.active:hover::before {
+  &.active:hover::before, &.active:focus::before {
     transform: scale(.9);
   }
 }
@@ -273,8 +261,17 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       padding: 2.7px;
     }
 
+    &:focus, &:hover {
+      background: $ig-blue;
+      transform: scale(1.5);
+    }
+    
     &.active {
       background: $ig-white;
+      
+      &:focus, &:hover {
+         border-color: $ig-blue;
+      }
     }
   }
 }
