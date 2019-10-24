@@ -336,6 +336,44 @@ class App extends React.Component {
           </div>
 
         </div>
+
+        <div className='app-sandbox'>
+          <div className='app-sandbox-content'>
+            <h2 className='app-header'>Second Gallery on the Page</h2>
+            <p>If you plan to use multiple `ImageGallery`s on one site, you
+              should start using `arrowKeysInFullscreenOnly` to prevent
+              unexpected behaviour, or all galleries will slide when the
+              arrow keys are pressed. Just use the arrow keys on this site and
+              see what happens. Only the first gallery reacts in non-fullscreen.
+              The second one only listens to keyDown events in fullscreen.
+            </p>
+          </div>
+        </div>
+
+        <ImageGallery
+          arrowKeysInFullscreenOnly
+          items={this.images}
+          lazyLoad={false}
+          onClick={this._onImageClick.bind(this)}
+          onImageLoad={this._onImageLoad}
+          onSlide={this._onSlide.bind(this)}
+          onPause={this._onPause.bind(this)}
+          onScreenChange={this._onScreenChange.bind(this)}
+          onPlay={this._onPlay.bind(this)}
+          infinite={this.state.infinite}
+          showBullets={this.state.showBullets}
+          showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
+          showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
+          showThumbnails={this.state.showThumbnails}
+          showIndex={this.state.showIndex}
+          showNav={this.state.showNav}
+          isRTL={this.state.isRTL}
+          thumbnailPosition={this.state.thumbnailPosition}
+          slideDuration={parseInt(this.state.slideDuration)}
+          slideInterval={parseInt(this.state.slideInterval)}
+          slideOnThumbnailOver={this.state.slideOnThumbnailOver}
+          additionalClass="app-image-gallery"
+        />
       </section>
     );
   }

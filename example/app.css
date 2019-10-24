@@ -21,8 +21,8 @@ label {
   margin-left: 5px;
 }
 
-.app {
-
+p {
+  line-height: 1.5;
 }
 
 .app-header {
