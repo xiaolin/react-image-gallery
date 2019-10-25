@@ -3,6 +3,10 @@
   "version": "0.9.1",
   "description": "React carousel image gallery component with thumbnail and mobile support",
   "main": "./build/image-gallery.js",
+  "files": [
+    "build",
+    "styles/css"
+  ],
   "scripts": {
     "start": "gulp dev",
     "build": "gulp build",
