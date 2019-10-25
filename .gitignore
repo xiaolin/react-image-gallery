@@ -9,3 +9,6 @@ example/example.js
 example/example.js.map
 demo/
 styles/css/
+
+## generated npm packages
+*-[0-9].[0-9].[0-9].tgz
