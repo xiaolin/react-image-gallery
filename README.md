@@ -238,9 +238,10 @@ The following functions can be accessed using [refs](https://reactjs.org/docs/re
 
 # Contributing
 
+Each PR should be specific and isolated to the issue you're trying to fix. Please do not stack feature/chores/refactors/enhancements in one PR. Describe your feature/implementation in the pullrequest. If you're unsure if its usefu or its a major change, please open an issue first and get feedback.
+
 * Follow eslint provided
 * Comment your code
-* Describe your feature/implementation in the pullrequest
 * Write [clean](https://github.com/ryanmcdermott/clean-code-javascript) code
 
 # Build the example locally
