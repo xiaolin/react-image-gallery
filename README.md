@@ -255,7 +255,6 @@ npm start
 
 Then open [`localhost:8001`](http://localhost:8001) in a browser.
 
-
 # License
 
 MIT
