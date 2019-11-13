@@ -251,6 +251,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     margin: 0 5px;
     outline: none;
     padding: 5px;
+    transition: background .2s ease-out;
 
     @media (max-width: $ig-screen-sm-min) {
       margin: 0 3px;
@@ -263,15 +264,11 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
     &:focus, &:hover {
       background: $ig-blue;
-      transform: scale(1.5);
+      transform: scale(1.1);
     }
-    
+
     &.active {
       background: $ig-white;
-      
-      &:focus, &:hover {
-         border-color: $ig-blue;
-      }
     }
   }
 }
