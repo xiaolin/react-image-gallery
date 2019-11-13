@@ -2,6 +2,7 @@ import React from 'react';
 import { Swipeable, LEFT, RIGHT } from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
+import isEqual from 'lodash.isequal';
 import ResizeObserver from 'resize-observer-polyfill';
 import {
   arrayOf,
@@ -213,7 +214,7 @@ export default class ImageGallery extends React.Component {
 
   componentDidUpdate(prevProps, prevState) {
     const itemsSizeChanged = prevProps.items.length !== this.props.items.length;
-    const itemsChanged = JSON.stringify(prevProps.items) !== JSON.stringify(this.props.items);
+    const itemsChanged = !isEqual(prevProps.items, this.props.items);
     const startIndexUpdated = prevProps.startIndex !== this.props.startIndex;
     if (itemsSizeChanged) {
       this.handleResize();
