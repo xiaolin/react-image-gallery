@@ -69,6 +69,7 @@
   },
   "dependencies": {
     "lodash.debounce": "^4.0.8",
+    "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
     "react-swipeable": "^5.2.0",
