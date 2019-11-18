@@ -88,10 +88,24 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     transition: color .2s ease-out;
   }
 
-  &:hover::before,
-  &:focus::before {
+  &:hover::before {
     color: $ig-blue;
     transform: scale(1.1);
+  }
+
+  &:focus::before {
+    outline: 2px solid $ig-blue;
+  }
+}
+
+.image-gallery-using-mouse {
+  .image-gallery-fullscreen-button,
+  .image-gallery-play-button,
+  .image-gallery-left-nav,
+  .image-gallery-right-nav {
+    &:focus::before {
+      outline: none;
+    }
   }
 }
 

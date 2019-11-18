@@ -228,6 +228,7 @@ export default class ImageGallery extends React.Component {
       this.play();
     }
     window.addEventListener('keydown', this.handleKeyDown);
+    window.addEventListener('mousedown', this.handleMouseDown);
     this.addScreenChangeEvent();
   }
 
@@ -264,6 +265,7 @@ export default class ImageGallery extends React.Component {
 
   componentWillUnmount() {
     window.removeEventListener('keydown', this.handleKeyDown);
+    window.removeEventListener('mousedown', this.handleMouseDown);
 
     this.removeScreenChangeEvent();
 
@@ -378,7 +380,14 @@ export default class ImageGallery extends React.Component {
     this.setThumbsTranslate(-this.getThumbsTranslate(currentIndex));
   };
 
+  handleMouseDown = () => {
+    this.imageGallery.current.classList.add('image-gallery-using-mouse');
+  };
+
   handleKeyDown = (event) => {
+    // keep track of mouse vs keyboard usage for a11y
+    this.imageGallery.current.classList.remove('image-gallery-using-mouse');
+
     if (this.props.disableArrowKeys) {
       return;
     }
