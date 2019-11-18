@@ -20,7 +20,7 @@ class App extends React.Component {
       showGalleryPlayButton: true,
       showNav: true,
       isRTL: false,
-      slideDuration: 450,
+      slideDuration: 350,
       slideInterval: 2000,
       slideOnThumbnailOver: false,
       thumbnailPosition: 'bottom',
