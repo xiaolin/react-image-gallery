@@ -88,7 +88,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     transition: color .2s ease-out;
   }
 
-  &:hover::before, &:focus::before {
+  &:hover::before,
+  &:focus::before {
     color: $ig-blue;
     transform: scale(1.1);
   }
@@ -262,7 +263,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       padding: 2.7px;
     }
 
-    &:focus, &:hover {
+    &:focus,
+    &:hover {
       background: $ig-blue;
       transform: scale(1.1);
     }
@@ -283,7 +285,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   &.right {
     display: inline-block;
     vertical-align: top;
-    width: 108px; // 100px + 8px for border
+    width: 100px;
 
     @media (max-width: $ig-screen-sm-min) {
       width: 81px; // 75px + 6px for border
@@ -304,6 +306,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
         + .image-gallery-thumbnail {
           margin-left: 0;
+          margin-top: 2px;
         }
 
       }
@@ -350,6 +353,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   border: 4px solid transparent;
   transition: border .3s ease-out;
   width: 100px;
+  background: transparent;
+  padding: 0;
 
   @media (max-width: $ig-screen-sm-min) {
     border: 3px solid transparent;
@@ -369,7 +374,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     width: 100%;
   }
 
-  &.active {
+  &.active,
+  &:hover,
+  &:focus {
+    outline: none;
     border: 4px solid $ig-blue;
 
     @media (max-width: $ig-screen-sm-min) {
