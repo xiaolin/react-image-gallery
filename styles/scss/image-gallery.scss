@@ -106,10 +106,12 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
     @media (max-width: $ig-screen-sm-min) {
       font-size: 2.4em;
+      padding: 10px 15px;
     }
 
     @media (max-width: $ig-screen-xsm-min) {
       font-size: 2em;
+      padding: 5px;
     }
   }
 
@@ -358,7 +360,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
   @media (max-width: $ig-screen-sm-min) {
     border: 3px solid transparent;
-    width: 75px;
+    width: 81px;
   }
 
   + .image-gallery-thumbnail {
