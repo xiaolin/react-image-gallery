@@ -496,7 +496,7 @@ export default class ImageGallery extends React.Component {
       }
 
       const swipingTransition = {
-        transition: `transform ${swipingTransitionDuration}ms ease-in`,
+        transition: `transform ${swipingTransitionDuration}ms ease-out`,
       };
 
       this.setState({
