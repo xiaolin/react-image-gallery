@@ -68,7 +68,7 @@ export default class ImageGallery extends React.Component {
     disableSwipe: bool,
     useBrowserFullscreen: bool,
     preventDefaultTouchmoveEvent: bool,
-    onErrorImage: string,
+    onErrorImageURL: string,
     indexSeparator: string,
     thumbnailPosition: string,
     startIndex: number,
@@ -105,7 +105,7 @@ export default class ImageGallery extends React.Component {
   };
 
   static defaultProps = {
-    onErrorImage: '',
+    onErrorImageURL: '',
     additionalClass: '',
     showNav: true,
     autoPlay: false,
@@ -781,10 +781,10 @@ export default class ImageGallery extends React.Component {
   }
 
   handleImageError(event) {
-    const { onErrorImage } = this.props;
-    if (onErrorImage && event.target.src.indexOf(onErrorImage) === -1) {
+    const { onErrorImageURL } = this.props;
+    if (onErrorImageURL && event.target.src.indexOf(onErrorImageURL) === -1) {
       /* eslint-disable no-param-reassign */
-      event.target.src = onErrorImage;
+      event.target.src = onErrorImageURL;
       /* eslint-enable no-param-reassign */
     }
   }
