@@ -71,7 +71,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 .image-gallery-fullscreen-button,
 .image-gallery-play-button,
 .image-gallery-left-nav,
-.image-gallery-right-nav {
+.image-gallery-right-nav,
+.image-gallery-zoom-in, 
+.image-gallery-zoom-out  {
   appearance: none;
   background-color: transparent;
   border: 0;
@@ -102,7 +104,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   .image-gallery-fullscreen-button,
   .image-gallery-play-button,
   .image-gallery-left-nav,
-  .image-gallery-right-nav {
+  .image-gallery-right-nav,
+  .image-gallery-zoom-in,
+  .image-gallery-zoom-out {
     &:focus::before {
       outline: none;
     }
@@ -110,7 +114,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 }
 
 .image-gallery-fullscreen-button,
-.image-gallery-play-button {
+.image-gallery-play-button,
+.image-gallery-zoom-in,
+.image-gallery-zoom-out {
   bottom: 0;
 
   &::before {
@@ -158,6 +164,30 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     content: $ionicon-var-ios-pause;
   }
 
+}
+
+.image-gallery-zoom-controls {
+  top: 0;
+  right: 0;
+  padding: 10px;
+  position: absolute;
+
+  .image-gallery-zoom-in {
+    position: relative;
+
+    &::before {
+      padding: 10px 5px;
+      content: $ionicon-var-ios-add-circle;
+    }
+  }
+  .image-gallery-zoom-out { 
+    position: relative;
+
+    &::before {
+      padding: 10px 5px;
+      content: $ionicon-var-ios-remove-circle;
+    }
+  }
 }
 
 .image-gallery-left-nav,
@@ -437,4 +467,45 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     font-size: .8em;
     padding: 5px 10px;
   }
+}
+
+.image-gallery-image picture{
+    transform: translateZ(0);
+    max-width: 450px;
+    width: 100%;
+    margin: 0 auto;
+    overflow: hidden;
+    //flexbox controls the centering of the image
+    display: flex;
+    justify-content: center;
+    -ms-flex-align: center;
+    background-color: red; //there should be no red
+    
+    img {
+      width: 100%;
+      align-self: center;
+      -ms-align-self: center;
+      flex-shrink: 0;
+      
+      &[data-zoomReset] {
+        cursor: grabbing;
+        margin: 0 -100%;
+      }
+    }
+    
+    @media (max-width: 1140px) {
+      max-width: 100%;
+    }
+}
+
+.image-gallery-image {
+    overflow: hidden;
+    cursor: zoom-in;
+    touch-action: manipulation;
+    img {
+      object-fit: cover;
+      will-change: transform;
+      transition: transform 150ms ease-in-out;
+      touch-action: manipulation;
+    }
 }

@@ -63,6 +63,7 @@ export default class ImageGallery extends React.Component {
     showThumbnails: bool,
     showPlayButton: bool,
     showFullscreenButton: bool,
+    showZoomControls: bool,
     disableThumbnailScroll: bool,
     disableArrowKeys: bool,
     disableSwipe: bool,
@@ -96,6 +97,7 @@ export default class ImageGallery extends React.Component {
     renderRightNav: func,
     renderPlayPauseButton: func,
     renderFullscreenButton: func,
+    renderZoomControlButton: func,
     renderItem: func,
     renderThumbInner: func,
     stopPropagation: bool,
@@ -116,6 +118,7 @@ export default class ImageGallery extends React.Component {
     showThumbnails: true,
     showPlayButton: true,
     showFullscreenButton: true,
+    showZoomControls: true,
     disableThumbnailScroll: false,
     disableArrowKeys: false,
     disableSwipe: false,
@@ -177,6 +180,26 @@ export default class ImageGallery extends React.Component {
         aria-label="Play or Pause Slideshow"
       />
     ),
+    renderZoomControlButton: (zoomHandler) => (
+      <div className="image-gallery-zoom-controls">
+        <button
+          className={`image-gallery-zoom-in`}
+          type="button"
+          aria-label="Zoom In"
+          onClick={(e) => {
+            zoomHandler(true);
+          }}
+        ></button>
+        <button
+          className={`image-gallery-zoom-out`}
+          type="button"
+          aria-label="Zoom Out"
+          onClick={(e) => {
+            zoomHandler(false);
+          }}
+        ></button>
+      </div>
+    ),
     renderFullscreenButton: (onClick, isFullscreen) => (
       <button
         type="button"
@@ -199,6 +222,7 @@ export default class ImageGallery extends React.Component {
       thumbnailsWrapperHeight: 0,
       isFullscreen: false,
       isPlaying: false,
+      initZoom: 1
     };
     this.imageGallery = React.createRef();
     this.thumbnailsWrapper = React.createRef();
@@ -236,6 +260,7 @@ export default class ImageGallery extends React.Component {
     if (autoPlay) {
       this.play();
     }
+    // document.querySelector('body').addEventListener("mousewheel", this.preventScrollHandler);
     window.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('mousedown', this.handleMouseDown);
     this.initResizeObserver(this.imageGallerySlideWrapper);
@@ -1044,12 +1069,69 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  buttonZoomHandler = (flag) => {
+    const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
+    this.zoom(img, flag);
+  }
+
+  mouseZoomHandler = e => {
+    const img = e.target;
+    this.preventScrollHandler(e);
+    var wheelData = e.nativeEvent.wheelDelta / 120;    
+    if (wheelData > 0) {
+      this.zoom(img, true)
+    } else {
+      this.zoom(img, false)
+    }
+  }
+
+  zoomIn = (img) => {
+    // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
+    this.zoom(img, true);
+  }
+  zoomOut = (img) => {
+    // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
+    this.zoom(img, true);
+  }
+
+  zoom(img, flag) {
+    const { initZoom } = this.state;
+    if (flag) {
+      initZoom < 5 && this.setState({ initZoom: initZoom + 0.50 })
+    } else {
+      initZoom > 1 && this.setState({ initZoom: initZoom - 0.50 })
+    }
+    img.style.transform = `scale(${this.state.initZoom})`;
+  }
+
+  zoomMouseMoveHandler = (e) => {
+    const img = e.target;
+    const imgPartent = img.parentElement;
+    const transform = ((e.pageX - imgPartent.offsetLeft) / img.width) * 100 + '% ' + ((e.pageY - imgPartent.offsetTop) / img.height) * 100 + '%'
+    e.preventDefault();
+    e.stopPropagation();
+    img.style.transformOrigin = transform;
+  }
+
+  preventScrollHandler = e => {
+    debugger;
+    e.preventDefault();
+    e.stopPropagation();
+    // e.nativeEvent.preventDefault();
+  }
+
   renderItem(item) {
-    const { onImageError, onImageLoad } = this.props;
+    const { onImageError, onImageLoad, showZoomControls } = this.props;
     const handleImageError = onImageError || this.handleImageError;
 
     return (
-      <div className="image-gallery-image">
+      <div className="image-gallery-image"
+        onMouseMove={this.zoomMouseMoveHandler}
+        onScroll={this.preventScrollHandler}
+        onWheel={this.preventScrollHandler}
+        onTouchMove={this.preventScrollHandler}
+        onTouchEnd={this.preventScrollHandler}
+      >
         {
           item.imageSet ? (
             <picture
@@ -1069,6 +1151,7 @@ export default class ImageGallery extends React.Component {
               <img
                 alt={item.originalAlt}
                 src={item.original}
+                onWheel={showZoomControls && this.mouseZoomHandler}                
               />
             </picture>
           ) : (
@@ -1080,6 +1163,8 @@ export default class ImageGallery extends React.Component {
               title={item.originalTitle}
               onLoad={onImageLoad}
               onError={handleImageError}
+              onWheel={showZoomControls && this.mouseZoomHandler}  
+                // onScroll={ e => e.preventDefault()} onWheel={ e => e.preventDefault()} onTouchMove={ e => e.preventDefault()} onTouchEnd={ e => e.stopPropagation() }  
             />
           )
         }
@@ -1153,7 +1238,9 @@ export default class ImageGallery extends React.Component {
       showThumbnails,
       showNav,
       showPlayButton,
+      showZoomControls,
       renderPlayPauseButton,
+      renderZoomControlButton
     } = this.props;
 
     const thumbnailStyle = this.getThumbnailStyle();
@@ -1301,6 +1388,7 @@ export default class ImageGallery extends React.Component {
             </div>
           )
         }
+        {showZoomControls && renderZoomControlButton(this.buttonZoomHandler)}
         {showFullscreenButton && renderFullscreenButton(this.toggleFullScreen, isFullscreen)}
         {
           showIndex && (
