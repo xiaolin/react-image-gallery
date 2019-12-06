@@ -200,6 +200,7 @@ export default class ImageGallery extends React.Component {
       isFullscreen: false,
       isPlaying: false,
     };
+    this.loadedImages = {};
     this.imageGallery = React.createRef();
     this.thumbnailsWrapper = React.createRef();
     this.thumbnails = React.createRef();
@@ -1044,6 +1045,20 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  isImageLoaded(item) {
+    /*
+      Keep track of images loaded so that onImageLoad prop is not
+      called multiple times when re-render the images
+    */
+    const imageExists = this.loadedImages[item.original];
+    if (imageExists) {
+      return true;
+    }
+    // add image as loaded
+    this.loadedImages[item.original] = true;
+    return false;
+  }
+
   renderItem(item) {
     const { onImageError, onImageLoad } = this.props;
     const handleImageError = onImageError || this.handleImageError;
@@ -1053,7 +1068,7 @@ export default class ImageGallery extends React.Component {
         {
           item.imageSet ? (
             <picture
-              onLoad={onImageLoad}
+              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
               onError={handleImageError}
             >
               {
@@ -1078,7 +1093,7 @@ export default class ImageGallery extends React.Component {
               srcSet={item.srcSet}
               sizes={item.sizes}
               title={item.originalTitle}
-              onLoad={onImageLoad}
+              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
               onError={handleImageError}
             />
           )
