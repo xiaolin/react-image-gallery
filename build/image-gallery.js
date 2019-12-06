@@ -65,29 +65,33 @@ var ImageGallery = function (_React$Component) {
     var _this = _possibleConstructorReturn(this, (ImageGallery.__proto__ || Object.getPrototypeOf(ImageGallery)).call(this, props));
 
     _this.buttonZoomHandler = function (flag) {
+      if (!_this.props.showZoomControls) {
+        return;
+      }
       var img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
       _this.zoom(img, flag);
     };
 
     _this.mouseZoomHandler = function (e) {
+      if (!_this.props.showZoomControls) {
+        return;
+      }
       var img = e.target;
       _this.preventScrollHandler(e);
       var wheelData = e.nativeEvent.wheelDelta / 120;
       if (wheelData > 0) {
-        _this.zoom(img, true);
+        _this.zoomIn(img);
       } else {
-        _this.zoom(img, false);
+        _this.zoomOut(img);
       }
     };
 
     _this.zoomIn = function (img) {
-      // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
       _this.zoom(img, true);
     };
 
     _this.zoomOut = function (img) {
-      // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
-      _this.zoom(img, true);
+      _this.zoom(img, false);
     };
 
     _this.zoomMouseMoveHandler = function (e) {
@@ -1114,12 +1118,14 @@ var ImageGallery = function (_React$Component) {
     value: function zoom(img, flag) {
       var initZoom = this.state.initZoom;
 
+      var newZoom = void 0;
       if (flag) {
-        initZoom < 5 && this.setState({ initZoom: initZoom + 0.50 });
+        newZoom = initZoom < 5 ? initZoom + 0.5 : initZoom;
       } else {
-        initZoom > 1 && this.setState({ initZoom: initZoom - 0.50 });
+        newZoom = initZoom > 1 ? initZoom - 0.5 : initZoom;
       }
-      img.style.transform = 'scale(' + this.state.initZoom + ')';
+      img.style.transform = 'scale(' + newZoom + ')';
+      this.setState({ initZoom: newZoom });
     }
   }, {
     key: 'renderItem',
@@ -1165,8 +1171,10 @@ var ImageGallery = function (_React$Component) {
           title: item.originalTitle,
           onLoad: onImageLoad,
           onError: handleImageError,
-          onWheel: showZoomControls && this.mouseZoomHandler
-          // onScroll={ e => e.preventDefault()} onWheel={ e => e.preventDefault()} onTouchMove={ e => e.preventDefault()} onTouchEnd={ e => e.stopPropagation() }  
+          onWheel: showZoomControls && this.mouseZoomHandler,
+          onScroll: this.preventScrollHandler,
+          onTouchMove: this.preventScrollHandler,
+          onTouchEnd: this.preventScrollHandler
         }),
         item.description && _react2.default.createElement(
           'span',
