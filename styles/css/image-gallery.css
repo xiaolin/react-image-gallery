@@ -412,7 +412,6 @@
 
 .image-gallery-image {
   overflow: hidden;
-  cursor: zoom-in;
   touch-action: manipulation; }
   .image-gallery-image img {
     object-fit: cover;

@@ -500,7 +500,6 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
 .image-gallery-image {
     overflow: hidden;
-    cursor: zoom-in;
     touch-action: manipulation;
     img {
       object-fit: cover;
