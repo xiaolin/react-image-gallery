@@ -1105,16 +1105,15 @@ export default class ImageGallery extends React.Component {
   }
 
   zoomMouseMoveHandler = (e) => {
-    const img = e.target;
-    const imgPartent = img.parentElement;
-    const transform = ((e.pageX - imgPartent.offsetLeft) / img.width) * 100 + '% ' + ((e.pageY - imgPartent.offsetTop) / img.height) * 100 + '%'
-    e.preventDefault();
-    e.stopPropagation();
+    this.preventScrollHandler(e)
+    const imgPartent = e.target.parentElement;
+    const img = imgPartent.querySelector('img');   
+    const imageParentPos = imgPartent.getBoundingClientRect();
+    const transform = ((e.pageX - imageParentPos.left) / img.width) * 100 + '% ' + ((e.pageY - imageParentPos.top) / img.height) * 100 + '%'
     img.style.transformOrigin = transform;
   }
 
   preventScrollHandler = e => {
-    debugger;
     e.preventDefault();
     e.stopPropagation();
     // e.nativeEvent.preventDefault();
@@ -1126,6 +1125,7 @@ export default class ImageGallery extends React.Component {
 
     return (
       <div className="image-gallery-image"
+        onMouseMove={this.zoomMouseMoveHandler}
         onMouseMove={this.zoomMouseMoveHandler}
         onScroll={this.preventScrollHandler}
         onWheel={this.preventScrollHandler}
@@ -1164,7 +1164,7 @@ export default class ImageGallery extends React.Component {
               onLoad={onImageLoad}
               onError={handleImageError}
               onWheel={showZoomControls && this.mouseZoomHandler}  
-                // onScroll={ e => e.preventDefault()} onWheel={ e => e.preventDefault()} onTouchMove={ e => e.preventDefault()} onTouchEnd={ e => e.stopPropagation() }  
+              // onScroll={ e => e.preventDefault()} onWheel={ e => e.preventDefault()} onTouchMove={ e => e.preventDefault()} onTouchEnd={ e => e.stopPropagation() }  
             />
           )
         }
