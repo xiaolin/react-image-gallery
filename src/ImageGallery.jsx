@@ -558,6 +558,126 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  getSlideItems(items) {
+    const { currentIndex } = this.state;
+    const {
+      infinite,
+      slideOnThumbnailOver,
+      onClick,
+      lazyLoad,
+      onTouchMove,
+      onTouchEnd,
+      onTouchStart,
+      onMouseOver,
+      onMouseLeave,
+      renderItem,
+      renderThumbInner,
+      showThumbnails,
+      showBullets,
+    } = this.props;
+
+    const slides = [];
+    const thumbnails = [];
+    const bullets = [];
+
+    items.forEach((item, index) => {
+      const alignment = this.getAlignmentClassName(index);
+      const originalClass = item.originalClass ? ` ${item.originalClass}` : '';
+      const thumbnailClass = item.thumbnailClass ? ` ${item.thumbnailClass}` : '';
+      const handleRenderItem = item.renderItem || renderItem || this.renderItem;
+      const handleRenderThumbInner = item.renderThumbInner
+        || renderThumbInner || this.renderThumbInner;
+
+      const showItem = !lazyLoad || alignment || this.lazyLoaded[index];
+      if (showItem && lazyLoad && !this.lazyLoaded[index]) {
+        this.lazyLoaded[index] = true;
+      }
+
+      const slideStyle = this.getSlideStyle(index);
+
+      const slide = (
+        <div
+          key={`slide-${item.original}`}
+          tabIndex="-1"
+          className={`image-gallery-slide ${alignment} ${originalClass}`}
+          style={slideStyle}
+          onClick={onClick}
+          onKeyUp={this.handleSlideKeyUp}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          onTouchStart={onTouchStart}
+          onMouseOver={onMouseOver}
+          onFocus={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          role="button"
+        >
+          {showItem ? handleRenderItem(item) : <div style={{ height: '100%' }} />}
+        </div>
+      );
+
+      if (infinite) {
+        // don't add some slides while transitioning to avoid background transitions
+        if (this.shouldPushSlideOnInfiniteMode(index)) {
+          slides.push(slide);
+        }
+      } else {
+        slides.push(slide);
+      }
+
+      if (showThumbnails) {
+        thumbnails.push(
+          <button
+            key={`thumbnail-${item.original}`}
+            type="button"
+            tabIndex="0"
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+            className={
+              `image-gallery-thumbnail ${thumbnailClass} ${(currentIndex === index ? 'active' : '')}`
+            }
+            onMouseLeave={slideOnThumbnailOver ? this.onThumbnailMouseLeave : null}
+            onMouseOver={event => this.handleThumbnailMouseOver(event, index)}
+            onFocus={event => this.handleThumbnailMouseOver(event, index)}
+            onKeyUp={event => this.handleThumbnailKeyUp(event, index)}
+            onClick={event => this.onThumbnailClick(event, index)}
+          >
+            {handleRenderThumbInner(item)}
+          </button>,
+        );
+      }
+
+      if (showBullets) {
+        // generate bullet elements and store them in array
+        const bulletOnClick = (event) => {
+          if (item.bulletOnClick) {
+            item.bulletOnClick({ item, itemIndex: index, currentIndex });
+          }
+          return this.slideToIndex.call(this, index, event);
+        };
+        bullets.push(
+          <button
+            type="button"
+            key={`bullet-${item.original}`}
+            className={[
+              'image-gallery-bullet',
+              currentIndex === index ? 'active' : '',
+              item.bulletClass || '',
+            ].join(' ')}
+            onClick={bulletOnClick}
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+          />,
+        );
+      }
+    });
+
+    return {
+      slides,
+      thumbnails,
+      bullets,
+    };
+  }
+
   ignoreIsTransitioning() {
     /*
       Ignore isTransitioning because were not going to sibling slides
@@ -1143,22 +1263,11 @@ export default class ImageGallery extends React.Component {
 
     const {
       additionalClass,
-      infinite,
-      slideOnThumbnailOver,
       indexSeparator, // deprecate soon, and allow custom render
-      onClick,
       isRTL,
       items,
-      lazyLoad,
       thumbnailPosition,
-      onTouchMove,
-      onTouchEnd,
-      onTouchStart,
-      onMouseOver,
-      onMouseLeave,
       renderFullscreenButton,
-      renderItem,
-      renderThumbInner,
       renderCustomControls,
       renderLeftNav,
       renderRightNav,
@@ -1172,100 +1281,7 @@ export default class ImageGallery extends React.Component {
     } = this.props;
 
     const thumbnailStyle = this.getThumbnailStyle();
-    const slides = [];
-    const thumbnails = [];
-    const bullets = [];
-
-    items.forEach((item, index) => {
-      const alignment = this.getAlignmentClassName(index);
-      const originalClass = item.originalClass ? ` ${item.originalClass}` : '';
-      const thumbnailClass = item.thumbnailClass ? ` ${item.thumbnailClass}` : '';
-      const handleRenderItem = item.renderItem || renderItem || this.renderItem;
-      const handleRenderThumbInner = item.renderThumbInner
-        || renderThumbInner || this.renderThumbInner;
-
-      const showItem = !lazyLoad || alignment || this.lazyLoaded[index];
-      if (showItem && lazyLoad && !this.lazyLoaded[index]) {
-        this.lazyLoaded[index] = true;
-      }
-
-      const slideStyle = this.getSlideStyle(index);
-
-      const slide = (
-        <div
-          key={`slide-${item.original}`}
-          tabIndex="-1"
-          className={`image-gallery-slide ${alignment} ${originalClass}`}
-          style={slideStyle}
-          onClick={onClick}
-          onKeyUp={this.handleSlideKeyUp}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onTouchStart={onTouchStart}
-          onMouseOver={onMouseOver}
-          onFocus={onMouseOver}
-          onMouseLeave={onMouseLeave}
-          role="button"
-        >
-          {showItem ? handleRenderItem(item) : <div style={{ height: '100%' }} />}
-        </div>
-      );
-
-      if (infinite) {
-        // don't add some slides while transitioning to avoid background transitions
-        if (this.shouldPushSlideOnInfiniteMode(index)) {
-          slides.push(slide);
-        }
-      } else {
-        slides.push(slide);
-      }
-
-      if (showThumbnails) {
-        thumbnails.push(
-          <button
-            key={`thumbnail-${item.original}`}
-            type="button"
-            tabIndex="0"
-            aria-pressed={currentIndex === index ? 'true' : 'false'}
-            aria-label={`Go to Slide ${index + 1}`}
-            className={
-              `image-gallery-thumbnail ${thumbnailClass} ${(currentIndex === index ? 'active' : '')}`
-            }
-            onMouseLeave={slideOnThumbnailOver ? this.onThumbnailMouseLeave : null}
-            onMouseOver={event => this.handleThumbnailMouseOver(event, index)}
-            onFocus={event => this.handleThumbnailMouseOver(event, index)}
-            onKeyUp={event => this.handleThumbnailKeyUp(event, index)}
-            onClick={event => this.onThumbnailClick(event, index)}
-          >
-            {handleRenderThumbInner(item)}
-          </button>,
-        );
-      }
-
-      if (showBullets) {
-        // generate bullet elements and store them in array
-        const bulletOnClick = (event) => {
-          if (item.bulletOnClick) {
-            item.bulletOnClick({ item, itemIndex: index, currentIndex });
-          }
-          return this.slideToIndex.call(this, index, event);
-        };
-        bullets.push(
-          <button
-            type="button"
-            key={`bullet-${item.original}`}
-            className={[
-              'image-gallery-bullet',
-              currentIndex === index ? 'active' : '',
-              item.bulletClass || '',
-            ].join(' ')}
-            onClick={bulletOnClick}
-            aria-pressed={currentIndex === index ? 'true' : 'false'}
-            aria-label={`Go to Slide ${index + 1}`}
-          />,
-        );
-      }
-    });
+    const { slides, thumbnails, bullets } = this.getSlideItems(items);
 
     const slideWrapper = (
       <div
