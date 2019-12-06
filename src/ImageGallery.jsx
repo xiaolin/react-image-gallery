@@ -1070,38 +1070,44 @@ export default class ImageGallery extends React.Component {
   }
 
   buttonZoomHandler = (flag) => {
+    if (!this.props.showZoomControls) {
+      return;
+    }
     const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
     this.zoom(img, flag);
   }
 
   mouseZoomHandler = e => {
+    if (!this.props.showZoomControls) {
+      return;
+    }
     const img = e.target;
     this.preventScrollHandler(e);
     var wheelData = e.nativeEvent.wheelDelta / 120;    
     if (wheelData > 0) {
-      this.zoom(img, true)
+      this.zoomIn(img)
     } else {
-      this.zoom(img, false)
+      this.zoomOut(img)
     }
   }
 
   zoomIn = (img) => {
-    // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
     this.zoom(img, true);
   }
   zoomOut = (img) => {
-    // const img = document.querySelector('.image-gallery-slides .center .image-gallery-image img');
-    this.zoom(img, true);
+    this.zoom(img, false);
   }
 
   zoom(img, flag) {
     const { initZoom } = this.state;
+    let newZoom;
     if (flag) {
-      initZoom < 5 && this.setState({ initZoom: initZoom + 0.50 })
+      newZoom = initZoom < 5 ? initZoom + 0.5 : initZoom;
     } else {
-      initZoom > 1 && this.setState({ initZoom: initZoom - 0.50 })
+      newZoom = initZoom > 1 ? initZoom - 0.5 : initZoom;
     }
-    img.style.transform = `scale(${this.state.initZoom})`;
+    img.style.transform = `scale(${newZoom})`;
+    this.setState({ initZoom: newZoom });
   }
 
   zoomMouseMoveHandler = (e) => {
@@ -1164,7 +1170,9 @@ export default class ImageGallery extends React.Component {
               onLoad={onImageLoad}
               onError={handleImageError}
               onWheel={showZoomControls && this.mouseZoomHandler}  
-              // onScroll={ e => e.preventDefault()} onWheel={ e => e.preventDefault()} onTouchMove={ e => e.preventDefault()} onTouchEnd={ e => e.stopPropagation() }  
+              onScroll={this.preventScrollHandler}
+              onTouchMove={this.preventScrollHandler}
+              onTouchEnd={this.preventScrollHandler}  
             />
           )
         }
