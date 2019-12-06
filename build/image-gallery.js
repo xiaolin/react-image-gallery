@@ -34,6 +34,8 @@ var _propTypes = require('prop-types');
 
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
+function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
@@ -89,16 +91,15 @@ var ImageGallery = function (_React$Component) {
     };
 
     _this.zoomMouseMoveHandler = function (e) {
-      var img = e.target;
-      var imgPartent = img.parentElement;
-      var transform = (e.pageX - imgPartent.offsetLeft) / img.width * 100 + '% ' + (e.pageY - imgPartent.offsetTop) / img.height * 100 + '%';
-      e.preventDefault();
-      e.stopPropagation();
+      _this.preventScrollHandler(e);
+      var imgPartent = e.target.parentElement;
+      var img = imgPartent.querySelector('img');
+      var imageParentPos = imgPartent.getBoundingClientRect();
+      var transform = (e.pageX - imageParentPos.left) / img.width * 100 + '% ' + (e.pageY - imageParentPos.top) / img.height * 100 + '%';
       img.style.transformOrigin = transform;
     };
 
     _this.preventScrollHandler = function (e) {
-      debugger;
       e.preventDefault();
       e.stopPropagation();
       // e.nativeEvent.preventDefault();
@@ -1123,6 +1124,8 @@ var ImageGallery = function (_React$Component) {
   }, {
     key: 'renderItem',
     value: function renderItem(item) {
+      var _React$createElement;
+
       var _props14 = this.props,
           onImageError = _props14.onImageError,
           onImageLoad = _props14.onImageLoad,
@@ -1132,13 +1135,9 @@ var ImageGallery = function (_React$Component) {
 
       return _react2.default.createElement(
         'div',
-        { className: 'image-gallery-image',
-          onMouseMove: this.zoomMouseMoveHandler,
-          onScroll: this.preventScrollHandler,
-          onWheel: this.preventScrollHandler,
-          onTouchMove: this.preventScrollHandler,
-          onTouchEnd: this.preventScrollHandler
-        },
+        (_React$createElement = { className: 'image-gallery-image',
+          onMouseMove: this.zoomMouseMoveHandler
+        }, _defineProperty(_React$createElement, 'onMouseMove', this.zoomMouseMoveHandler), _defineProperty(_React$createElement, 'onScroll', this.preventScrollHandler), _defineProperty(_React$createElement, 'onWheel', this.preventScrollHandler), _defineProperty(_React$createElement, 'onTouchMove', this.preventScrollHandler), _defineProperty(_React$createElement, 'onTouchEnd', this.preventScrollHandler), _React$createElement),
         item.imageSet ? _react2.default.createElement(
           'picture',
           {
