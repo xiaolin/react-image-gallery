@@ -205,6 +205,7 @@ export default class ImageGallery extends React.Component {
       thumbnailsWrapperHeight: 0,
       isFullscreen: false,
       isPlaying: false,
+      isMouseOverGallery: false,
     };
     this.imageGallery = React.createRef();
     this.thumbnailsWrapper = React.createRef();
@@ -217,6 +218,8 @@ export default class ImageGallery extends React.Component {
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
+    this.onMouseOver = this.onMouseOver.bind(this);
+    this.onMouseOut = this.onMouseOut.bind(this);
     this.onThumbnailMouseLeave = this.onThumbnailMouseLeave.bind(this);
     this.pauseOrPlay = this.pauseOrPlay.bind(this);
     this.renderThumbInner = this.renderThumbInner.bind(this);
@@ -312,6 +315,18 @@ export default class ImageGallery extends React.Component {
     if (this.transitionTimer) {
       window.clearTimeout(this.transitionTimer);
     }
+  }
+
+  onMouseOver() {
+    this.setState({
+      isMouseOverGallery: true,
+    });
+  }
+
+  onMouseOut() {
+    this.setState({
+      isMouseOverGallery: false,
+    });
   }
 
   onSliding() {
@@ -809,7 +824,8 @@ export default class ImageGallery extends React.Component {
 
   handleKeyDown(event) {
     const { disableArrowKeys, useBrowserFullscreen } = this.props;
-    const { isFullscreen } = this.state;
+    // only allow left and right arrow keys, when the current gallery is "hovered"
+    const { isFullscreen, isMouseOverGallery } = this.state;
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
@@ -821,12 +837,12 @@ export default class ImageGallery extends React.Component {
 
     switch (key) {
       case LEFT_ARROW:
-        if (this.canSlideLeft() && !this.intervalId) {
+        if (this.canSlideLeft() && !this.intervalId && isMouseOverGallery) {
           this.slideLeft();
         }
         break;
       case RIGHT_ARROW:
-        if (this.canSlideRight() && !this.intervalId) {
+        if (this.canSlideRight() && !this.intervalId && isMouseOverGallery) {
           this.slideRight();
         }
         break;
@@ -930,7 +946,7 @@ export default class ImageGallery extends React.Component {
     const { onScreenChange } = this.props;
     const fullScreenElement = ImageGallery.getFullScreenElement();
 
-    if (this.imageGallery !== fullScreenElement) return;
+    if (this.imageGallery.current !== fullScreenElement) return;
 
     if (onScreenChange) onScreenChange(fullScreenElement);
     this.setState({ isFullscreen: !!fullScreenElement });
@@ -1394,7 +1410,13 @@ export default class ImageGallery extends React.Component {
       .join(' ');
 
     return (
-      <div ref={this.imageGallery} className={classNames} aria-live="polite">
+      <div
+        ref={this.imageGallery}
+        className={classNames}
+        aria-live="polite"
+        onMouseOver={this.onMouseOver}
+        onMouseOut={this.onMouseOut}
+      >
         <div
           className={`image-gallery-content${
             isFullscreen ? ' fullscreen' : ''
