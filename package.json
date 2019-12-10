@@ -5,7 +5,8 @@
   "main": "./build/image-gallery.js",
   "files": [
     "build",
-    "styles/css"
+    "styles/css",
+    "styles/scss"
   ],
   "scripts": {
     "start": "gulp dev",
