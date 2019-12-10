@@ -10,7 +10,7 @@
   ],
   "scripts": {
     "start": "gulp dev",
-    "build": "gulp build",
+    "build": "rimraf build && rimraf styles/css && gulp build",
     "lint": "eslint --ext .js,.jsx src"
   },
   "repository": {
@@ -65,6 +65,7 @@
     "gulp-uglify": "^1.5.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",
+    "rimraf": "^3.0.0",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.8.0"

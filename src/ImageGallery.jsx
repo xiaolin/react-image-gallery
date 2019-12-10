@@ -945,11 +945,17 @@ export default class ImageGallery extends React.Component {
      */
     const { onScreenChange } = this.props;
     const fullScreenElement = ImageGallery.getFullScreenElement();
+    const isFullscreen = this.imageGallery.current === fullScreenElement;
 
-    if (this.imageGallery.current !== fullScreenElement) return;
-
-    if (onScreenChange) onScreenChange(fullScreenElement);
-    this.setState({ isFullscreen: !!fullScreenElement });
+    this.setState({ isFullscreen }, () => {
+      if (onScreenChange) {
+        onScreenChange(
+          this.state.isFullscreen && fullScreenElement
+            ? fullScreenElement
+            : undefined,
+        );
+      }
+    });
   }
 
   slideToIndex(index, event) {
