@@ -14,28 +14,30 @@ var watchify = require('watchify');
 
 var babelOptions = {
   plugins: ['transform-object-assign'],
-  presets: ['es2015', 'react', 'stage-0']
+  presets: ['es2015', 'react', 'stage-0'],
 };
 
-gulp.task('server', function () {
+gulp.task('server', function() {
   connect.server({
     host: '0.0.0.0',
     root: ['example', 'build', 'styles'],
     port: 8001,
-    livereload: true
+    livereload: true,
   });
 });
 
-gulp.task('sass', function () {
-  gulp.src('./styles/scss/image-gallery.scss')
+gulp.task('sass', function() {
+  gulp
+    .src('./styles/scss/image-gallery.scss')
     .pipe(sass())
     .pipe(rename('image-gallery.css'))
     .pipe(gulp.dest('./styles/css/'))
     .pipe(livereload());
 });
 
-gulp.task('sass-no-icon', function () {
-  gulp.src('./styles/scss/image-gallery-no-icon.scss')
+gulp.task('sass-no-icon', function() {
+  gulp
+    .src('./styles/scss/image-gallery-no-icon.scss')
     .pipe(sass())
     .pipe(rename('image-gallery-no-icon.css'))
     .pipe(gulp.dest('./styles/css/'))
@@ -43,13 +45,17 @@ gulp.task('sass-no-icon', function () {
 });
 
 gulp.task('scripts', function() {
-  watchify(browserify({
-    entries: './example/app.js',
-    extensions: ['.jsx'],
-    debug: true
-  }).transform('babelify', babelOptions))
+  watchify(
+    browserify({
+      entries: './example/app.js',
+      extensions: ['.jsx'],
+      debug: true,
+    }).transform('babelify', babelOptions),
+  )
     .bundle()
-    .on('error', err => { console.error('error is', err) })
+    .on('error', err => {
+      console.error('error is', err);
+    })
     .pipe(source('example.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./example/'))
@@ -61,22 +67,25 @@ gulp.task('demo-src', function() {
   browserify({
     entries: './example/app.js',
     extensions: ['.jsx'],
-    debug: true
-  }).transform('babelify', babelOptions)
+    debug: true,
+  })
+    .transform('babelify', babelOptions)
     .bundle()
     .pipe(source('demo.js'))
     .pipe(buffer())
     .pipe(uglify())
     .pipe(gulp.dest('./demo/'));
 
-  gulp.src(['./styles/css/image-gallery.css', './example/app.css'])
+  gulp
+    .src(['./styles/css/image-gallery.css', './example/app.css'])
     .pipe(concat('demo.css'))
-    .pipe(cleanCSS({keepSpecialComments: false}))
+    .pipe(cleanCSS({ keepSpecialComments: false }))
     .pipe(gulp.dest('./demo/'));
 });
 
-gulp.task('source-js', function () {
-  return gulp.src('./src/ImageGallery.jsx')
+gulp.task('source-js', function() {
+  return gulp
+    .src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
     .pipe(babel(babelOptions))
     .pipe(gulp.dest('./build'));
