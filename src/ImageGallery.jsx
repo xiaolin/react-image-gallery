@@ -216,6 +216,7 @@ export default class ImageGallery extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
+    this.handleResize = this.handleResize.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
     this.onMouseOver = this.onMouseOver.bind(this);
@@ -917,9 +918,7 @@ export default class ImageGallery extends React.Component {
     this.resizeObserver = new ResizeObserver(
       debounce(entries => {
         if (!entries) return;
-        entries.forEach(() => {
-          this.handleResize();
-        });
+        entries.forEach(this.handleResize);
       }, 300),
     );
     this.resizeObserver.observe(element.current);

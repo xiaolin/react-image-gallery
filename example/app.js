@@ -27,6 +27,17 @@ class App extends React.Component {
       showVideo: {},
     };
 
+    // bindings
+    this._onImageClick = this._onImageClick.bind(this);
+    this._onSlide = this._onSlide.bind(this);
+    this._onPause = this._onPause.bind(this);
+    this._onPlay = this._onPlay.bind(this);
+    this._onScreenChange = this._onScreenChange.bind(this);
+    this._handleThumbnailPositionChange = this._handleThumbnailPositionChange.bind(
+      this,
+    );
+    this._renderVideo = this._renderVideo.bind(this);
+
     this.images = [
       {
         thumbnail: `${PREFIX_URL}4v.jpg`,
@@ -34,7 +45,7 @@ class App extends React.Component {
         embedUrl:
           'https://www.youtube.com/embed/4pSzhZ76GdM?autoplay=1&showinfo=0',
         description: 'Render custom slides within the gallery',
-        renderItem: this._renderVideo.bind(this),
+        renderItem: this._renderVideo,
       },
       {
         original: `${PREFIX_URL}image_set_default.jpg`,
@@ -196,12 +207,12 @@ class App extends React.Component {
           ref={i => (this._imageGallery = i)}
           items={this.images}
           lazyLoad={false}
-          onClick={this._onImageClick.bind(this)}
+          onClick={this._onImageClick}
           onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide.bind(this)}
-          onPause={this._onPause.bind(this)}
-          onScreenChange={this._onScreenChange.bind(this)}
-          onPlay={this._onPlay.bind(this)}
+          onSlide={this._onSlide}
+          onPause={this._onPause}
+          onScreenChange={this._onScreenChange}
+          onPlay={this._onPlay}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
           showFullscreenButton={
@@ -265,7 +276,7 @@ class App extends React.Component {
                   <select
                     className="app-interval-input"
                     value={this.state.thumbnailPosition}
-                    onChange={this._handleThumbnailPositionChange.bind(this)}
+                    onChange={this._handleThumbnailPositionChange}
                   >
                     <option value="bottom">Bottom</option>
                     <option value="top">Top</option>
@@ -397,12 +408,12 @@ class App extends React.Component {
           arrowKeysInFullscreenOnly
           items={this.images}
           lazyLoad={false}
-          onClick={this._onImageClick.bind(this)}
+          onClick={this._onImageClick}
           onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide.bind(this)}
-          onPause={this._onPause.bind(this)}
-          onScreenChange={this._onScreenChange.bind(this)}
-          onPlay={this._onPlay.bind(this)}
+          onSlide={this._onSlide}
+          onPause={this._onPause}
+          onScreenChange={this._onScreenChange}
+          onPlay={this._onPlay}
           infinite={this.state.infinite}
           showBullets={this.state.showBullets}
           showFullscreenButton={
