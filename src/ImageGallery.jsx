@@ -390,11 +390,17 @@ export default class ImageGallery extends React.Component {
 
   setModalFullscreen(state) {
     const { onScreenChange } = this.props;
-    this.setState({ modalFullscreen: state });
-    // manually call because browser does not support screenchange events
-    if (onScreenChange) {
-      onScreenChange(state);
-    }
+
+    // update both isFullscreen _and_ modalFullscreen
+    this.setState(prevState => {
+      // manually call because browser does not support screenchange events
+      if (onScreenChange) {
+        onScreenChange(state, prevState.isFullscreen);
+      }
+
+      // and update the current state accordingly
+      return { isFullscreen: state, modalFullscreen: state };
+    });
   }
 
   getThumbsTranslate(indexDifference) {
@@ -947,14 +953,19 @@ export default class ImageGallery extends React.Component {
     const fullScreenElement = ImageGallery.getFullScreenElement();
     const isFullscreen = this.imageGallery.current === fullScreenElement;
 
-    this.setState({ isFullscreen }, () => {
+    this.setState(prevState => {
       if (onScreenChange) {
+        // in order to detect (eg. for tracking) if the current gallery was in
+        // fullscreen previously, onScreenChange will provide a second argument
         onScreenChange(
-          this.state.isFullscreen && fullScreenElement
-            ? fullScreenElement
-            : undefined,
+          isFullscreen ? fullScreenElement : null,
+          prevState.isFullscreen,
         );
       }
+
+      return {
+        isFullscreen,
+      };
     });
   }
 
@@ -1077,11 +1088,9 @@ export default class ImageGallery extends React.Component {
       } else {
         // fallback to fullscreen modal for unsupported browsers
         this.setModalFullscreen(true);
-        this.setState({ isFullscreen: true });
       }
     } else {
       this.setModalFullscreen(true);
-      this.setState({ isFullscreen: true });
     }
   }
 
@@ -1105,10 +1114,6 @@ export default class ImageGallery extends React.Component {
       } else {
         this.setModalFullscreen(false);
       }
-
-      // it's fair to set the isFullscreen here in all cases, and not only in
-      // the image gallery instance that was actually in the fullscreen
-      this.setState({ isFullscreen: false });
     }
   }
 
