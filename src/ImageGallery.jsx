@@ -299,7 +299,7 @@ export default class ImageGallery extends React.Component {
 
     if (startIndexUpdated || itemsChanged) {
       // TODO: this should be fix/removed if all it is doing
-      // is resetting the gallery currentIndext state
+      // is resetting the gallery currentIndex state
       this.setState({ currentIndex: startIndex });
     }
   }
@@ -391,7 +391,7 @@ export default class ImageGallery extends React.Component {
 
   setModalFullscreen(state) {
     const { onScreenChange } = this.props;
-    const prevIsFullscreen = this.state.isFullscreen;
+    const { isFullscreen: prevIsFullscreen } = this.state;
 
     // update both isFullscreen _and_ modalFullscreen
     this.setState(
@@ -952,7 +952,7 @@ export default class ImageGallery extends React.Component {
     const { onScreenChange } = this.props;
     const fullScreenElement = ImageGallery.getFullScreenElement();
     const isFullscreen = this.imageGallery.current === fullScreenElement;
-    const prevIsFullscreen = this.state.isFullscreen;
+    const { isFullscreen: prevIsFullscreen } = this.state;
 
     this.setState(
       {
