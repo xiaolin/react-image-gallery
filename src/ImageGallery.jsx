@@ -246,7 +246,7 @@ export default class ImageGallery extends React.Component {
       () => {
         // manually call because browser does not support screenchange events
         if (onScreenChange) {
-          onScreenChange(state, prevIsFullscreen);
+          onScreenChange(state ? this.imageGallery.current : null, prevIsFullscreen);
         }
       },
     );
