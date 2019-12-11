@@ -28,163 +28,6 @@ function isEnterOrSpaceKey(event) {
 }
 
 export default class ImageGallery extends React.Component {
-  static propTypes = {
-    flickThreshold: number,
-    items: arrayOf(
-      shape({
-        bulletClass: string,
-        bulletOnClick: func,
-        description: string,
-        original: string.isRequired,
-        originalAlt: string,
-        originalTitle: string,
-        thumbnail: string,
-        thumbnailAlt: string,
-        thumbnailLabel: string,
-        thumbnailTitle: string,
-        originalClass: string,
-        thumbnailClass: string,
-        renderItem: func,
-        renderThumbInner: func,
-        imageSet: imageSetType,
-        srcSet: string,
-        sizes: string,
-      }),
-    ).isRequired,
-    showNav: bool,
-    autoPlay: bool,
-    lazyLoad: bool,
-    infinite: bool,
-    showIndex: bool,
-    showBullets: bool,
-    showThumbnails: bool,
-    showPlayButton: bool,
-    showFullscreenButton: bool,
-    disableThumbnailScroll: bool,
-    disableArrowKeys: bool,
-    disableSwipe: bool,
-    useBrowserFullscreen: bool,
-    preventDefaultTouchmoveEvent: bool,
-    onErrorImageURL: string,
-    indexSeparator: string,
-    thumbnailPosition: string,
-    startIndex: number,
-    slideDuration: number,
-    slideInterval: number,
-    slideOnThumbnailOver: bool,
-    swipeThreshold: number,
-    swipingTransitionDuration: number,
-    onSlide: func,
-    onScreenChange: func,
-    onPause: func,
-    onPlay: func,
-    onClick: func,
-    onImageLoad: func,
-    onImageError: func,
-    onTouchMove: func,
-    onTouchEnd: func,
-    onTouchStart: func,
-    onMouseOver: func,
-    onMouseLeave: func,
-    onThumbnailError: func,
-    onThumbnailClick: func,
-    renderCustomControls: func,
-    renderLeftNav: func,
-    renderRightNav: func,
-    renderPlayPauseButton: func,
-    renderFullscreenButton: func,
-    renderItem: func,
-    renderThumbInner: func,
-    stopPropagation: bool,
-    additionalClass: string,
-    useTranslate3D: bool,
-    isRTL: bool,
-  };
-
-  static defaultProps = {
-    onErrorImageURL: '',
-    additionalClass: '',
-    showNav: true,
-    autoPlay: false,
-    lazyLoad: false,
-    infinite: true,
-    showIndex: false,
-    showBullets: false,
-    showThumbnails: true,
-    showPlayButton: true,
-    showFullscreenButton: true,
-    disableThumbnailScroll: false,
-    disableArrowKeys: false,
-    disableSwipe: false,
-    useTranslate3D: true,
-    isRTL: false,
-    useBrowserFullscreen: true,
-    preventDefaultTouchmoveEvent: false,
-    flickThreshold: 0.4,
-    stopPropagation: false,
-    indexSeparator: ' / ',
-    thumbnailPosition: 'bottom',
-    startIndex: 0,
-    slideDuration: 450,
-    swipingTransitionDuration: 0,
-    onSlide: null,
-    onScreenChange: null,
-    onPause: null,
-    onPlay: null,
-    onClick: null,
-    onImageLoad: null,
-    onImageError: null,
-    onTouchMove: null,
-    onTouchEnd: null,
-    onTouchStart: null,
-    onMouseOver: null,
-    onMouseLeave: null,
-    onThumbnailError: null,
-    onThumbnailClick: null,
-    renderCustomControls: null,
-    renderThumbInner: null,
-    renderItem: null,
-    slideInterval: 3000,
-    slideOnThumbnailOver: false,
-    swipeThreshold: 30,
-    renderLeftNav: (onClick, disabled) => (
-      <button
-        type="button"
-        className="image-gallery-left-nav"
-        disabled={disabled}
-        onClick={onClick}
-        aria-label="Previous Slide"
-      />
-    ),
-    renderRightNav: (onClick, disabled) => (
-      <button
-        type="button"
-        className="image-gallery-right-nav"
-        disabled={disabled}
-        onClick={onClick}
-        aria-label="Next Slide"
-      />
-    ),
-    renderPlayPauseButton: (onClick, isPlaying) => (
-      <button
-        type="button"
-        className={`image-gallery-play-button${isPlaying ? ' active' : ''}`}
-        onClick={onClick}
-        aria-label="Play or Pause Slideshow"
-      />
-    ),
-    renderFullscreenButton: (onClick, isFullscreen) => (
-      <button
-        type="button"
-        className={`image-gallery-fullscreen-button${
-          isFullscreen ? ' active' : ''
-        }`}
-        onClick={onClick}
-        aria-label="Open Fullscreen"
-      />
-    ),
-  };
-
   static getFullScreenElement() {
     return (
       document.fullscreenElement ||
@@ -300,6 +143,7 @@ export default class ImageGallery extends React.Component {
     if (startIndexUpdated || itemsChanged) {
       // TODO: this should be fix/removed if all it is doing
       // is resetting the gallery currentIndex state
+      // eslint-disable-next-line
       this.setState({ currentIndex: startIndex });
     }
   }
@@ -1470,3 +1314,160 @@ export default class ImageGallery extends React.Component {
     );
   }
 }
+
+ImageGallery.propTypes = {
+  flickThreshold: number,
+  items: arrayOf(
+    shape({
+      bulletClass: string,
+      bulletOnClick: func,
+      description: string,
+      original: string.isRequired,
+      originalAlt: string,
+      originalTitle: string,
+      thumbnail: string,
+      thumbnailAlt: string,
+      thumbnailLabel: string,
+      thumbnailTitle: string,
+      originalClass: string,
+      thumbnailClass: string,
+      renderItem: func,
+      renderThumbInner: func,
+      imageSet: imageSetType,
+      srcSet: string,
+      sizes: string,
+    }),
+  ).isRequired,
+  showNav: bool,
+  autoPlay: bool,
+  lazyLoad: bool,
+  infinite: bool,
+  showIndex: bool,
+  showBullets: bool,
+  showThumbnails: bool,
+  showPlayButton: bool,
+  showFullscreenButton: bool,
+  disableThumbnailScroll: bool,
+  disableArrowKeys: bool,
+  disableSwipe: bool,
+  useBrowserFullscreen: bool,
+  preventDefaultTouchmoveEvent: bool,
+  onErrorImageURL: string,
+  indexSeparator: string,
+  thumbnailPosition: string,
+  startIndex: number,
+  slideDuration: number,
+  slideInterval: number,
+  slideOnThumbnailOver: bool,
+  swipeThreshold: number,
+  swipingTransitionDuration: number,
+  onSlide: func,
+  onScreenChange: func,
+  onPause: func,
+  onPlay: func,
+  onClick: func,
+  onImageLoad: func,
+  onImageError: func,
+  onTouchMove: func,
+  onTouchEnd: func,
+  onTouchStart: func,
+  onMouseOver: func,
+  onMouseLeave: func,
+  onThumbnailError: func,
+  onThumbnailClick: func,
+  renderCustomControls: func,
+  renderLeftNav: func,
+  renderRightNav: func,
+  renderPlayPauseButton: func,
+  renderFullscreenButton: func,
+  renderItem: func,
+  renderThumbInner: func,
+  stopPropagation: bool,
+  additionalClass: string,
+  useTranslate3D: bool,
+  isRTL: bool,
+};
+
+ImageGallery.defaultProps = {
+  onErrorImageURL: '',
+  additionalClass: '',
+  showNav: true,
+  autoPlay: false,
+  lazyLoad: false,
+  infinite: true,
+  showIndex: false,
+  showBullets: false,
+  showThumbnails: true,
+  showPlayButton: true,
+  showFullscreenButton: true,
+  disableThumbnailScroll: false,
+  disableArrowKeys: false,
+  disableSwipe: false,
+  useTranslate3D: true,
+  isRTL: false,
+  useBrowserFullscreen: true,
+  preventDefaultTouchmoveEvent: false,
+  flickThreshold: 0.4,
+  stopPropagation: false,
+  indexSeparator: ' / ',
+  thumbnailPosition: 'bottom',
+  startIndex: 0,
+  slideDuration: 450,
+  swipingTransitionDuration: 0,
+  onSlide: null,
+  onScreenChange: null,
+  onPause: null,
+  onPlay: null,
+  onClick: null,
+  onImageLoad: null,
+  onImageError: null,
+  onTouchMove: null,
+  onTouchEnd: null,
+  onTouchStart: null,
+  onMouseOver: null,
+  onMouseLeave: null,
+  onThumbnailError: null,
+  onThumbnailClick: null,
+  renderCustomControls: null,
+  renderThumbInner: null,
+  renderItem: null,
+  slideInterval: 3000,
+  slideOnThumbnailOver: false,
+  swipeThreshold: 30,
+  renderLeftNav: (onClick, disabled) => (
+    <button
+      type="button"
+      className="image-gallery-left-nav"
+      disabled={disabled}
+      onClick={onClick}
+      aria-label="Previous Slide"
+    />
+  ),
+  renderRightNav: (onClick, disabled) => (
+    <button
+      type="button"
+      className="image-gallery-right-nav"
+      disabled={disabled}
+      onClick={onClick}
+      aria-label="Next Slide"
+    />
+  ),
+  renderPlayPauseButton: (onClick, isPlaying) => (
+    <button
+      type="button"
+      className={`image-gallery-play-button${isPlaying ? ' active' : ''}`}
+      onClick={onClick}
+      aria-label="Play or Pause Slideshow"
+    />
+  ),
+  renderFullscreenButton: (onClick, isFullscreen) => (
+    <button
+      type="button"
+      className={`image-gallery-fullscreen-button${
+        isFullscreen ? ' active' : ''
+      }`}
+      onClick={onClick}
+      aria-label="Open Fullscreen"
+    />
+  ),
+};

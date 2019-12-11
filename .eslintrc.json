@@ -7,6 +7,7 @@
     "node": true
   },
   "rules": {
+    "react/jsx-fragments": 0,
     "prettier/prettier": "error"
   }
 }
