@@ -391,17 +391,21 @@ export default class ImageGallery extends React.Component {
 
   setModalFullscreen(state) {
     const { onScreenChange } = this.props;
+    const prevIsFullscreen = this.state.isFullscreen;
 
     // update both isFullscreen _and_ modalFullscreen
-    this.setState(prevState => {
-      // manually call because browser does not support screenchange events
-      if (onScreenChange) {
-        onScreenChange(state, prevState.isFullscreen);
-      }
-
-      // and update the current state accordingly
-      return { isFullscreen: state, modalFullscreen: state };
-    });
+    this.setState(
+      {
+        isFullscreen: state,
+        modalFullscreen: state,
+      },
+      () => {
+        // manually call because browser does not support screenchange events
+        if (onScreenChange) {
+          onScreenChange(state, prevIsFullscreen);
+        }
+      },
+    );
   }
 
   getThumbsTranslate(indexDifference) {
@@ -573,17 +577,14 @@ export default class ImageGallery extends React.Component {
       translate = `translate3d(${translateX}%, 0, 0)`;
     }
 
-    return Object.assign(
-      {},
-      {
-        WebkitTransform: translate,
-        MozTransform: translate,
-        msTransform: translate,
-        OTransform: translate,
-        transform: translate,
-      },
-      slideStyle,
-    );
+    return {
+      WebkitTransform: translate,
+      MozTransform: translate,
+      msTransform: translate,
+      OTransform: translate,
+      transform: translate,
+      ...slideStyle,
+    };
   }
 
   getCurrentIndex() {
@@ -951,21 +952,23 @@ export default class ImageGallery extends React.Component {
     const { onScreenChange } = this.props;
     const fullScreenElement = ImageGallery.getFullScreenElement();
     const isFullscreen = this.imageGallery.current === fullScreenElement;
+    const prevIsFullscreen = this.state.isFullscreen;
 
-    this.setState(prevState => {
-      if (onScreenChange) {
-        // in order to detect (eg. for tracking) if the current gallery was in
-        // fullscreen previously, onScreenChange will provide a second argument
-        onScreenChange(
-          isFullscreen ? fullScreenElement : null,
-          prevState.isFullscreen,
-        );
-      }
-
-      return {
+    this.setState(
+      {
         isFullscreen,
-      };
-    });
+      },
+      () => {
+        if (onScreenChange) {
+          // in order to detect (eg. for tracking) if the current gallery was in
+          // fullscreen previously, onScreenChange will provide a second argument
+          onScreenChange(
+            isFullscreen ? fullScreenElement : null,
+            prevIsFullscreen,
+          );
+        }
+      },
+    );
   }
 
   slideToIndex(index, event) {
@@ -1425,7 +1428,9 @@ export default class ImageGallery extends React.Component {
         className={classNames}
         aria-live="polite"
         onMouseOver={this.onMouseOver}
+        onFocus={this.onMouseOver}
         onMouseOut={this.onMouseOut}
+        onBlur={this.onMouseOut}
       >
         <div
           className={`image-gallery-content${
