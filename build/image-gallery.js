@@ -1278,6 +1278,8 @@ var ImageGallery = function (_React$Component) {
 
       if (showBullets) {
         var numOfBullets = Math.min(items.length, MAX_BULLETS_ON_SCREEN);
+        var _classNames = ['image-gallery-bullet'];
+
         for (var i = 0; i < numOfBullets; i = i + 1) {
           var isActive = void 0;
           if (items.length <= MAX_BULLETS_ON_SCREEN) {
@@ -1286,15 +1288,25 @@ var ImageGallery = function (_React$Component) {
             var center = Math.floor(MAX_BULLETS_ON_SCREEN / 2);
             if (currentIndex < center) isActive = currentIndex === i;else if (items.length - currentIndex < numOfBullets - center) {
               isActive = items.length - currentIndex === numOfBullets - i;
+
+              if (i === 0) {
+                _classNames.push('first-smaller');
+              } else if (i === numOfBullets - 1) {
+                _classNames.push('last-smaller');
+              }
             } else {
               isActive = i === center;
             }
           }
 
+          if (isActive) {
+            _classNames.push('active');
+          }
+
           bullets.push(_react2.default.createElement('button', {
             type: 'button',
             key: 'bullet-' + i,
-            className: ['hadar', 'image-gallery-bullet', isActive ? 'active' : ''].join(' '),
+            className: _classNames.join(' '),
             'aria-pressed': isActive ? 'true' : 'false'
           }));
         }

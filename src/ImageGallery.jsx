@@ -1256,6 +1256,10 @@ export default class ImageGallery extends React.Component {
 
     if (showBullets) {
       const numOfBullets = Math.min(items.length, MAX_BULLETS_ON_SCREEN);
+      const classNames = [
+        'image-gallery-bullet',
+      ];
+
       for (let i = 0; i < numOfBullets; i = i + 1) {
         let isActive;
         if (items.length <= MAX_BULLETS_ON_SCREEN) {
@@ -1265,20 +1269,26 @@ export default class ImageGallery extends React.Component {
           if (currentIndex < center)  isActive = currentIndex === i;
           else if ((items.length) - currentIndex < (numOfBullets - center)) {
             isActive =  ((items.length) - currentIndex) === (numOfBullets - i);
+
+            if (i === 0) {
+              classNames.push('first-smaller');
+            } else if (i === numOfBullets - 1) {
+              classNames.push('last-smaller');
+            }
           } else {
             isActive = i === center;
           }
+        }
+
+        if (isActive) {
+          classNames.push('active');
         }
 
         bullets.push(
             <button
                 type="button"
                 key={`bullet-${i}`}
-                className={[
-                    'hadar',
-                  'image-gallery-bullet',
-                  isActive ? 'active' : '',
-                ].join(' ')}
+                className={classNames.join(' ')}
                 aria-pressed={isActive ? 'true' : 'false'}
             />,
         );
