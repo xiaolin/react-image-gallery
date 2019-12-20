@@ -1270,14 +1270,14 @@ export default class ImageGallery extends React.Component {
           if (currentIndex < center)  isActive = currentIndex === i;
           else if ((items.length) - currentIndex < (numOfBullets - center)) {
             isActive =  ((items.length) - currentIndex) === (numOfBullets - i);
+          } else {
+            isActive = i === center;
 
             if (i === 0) {
               classNames.push('first-smaller');
             } else if (i === numOfBullets - 1) {
               classNames.push('last-smaller');
             }
-          } else {
-            isActive = i === center;
           }
         }
 
