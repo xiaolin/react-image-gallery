@@ -1278,10 +1278,11 @@ var ImageGallery = function (_React$Component) {
 
       if (showBullets) {
         var numOfBullets = Math.min(items.length, MAX_BULLETS_ON_SCREEN);
-        var _classNames = ['image-gallery-bullet'];
 
         for (var i = 0; i < numOfBullets; i = i + 1) {
           var isActive = void 0;
+          var _classNames = ['image-gallery-bullet'];
+
           if (items.length <= MAX_BULLETS_ON_SCREEN) {
             isActive = currentIndex === i;
           } else {

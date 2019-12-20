@@ -1256,12 +1256,13 @@ export default class ImageGallery extends React.Component {
 
     if (showBullets) {
       const numOfBullets = Math.min(items.length, MAX_BULLETS_ON_SCREEN);
-      const classNames = [
-        'image-gallery-bullet',
-      ];
 
       for (let i = 0; i < numOfBullets; i = i + 1) {
         let isActive;
+        const classNames = [
+          'image-gallery-bullet',
+        ];
+
         if (items.length <= MAX_BULLETS_ON_SCREEN) {
           isActive = currentIndex === i;
         } else {
