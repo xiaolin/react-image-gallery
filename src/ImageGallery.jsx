@@ -32,6 +32,8 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
+const MAX_BULLETS_ON_SCREEN = 7;
+
 export default class ImageGallery extends React.Component {
   static propTypes = {
     flickThreshold: number,
@@ -1227,30 +1229,62 @@ export default class ImageGallery extends React.Component {
         );
       }
 
-      if (showBullets) {
-        // generate bullet elements and store them in array
-        const bulletOnClick = (event) => {
-          if (item.bulletOnClick) {
-            item.bulletOnClick({ item, itemIndex: index, currentIndex });
+      // if (showBullets) {
+      //   // generate bullet elements and store them in array
+      //   const bulletOnClick = (event) => {
+      //     if (item.bulletOnClick) {
+      //       item.bulletOnClick({ item, itemIndex: index, currentIndex });
+      //     }
+      //     return this.slideToIndex.call(this, index, event);
+      //   };
+      //   bullets.push(
+      //     <button
+      //       type="button"
+      //       key={`bullet-${item.original}`}
+      //       className={[
+      //         'image-gallery-bullet',
+      //         currentIndex === index ? 'active' : '',
+      //         item.bulletClass || '',
+      //       ].join(' ')}
+      //       onClick={bulletOnClick}
+      //       aria-pressed={currentIndex === index ? 'true' : 'false'}
+      //       aria-label={`Go to Slide ${index + 1}`}
+      //     />,
+      //   );
+      // }
+    });
+
+    if (showBullets) {
+      const numOfBullets = Math.min(items.length, MAX_BULLETS_ON_SCREEN);
+      for (let i = 0; i < numOfBullets; i = i + 1) {
+        let isActive;
+        if (items.length <= MAX_BULLETS_ON_SCREEN) {
+          isActive = currentIndex === i;
+        } else {
+          const center = Math.floor((MAX_BULLETS_ON_SCREEN / 2));
+          if (currentIndex < center)  isActive = currentIndex === i;
+          else if ((items.length) - currentIndex < (numOfBullets - center)) {
+            isActive =  ((items.length) - currentIndex) === (numOfBullets - i);
+          } else {
+            isActive = i === center;
           }
-          return this.slideToIndex.call(this, index, event);
-        };
+        }
+
         bullets.push(
-          <button
-            type="button"
-            key={`bullet-${item.original}`}
-            className={[
-              'image-gallery-bullet',
-              currentIndex === index ? 'active' : '',
-              item.bulletClass || '',
-            ].join(' ')}
-            onClick={bulletOnClick}
-            aria-pressed={currentIndex === index ? 'true' : 'false'}
-            aria-label={`Go to Slide ${index + 1}`}
-          />,
+            <button
+                type="button"
+                key={`bullet-${i}`}
+                className={[
+                    'hadar',
+                  'image-gallery-bullet',
+                  isActive ? 'active' : '',
+                ].join(' ')}
+                aria-pressed={isActive ? 'true' : 'false'}
+            />,
         );
       }
-    });
+    }
+
 
     const slideWrapper = (
       <div
