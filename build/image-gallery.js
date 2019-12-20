@@ -1289,14 +1289,14 @@ var ImageGallery = function (_React$Component) {
             var center = Math.floor(MAX_BULLETS_ON_SCREEN / 2);
             if (currentIndex < center) isActive = currentIndex === i;else if (items.length - currentIndex < numOfBullets - center) {
               isActive = items.length - currentIndex === numOfBullets - i;
+            } else {
+              isActive = i === center;
 
               if (i === 0) {
                 _classNames.push('first-smaller');
               } else if (i === numOfBullets - 1) {
                 _classNames.push('last-smaller');
               }
-            } else {
-              isActive = i === center;
             }
           }
 
