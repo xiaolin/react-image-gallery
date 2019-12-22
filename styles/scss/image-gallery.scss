@@ -156,18 +156,16 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 
   &.fullscreen {
     background: $ig-black;
-
-    .image-gallery-slide .image-gallery-image {
-      max-height: calc(100vh - 80px); // 80 px for the thumbnail space
-    }
   }
 
-  &.fullscreen {
-    &.left,
-    &.right {
-      .image-gallery-slide .image-gallery-image {
-        max-height: 100vh;
-      }
+  .image-gallery-slide .image-gallery-image {
+    max-height: calc(100vh - 80px); // 80 px for the thumbnail space
+  }
+
+  &.left,
+  &.right {
+    .image-gallery-slide .image-gallery-image {
+      max-height: 100vh;
     }
   }
 }
