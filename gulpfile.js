@@ -34,14 +34,6 @@ gulp.task('sass', function () {
     .pipe(livereload());
 });
 
-gulp.task('sass-no-icon', function () {
-  gulp.src('./styles/scss/image-gallery-no-icon.scss')
-    .pipe(sass())
-    .pipe(rename('image-gallery-no-icon.css'))
-    .pipe(gulp.dest('./styles/css/'))
-    .pipe(livereload());
-});
-
 gulp.task('scripts', function() {
   watchify(browserify({
     entries: './example/app.js',
@@ -85,9 +77,9 @@ gulp.task('source-js', function () {
 gulp.task('watch', function() {
   livereload.listen();
   gulp.watch(['styles/**/*.scss'], ['sass']);
-  gulp.watch(['src/*.jsx', 'example/app.js'], ['scripts']);
+  gulp.watch(['src/*.jsx', 'src/icons/*.jsx', 'example/app.js'], ['scripts']);
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'sass', 'sass-no-icon']);
+gulp.task('build', ['source-js', 'sass']);
 gulp.task('demo', ['demo-src']);
