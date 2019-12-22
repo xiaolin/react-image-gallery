@@ -35,10 +35,6 @@ npm install react-image-gallery
 
 # CSS
 @import "~react-image-gallery/styles/css/image-gallery.css";
-
-# Stylesheet with no icons
-node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
-node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
 
 ### Example
@@ -110,8 +106,8 @@ class MyGallery extends React.Component {
 * `autoPlay`: Boolean, default `false`
 * `disableThumbnailScroll`: Boolean, default `false`
   * disables the thumbnail container from adjusting
-* `disableArrowKeys`: Boolean, default `false`
-  * disables keydown listener for left and right keyboard arrow keys
+* `disableKeyDown`: Boolean, default `false`
+  * disables keydown listener for keyboard shortcuts (left arrow, right arrow, esc key)
 * `disableSwipe`: Boolean, default `false`
 * `onErrorImageURL`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
