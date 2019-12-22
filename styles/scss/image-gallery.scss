@@ -157,8 +157,17 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   &.fullscreen {
     background: $ig-black;
 
-    .image-gallery-slide {
-      background: $ig-black;
+    .image-gallery-slide .image-gallery-image {
+      max-height: calc(100vh - 80px); // 80 px for the thumbnail space
+    }
+  }
+
+  &.fullscreen {
+    &.left,
+    &.right {
+      .image-gallery-slide .image-gallery-image {
+        max-height: 100vh;
+      }
     }
   }
 }
@@ -185,10 +194,10 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   overflow: hidden;
   position: relative;
   white-space: nowrap;
+  text-align: center;
 }
 
 .image-gallery-slide {
-  background: $ig-white;
   left: 0;
   position: absolute;
   top: 0;
@@ -198,8 +207,9 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     position: relative;
   }
 
-  img {
+  .image-gallery-image {
     width: 100%;
+    object-fit: contain;
   }
 
   .image-gallery-description {
@@ -364,7 +374,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     position: relative;
   }
 
-  img {
+  .image-gallery-thumbnail-image {
     vertical-align: middle;
     width: 100%;
     line-height: 0;

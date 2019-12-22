@@ -68,6 +68,7 @@
     "react": "^16.0.0"
   },
   "dependencies": {
+    "clsx": "^1.0.4",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",
