@@ -66,7 +66,7 @@ export default class ImageGallery extends React.Component {
     showPlayButton: bool,
     showFullscreenButton: bool,
     disableThumbnailScroll: bool,
-    disableArrowKeys: bool,
+    disableKeyDown: bool,
     disableSwipe: bool,
     useBrowserFullscreen: bool,
     preventDefaultTouchmoveEvent: bool,
@@ -119,7 +119,7 @@ export default class ImageGallery extends React.Component {
     showPlayButton: true,
     showFullscreenButton: true,
     disableThumbnailScroll: false,
-    disableArrowKeys: false,
+    disableKeyDown: false,
     disableSwipe: false,
     useTranslate3D: true,
     isRTL: false,
@@ -881,12 +881,12 @@ export default class ImageGallery extends React.Component {
   }
 
   handleKeyDown(event) {
-    const { disableArrowKeys, useBrowserFullscreen } = this.props;
+    const { disableKeyDown, useBrowserFullscreen } = this.props;
     const { isFullscreen } = this.state;
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
-    if (disableArrowKeys) return;
+    if (disableKeyDown) return;
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
     const ESC_KEY = 27;
