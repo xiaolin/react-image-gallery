@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Swipeable, LEFT, RIGHT } from 'react-swipeable';
 import throttle from 'lodash.throttle';
@@ -13,7 +14,6 @@ import {
   string,
 } from 'prop-types';
 import SVG from './SVG';
-
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -633,6 +633,11 @@ export default class ImageGallery extends React.Component {
       }
 
       if (showThumbnails) {
+        const igThumbnailClass = clsx(
+          'image-gallery-thumbnail',
+          thumbnailClass,
+          { active: currentIndex === index },
+        );
         thumbnails.push(
           <button
             key={`thumbnail-${item.original}`}
@@ -640,9 +645,7 @@ export default class ImageGallery extends React.Component {
             tabIndex="0"
             aria-pressed={currentIndex === index ? 'true' : 'false'}
             aria-label={`Go to Slide ${index + 1}`}
-            className={
-              `image-gallery-thumbnail ${thumbnailClass} ${(currentIndex === index ? 'active' : '')}`
-            }
+            className={igThumbnailClass}
             onMouseLeave={slideOnThumbnailOver ? this.onThumbnailMouseLeave : null}
             onMouseOver={event => this.handleThumbnailMouseOver(event, index)}
             onFocus={event => this.handleThumbnailMouseOver(event, index)}
@@ -662,15 +665,16 @@ export default class ImageGallery extends React.Component {
           }
           return this.slideToIndex.call(this, index, event);
         };
+        const igBulletClass = clsx(
+          'image-gallery-bullet',
+          item.bulletClass,
+          { active: currentIndex === index },
+        );
         bullets.push(
           <button
             type="button"
             key={`bullet-${item.original}`}
-            className={[
-              'image-gallery-bullet',
-              currentIndex === index ? 'active' : '',
-              item.bulletClass || '',
-            ].join(' ')}
+            className={igBulletClass}
             onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
             aria-label={`Go to Slide ${index + 1}`}
@@ -1192,7 +1196,7 @@ export default class ImageGallery extends React.Component {
     const handleImageError = onImageError || this.handleImageError;
 
     return (
-      <div className="image-gallery-image">
+      <div>
         {
           item.imageSet ? (
             <picture
@@ -1210,12 +1214,14 @@ export default class ImageGallery extends React.Component {
                 ))
               }
               <img
+                className="image-gallery-image"
                 alt={item.originalAlt}
                 src={item.original}
               />
             </picture>
           ) : (
             <img
+              className="image-gallery-image"
               src={item.original}
               alt={item.originalAlt}
               srcSet={item.srcSet}
@@ -1245,6 +1251,7 @@ export default class ImageGallery extends React.Component {
     return (
       <div className="image-gallery-thumbnail-inner">
         <img
+          className="image-gallery-thumbnail-image"
           src={item.thumbnail}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
@@ -1290,12 +1297,14 @@ export default class ImageGallery extends React.Component {
 
     const thumbnailStyle = this.getThumbnailStyle();
     const { slides, thumbnails, bullets } = this.getSlideItems(items);
+    const slideWrapperClass = clsx(
+      'image-gallery-slide-wrapper',
+      thumbnailPosition,
+      { 'image-gallery-rtl': isRTL },
+    );
 
     const slideWrapper = (
-      <div
-        ref={this.imageGallerySlideWrapper}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
-      >
+      <div ref={this.imageGallerySlideWrapper} className={slideWrapperClass}>
         {renderCustomControls && renderCustomControls()}
         {
           this.canSlide() ? (
@@ -1359,24 +1368,25 @@ export default class ImageGallery extends React.Component {
       </div>
     );
 
-    const classNames = [
-      'image-gallery',
-      additionalClass,
-      modalFullscreen ? 'fullscreen-modal' : '',
-    ].filter(name => typeof name === 'string').join(' ');
-
+    const igClass = clsx('image-gallery', additionalClass, { 'fullscreen-modal': modalFullscreen });
+    const igContentClass = clsx('image-gallery-content', thumbnailPosition, { fullscreen: isFullscreen });
+    const thumbnailWrapperClass = clsx(
+      'image-gallery-thumbnails-wrapper',
+      thumbnailPosition,
+      { 'thumbnails-wrapper-rtl': !this.isThumbnailVertical() && isRTL },
+    );
     return (
       <div
         ref={this.imageGallery}
-        className={classNames}
+        className={igClass}
         aria-live="polite"
       >
-        <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
+        <div className={igContentClass}>
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
           {
             showThumbnails && (
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this.isThumbnailVertical() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={thumbnailWrapperClass}
                 style={this.getThumbnailBarHeight()}
               >
                 <div
