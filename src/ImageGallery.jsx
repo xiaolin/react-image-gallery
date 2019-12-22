@@ -12,6 +12,8 @@ import {
   shape,
   string,
 } from 'prop-types';
+import SVG from './SVG';
+
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -153,38 +155,44 @@ export default class ImageGallery extends React.Component {
     renderLeftNav: (onClick, disabled) => (
       <button
         type="button"
-        className="image-gallery-left-nav"
+        className="image-gallery-icon image-gallery-left-nav"
         disabled={disabled}
         onClick={onClick}
         aria-label="Previous Slide"
-      />
+      >
+        <SVG icon="left" viewBox="6 0 12 24" />
+      </button>
     ),
     renderRightNav: (onClick, disabled) => (
       <button
         type="button"
-        className="image-gallery-right-nav"
+        className="image-gallery-icon image-gallery-right-nav"
         disabled={disabled}
         onClick={onClick}
         aria-label="Next Slide"
-      />
+      >
+        <SVG icon="right" viewBox="6 0 12 24" />
+      </button>
     ),
     renderPlayPauseButton: (onClick, isPlaying) => (
       <button
         type="button"
-        className={
-          `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+        className="image-gallery-icon image-gallery-play-button"
         onClick={onClick}
         aria-label="Play or Pause Slideshow"
-      />
+      >
+        <SVG strokeWidth={2} icon={isPlaying ? 'pause' : 'play'} />
+      </button>
     ),
     renderFullscreenButton: (onClick, isFullscreen) => (
       <button
         type="button"
-        className={
-          `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+        className="image-gallery-icon image-gallery-fullscreen-button"
         onClick={onClick}
         aria-label="Open Fullscreen"
-      />
+      >
+        <SVG strokeWidth={2} icon={isFullscreen ? 'minimize' : 'maximize'} />
+      </button>
     ),
   };
 
