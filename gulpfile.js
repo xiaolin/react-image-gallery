@@ -74,6 +74,14 @@ gulp.task('source-js', function () {
     .pipe(gulp.dest('./build'));
 });
 
+// todo fix this to do it in on task
+gulp.task('svg-js', function () {
+  return gulp.src('./src/SVG.jsx')
+    .pipe(concat('SVG.js'))
+    .pipe(babel(babelOptions))
+    .pipe(gulp.dest('./build'));
+});
+
 gulp.task('watch', function() {
   livereload.listen();
   gulp.watch(['styles/**/*.scss'], ['sass']);
@@ -81,5 +89,5 @@ gulp.task('watch', function() {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'sass']);
+gulp.task('build', ['source-js', 'svg-js', 'sass']);
 gulp.task('demo', ['demo-src']);
