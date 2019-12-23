@@ -5,7 +5,7 @@ React Carousel Image Gallery
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
 
 ## Live Demo (try it on mobile for swipe support)
-### Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
+#### [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
 ![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery_v1.0.2.gif)
 
