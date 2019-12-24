@@ -1,32 +1,32 @@
-var babel = require('gulp-babel');
-var browserify = require('browserify');
-var concat = require('gulp-concat');
-var connect = require('gulp-connect');
-var gulp = require('gulp');
-var livereload = require('gulp-livereload');
-var rename = require('gulp-rename');
-var sass = require('gulp-sass');
-var uglify = require('gulp-uglify');
-var cleanCSS = require('gulp-clean-css');
-var source = require('vinyl-source-stream');
-var buffer = require('vinyl-buffer');
-var watchify = require('watchify');
+const babel = require('gulp-babel');
+const browserify = require('browserify');
+const concat = require('gulp-concat');
+const connect = require('gulp-connect');
+const gulp = require('gulp');
+const livereload = require('gulp-livereload');
+const rename = require('gulp-rename');
+const sass = require('gulp-sass');
+const uglify = require('gulp-uglify');
+const cleanCSS = require('gulp-clean-css');
+const source = require('vinyl-source-stream');
+const buffer = require('vinyl-buffer');
+const watchify = require('watchify');
 
-var babelOptions = {
+const babelOptions = {
   plugins: ['transform-object-assign'],
-  presets: ['es2015', 'react', 'stage-0']
+  presets: ['es2015', 'react', 'stage-0'],
 };
 
-gulp.task('server', function () {
+gulp.task('server', () => {
   connect.server({
     host: '0.0.0.0',
     root: ['example', 'build', 'styles'],
     port: 8001,
-    livereload: true
+    livereload: true,
   });
 });
 
-gulp.task('sass', function () {
+gulp.task('sass', () => {
   gulp.src('./styles/scss/image-gallery.scss')
     .pipe(sass())
     .pipe(rename('image-gallery.css'))
@@ -34,26 +34,26 @@ gulp.task('sass', function () {
     .pipe(livereload());
 });
 
-gulp.task('scripts', function() {
+gulp.task('scripts', () => {
   watchify(browserify({
     entries: './example/app.js',
     extensions: ['.jsx'],
-    debug: true
+    debug: true,
   }).transform('babelify', babelOptions))
     .bundle()
-    .on('error', err => { console.error('error is', err) })
+    .on('error', (err) => console.error('error is', err))
     .pipe(source('example.js'))
     .pipe(buffer())
     .pipe(gulp.dest('./example/'))
     .pipe(livereload());
 });
 
-gulp.task('demo-src', function() {
+gulp.task('demo-src', () => {
   process.env.NODE_ENV = 'production';
   browserify({
     entries: './example/app.js',
     extensions: ['.jsx'],
-    debug: true
+    debug: true,
   }).transform('babelify', babelOptions)
     .bundle()
     .pipe(source('demo.js'))
@@ -63,26 +63,25 @@ gulp.task('demo-src', function() {
 
   gulp.src(['./styles/css/image-gallery.css', './example/app.css'])
     .pipe(concat('demo.css'))
-    .pipe(cleanCSS({keepSpecialComments: false}))
+    .pipe(cleanCSS({ keepSpecialComments: false }))
     .pipe(gulp.dest('./demo/'));
 });
 
-gulp.task('source-js', function () {
-  return gulp.src('./src/ImageGallery.jsx')
+gulp.task('source-js', () => (
+  gulp.src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
     .pipe(babel(babelOptions))
-    .pipe(gulp.dest('./build'));
-});
+    .pipe(gulp.dest('./build'))
+));
 
-// todo fix this to do it in on task
-gulp.task('svg-js', function () {
-  return gulp.src('./src/SVG.jsx')
+gulp.task('svg-js', () => (
+  gulp.src('./src/SVG.jsx')
     .pipe(concat('SVG.js'))
     .pipe(babel(babelOptions))
-    .pipe(gulp.dest('./build'));
-});
+    .pipe(gulp.dest('./build'))
+));
 
-gulp.task('watch', function() {
+gulp.task('watch', () => {
   livereload.listen();
   gulp.watch(['styles/**/*.scss'], ['sass']);
   gulp.watch(['src/*.jsx', 'src/icons/*.jsx', 'example/app.js'], ['scripts']);
