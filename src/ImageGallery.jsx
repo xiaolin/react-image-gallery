@@ -1,3 +1,4 @@
+import clsx from 'clsx';
 import React from 'react';
 import { Swipeable, LEFT, RIGHT } from 'react-swipeable';
 import throttle from 'lodash.throttle';
@@ -12,6 +13,7 @@ import {
   shape,
   string,
 } from 'prop-types';
+import SVG from './SVG';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -66,7 +68,7 @@ export default class ImageGallery extends React.Component {
     showPlayButton: bool,
     showFullscreenButton: bool,
     disableThumbnailScroll: bool,
-    disableArrowKeys: bool,
+    disableKeyDown: bool,
     disableSwipe: bool,
     useBrowserFullscreen: bool,
     preventDefaultTouchmoveEvent: bool,
@@ -119,7 +121,7 @@ export default class ImageGallery extends React.Component {
     showPlayButton: true,
     showFullscreenButton: true,
     disableThumbnailScroll: false,
-    disableArrowKeys: false,
+    disableKeyDown: false,
     disableSwipe: false,
     useTranslate3D: true,
     isRTL: false,
@@ -155,38 +157,44 @@ export default class ImageGallery extends React.Component {
     renderLeftNav: (onClick, disabled) => (
       <button
         type="button"
-        className="image-gallery-left-nav"
+        className="image-gallery-icon image-gallery-left-nav"
         disabled={disabled}
         onClick={onClick}
         aria-label="Previous Slide"
-      />
+      >
+        <SVG icon="left" viewBox="6 0 12 24" />
+      </button>
     ),
     renderRightNav: (onClick, disabled) => (
       <button
         type="button"
-        className="image-gallery-right-nav"
+        className="image-gallery-icon image-gallery-right-nav"
         disabled={disabled}
         onClick={onClick}
         aria-label="Next Slide"
-      />
+      >
+        <SVG icon="right" viewBox="6 0 12 24" />
+      </button>
     ),
     renderPlayPauseButton: (onClick, isPlaying) => (
       <button
         type="button"
-        className={
-          `image-gallery-play-button${isPlaying ? ' active' : ''}`}
+        className="image-gallery-icon image-gallery-play-button"
         onClick={onClick}
         aria-label="Play or Pause Slideshow"
-      />
+      >
+        <SVG strokeWidth={2} icon={isPlaying ? 'pause' : 'play'} />
+      </button>
     ),
     renderFullscreenButton: (onClick, isFullscreen) => (
       <button
         type="button"
-        className={
-          `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
+        className="image-gallery-icon image-gallery-fullscreen-button"
         onClick={onClick}
         aria-label="Open Fullscreen"
-      />
+      >
+        <SVG strokeWidth={2} icon={isFullscreen ? 'minimize' : 'maximize'} />
+      </button>
     ),
   };
 
@@ -202,6 +210,7 @@ export default class ImageGallery extends React.Component {
       isFullscreen: false,
       isPlaying: false,
     };
+    this.loadedImages = {};
     this.imageGallery = React.createRef();
     this.thumbnailsWrapper = React.createRef();
     this.thumbnails = React.createRef();
@@ -559,6 +568,130 @@ export default class ImageGallery extends React.Component {
     };
   }
 
+  getSlideItems(items) {
+    const { currentIndex } = this.state;
+    const {
+      infinite,
+      slideOnThumbnailOver,
+      onClick,
+      lazyLoad,
+      onTouchMove,
+      onTouchEnd,
+      onTouchStart,
+      onMouseOver,
+      onMouseLeave,
+      renderItem,
+      renderThumbInner,
+      showThumbnails,
+      showBullets,
+    } = this.props;
+
+    const slides = [];
+    const thumbnails = [];
+    const bullets = [];
+
+    items.forEach((item, index) => {
+      const alignment = this.getAlignmentClassName(index);
+      const originalClass = item.originalClass ? ` ${item.originalClass}` : '';
+      const thumbnailClass = item.thumbnailClass ? ` ${item.thumbnailClass}` : '';
+      const handleRenderItem = item.renderItem || renderItem || this.renderItem;
+      const handleRenderThumbInner = item.renderThumbInner
+        || renderThumbInner || this.renderThumbInner;
+
+      const showItem = !lazyLoad || alignment || this.lazyLoaded[index];
+      if (showItem && lazyLoad && !this.lazyLoaded[index]) {
+        this.lazyLoaded[index] = true;
+      }
+
+      const slideStyle = this.getSlideStyle(index);
+
+      const slide = (
+        <div
+          key={`slide-${item.original}`}
+          tabIndex="-1"
+          className={`image-gallery-slide ${alignment} ${originalClass}`}
+          style={slideStyle}
+          onClick={onClick}
+          onKeyUp={this.handleSlideKeyUp}
+          onTouchMove={onTouchMove}
+          onTouchEnd={onTouchEnd}
+          onTouchStart={onTouchStart}
+          onMouseOver={onMouseOver}
+          onFocus={onMouseOver}
+          onMouseLeave={onMouseLeave}
+          role="button"
+        >
+          {showItem ? handleRenderItem(item) : <div style={{ height: '100%' }} />}
+        </div>
+      );
+
+      if (infinite) {
+        // don't add some slides while transitioning to avoid background transitions
+        if (this.shouldPushSlideOnInfiniteMode(index)) {
+          slides.push(slide);
+        }
+      } else {
+        slides.push(slide);
+      }
+
+      if (showThumbnails) {
+        const igThumbnailClass = clsx(
+          'image-gallery-thumbnail',
+          thumbnailClass,
+          { active: currentIndex === index },
+        );
+        thumbnails.push(
+          <button
+            key={`thumbnail-${item.original}`}
+            type="button"
+            tabIndex="0"
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+            className={igThumbnailClass}
+            onMouseLeave={slideOnThumbnailOver ? this.onThumbnailMouseLeave : null}
+            onMouseOver={event => this.handleThumbnailMouseOver(event, index)}
+            onFocus={event => this.handleThumbnailMouseOver(event, index)}
+            onKeyUp={event => this.handleThumbnailKeyUp(event, index)}
+            onClick={event => this.onThumbnailClick(event, index)}
+          >
+            {handleRenderThumbInner(item)}
+          </button>,
+        );
+      }
+
+      if (showBullets) {
+        // generate bullet elements and store them in array
+        const bulletOnClick = (event) => {
+          if (item.bulletOnClick) {
+            item.bulletOnClick({ item, itemIndex: index, currentIndex });
+          }
+          return this.slideToIndex.call(this, index, event);
+        };
+        const igBulletClass = clsx(
+          'image-gallery-bullet',
+          item.bulletClass,
+          { active: currentIndex === index },
+        );
+        bullets.push(
+          <button
+            type="button"
+            key={`bullet-${item.original}`}
+            className={igBulletClass}
+            onClick={bulletOnClick}
+            aria-pressed={currentIndex === index ? 'true' : 'false'}
+            aria-label={`Go to Slide ${index + 1}`}
+          />,
+        );
+      }
+    });
+
+    return {
+      slides,
+      thumbnails,
+      bullets,
+    };
+  }
+
   ignoreIsTransitioning() {
     /*
       Ignore isTransitioning because were not going to sibling slides
@@ -750,12 +883,12 @@ export default class ImageGallery extends React.Component {
   }
 
   handleKeyDown(event) {
-    const { disableArrowKeys, useBrowserFullscreen } = this.props;
+    const { disableKeyDown, useBrowserFullscreen } = this.props;
     const { isFullscreen } = this.state;
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
-    if (disableArrowKeys) return;
+    if (disableKeyDown) return;
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
     const ESC_KEY = 27;
@@ -1046,16 +1179,30 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  isImageLoaded(item) {
+    /*
+      Keep track of images loaded so that onImageLoad prop is not
+      called multiple times when re-render the images
+    */
+    const imageExists = this.loadedImages[item.original];
+    if (imageExists) {
+      return true;
+    }
+    // add image as loaded
+    this.loadedImages[item.original] = true;
+    return false;
+  }
+
   renderItem(item) {
     const { onImageError, onImageLoad } = this.props;
     const handleImageError = onImageError || this.handleImageError;
 
     return (
-      <div className="image-gallery-image">
+      <div>
         {
           item.imageSet ? (
             <picture
-              onLoad={onImageLoad}
+              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
               onError={handleImageError}
             >
               {
@@ -1069,18 +1216,20 @@ export default class ImageGallery extends React.Component {
                 ))
               }
               <img
+                className="image-gallery-image"
                 alt={item.originalAlt}
                 src={item.original}
               />
             </picture>
           ) : (
             <img
+              className="image-gallery-image"
               src={item.original}
               alt={item.originalAlt}
               srcSet={item.srcSet}
               sizes={item.sizes}
               title={item.originalTitle}
-              onLoad={onImageLoad}
+              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
               onError={handleImageError}
             />
           )
@@ -1104,6 +1253,7 @@ export default class ImageGallery extends React.Component {
     return (
       <div className="image-gallery-thumbnail-inner">
         <img
+          className="image-gallery-thumbnail-image"
           src={item.thumbnail}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
@@ -1130,22 +1280,11 @@ export default class ImageGallery extends React.Component {
 
     const {
       additionalClass,
-      infinite,
-      slideOnThumbnailOver,
       indexSeparator, // deprecate soon, and allow custom render
-      onClick,
       isRTL,
       items,
-      lazyLoad,
       thumbnailPosition,
-      onTouchMove,
-      onTouchEnd,
-      onTouchStart,
-      onMouseOver,
-      onMouseLeave,
       renderFullscreenButton,
-      renderItem,
-      renderThumbInner,
       renderCustomControls,
       renderLeftNav,
       renderRightNav,
@@ -1296,12 +1435,15 @@ export default class ImageGallery extends React.Component {
       }
     }
 
+    const { slides, thumbnails, bullets } = this.getSlideItems(items);
+    const slideWrapperClass = clsx(
+      'image-gallery-slide-wrapper',
+      thumbnailPosition,
+      { 'image-gallery-rtl': isRTL },
+    );
 
     const slideWrapper = (
-      <div
-        ref={this.imageGallerySlideWrapper}
-        className={`image-gallery-slide-wrapper ${thumbnailPosition} ${isRTL ? 'image-gallery-rtl' : ''}`}
-      >
+      <div ref={this.imageGallerySlideWrapper} className={slideWrapperClass}>
         {renderCustomControls && renderCustomControls()}
         {
           this.canSlide() ? (
@@ -1365,24 +1507,25 @@ export default class ImageGallery extends React.Component {
       </div>
     );
 
-    const classNames = [
-      'image-gallery',
-      additionalClass,
-      modalFullscreen ? 'fullscreen-modal' : '',
-    ].filter(name => typeof name === 'string').join(' ');
-
+    const igClass = clsx('image-gallery', additionalClass, { 'fullscreen-modal': modalFullscreen });
+    const igContentClass = clsx('image-gallery-content', thumbnailPosition, { fullscreen: isFullscreen });
+    const thumbnailWrapperClass = clsx(
+      'image-gallery-thumbnails-wrapper',
+      thumbnailPosition,
+      { 'thumbnails-wrapper-rtl': !this.isThumbnailVertical() && isRTL },
+    );
     return (
       <div
         ref={this.imageGallery}
-        className={classNames}
+        className={igClass}
         aria-live="polite"
       >
-        <div className={`image-gallery-content${isFullscreen ? ' fullscreen' : ''}`}>
+        <div className={igContentClass}>
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
           {
             showThumbnails && (
               <div
-                className={`image-gallery-thumbnails-wrapper ${thumbnailPosition} ${!this.isThumbnailVertical() && isRTL ? 'thumbnails-wrapper-rtl' : ''}`}
+                className={thumbnailWrapperClass}
                 style={this.getThumbnailBarHeight()}
               >
                 <div

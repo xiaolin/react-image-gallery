@@ -1,6 +1,6 @@
 {
   "name": "react-image-gallery",
-  "version": "0.9.1",
+  "version": "1.0.3",
   "description": "React carousel image gallery component with thumbnail and mobile support",
   "main": "./build/image-gallery.js",
   "scripts": {
@@ -68,6 +68,7 @@
     "react": "^16.0.0"
   },
   "dependencies": {
+    "clsx": "^1.0.4",
     "lodash.debounce": "^4.0.8",
     "lodash.isequal": "^4.5.0",
     "lodash.throttle": "^4.1.1",

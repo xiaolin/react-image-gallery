@@ -148,7 +148,7 @@ class App extends React.Component {
 
   _renderVideo(item) {
     return (
-      <div className='image-gallery-image'>
+      <div>
         {
           this.state.showVideo[item.embedUrl] ?
             <div className='video-wrapper'>
@@ -169,7 +169,7 @@ class App extends React.Component {
           :
             <a onClick={this._toggleShowVideo.bind(this, item.embedUrl)}>
               <div className='play-button'></div>
-              <img src={item.original}/>
+              <img className='image-gallery-image' src={item.original} />
               {
                 item.description &&
                   <span

@@ -5,9 +5,9 @@ React Carousel Image Gallery
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](http://www.npmjs.com/package/react-image-gallery)
 
 ## Live Demo (try it on mobile for swipe support)
-Live demo: [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
+#### [`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
 
-![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery.gif)
+![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery_v1.0.2.gif)
 
 React image gallery is a React component for building image galleries and carousels
 
@@ -18,7 +18,7 @@ Features of `react-image-gallery`
 * Custom Rendered Slides
 * Responsive Design
 * Tons of customization options (see props below)
-* Lightweight ~8kb (gzipped, excluding react)
+* Lightweight ~7kb gzipped
 
 ## Getting started
 
@@ -35,10 +35,6 @@ npm install react-image-gallery
 
 # CSS
 @import "~react-image-gallery/styles/css/image-gallery.css";
-
-# Stylesheet with no icons
-node_modules/react-image-gallery/styles/scss/image-gallery-no-icon.scss
-node_modules/react-image-gallery/styles/css/image-gallery-no-icon.css
 ```
 
 ### Example
@@ -110,8 +106,8 @@ class MyGallery extends React.Component {
 * `autoPlay`: Boolean, default `false`
 * `disableThumbnailScroll`: Boolean, default `false`
   * disables the thumbnail container from adjusting
-* `disableArrowKeys`: Boolean, default `false`
-  * disables keydown listener for left and right keyboard arrow keys
+* `disableKeyDown`: Boolean, default `false`
+  * disables keydown listener for keyboard shortcuts (left arrow, right arrow, esc key)
 * `disableSwipe`: Boolean, default `false`
 * `onErrorImageURL`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
