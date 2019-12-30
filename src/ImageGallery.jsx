@@ -196,6 +196,15 @@ export default class ImageGallery extends React.Component {
     ),
   };
 
+  static getFullScreenElement() {
+    return (
+      document.fullscreenElement
+      || document.msFullscreenElement
+      || document.mozFullScreenElement
+      || document.webkitFullscreenElement
+    );
+  }
+
   constructor(props) {
     super(props);
     this.state = {
@@ -207,6 +216,7 @@ export default class ImageGallery extends React.Component {
       thumbnailsWrapperHeight: 0,
       isFullscreen: false,
       isPlaying: false,
+      isInFocus: false,
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -220,6 +230,8 @@ export default class ImageGallery extends React.Component {
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
+    this.onFocus = this.onFocus.bind(this);
+    this.onBlur = this.onBlur.bind(this);
     this.onThumbnailMouseLeave = this.onThumbnailMouseLeave.bind(this);
     this.pauseOrPlay = this.pauseOrPlay.bind(this);
     this.renderThumbInner = this.renderThumbInner.bind(this);
@@ -308,6 +320,18 @@ export default class ImageGallery extends React.Component {
     }
   }
 
+  onFocus() {
+    this.setState({
+      isInFocus: true,
+    });
+  }
+
+  onBlur() {
+    this.setState({
+      isInFocus: false,
+    });
+  }
+
   onSliding() {
     const { currentIndex, isTransitioning } = this.state;
     const { onSlide, slideDuration } = this.props;
@@ -369,11 +393,26 @@ export default class ImageGallery extends React.Component {
 
   setModalFullscreen(state) {
     const { onScreenChange } = this.props;
-    this.setState({ modalFullscreen: state });
-    // manually call because browser does not support screenchange events
-    if (onScreenChange) {
-      onScreenChange(state);
-    }
+    const { isFullscreen: prevIsFullscreen } = this.state;
+
+    // update both isFullscreen _and_ modalFullscreen
+    this.setState(
+      {
+        isFullscreen: state,
+        modalFullscreen: state,
+      },
+      () => {
+        // manually call because browser does not support screenchange events
+        if (onScreenChange) {
+          onScreenChange(
+            state
+              ? this.imageGallery.current
+              : null,
+            prevIsFullscreen,
+          );
+        }
+      },
+    );
   }
 
   getThumbsTranslate(indexDifference) {
@@ -882,7 +921,8 @@ export default class ImageGallery extends React.Component {
 
   handleKeyDown(event) {
     const { disableKeyDown, useBrowserFullscreen } = this.props;
-    const { isFullscreen } = this.state;
+    // only allow left and right arrow keys, when the current gallery is hovered
+    const { isFullscreen, isInFocus } = this.state;
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
@@ -894,12 +934,12 @@ export default class ImageGallery extends React.Component {
 
     switch (key) {
       case LEFT_ARROW:
-        if (this.canSlideLeft() && !this.intervalId) {
+        if (this.canSlideLeft() && !this.intervalId && isInFocus) {
           this.slideLeft();
         }
         break;
       case RIGHT_ARROW:
-        if (this.canSlideRight() && !this.intervalId) {
+        if (this.canSlideRight() && !this.intervalId && isInFocus) {
           this.slideRight();
         }
         break;
@@ -982,17 +1022,36 @@ export default class ImageGallery extends React.Component {
 
 
   handleScreenChange() {
-    /*
-      handles screen change events that the browser triggers e.g. esc key
-    */
+    /**
+     * handles screen change events that the browser triggers (e.g. esc key),
+     * but only if the current instance is the gallery shown in fullscreen mode.
+     * This is especially useful, when multiple galleries are used on a single
+     * page.
+     */
     const { onScreenChange } = this.props;
-    const fullScreenElement = document.fullscreenElement
-      || document.msFullscreenElement
-      || document.mozFullScreenElement
-      || document.webkitFullscreenElement;
+    const { isFullscreen: prevIsFullscreen } = this.state;
 
-    if (onScreenChange) onScreenChange(fullScreenElement);
-    this.setState({ isFullscreen: !!fullScreenElement });
+    const fullScreenElement = ImageGallery.getFullScreenElement();
+    // only for _one_ gallery on the page this will evaluate to true
+    const isFullscreen = this.imageGallery.current === fullScreenElement;
+
+    this.setState(
+      {
+        isFullscreen,
+      },
+      () => {
+        if (onScreenChange) {
+          /**
+           * in order to detect the current gallery going changing to
+           * fullscreen, `onScreenChange will provide a second argument.
+           */
+          onScreenChange(
+            isFullscreen ? fullScreenElement : null,
+            prevIsFullscreen,
+          );
+        }
+      },
+    );
   }
 
   slideToIndex(index, event) {
@@ -1092,6 +1151,14 @@ export default class ImageGallery extends React.Component {
   fullScreen() {
     const { useBrowserFullscreen } = this.props;
     const gallery = this.imageGallery.current;
+
+    /**
+     * ATTENTION: do not handle this.state.isFullscreen here (and in
+     * exitFullScreen), instead `handleScreenChange` and `setModalFullscreen`
+     * should handle it. This is especially useful, when multiple galleries are
+     * on the same page. Only the gallery in fullscreen-mode will change it's
+     * state properly.
+     */
     if (useBrowserFullscreen) {
       if (gallery.requestFullscreen) {
         gallery.requestFullscreen();
@@ -1108,7 +1175,6 @@ export default class ImageGallery extends React.Component {
     } else {
       this.setModalFullscreen(true);
     }
-    this.setState({ isFullscreen: true });
   }
 
   exitFullScreen() {
@@ -1131,7 +1197,6 @@ export default class ImageGallery extends React.Component {
       } else {
         this.setModalFullscreen(false);
       }
-      this.setState({ isFullscreen: false });
     }
   }
 
@@ -1380,6 +1445,10 @@ export default class ImageGallery extends React.Component {
         ref={this.imageGallery}
         className={igClass}
         aria-live="polite"
+        onMouseOver={this.onFocus}
+        onFocus={this.onFocus}
+        onMouseOut={this.onBlur}
+        onBlur={this.onBlur}
       >
         <div className={igContentClass}>
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
