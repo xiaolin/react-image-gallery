@@ -140,7 +140,12 @@ class MyGallery extends React.Component {
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
 * `onBeforeSlide`: Function, `callback(nextIndex)`
-* `onScreenChange`: Function, `callback(fullscreenElement)`
+* `onScreenChange`: Function, `callback(fullscreenElement, wasInFullscreen)`
+  * `fullscreenElement` will either be a DOM node or a boolean (for unsupported
+    browsers)
+  * the gallery's previous fullscreen state. This helps selecting the active
+    gallery when multiple galleries are present on the same page, because all
+    of them will invoke `onScreenChange` when one changes to fullscreen mode.
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
 * `onClick`: Function, `callback(event)`
