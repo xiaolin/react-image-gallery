@@ -951,12 +951,12 @@ export default class ImageGallery extends React.Component {
 
     switch (key) {
       case LEFT_ARROW:
-        if (this.canSlideLeft() && !this.intervalId && isInFocus) {
+        if (!this.intervalId && isInFocus && this.canSlideLeft()) {
           this.slideLeft();
         }
         break;
       case RIGHT_ARROW:
-        if (this.canSlideRight() && !this.intervalId && isInFocus) {
+        if (!this.intervalId && isInFocus && this.canSlideRight()) {
           this.slideRight();
         }
         break;
@@ -1059,8 +1059,8 @@ export default class ImageGallery extends React.Component {
       () => {
         if (onScreenChange) {
           /**
-           * in order to detect the current gallery going changing to
-           * fullscreen, `onScreenChange will provide a second argument.
+           * in order to detect the current gallery going to change to
+           * fullscreen, `onScreenChange` will provide a second argument.
            */
           onScreenChange(
             isFullscreen ? fullScreenElement : null,
