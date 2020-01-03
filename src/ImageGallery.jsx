@@ -80,6 +80,7 @@ export default class ImageGallery extends React.Component {
     swipeThreshold: number,
     swipingTransitionDuration: number,
     onSlide: func,
+    onBeforeSlide: func,
     onScreenChange: func,
     onPause: func,
     onPlay: func,
@@ -133,6 +134,7 @@ export default class ImageGallery extends React.Component {
     slideDuration: 450,
     swipingTransitionDuration: 0,
     onSlide: null,
+    onBeforeSlide: null,
     onScreenChange: null,
     onPause: null,
     onPlay: null,
@@ -258,6 +260,7 @@ export default class ImageGallery extends React.Component {
       slideDuration,
       startIndex,
       thumbnailPosition,
+      onBeforeSlide,
     } = this.props;
     const { currentIndex } = this.state;
     const itemsSizeChanged = prevProps.items.length !== items.length;
@@ -275,6 +278,10 @@ export default class ImageGallery extends React.Component {
       this.handleResize();
     }
     if (prevState.currentIndex !== currentIndex) {
+      if (onBeforeSlide) {
+        onBeforeSlide(currentIndex);
+      }
+
       this.slideThumbnailBar(prevState.currentIndex);
     }
     // if slideDuration changes, update slideToIndex throttle
