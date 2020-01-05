@@ -260,7 +260,6 @@ export default class ImageGallery extends React.Component {
       slideDuration,
       startIndex,
       thumbnailPosition,
-      onBeforeSlide,
     } = this.props;
     const { currentIndex } = this.state;
     const itemsSizeChanged = prevProps.items.length !== items.length;
@@ -278,10 +277,6 @@ export default class ImageGallery extends React.Component {
       this.handleResize();
     }
     if (prevState.currentIndex !== currentIndex) {
-      if (onBeforeSlide) {
-        onBeforeSlide(currentIndex);
-      }
-
       this.slideThumbnailBar(prevState.currentIndex);
     }
     // if slideDuration changes, update slideToIndex throttle
@@ -1004,7 +999,7 @@ export default class ImageGallery extends React.Component {
 
   slideToIndex(index, event) {
     const { currentIndex, isTransitioning } = this.state;
-    const { items, slideDuration } = this.props;
+    const { items, slideDuration, onBeforeSlide } = this.props;
 
     if (!isTransitioning) {
       if (event) {
@@ -1021,6 +1016,10 @@ export default class ImageGallery extends React.Component {
         nextIndex = slideCount;
       } else if (index > slideCount) {
         nextIndex = 0;
+      }
+
+      if (onBeforeSlide) {
+        onBeforeSlide(nextIndex);
       }
 
       this.setState({
