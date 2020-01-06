@@ -1018,7 +1018,7 @@ export default class ImageGallery extends React.Component {
         nextIndex = 0;
       }
 
-      if (onBeforeSlide) {
+      if (onBeforeSlide && nextIndex !== currentIndex) {
         onBeforeSlide(nextIndex);
       }
 
