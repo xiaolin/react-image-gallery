@@ -136,6 +136,7 @@ class MyGallery extends React.Component {
 * `onThumbnailClick`: Function, `callback(event, index)`
 * `onImageLoad`: Function, `callback(event)`
 * `onSlide`: Function, `callback(currentIndex)`
+* `onBeforeSlide`: Function, `callback(nextIndex)`
 * `onScreenChange`: Function, `callback(fullscreenElement)`
 * `onPause`: Function, `callback(currentIndex)`
 * `onPlay`: Function, `callback(currentIndex)`
