@@ -267,13 +267,13 @@ export default class ImageGallery extends React.Component {
     const thumbnailsPositionChanged = prevProps.thumbnailPosition !== thumbnailPosition;
     const showThumbnailsChanged = prevProps.showThumbnails !== showThumbnails;
 
-    if (thumbnailsPositionChanged || showThumbnailsChanged) {
+    if (thumbnailsPositionChanged) {
       // re-initialize resizeObserver because slides was unmounted and mounted again
       this.removeResizeObserver();
       this.initResizeObserver(this.imageGallerySlideWrapper);
     }
 
-    if (itemsSizeChanged) {
+    if (itemsSizeChanged || showThumbnailsChanged) {
       this.handleResize();
     }
     if (prevState.currentIndex !== currentIndex) {
