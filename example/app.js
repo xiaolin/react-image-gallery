@@ -81,6 +81,10 @@ class App extends React.Component {
     console.debug('slid to index', index);
   }
 
+  _onBeforeSlide(index) {
+    console.debug('sliding to index', index);
+  }
+
   _onPause(index) {
     console.debug('paused on index', index);
   }
@@ -196,6 +200,7 @@ class App extends React.Component {
           onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
           onSlide={this._onSlide.bind(this)}
+          onBeforeSlide={this._onBeforeSlide.bind(this)}
           onPause={this._onPause.bind(this)}
           onScreenChange={this._onScreenChange.bind(this)}
           onPlay={this._onPlay.bind(this)}

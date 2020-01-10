@@ -80,6 +80,7 @@ export default class ImageGallery extends React.Component {
     swipeThreshold: number,
     swipingTransitionDuration: number,
     onSlide: func,
+    onBeforeSlide: func,
     onScreenChange: func,
     onPause: func,
     onPlay: func,
@@ -133,6 +134,7 @@ export default class ImageGallery extends React.Component {
     slideDuration: 450,
     swipingTransitionDuration: 0,
     onSlide: null,
+    onBeforeSlide: null,
     onScreenChange: null,
     onPause: null,
     onPlay: null,
@@ -997,7 +999,7 @@ export default class ImageGallery extends React.Component {
 
   slideToIndex(index, event) {
     const { currentIndex, isTransitioning } = this.state;
-    const { items, slideDuration } = this.props;
+    const { items, slideDuration, onBeforeSlide } = this.props;
 
     if (!isTransitioning) {
       if (event) {
@@ -1014,6 +1016,10 @@ export default class ImageGallery extends React.Component {
         nextIndex = slideCount;
       } else if (index > slideCount) {
         nextIndex = 0;
+      }
+
+      if (onBeforeSlide && nextIndex !== currentIndex) {
+        onBeforeSlide(nextIndex);
       }
 
       this.setState({
