@@ -447,36 +447,45 @@ export default class ImageGallery extends React.Component {
   getTranslateXForTwoSlide(index) {
     // For taking care of infinite swipe when there are only two slides
     const { currentIndex, offsetPercentage, previousIndex } = this.state;
+    const indexChanged = currentIndex !== previousIndex;
+    const firstSlideWasPrevSlide = index === 0 && previousIndex === 0;
+    const secondSlideWasPrevSlide = index === 1 && previousIndex === 1;
+    const firstSlideIsNextSlide = index === 0 && currentIndex === 1;
+    const secondSlideIsNextSlide = index === 1 && currentIndex === 0;
+    const swipingEnded = offsetPercentage === 0;
     const baseTranslateX = -100 * currentIndex;
     let translateX = baseTranslateX + (index * 100) + offsetPercentage;
 
     // keep track of user swiping direction
+    // important to understand how to translateX based on last direction
     if (offsetPercentage > 0) {
       this.direction = 'left';
     } else if (offsetPercentage < 0) {
       this.direction = 'right';
     }
 
-    // when swiping make sure the slides are on the correct side
-    if (currentIndex === 0 && index === 1 && offsetPercentage > 0) {
+    // when swiping between two slides make sure the next and prev slides
+    // are on both left and right
+    if (secondSlideIsNextSlide && offsetPercentage > 0) { // swiping right
       translateX = -100 + offsetPercentage;
-    } else if (currentIndex === 1 && index === 0 && offsetPercentage < 0) {
+    }
+    if (firstSlideIsNextSlide && offsetPercentage < 0) { // swiping left
       translateX = 100 + offsetPercentage;
     }
 
-    if (currentIndex !== previousIndex) {
-      // when swiped move the slide to the correct side
-      if (previousIndex === 0 && index === 0 && offsetPercentage === 0 && this.direction === 'left') {
+    if (indexChanged) {
+      // when indexChanged move the slide to the correct side
+      if (firstSlideWasPrevSlide && swipingEnded && this.direction === 'left') {
         translateX = 100;
-      } else if (previousIndex === 1 && index === 1 && offsetPercentage === 0 && this.direction === 'right') {
+      } else if (secondSlideWasPrevSlide && swipingEnded && this.direction === 'right') {
         translateX = -100;
       }
     } else {
-      // keep the slide on the correct slide even when not a swipe
-      if (currentIndex === 0 && index === 1 && offsetPercentage === 0 && this.direction === 'left') {
+      // keep the slide on the correct side if the swipe was not successful
+      if (secondSlideIsNextSlide && swipingEnded && this.direction === 'left') {
         translateX = -100;
       }
-      if (currentIndex === 1 && index === 0 && offsetPercentage === 0 && this.direction === 'right') {
+      if (firstSlideIsNextSlide && swipingEnded && this.direction === 'right') {
         translateX = 100;
       }
     }
@@ -570,10 +579,11 @@ export default class ImageGallery extends React.Component {
     };
   }
 
-  getSlideItems(items) {
+  getSlideItems() {
     const { currentIndex } = this.state;
     const {
       infinite,
+      items,
       slideOnThumbnailOver,
       onClick,
       lazyLoad,
@@ -1304,7 +1314,7 @@ export default class ImageGallery extends React.Component {
     } = this.props;
 
     const thumbnailStyle = this.getThumbnailStyle();
-    const { slides, thumbnails, bullets } = this.getSlideItems(items);
+    const { slides, thumbnails, bullets } = this.getSlideItems();
     const slideWrapperClass = clsx(
       'image-gallery-slide-wrapper',
       thumbnailPosition,
@@ -1319,15 +1329,14 @@ export default class ImageGallery extends React.Component {
             <React.Fragment>
               {
                 showNav && (
-                  <span key="navigation">
+                  <React.Fragment>
                     {renderLeftNav(this.slideLeft, !this.canSlideLeft())}
                     {renderRightNav(this.slideRight, !this.canSlideRight())}
-                  </span>
+                  </React.Fragment>
                 )
               }
               <Swipeable
                 className="image-gallery-swipe"
-                key="swipeable"
                 delta={0}
                 onSwiping={this.handleSwiping}
                 onSwiped={this.handleOnSwiped}
