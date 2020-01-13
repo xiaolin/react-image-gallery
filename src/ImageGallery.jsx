@@ -203,7 +203,7 @@ export default class ImageGallery extends React.Component {
     this.state = {
       currentIndex: props.startIndex,
       thumbsTranslate: 0,
-      offsetPercentage: 0,
+      currentSlideOffset: 0,
       galleryWidth: 0,
       thumbnailsWrapperWidth: 0,
       thumbnailsWrapperHeight: 0,
@@ -446,31 +446,32 @@ export default class ImageGallery extends React.Component {
 
   getTranslateXForTwoSlide(index) {
     // For taking care of infinite swipe when there are only two slides
-    const { currentIndex, offsetPercentage, previousIndex } = this.state;
+    const { currentIndex, currentSlideOffset, previousIndex } = this.state;
     const indexChanged = currentIndex !== previousIndex;
     const firstSlideWasPrevSlide = index === 0 && previousIndex === 0;
     const secondSlideWasPrevSlide = index === 1 && previousIndex === 1;
     const firstSlideIsNextSlide = index === 0 && currentIndex === 1;
     const secondSlideIsNextSlide = index === 1 && currentIndex === 0;
-    const swipingEnded = offsetPercentage === 0;
+    const swipingEnded = currentSlideOffset === 0;
     const baseTranslateX = -100 * currentIndex;
-    let translateX = baseTranslateX + (index * 100) + offsetPercentage;
+    let translateX = baseTranslateX + (index * 100) + currentSlideOffset;
 
     // keep track of user swiping direction
     // important to understand how to translateX based on last direction
-    if (offsetPercentage > 0) {
+    if (currentSlideOffset > 0) {
       this.direction = 'left';
-    } else if (offsetPercentage < 0) {
+    } else if (currentSlideOffset < 0) {
       this.direction = 'right';
     }
 
+
     // when swiping between two slides make sure the next and prev slides
     // are on both left and right
-    if (secondSlideIsNextSlide && offsetPercentage > 0) { // swiping right
-      translateX = -100 + offsetPercentage;
+    if (secondSlideIsNextSlide && currentSlideOffset > 0) { // swiping right
+      translateX = -100 + currentSlideOffset;
     }
-    if (firstSlideIsNextSlide && offsetPercentage < 0) { // swiping left
-      translateX = 100 + offsetPercentage;
+    if (firstSlideIsNextSlide && currentSlideOffset < 0) { // swiping left
+      translateX = 100 + currentSlideOffset;
     }
 
     if (indexChanged) {
@@ -502,7 +503,7 @@ export default class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, offsetPercentage, slideStyle } = this.state;
+    const { currentIndex, currentSlideOffset, slideStyle } = this.state;
     const {
       infinite,
       items,
@@ -514,17 +515,17 @@ export default class ImageGallery extends React.Component {
 
     // calculates where the other slides belong based on currentIndex
     // if it is RTL the base line should be reversed
-    let translateX = (baseTranslateX + (index * 100)) * (isRTL ? -1 : 1) + offsetPercentage;
+    let translateX = (baseTranslateX + (index * 100)) * (isRTL ? -1 : 1) + currentSlideOffset;
 
     if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
         // if it is RTL the base line should be reversed
-        translateX = -100 * (isRTL ? -1 : 1) + offsetPercentage;
+        translateX = -100 * (isRTL ? -1 : 1) + currentSlideOffset;
       } else if (currentIndex === totalSlides && index === 0) {
         // make the first slide the slide after the last
         // if it is RTL the base line should be reversed
-        translateX = 100 * (isRTL ? -1 : 1) + offsetPercentage;
+        translateX = 100 * (isRTL ? -1 : 1) + currentSlideOffset;
       }
     }
 
@@ -820,9 +821,9 @@ export default class ImageGallery extends React.Component {
     if (!isTransitioning && !scrollingUpDown) {
       const side = dir === RIGHT ? 1 : -1;
 
-      let offsetPercentage = (absX / galleryWidth * 100);
-      if (Math.abs(offsetPercentage) >= 100) {
-        offsetPercentage = 100;
+      let currentSlideOffset = (absX / galleryWidth * 100);
+      if (Math.abs(currentSlideOffset) >= 100) {
+        currentSlideOffset = 100;
       }
 
       const swipingTransition = {
@@ -830,19 +831,19 @@ export default class ImageGallery extends React.Component {
       };
 
       this.setState({
-        offsetPercentage: side * offsetPercentage,
+        currentSlideOffset: side * currentSlideOffset,
         slideStyle: swipingTransition,
       });
     } else {
       // don't move the slide
-      this.setState({ offsetPercentage: 0 });
+      this.setState({ currentSlideOffset: 0 });
     }
   }
 
   sufficientSwipe() {
-    const { offsetPercentage } = this.state;
+    const { currentSlideOffset } = this.state;
     const { swipeThreshold } = this.props;
-    return Math.abs(offsetPercentage) > swipeThreshold;
+    return Math.abs(currentSlideOffset) > swipeThreshold;
   }
 
   handleOnSwiped({ event, dir, velocity }) {
@@ -1038,7 +1039,7 @@ export default class ImageGallery extends React.Component {
         previousIndex: currentIndex,
         currentIndex: nextIndex,
         isTransitioning: nextIndex !== currentIndex,
-        offsetPercentage: 0,
+        currentSlideOffset: 0,
         slideStyle: { transition: `all ${slideDuration}ms ease-out` },
       }, this.onSliding);
     }
@@ -1063,13 +1064,47 @@ export default class ImageGallery extends React.Component {
   }
 
   slidePrevious(event) {
-    const { currentIndex } = this.state;
-    this.slideToIndex(currentIndex - 1, event);
+    const { currentIndex, currentSlideOffset, isTransitioning } = this.state;
+    const { items } = this.props;
+    const nextIndex = currentIndex - 1;
+
+    if (isTransitioning) return;
+
+    if (items.length === 2) {
+      /*
+        When there are only 2 slides fake a tiny swipe to get the slides
+        on the correct side for transitioning
+      */
+      this.setState({
+        currentSlideOffset: currentSlideOffset + 0.001, // this will reset once index changes
+        slideStyle: { transition: 'none' }, // move the slide over instantly
+      }, () => {
+        // add 25ms timeout to avoid delay in moving slides over
+        window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
+      });
+    } else {
+      this.slideToIndex(nextIndex, event);
+    }
   }
 
   slideNext(event) {
-    const { currentIndex } = this.state;
-    this.slideToIndex(currentIndex + 1, event);
+    const { currentIndex, currentSlideOffset, isTransitioning } = this.state;
+    const { items } = this.props;
+    const nextIndex = currentIndex + 1;
+
+    if (isTransitioning) return;
+
+    if (items.length === 2) {
+      // same as above for 2 slides
+      this.setState({
+        currentSlideOffset: currentSlideOffset - 0.001,
+        slideStyle: { transition: 'none' },
+      }, () => {
+        window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
+      });
+    } else {
+      this.slideToIndex(nextIndex, event);
+    }
   }
 
   handleThumbnailMouseOver(event, index) {
