@@ -42,6 +42,7 @@ export default class ImageGallery extends React.Component {
       bulletOnClick: func,
       description: string,
       original: string.isRequired,
+      fullscreen: string,
       originalAlt: string,
       originalTitle: string,
       thumbnail: string,
@@ -1245,8 +1246,10 @@ export default class ImageGallery extends React.Component {
   }
 
   renderItem(item) {
+    const { isFullscreen } = this.state;
     const { onImageError, onImageLoad } = this.props;
     const handleImageError = onImageError || this.handleImageError;
+    const itemSrc = isFullscreen ? (item.fullscreen || item.original) : item.original;
 
     return (
       <div>
@@ -1269,13 +1272,13 @@ export default class ImageGallery extends React.Component {
               <img
                 className="image-gallery-image"
                 alt={item.originalAlt}
-                src={item.original}
+                src={itemSrc}
               />
             </picture>
           ) : (
             <img
               className="image-gallery-image"
-              src={item.original}
+              src={itemSrc}
               alt={item.originalAlt}
               srcSet={item.srcSet}
               sizes={item.sizes}
