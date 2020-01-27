@@ -1600,7 +1600,7 @@ ImageGallery.defaultProps = {
 exports.default = ImageGallery;
 
 
-"use strict";
+'use strict';
 
 (function JcWheelZoomModule(factory) {
   window.JcWheelZoom = factory();
@@ -1613,7 +1613,7 @@ exports.default = ImageGallery;
    */
   function JcWheelZoom(selector, options) {
     for (var fn in this) {
-      if (fn.charAt(0) === "_" && typeof this[fn] === "function") {
+      if (fn.charAt(0) === '_' && typeof this[fn] === 'function') {
         this[fn] = this[fn].bind(this);
       }
     }
@@ -1659,12 +1659,12 @@ exports.default = ImageGallery;
     _init: function _init() {
       // original image sizes
       this.original.image = {
-        width: this.image.offsetWidth,
-        height: this.image.offsetHeight
+        width: this.image.naturalWidth,
+        height: this.image.naturalHeight
       };
 
       // will move this container, and will center the image in it
-      this.container = document.createElement("div");
+      this.container = document.createElement('div');
 
       this.window.appendChild(this.container);
       this.container.appendChild(this.image);
@@ -1675,9 +1675,9 @@ exports.default = ImageGallery;
         new DragScrollable(this.window);
       }
 
-      this.window.addEventListener("mousewheel", this._rescale);
+      this.window.addEventListener('mousewheel', this._rescale);
 
-      window.addEventListener("resize", this._rescale);
+      window.addEventListener('resize', this._rescale);
     },
     /**
      * @private
@@ -1696,6 +1696,8 @@ exports.default = ImageGallery;
       this.correctX = Math.max(0, (this.original.window.width - this.original.image.width * minScale) / 2);
       this.correctY = Math.max(0, (this.original.window.height - this.original.image.height * minScale) / 2);
 
+      debugger;
+
       // set new image dimensions to fit it into the container
       this.image.width = this.original.image.width * minScale;
       this.image.height = this.original.image.height * minScale;
@@ -1707,7 +1709,7 @@ exports.default = ImageGallery;
       this.container.style.width = this.image.width + this.correctX * 2 + 'px';
       this.container.style.height = this.image.height + this.correctY * 2 + 'px';
 
-      if (typeof this.options.prepare === "function") {
+      if (typeof this.options.prepare === 'function') {
         this.options.prepare(minScale, this.correctX, this.correctY);
       }
     },
@@ -1717,6 +1719,7 @@ exports.default = ImageGallery;
     _rescale: function _rescale(event) {
       event.preventDefault();
 
+      debugger;
       var delta = event.wheelDelta > 0 || event.detail < 0 ? 1 : -1;
 
       // the size of the image at the moment
@@ -1725,6 +1728,8 @@ exports.default = ImageGallery;
 
       // current proportion of scale
       var scale = imageCurrentWidth / this.original.image.width;
+      console.log(scale);
+
       // minimum allowed proportion of scale
       var minScale = Math.min(this.original.window.width / this.original.image.width, this.original.window.height / this.original.image.height);
       // new allowed proportion of scale
@@ -1747,7 +1752,7 @@ exports.default = ImageGallery;
       this.container.style.width = containerNewWidth + 'px';
       this.container.style.height = containerNewHeight + 'px';
 
-      if (typeof this.options.rescale === "function") {
+      if (typeof this.options.rescale === 'function') {
         this.options.rescale(newScale, this.correctX, this.correctY, minScale);
       }
 
@@ -1782,7 +1787,7 @@ exports.default = ImageGallery;
     zoomUp: function zoomUp() {
       var windowCoords = _getCoords(this.window);
 
-      var event = new Event("mousewheel");
+      var event = new Event('mousewheel');
 
       event.wheelDelta = 1;
       event.detail = -1;
@@ -1797,7 +1802,7 @@ exports.default = ImageGallery;
     zoomDown: function zoomDown() {
       var windowCoords = _getCoords(this.window);
 
-      var event = new Event("mousewheel");
+      var event = new Event('mousewheel');
 
       event.wheelDelta = -1;
       event.detail = 1;
@@ -1829,7 +1834,7 @@ exports.default = ImageGallery;
     this.mouseMoveHandler = this.mouseMoveHandler.bind(this);
 
     this.scrollable = scrollable;
-    this.scrollable.addEventListener("mousedown", this.mouseDownHandler);
+    this.scrollable.addEventListener('mousedown', this.mouseDownHandler);
   }
 
   DragScrollable.prototype = {
@@ -1847,14 +1852,14 @@ exports.default = ImageGallery;
         top: event.clientY
       };
 
-      document.addEventListener("mouseup", this.mouseUpHandler);
-      document.addEventListener("mousemove", this.mouseMoveHandler);
+      document.addEventListener('mouseup', this.mouseUpHandler);
+      document.addEventListener('mousemove', this.mouseMoveHandler);
     },
     mouseUpHandler: function mouseUpHandler(event) {
       event.preventDefault();
 
-      document.removeEventListener("mouseup", this.mouseUpHandler);
-      document.removeEventListener("mousemove", this.mouseMoveHandler);
+      document.removeEventListener('mouseup', this.mouseUpHandler);
+      document.removeEventListener('mousemove', this.mouseMoveHandler);
     },
     mouseMoveHandler: function mouseMoveHandler(event) {
       event.preventDefault();
