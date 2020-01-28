@@ -33,7 +33,7 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
-let jcWheelZoom;
+window.jcWheelZoom = undefined;
 
 export default class ImageGallery extends React.Component {
   static propTypes = {
@@ -190,7 +190,7 @@ export default class ImageGallery extends React.Component {
           type="button"
           aria-label="Zoom In"
           onClick={(e) => {
-            jcWheelZoom.zoomUp();
+            window.jcWheelZoom.zoomUp();
             // zoomHandler(true);
           }}
         ></button>
@@ -199,7 +199,7 @@ export default class ImageGallery extends React.Component {
           type="button"
           aria-label="Zoom Out"
           onClick={(e) => {
-            jcWheelZoom.zoomDown();
+            window.jcWheelZoom.zoomDown();
             // zoomHandler(false);
           }}
         ></button>
@@ -270,6 +270,11 @@ export default class ImageGallery extends React.Component {
     window.addEventListener('mousedown', this.handleMouseDown);
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
+    window.addEventListener('resize', () => {
+      if(jcWheelZoom){
+        jcWheelZoom.prepare();
+      }
+    });
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -339,9 +344,14 @@ export default class ImageGallery extends React.Component {
           onSlide(currentIndex);
         }
       }
-      jcWheelZoom = null;
-      jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
-        maxScale: 2
+      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .left img', {
+        maxScale: 3
+      });
+      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .right img', {
+        maxScale: 3
+      });
+      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
+        maxScale: 3
       });
     }, slideDuration + 50);
   }
@@ -1109,7 +1119,7 @@ export default class ImageGallery extends React.Component {
                 ))
               }
               <div style={{
-                overflow: 'auto', position:'relative', cursor:'move'}}>
+                height: "600px", width: "100%", overflow: 'auto', position:'relative', cursor:'move'}}>
                 <img
                   alt={item.originalAlt}
                   src={item.original}
@@ -1118,7 +1128,7 @@ export default class ImageGallery extends React.Component {
             </picture>
           ) : (
             <div style={{
-              overflow: 'auto', position:'relative', cursor:'move'}}>
+              height: "600px", width: "100%", overflow: 'auto', position:'relative', cursor:'move'}}>
             <img
               src={item.original}
               alt={item.originalAlt}

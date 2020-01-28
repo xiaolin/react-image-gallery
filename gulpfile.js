@@ -78,7 +78,6 @@ gulp.task('demo-src', function() {
 gulp.task('source-js', function () {
   return gulp.src('./src/ImageGallery.jsx')
     .pipe(concat('image-gallery.js'))
-    .pipe(concat('wheel-zoom.js'))
     .pipe(babel(babelOptions))
     .pipe(gulp.dest('./build'));
 });

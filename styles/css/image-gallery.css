@@ -229,8 +229,6 @@
   width: 100%; }
   .image-gallery-slide.center {
     position: relative; }
-  .image-gallery-slide img {
-    width: 100%; }
   .image-gallery-slide .image-gallery-description {
     background: rgba(0, 0, 0, 0.4);
     bottom: 70px;
@@ -414,7 +412,6 @@
   overflow: hidden;
   touch-action: manipulation; }
   .image-gallery-image img {
-    object-fit: cover;
     will-change: transform;
     transition: transform 150ms ease-in-out;
     touch-action: manipulation; }

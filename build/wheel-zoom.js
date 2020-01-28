@@ -56,7 +56,7 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
-var jcWheelZoom = void 0;
+window.jcWheelZoom = undefined;
 
 var ImageGallery = function (_React$Component) {
   _inherits(ImageGallery, _React$Component);
@@ -197,8 +197,8 @@ var ImageGallery = function (_React$Component) {
             onSlide(currentIndex);
           }
         }
-        jcWheelZoom = null;
-        jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
+        // window.jcWheelZoom = null;
+        window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
           maxScale: 2
         });
       }, slideDuration + 50);
@@ -1111,7 +1111,7 @@ var ImageGallery = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { style: {
-                overflow: 'auto', position: 'relative', cursor: 'move' } },
+                height: "100%", width: "100%", overflow: 'auto', position: 'relative', cursor: 'move' } },
             _react2.default.createElement('img', {
               alt: item.originalAlt,
               src: item.original
@@ -1120,7 +1120,7 @@ var ImageGallery = function (_React$Component) {
         ) : _react2.default.createElement(
           'div',
           { style: {
-              overflow: 'auto', position: 'relative', cursor: 'move' } },
+              height: "100%", width: "100%", overflow: 'auto', position: 'relative', cursor: 'move' } },
           _react2.default.createElement('img', {
             src: item.original,
             alt: item.originalAlt,
@@ -1573,7 +1573,7 @@ ImageGallery.defaultProps = {
         type: 'button',
         'aria-label': 'Zoom In',
         onClick: function onClick(e) {
-          jcWheelZoom.zoomUp();
+          window.jcWheelZoom.zoomUp();
           // zoomHandler(true);
         }
       }),
@@ -1582,7 +1582,7 @@ ImageGallery.defaultProps = {
         type: 'button',
         'aria-label': 'Zoom Out',
         onClick: function onClick(e) {
-          jcWheelZoom.zoomDown();
+          window.jcWheelZoom.zoomDown();
           // zoomHandler(false);
         }
       })

@@ -250,7 +250,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   img {
-    width: 100%;
+    // width: 100%;
   }
 
   .image-gallery-description {
@@ -502,7 +502,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     overflow: hidden;
     touch-action: manipulation;
     img {
-      object-fit: cover;
+      // object-fit: cover;
       will-change: transform;
       transition: transform 150ms ease-in-out;
       touch-action: manipulation;

@@ -117,7 +117,6 @@
         _rescale: function (event) {
             event.preventDefault();
 
-            debugger;
             const delta = event.wheelDelta > 0 || event.detail < 0 ? 1 : -1;
 
             // the size of the image at the moment
