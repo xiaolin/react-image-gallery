@@ -74,6 +74,20 @@ gulp.task('source-js', () => (
     .pipe(gulp.dest('./build'))
 ));
 
+gulp.task('prod', () => {
+  watchify(browserify({
+    entries: './src/ImageGallery.jsx',
+    extensions: ['.jsx'],
+    debug: true,
+  }).transform('babelify', babelOptions))
+    .bundle()
+    .on('error', (err) => console.error('error is', err))
+    .pipe(source('image-gallery.js'))
+    .pipe(buffer())
+    .pipe(gulp.dest('./build/'))
+    .pipe(livereload());
+});
+
 gulp.task('svg-js', () => (
   gulp.src('./src/SVG.jsx')
     .pipe(concat('SVG.js'))
@@ -88,5 +102,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'svg-js', 'sass']);
+gulp.task('build', ['prod', 'svg-js', 'sass']);
 gulp.task('demo', ['demo-src']);
