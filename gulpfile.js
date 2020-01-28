@@ -74,19 +74,12 @@ gulp.task('source-js', () => (
     .pipe(gulp.dest('./build'))
 ));
 
-gulp.task('prod', () => {
-  watchify(browserify({
-    entries: './src/ImageGallery.jsx',
-    extensions: ['.jsx','.js'],
-    debug: true,
-  }).transform('babelify', babelOptions))
-    .bundle()
-    .on('error', (err) => console.error('error is', err))
-    .pipe(source('image-gallery.js'))
-    .pipe(buffer())
-    .pipe(gulp.dest('./build/'))
-    .pipe(livereload());
-});
+gulp.task('wheel-zoom', () => (
+  gulp.src('./src/wheel-zoom.js')
+    .pipe(concat('wheel-zoom.js'))
+    .pipe(babel(babelOptions))
+    .pipe(gulp.dest('./build'))
+));
 
 gulp.task('svg-js', () => (
   gulp.src('./src/SVG.jsx')
@@ -102,5 +95,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'svg-js', 'sass']);
+gulp.task('build', ['source-js', 'wheel-zoom', 'svg-js', 'sass']);
 gulp.task('demo', ['demo-src']);

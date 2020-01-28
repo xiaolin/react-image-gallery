@@ -12,6 +12,7 @@ import {
   shape,
   string,
 } from 'prop-types';
+
 import JcWheelZoom from "./wheel-zoom";
 
 const screenChangeEvents = [
@@ -33,8 +34,8 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
-window.JcWheelZoom = JcWheelZoom;
-window.jcWheelZoom = undefined;
+// window.JcWheelZoom = JcWheelZoom;
+window.jcWheelZoom;
 
 export default class ImageGallery extends React.Component {
   static propTypes = {
@@ -271,9 +272,16 @@ export default class ImageGallery extends React.Component {
     window.addEventListener('mousedown', this.handleMouseDown);
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
+    setTimeout(() => {
+      console.log(document.querySelector('.image-gallery-slides .center img'));
+      window.jcWheelZoom = JcWheelZoom.create('.image-gallery-slides .center img', {
+        maxScale: 10
+      });
+    },0)
+    
     window.addEventListener('resize', () => {
       if(jcWheelZoom){
-        jcWheelZoom.prepare();
+        window.jcWheelZoom.prepare();
       }
     });
   }
@@ -338,8 +346,8 @@ export default class ImageGallery extends React.Component {
   onSliding() {
     const { currentIndex, isTransitioning } = this.state;
     const { onSlide, slideDuration } = this.props;
-    window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
-      maxScale: 3
+    window.jcWheelZoom = JcWheelZoom.create('.image-gallery-slides .center img', {
+      maxScale: 10
     });
     this.transitionTimer = window.setTimeout(() => {
       if (isTransitioning) {
@@ -1356,7 +1364,7 @@ export default class ImageGallery extends React.Component {
             </div>
           )
         }
-        {showZoomControls && renderZoomControlButton(this.buttonZoomHandler)}
+        {showZoomControls && renderZoomControlButton.call(this.buttonZoomHandler)}
         {showFullscreenButton && renderFullscreenButton(this.toggleFullScreen, isFullscreen)}
         {
           showIndex && (

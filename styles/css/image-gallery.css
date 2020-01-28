@@ -414,7 +414,6 @@
   overflow: hidden;
   touch-action: manipulation; }
   .image-gallery-image img {
-    max-height: 100%;
     max-width: 100%;
     will-change: transform;
     transition: transform 150ms ease-in-out;

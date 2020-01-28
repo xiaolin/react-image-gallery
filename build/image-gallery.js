@@ -58,8 +58,8 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
-window.JcWheelZoom = _wheelZoom2.default;
-window.jcWheelZoom = undefined;
+// window.JcWheelZoom = JcWheelZoom;
+window.jcWheelZoom;
 
 var ImageGallery = function (_React$Component) {
   _inherits(ImageGallery, _React$Component);
@@ -123,9 +123,15 @@ var ImageGallery = function (_React$Component) {
       window.addEventListener('mousedown', this.handleMouseDown);
       this.initResizeObserver(this.imageGallerySlideWrapper);
       this.addScreenChangeEvent();
+      setTimeout(function () {
+        window.jcWheelZoom = _wheelZoom2.default.create('.image-gallery-slides .center img', {
+          maxScale: 10
+        });
+      }, 0);
+
       window.addEventListener('resize', function () {
         if (jcWheelZoom) {
-          jcWheelZoom.prepare();
+          window.jcWheelZoom.prepare();
         }
       });
     }
@@ -198,8 +204,8 @@ var ImageGallery = function (_React$Component) {
           onSlide = _props2.onSlide,
           slideDuration = _props2.slideDuration;
 
-      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
-        maxScale: 3
+      window.jcWheelZoom = _wheelZoom2.default.create('.image-gallery-slides .center img', {
+        maxScale: 10
       });
       this.transitionTimer = window.setTimeout(function () {
         if (isTransitioning) {
@@ -1355,7 +1361,7 @@ var ImageGallery = function (_React$Component) {
             bullets
           )
         ),
-        showZoomControls && renderZoomControlButton(this.buttonZoomHandler),
+        showZoomControls && renderZoomControlButton.call(this.buttonZoomHandler),
         showFullscreenButton && renderFullscreenButton(this.toggleFullScreen, isFullscreen),
         showIndex && _react2.default.createElement(
           'div',
