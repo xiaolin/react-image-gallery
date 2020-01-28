@@ -1,44 +1,45 @@
 'use strict';
+
+(function JcWheelZoomModule(factory) {
+    window.JcWheelZoom = factory();
+})(function JcWheelZoomFactory() {
     /**
      * @class JcWheelZoom
      * @param {selector} selector
      * @param {Object} [options]
      * @constructor
      */
-    class JcWheelZoom {
-        constructor(selector, options){
+    function JcWheelZoom(selector, options) {
+        for (let fn in this) {
+            if (fn.charAt(0) === '_' && typeof this[fn] === 'function') {
+                this[fn] = this[fn].bind(this);
+            }
+        }
 
-            for (let fn in this) {
-                if (fn.charAt(0) === '_' && typeof this[fn] === 'function') {
-                    this[fn] = this[fn].bind(this);
-                }
+        const defaults = {
+            // drag scrollable image
+            dragScrollable: true,
+            // maximum allowed proportion of scale
+            maxScale: 1,
+            // image resizing speed
+            speed: 10
+        };
+
+        this.image = document.querySelector(selector);
+        this.options = _extend(defaults, options);
+
+        if (this.image !== null) {
+            // for window take just the parent
+            this.window = this.image.parentNode;
+
+            // if the image has already been loaded
+            if (this.image.complete) {
+                this._init();
+            } else {
+                // if suddenly the image has not loaded yet, then wait
+                this.image.onload = this._init;
             }
-    
-            const defaults = {
-                // drag scrollable image
-                dragScrollable: true,
-                // maximum allowed proportion of scale
-                maxScale: 1,
-                // image resizing speed
-                speed: 10
-            };
-    
-            this.image = document.querySelector(selector);
-            this.options = _extend(defaults, options);
-    
-            if (this.image !== null) {
-                // for window take just the parent
-                this.window = this.image.parentNode;
-    
-                // if the image has already been loaded
-                if (this.image.complete) {
-                    this._init();
-                } else {
-                    // if suddenly the image has not loaded yet, then wait
-                    this.image.onload = this._init;
-                }
-            }
-        }   
+        }
     }
 
     JcWheelZoom.prototype = {
@@ -306,5 +307,7 @@
         return dst;
     }
 
-// Export
-export default JcWheelZoom;
+    // Export
+    return JcWheelZoom;
+    export default JcWheelZoom;
+});
