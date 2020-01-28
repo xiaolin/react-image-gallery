@@ -12,7 +12,7 @@ import {
   shape,
   string,
 } from 'prop-types';
-import "./wheel-zoom";
+import JcWheelZoom from "./wheel-zoom";
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -33,6 +33,7 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
+window.JcWheelZoom = JcWheelZoom;
 window.jcWheelZoom = undefined;
 
 export default class ImageGallery extends React.Component {

@@ -77,7 +77,7 @@ gulp.task('source-js', () => (
 gulp.task('prod', () => {
   watchify(browserify({
     entries: './src/ImageGallery.jsx',
-    extensions: ['.jsx'],
+    extensions: ['.jsx','.js'],
     debug: true,
   }).transform('babelify', babelOptions))
     .bundle()
@@ -102,5 +102,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['prod', 'svg-js', 'sass']);
+gulp.task('build', ['source-js', 'svg-js', 'sass']);
 gulp.task('demo', ['demo-src']);
