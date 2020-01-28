@@ -397,6 +397,8 @@
   -ms-flex-align: center;
   background-color: red; }
   .image-gallery-image picture img {
+    max-height: 100%;
+    max-width: 100%;
     width: 100%;
     align-self: center;
     -ms-align-self: center;
@@ -412,6 +414,8 @@
   overflow: hidden;
   touch-action: manipulation; }
   .image-gallery-image img {
+    max-height: 100%;
+    max-width: 100%;
     will-change: transform;
     transition: transform 150ms ease-in-out;
     touch-action: manipulation; }

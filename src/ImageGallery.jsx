@@ -337,6 +337,9 @@ export default class ImageGallery extends React.Component {
   onSliding() {
     const { currentIndex, isTransitioning } = this.state;
     const { onSlide, slideDuration } = this.props;
+    window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
+      maxScale: 3
+    });
     this.transitionTimer = window.setTimeout(() => {
       if (isTransitioning) {
         this.setState({ isTransitioning: !isTransitioning });
@@ -344,15 +347,6 @@ export default class ImageGallery extends React.Component {
           onSlide(currentIndex);
         }
       }
-      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .left img', {
-        maxScale: 3
-      });
-      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .right img', {
-        maxScale: 3
-      });
-      window.jcWheelZoom = window.JcWheelZoom.create('.image-gallery-slides .center img', {
-        maxScale: 3
-      });
     }, slideDuration + 50);
   }
 

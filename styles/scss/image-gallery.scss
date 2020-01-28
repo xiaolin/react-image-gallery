@@ -482,6 +482,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     background-color: red; //there should be no red
     
     img {
+      max-height: 100%;
+      max-width: 100%;
       width: 100%;
       align-self: center;
       -ms-align-self: center;
@@ -502,6 +504,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     overflow: hidden;
     touch-action: manipulation;
     img {
+      max-height: 100%;
+      max-width: 100%;
       // object-fit: cover;
       will-change: transform;
       transition: transform 150ms ease-in-out;

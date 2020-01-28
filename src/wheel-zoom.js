@@ -66,6 +66,8 @@
 
             this.window.appendChild(this.container);
             this.container.appendChild(this.image);
+            this.container.style.display = `flex`;
+            this.container.style.justifyContent = `center`;
 
             this._prepare();
 
@@ -101,11 +103,11 @@
             this.image.height = this.original.image.height * minScale;
 
             // center the image
-            this.image.style.marginLeft = `${this.correctX}px`;
+            // this.image.style.marginLeft = `${this.correctX}px`;
             this.image.style.marginTop = `${this.correctY}px`;
 
             this.container.style.width = `${this.image.width + (this.correctX * 2)}px`;
-            this.container.style.height = `${this.image.height + (this.correctY * 2)}px`;
+            this.container.style.height = `${this.image.height + (this.correctY * 2)}px`;            
 
             if (typeof this.options.prepare === 'function') {
                 this.options.prepare(minScale, this.correctX, this.correctY);
