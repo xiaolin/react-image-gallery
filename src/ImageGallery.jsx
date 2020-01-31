@@ -224,6 +224,7 @@ export default class ImageGallery extends React.Component {
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
     this.onThumbnailMouseLeave = this.onThumbnailMouseLeave.bind(this);
+    this.handleImageError = this.handleImageError.bind(this);
     this.pauseOrPlay = this.pauseOrPlay.bind(this);
     this.renderThumbInner = this.renderThumbInner.bind(this);
     this.renderItem = this.renderItem.bind(this);
@@ -1245,9 +1246,19 @@ export default class ImageGallery extends React.Component {
     return false;
   }
 
+  handleImageLoaded(event, item) {
+    const { onImageLoad } = this.props;
+    const imageExists = this.loadedImages[item.original];
+    if (!imageExists && onImageLoad) {
+      this.loadedImages[item.original] = true; // prevent from call again
+      // image just loaded, call onImageLoad
+      onImageLoad(event);
+    }
+  }
+
   renderItem(item) {
     const { isFullscreen } = this.state;
-    const { onImageError, onImageLoad } = this.props;
+    const { onImageError } = this.props;
     const handleImageError = onImageError || this.handleImageError;
     const itemSrc = isFullscreen ? (item.fullscreen || item.original) : item.original;
 
@@ -1256,7 +1267,7 @@ export default class ImageGallery extends React.Component {
         {
           item.imageSet ? (
             <picture
-              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
+              onLoad={event => this.handleImageLoaded(event, item)}
               onError={handleImageError}
             >
               {
@@ -1283,7 +1294,7 @@ export default class ImageGallery extends React.Component {
               srcSet={item.srcSet}
               sizes={item.sizes}
               title={item.originalTitle}
-              onLoad={!this.isImageLoaded(item) ? onImageLoad : null}
+              onLoad={event => this.handleImageLoaded(event, item)}
               onError={handleImageError}
             />
           )
