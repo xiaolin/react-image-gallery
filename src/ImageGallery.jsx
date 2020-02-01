@@ -273,7 +273,6 @@ export default class ImageGallery extends React.Component {
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
     setTimeout(() => {
-      console.log(document.querySelector('.image-gallery-slides .center img'));
       window.jcWheelZoom = JcWheelZoom.create('.image-gallery-slides .center img', {
         maxScale: 10
       });
@@ -912,6 +911,10 @@ export default class ImageGallery extends React.Component {
   slideToIndex(index, event) {
     const { currentIndex, isTransitioning } = this.state;
     const { items, slideDuration } = this.props;
+
+    if (window.jcWheelZoom) {
+      window.jcWheelZoom.resetZoom();
+    }
 
     if (!isTransitioning) {
       if (event) {

@@ -881,6 +881,10 @@ var ImageGallery = function (_React$Component) {
           slideDuration = _props12.slideDuration;
 
 
+      if (window.jcWheelZoom) {
+        window.jcWheelZoom.resetZoom();
+      }
+
       if (!isTransitioning) {
         if (event) {
           if (this.intervalId) {
