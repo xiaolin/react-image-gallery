@@ -235,7 +235,7 @@ JcWheelZoom.prototype = {
     this._rescale(event);
   },
   resetZoom: function resetZoom() {
-    if(this.original.image){      
+    if(this.original.image && this.image){      
       const minScale = Math.min(
         this.original.window.width / this.original.image.width,
         this.original.window.height / this.original.image.height
