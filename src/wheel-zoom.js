@@ -235,17 +235,19 @@ JcWheelZoom.prototype = {
     this._rescale(event);
   },
   resetZoom: function resetZoom() {
-    const minScale = Math.min(
-      this.original.window.width / this.original.image.width,
-      this.original.window.height / this.original.image.height
-    );
-
-    // set new image dimensions to fit it into the container
-    this.image.width = this.original.image.width * minScale;
-    this.image.height = this.original.image.height * minScale;
-
-    this.container.style.height = this.original.window.height + "px";
-    this.container.style.width = this.original.window.width + "px";
+    if(this.original.image){      
+      const minScale = Math.min(
+        this.original.window.width / this.original.image.width,
+        this.original.window.height / this.original.image.height
+      );
+  
+      // set new image dimensions to fit it into the container
+      this.image.width = this.original.image.width * minScale;
+      this.image.height = this.original.image.height * minScale;
+  
+      this.container.style.height = this.original.window.height + "px";
+      this.container.style.width = this.original.window.width + "px";
+    }
   }
 };
 
