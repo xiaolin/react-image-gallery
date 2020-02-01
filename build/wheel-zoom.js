@@ -215,7 +215,7 @@ JcWheelZoom.prototype = {
     this._rescale(event);
   },
   resetZoom: function resetZoom() {
-    if (this.original.image) {
+    if (this.original.image && this.image) {
       var minScale = Math.min(this.original.window.width / this.original.image.width, this.original.window.height / this.original.image.height);
 
       // set new image dimensions to fit it into the container
