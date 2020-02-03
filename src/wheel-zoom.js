@@ -77,7 +77,7 @@ JcWheelZoom.prototype = {
       new DragScrollable(this.window);
     }
 
-    this.window.addEventListener("mousewheel", this._rescale);
+    this.window.addEventListener("wheel", this._rescale);
 
     window.addEventListener("resize", this._rescale);
   },
@@ -128,7 +128,7 @@ JcWheelZoom.prototype = {
   _rescale: function(event) {
     event.preventDefault();
 
-    const delta = event.wheelDelta > 0 || event.detail < 0 ? 1 : -1;
+    const delta = event.wheelDelta > 0 || event.detail < 0 || event.deltaY < 0 ? 1 : -1;
 
     // the size of the image at the moment
     const imageCurrentWidth = this.image.width;

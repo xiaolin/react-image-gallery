@@ -1128,7 +1128,7 @@ var ImageGallery = function (_React$Component) {
           _react2.default.createElement(
             'div',
             { style: {
-                height: "600px", width: "100%", overflow: 'auto', position: 'relative', cursor: 'move' } },
+                height: "600px", width: "100%", overflow: 'hidden', position: 'relative', cursor: 'move' } },
             _react2.default.createElement('img', {
               alt: item.originalAlt,
               src: item.original
@@ -1137,7 +1137,7 @@ var ImageGallery = function (_React$Component) {
         ) : _react2.default.createElement(
           'div',
           { style: {
-              height: "600px", width: "100%", overflow: 'auto', position: 'relative', cursor: 'move' } },
+              height: "600px", width: "100%", overflow: 'hidden', position: 'relative', cursor: 'move' } },
           _react2.default.createElement('img', {
             src: item.original,
             alt: item.originalAlt,

@@ -1125,7 +1125,7 @@ export default class ImageGallery extends React.Component {
                 ))
               }
               <div style={{
-                height: "600px", width: "100%", overflow: 'auto', position:'relative', cursor:'move'}}>
+                height: "600px", width: "100%", overflow: 'hidden', position:'relative', cursor:'move'}}>
                 <img
                   alt={item.originalAlt}
                   src={item.original}
@@ -1134,7 +1134,7 @@ export default class ImageGallery extends React.Component {
             </picture>
           ) : (
             <div style={{
-              height: "600px", width: "100%", overflow: 'auto', position:'relative', cursor:'move'}}>
+              height: "600px", width: "100%", overflow: 'hidden', position:'relative', cursor:'move'}}>
             <img
               src={item.original}
               alt={item.originalAlt}
