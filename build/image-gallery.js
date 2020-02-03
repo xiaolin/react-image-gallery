@@ -175,6 +175,12 @@ var ImageGallery = function (_React$Component) {
         // TODO: this should be fix/removed if all it is doing
         // is resetting the gallery currentIndext state
         this.setState({ currentIndex: startIndex });
+        window.jcWheelZoom.resetZoom();
+        setTimeout(function () {
+          window.jcWheelZoom = _wheelZoom2.default.create('.image-gallery-slides .center img', {
+            maxScale: 10
+          });
+        }, 0);
       }
     }
   }, {

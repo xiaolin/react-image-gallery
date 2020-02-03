@@ -325,6 +325,12 @@ export default class ImageGallery extends React.Component {
       // TODO: this should be fix/removed if all it is doing
       // is resetting the gallery currentIndext state
       this.setState({ currentIndex: startIndex });
+      window.jcWheelZoom.resetZoom();
+      setTimeout(() => {
+        window.jcWheelZoom = JcWheelZoom.create('.image-gallery-slides .center img', {
+          maxScale: 10
+        });
+      },0)
     }
   }
 
