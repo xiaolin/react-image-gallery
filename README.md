@@ -16,6 +16,7 @@ Features of `react-image-gallery`
 * Thumbnail Navigation
 * Fullscreen Support
 * Custom Rendered Slides
+* RTL support
 * Responsive Design
 * Tons of customization options (see props below)
 * Lightweight ~7kb gzipped
