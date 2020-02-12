@@ -13,12 +13,12 @@ React image gallery is a React component for building image galleries and carous
 
 ## Features
 
-* Mobile Swipe Gestures
-* Thumbnail Navigation
-* Fullscreen Support
-* Custom Rendered Slides
+* Mobile swipe gestures
+* Thumbnail navigation
+* Fullscreen support
+* Custom rendered slides
 * RTL support
-* Responsive Design
+* Responsive design
 * Tons of customization options (see props below)
 * Lightweight ~7kb gzipped
 
