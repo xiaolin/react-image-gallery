@@ -1271,9 +1271,9 @@ export default class ImageGallery extends React.Component {
               onError={handleImageError}
             >
               {
-                item.imageSet.map(source => (
+                item.imageSet.map((source, index) => (
                   <source
-                    key={source.media}
+                    key={index}
                     media={source.media}
                     srcSet={source.srcSet}
                     type={source.type}
