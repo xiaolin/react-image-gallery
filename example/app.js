@@ -343,9 +343,7 @@ class App extends React.Component {
             <p>
               react-image-gallery supports rendering multiple instances of
               ImageGallery on the same page. Only one gallery will be in
-              fullscreen mode when one changes its state. Arrow Keys will only
-              work when the gallery is hovered on desktop or when the user
-              swipes on mobile devices.
+              fullscreen mode when one changes its state.
             </p>
           </div>
         </div>

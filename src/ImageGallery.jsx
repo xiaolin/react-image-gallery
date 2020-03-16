@@ -219,7 +219,6 @@ export default class ImageGallery extends React.Component {
       thumbnailsWrapperHeight: 0,
       isFullscreen: false,
       isPlaying: false,
-      isInFocus: false,
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -233,8 +232,6 @@ export default class ImageGallery extends React.Component {
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
-    this.onFocus = this.onFocus.bind(this);
-    this.onBlur = this.onBlur.bind(this);
     this.onThumbnailMouseLeave = this.onThumbnailMouseLeave.bind(this);
     this.handleImageError = this.handleImageError.bind(this);
     this.pauseOrPlay = this.pauseOrPlay.bind(this);
@@ -324,18 +321,6 @@ export default class ImageGallery extends React.Component {
     if (this.transitionTimer) {
       window.clearTimeout(this.transitionTimer);
     }
-  }
-
-  onFocus() {
-    this.setState({
-      isInFocus: true,
-    });
-  }
-
-  onBlur() {
-    this.setState({
-      isInFocus: false,
-    });
   }
 
   onSliding() {
@@ -938,8 +923,7 @@ export default class ImageGallery extends React.Component {
 
   handleKeyDown(event) {
     const { disableKeyDown, useBrowserFullscreen } = this.props;
-    // only allow left and right arrow keys, when the current gallery is hovered
-    const { isFullscreen, isInFocus } = this.state;
+    const { isFullscreen } = this.state;
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
@@ -951,12 +935,12 @@ export default class ImageGallery extends React.Component {
 
     switch (key) {
       case LEFT_ARROW:
-        if (!this.intervalId && isInFocus && this.canSlideLeft()) {
+        if (this.canSlideLeft() && !this.intervalId) {
           this.slideLeft();
         }
         break;
       case RIGHT_ARROW:
-        if (!this.intervalId && isInFocus && this.canSlideRight()) {
+        if (this.canSlideRight() && !this.intervalId) {
           this.slideRight();
         }
         break;
@@ -1511,10 +1495,6 @@ export default class ImageGallery extends React.Component {
         ref={this.imageGallery}
         className={igClass}
         aria-live="polite"
-        onMouseOver={this.onFocus}
-        onFocus={this.onFocus}
-        onMouseOut={this.onBlur}
-        onBlur={this.onBlur}
       >
         <div className={igContentClass}>
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
