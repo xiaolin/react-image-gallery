@@ -1273,7 +1273,7 @@ export default class ImageGallery extends React.Component {
               {
                 item.imageSet.map((source, index) => (
                   <source
-                    key={index}
+                    key={`${source.media}-${index}`}
                     media={source.media}
                     srcSet={source.srcSet}
                     type={source.type}
