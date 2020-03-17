@@ -622,7 +622,7 @@ export default class ImageGallery extends React.Component {
 
       const slide = (
         <div
-          key={`slide-${item.original}`}
+          key={`slide-${item.original}-${index}`}
           tabIndex="-1"
           className={`image-gallery-slide ${alignment} ${originalClass}`}
           style={slideStyle}
@@ -657,7 +657,7 @@ export default class ImageGallery extends React.Component {
         );
         thumbnails.push(
           <button
-            key={`thumbnail-${item.original}`}
+            key={`thumbnail-${item.original}-${index}`}
             type="button"
             tabIndex="0"
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -690,7 +690,7 @@ export default class ImageGallery extends React.Component {
         bullets.push(
           <button
             type="button"
-            key={`bullet-${item.original}`}
+            key={`bullet-${item.original}-${index}`}
             className={igBulletClass}
             onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -1271,9 +1271,9 @@ export default class ImageGallery extends React.Component {
               onError={handleImageError}
             >
               {
-                item.imageSet.map(source => (
+                item.imageSet.map((source, index) => (
                   <source
-                    key={source.media}
+                    key={`media-${source.media}-${index}`}
                     media={source.media}
                     srcSet={source.srcSet}
                     type={source.type}
