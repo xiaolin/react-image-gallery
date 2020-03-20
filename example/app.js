@@ -336,41 +336,6 @@ class App extends React.Component {
           </div>
 
         </div>
-
-        <div className="app-sandbox">
-          <div className="app-sandbox-content">
-            <h2 className="app-header">Multiple Galleries on the same Page</h2>
-            <p>
-              react-image-gallery supports rendering multiple instances of
-              ImageGallery on the same page. Only one gallery will be in
-              fullscreen mode when one changes its state.
-            </p>
-          </div>
-        </div>
-
-        <ImageGallery
-          items={this.images}
-          lazyLoad={false}
-          onClick={this._onImageClick.bind(this)}
-          onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide.bind(this)}
-          onPause={this._onPause.bind(this)}
-          onScreenChange={this._onScreenChange.bind(this)}
-          onPlay={this._onPlay.bind(this)}
-          infinite={this.state.infinite}
-          showBullets={this.state.showBullets}
-          showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
-          showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
-          showThumbnails={this.state.showThumbnails}
-          showIndex={this.state.showIndex}
-          showNav={this.state.showNav}
-          isRTL={this.state.isRTL}
-          thumbnailPosition={this.state.thumbnailPosition}
-          slideDuration={parseInt(this.state.slideDuration)}
-          slideInterval={parseInt(this.state.slideInterval)}
-          slideOnThumbnailOver={this.state.slideOnThumbnailOver}
-          additionalClass="app-image-gallery"
-        />
       </section>
     );
   }

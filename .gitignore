@@ -3,7 +3,6 @@ npm-debug.log
 .DS_Store
 
 .idea
-.vscode
 
 build/
 example/example.js
