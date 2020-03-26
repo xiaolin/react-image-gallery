@@ -305,9 +305,9 @@ export default class ImageGallery extends React.Component {
     window.removeEventListener('mousedown', this.handleMouseDown);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
-    if (this.intervalId) {
-      window.clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (this.playPauseIntervalId) {
+      window.clearInterval(this.playPauseIntervalId);
+      this.playPauseIntervalId = null;
     }
     if (this.transitionTimer) {
       window.clearTimeout(this.transitionTimer);
@@ -911,13 +911,13 @@ export default class ImageGallery extends React.Component {
 
     switch (key) {
       case LEFT_ARROW:
-        if (this.canSlideLeft() && !this.intervalId) {
-          this.slideLeft();
+        if (this.canSlideLeft() && !this.playPauseIntervalId) {
+          this.slideLeft(event);
         }
         break;
       case RIGHT_ARROW:
-        if (this.canSlideRight() && !this.intervalId) {
-          this.slideRight();
+        if (this.canSlideRight() && !this.playPauseIntervalId) {
+          this.slideRight(event);
         }
         break;
       case ESC_KEY:
@@ -990,7 +990,7 @@ export default class ImageGallery extends React.Component {
   }
 
   togglePlay() {
-    if (this.intervalId) {
+    if (this.playPauseIntervalId) {
       this.pause();
     } else {
       this.play();
@@ -1020,7 +1020,7 @@ export default class ImageGallery extends React.Component {
 
     if (!isTransitioning) {
       if (event) {
-        if (this.intervalId) {
+        if (this.playPauseIntervalId) {
           // user triggered event while ImageGallery is playing, reset interval
           this.pause(false);
           this.play(false);
@@ -1049,21 +1049,21 @@ export default class ImageGallery extends React.Component {
     }
   }
 
-  slideLeft() {
+  slideLeft(event) {
     const { isRTL } = this.props;
     if (isRTL) {
-      this.slideNext();
+      this.slideNext(event);
     } else {
-      this.slidePrevious();
+      this.slidePrevious(event);
     }
   }
 
-  slideRight() {
+  slideRight(event) {
     const { isRTL } = this.props;
     if (isRTL) {
-      this.slidePrevious();
+      this.slidePrevious(event);
     } else {
-      this.slideNext();
+      this.slideNext(event);
     }
   }
 
@@ -1209,9 +1209,9 @@ export default class ImageGallery extends React.Component {
       slideDuration,
     } = this.props;
     const { currentIndex } = this.state;
-    if (!this.intervalId) {
+    if (!this.playPauseIntervalId) {
       this.setState({ isPlaying: true });
-      this.intervalId = window.setInterval(
+      this.playPauseIntervalId = window.setInterval(
         this.pauseOrPlay,
         Math.max(slideInterval, slideDuration),
       );
@@ -1224,9 +1224,9 @@ export default class ImageGallery extends React.Component {
   pause(shouldCallOnPause = true) {
     const { onPause } = this.props;
     const { currentIndex } = this.state;
-    if (this.intervalId) {
-      window.clearInterval(this.intervalId);
-      this.intervalId = null;
+    if (this.playPauseIntervalId) {
+      window.clearInterval(this.playPauseIntervalId);
+      this.playPauseIntervalId = null;
       this.setState({ isPlaying: false });
       if (onPause && shouldCallOnPause) {
         onPause(currentIndex);
