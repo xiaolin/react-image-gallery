@@ -1002,14 +1002,14 @@ export default class ImageGallery extends React.Component {
     /*
       handles screen change events that the browser triggers e.g. esc key
     */
-    const { onScreenChange } = this.props;
+    const { onScreenChange, useBrowserFullscreen } = this.props;
     const fullScreenElement = document.fullscreenElement
       || document.msFullscreenElement
       || document.mozFullScreenElement
       || document.webkitFullscreenElement;
 
     if (onScreenChange) onScreenChange(fullScreenElement);
-    this.setState({ isFullscreen: !!fullScreenElement });
+    if (useBrowserFullscreen) this.setState({ isFullscreen: !!fullScreenElement });
   }
 
   slideToIndex(index, event) {
