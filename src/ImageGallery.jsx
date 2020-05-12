@@ -9,6 +9,7 @@ import {
   arrayOf,
   bool,
   func,
+  node,
   number,
   shape,
   string,
@@ -40,7 +41,7 @@ export default class ImageGallery extends React.Component {
     items: arrayOf(shape({
       bulletClass: string,
       bulletOnClick: func,
-      description: string,
+      description: node,
       original: string.isRequired,
       fullscreen: string,
       originalAlt: string,
