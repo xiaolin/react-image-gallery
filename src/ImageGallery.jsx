@@ -249,7 +249,7 @@ export default class ImageGallery extends React.Component {
     if (autoPlay) {
       this.play();
     }
-    window.addEventListener('keydown', this.handleKeyDown);
+    this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
     window.addEventListener('mousedown', this.handleMouseDown);
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
@@ -301,7 +301,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
-    window.removeEventListener('keydown', this.handleKeyDown);
+    this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('mousedown', this.handleMouseDown);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
