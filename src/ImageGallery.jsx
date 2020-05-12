@@ -11,6 +11,7 @@ import {
   func,
   node,
   number,
+  oneOf,
   shape,
   string,
 } from 'prop-types';
@@ -74,7 +75,7 @@ export default class ImageGallery extends React.Component {
     preventDefaultTouchmoveEvent: bool,
     onErrorImageURL: string,
     indexSeparator: string,
-    thumbnailPosition: string,
+    thumbnailPosition: oneOf(['top', 'bottom', 'left', 'right']),
     startIndex: number,
     slideDuration: number,
     slideInterval: number,
