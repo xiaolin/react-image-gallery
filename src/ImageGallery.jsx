@@ -9,7 +9,9 @@ import {
   arrayOf,
   bool,
   func,
+  node,
   number,
+  oneOf,
   shape,
   string,
 } from 'prop-types';
@@ -40,7 +42,7 @@ export default class ImageGallery extends React.Component {
     items: arrayOf(shape({
       bulletClass: string,
       bulletOnClick: func,
-      description: string,
+      description: node,
       original: string.isRequired,
       fullscreen: string,
       originalAlt: string,
@@ -73,7 +75,7 @@ export default class ImageGallery extends React.Component {
     preventDefaultTouchmoveEvent: bool,
     onErrorImageURL: string,
     indexSeparator: string,
-    thumbnailPosition: string,
+    thumbnailPosition: oneOf(['top', 'bottom', 'left', 'right']),
     startIndex: number,
     slideDuration: number,
     slideInterval: number,
