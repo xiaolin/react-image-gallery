@@ -25,6 +25,7 @@ class App extends React.Component {
       slideOnThumbnailOver: false,
       thumbnailPosition: 'bottom',
       showVideo: {},
+      useWindowKeyDown: true,
     };
 
     this.images = [
@@ -212,6 +213,7 @@ class App extends React.Component {
           slideInterval={parseInt(this.state.slideInterval)}
           slideOnThumbnailOver={this.state.slideOnThumbnailOver}
           additionalClass="app-image-gallery"
+          useWindowKeyDown={this.state.useWindowKeyDown}
         />
 
         <div className='app-sandbox'>
@@ -331,6 +333,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'slideOnThumbnailOver')}
                   checked={this.state.slideOnThumbnailOver}/>
                   <label htmlFor='slide_on_thumbnail_hover'>slide on mouse over thumbnails</label>
+              </li>
+              <li>
+                <input
+                  id='use_window_keydown'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'useWindowKeyDown')}
+                  checked={this.state.useWindowKeyDown}/>
+                  <label htmlFor='use_window_keydown'>use window keydown</label>
               </li>
             </ul>
           </div>

@@ -106,6 +106,7 @@ export default class ImageGallery extends React.Component {
     additionalClass: string,
     useTranslate3D: bool,
     isRTL: bool,
+    useWindowKeyDown: bool,
   };
 
   static defaultProps = {
@@ -197,6 +198,7 @@ export default class ImageGallery extends React.Component {
         <SVG strokeWidth={2} icon={isFullscreen ? 'minimize' : 'maximize'} />
       </button>
     ),
+    useWindowKeyDown: true,
   };
 
   constructor(props) {
@@ -245,11 +247,15 @@ export default class ImageGallery extends React.Component {
   }
 
   componentDidMount() {
-    const { autoPlay } = this.props;
+    const { autoPlay, useWindowKeyDown } = this.props;
     if (autoPlay) {
       this.play();
     }
-    this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
+    if (useWindowKeyDown) {
+      window.addEventListener('keydown', this.handleKeyDown);
+    } else {
+      this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
+    }
     window.addEventListener('mousedown', this.handleMouseDown);
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
@@ -263,6 +269,7 @@ export default class ImageGallery extends React.Component {
       startIndex,
       thumbnailPosition,
       showThumbnails,
+      useWindowKeyDown
     } = this.props;
     const { currentIndex } = this.state;
     const itemsSizeChanged = prevProps.items.length !== items.length;
@@ -293,6 +300,16 @@ export default class ImageGallery extends React.Component {
       this.lazyLoaded = [];
     }
 
+    if (useWindowKeyDown !== prevProps.useWindowKeyDown) {
+      if (useWindowKeyDown) {
+        this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
+        window.addEventListener('keydown', this.handleKeyDown);
+      } else {
+        window.removeEventListener('keydown', this.handleKeyDown);
+        this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
+      }
+    } 
+
     if (startIndexUpdated || itemsChanged) {
       // TODO: this should be fix/removed if all it is doing
       // is resetting the gallery currentIndext state
@@ -301,6 +318,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
+    const { useWindowKeyDown } = this.props
     this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('mousedown', this.handleMouseDown);
     this.removeScreenChangeEvent();
@@ -311,6 +329,11 @@ export default class ImageGallery extends React.Component {
     }
     if (this.transitionTimer) {
       window.clearTimeout(this.transitionTimer);
+    }
+    if (useWindowKeyDown) {
+      window.removeEventListener('keydown', this.handleKeyDown);
+    } else {
+      this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
     }
   }
 
