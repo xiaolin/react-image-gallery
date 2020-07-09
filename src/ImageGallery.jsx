@@ -12,6 +12,7 @@ import {
   node,
   number,
   oneOf,
+  oneOfType,
   shape,
   string,
 } from 'prop-types';
@@ -69,7 +70,7 @@ export default class ImageGallery extends React.Component {
     showPlayButton: bool,
     showFullscreenButton: bool,
     disableThumbnailScroll: bool,
-    disableKeyDown: bool,
+    disableKeyDown: oneOfType([bool, func]),
     disableSwipe: bool,
     useBrowserFullscreen: bool,
     preventDefaultTouchmoveEvent: bool,
@@ -905,7 +906,9 @@ export default class ImageGallery extends React.Component {
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.remove('image-gallery-using-mouse');
 
-    if (disableKeyDown) return;
+    if (
+      typeof disableKeyDown === 'function' ? disableKeyDown(event) : disableKeyDown
+    ) return;
     const LEFT_ARROW = 37;
     const RIGHT_ARROW = 39;
     const ESC_KEY = 27;
