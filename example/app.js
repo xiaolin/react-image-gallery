@@ -25,6 +25,7 @@ class App extends React.Component {
       slideOnThumbnailOver: false,
       thumbnailPosition: 'bottom',
       showVideo: {},
+      disableKeyDown: false,
     };
 
     this.images = [
@@ -57,6 +58,8 @@ class App extends React.Component {
         description: 'Custom class for slides & thumbnails'
       },
     ].concat(this._getStaticImages());
+
+    this.wrapperRef = React.createRef();
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -103,6 +106,33 @@ class App extends React.Component {
 
   _handleThumbnailPositionChange(event) {
     this.setState({thumbnailPosition: event.target.value});
+  }
+
+  _handleDisableKeyDownControl(event) {
+    const that = this;
+    const disableKeyDownChoice = event.target.value;
+    this.setState({ disableKeyDownChoice });
+    switch(disableKeyDownChoice) {
+      case 'true':
+        this.setState({disableKeyDown: true});
+        break;
+      case 'false':
+        this.setState({disableKeyDown: false});
+        break;
+      case 'focusOutsideGallery':
+        this.setState({disableKeyDown: event => {
+          return !that.wrapperRef.current.contains(event.target);
+        }});
+        break;
+      case 'focusInInputs':
+        this.setState({disableKeyDown: event => {
+          return ['INPUT', 'SELECT', 'TEXTAREA'].includes(
+            event.target.tagName
+          );
+        }});
+      default:
+        break;
+    }
   }
 
   _getStaticImages() {
@@ -189,30 +219,33 @@ class App extends React.Component {
     return (
 
       <section className='app'>
-        <ImageGallery
-          ref={i => this._imageGallery = i}
-          items={this.images}
-          lazyLoad={false}
-          onClick={this._onImageClick.bind(this)}
-          onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide.bind(this)}
-          onPause={this._onPause.bind(this)}
-          onScreenChange={this._onScreenChange.bind(this)}
-          onPlay={this._onPlay.bind(this)}
-          infinite={this.state.infinite}
-          showBullets={this.state.showBullets}
-          showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
-          showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
-          showThumbnails={this.state.showThumbnails}
-          showIndex={this.state.showIndex}
-          showNav={this.state.showNav}
-          isRTL={this.state.isRTL}
-          thumbnailPosition={this.state.thumbnailPosition}
-          slideDuration={parseInt(this.state.slideDuration)}
-          slideInterval={parseInt(this.state.slideInterval)}
-          slideOnThumbnailOver={this.state.slideOnThumbnailOver}
-          additionalClass="app-image-gallery"
-        />
+        <div ref={this.wrapperRef}>
+          <ImageGallery
+            ref={i => this._imageGallery = i}
+            items={this.images}
+            lazyLoad={false}
+            onClick={this._onImageClick.bind(this)}
+            onImageLoad={this._onImageLoad}
+            onSlide={this._onSlide.bind(this)}
+            onPause={this._onPause.bind(this)}
+            onScreenChange={this._onScreenChange.bind(this)}
+            onPlay={this._onPlay.bind(this)}
+            infinite={this.state.infinite}
+            showBullets={this.state.showBullets}
+            showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
+            showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
+            showThumbnails={this.state.showThumbnails}
+            showIndex={this.state.showIndex}
+            showNav={this.state.showNav}
+            isRTL={this.state.isRTL}
+            thumbnailPosition={this.state.thumbnailPosition}
+            slideDuration={parseInt(this.state.slideDuration)}
+            slideInterval={parseInt(this.state.slideInterval)}
+            slideOnThumbnailOver={this.state.slideOnThumbnailOver}
+            additionalClass="app-image-gallery"
+            disableKeyDown={this.state.disableKeyDown}
+          />
+        </div>
 
         <div className='app-sandbox'>
 
@@ -255,6 +288,24 @@ class App extends React.Component {
                     <option value='left'>Left</option>
                     <option value='right'>Right</option>
                   </select>
+                </div>
+              </li>
+              <li>
+                <div className='app-interval-input-group'>
+                  <span className='app-interval-label'>Disable Key Down Conditions</span>
+                  <select
+                    className='app-interval-input'
+                    onChange={this._handleDisableKeyDownControl.bind(this)}
+                  >
+                    <option value='false'>Never</option>
+                    <option value='true'>Always</option>
+                    <option value='focusOutsideGallery'>Focus outside Gallery</option>
+                    <option value='focusInInputs'>Any Inputs focused</option>
+                  </select>
+                  {
+                    this.state.disableKeyDownChoice === 'focusInInputs' &&
+                    <input placeholder='(try focusing here)' />
+                  }
                 </div>
               </li>
             </ul>
@@ -334,7 +385,6 @@ class App extends React.Component {
               </li>
             </ul>
           </div>
-
         </div>
       </section>
     );
