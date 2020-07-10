@@ -109,8 +109,9 @@ class MyGallery extends React.Component {
 * `autoPlay`: Boolean, default `false`
 * `disableThumbnailScroll`: Boolean, default `false`
   * disables the thumbnail container from adjusting
-* `disableKeyDown`: Boolean, default `false`
+* `disableKeyDown`: Boolean or Function, default `false`
   * disables keydown listener for keyboard shortcuts (left arrow, right arrow, esc key)
+  * if a function is provided, it is called with the KeyDown event. If the function returns true, the event does not change the image.
 * `disableSwipe`: Boolean, default `false`
 * `onErrorImageURL`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
