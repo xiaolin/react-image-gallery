@@ -624,6 +624,7 @@ export default class ImageGallery extends React.Component {
 
       const slide = (
         <div
+          aria-label={`Go to Slide ${index + 1}`}
           key={`slide-${item.original}-${index}`}
           tabIndex="-1"
           className={`image-gallery-slide ${alignment} ${originalClass}`}
