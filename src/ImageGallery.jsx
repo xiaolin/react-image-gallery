@@ -42,7 +42,7 @@ export default class ImageGallery extends React.Component {
     items: arrayOf(shape({
       bulletClass: string,
       bulletOnClick: func,
-      description: node,
+      description: string,
       original: string.isRequired,
       fullscreen: string,
       originalAlt: string,
