@@ -319,7 +319,6 @@ export default class ImageGallery extends React.Component {
 
   componentWillUnmount() {
     const { useWindowKeyDown } = this.props
-    this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
     window.removeEventListener('mousedown', this.handleMouseDown);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
