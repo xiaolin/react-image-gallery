@@ -1321,7 +1321,7 @@ export default class ImageGallery extends React.Component {
     const handleThumbnailError = onThumbnailError || this.handleImageError;
 
     return (
-      <div className="image-gallery-thumbnail-inner">
+      <span className="image-gallery-thumbnail-inner">
         <img
           className="image-gallery-thumbnail-image"
           src={item.thumbnail}
@@ -1331,12 +1331,12 @@ export default class ImageGallery extends React.Component {
         />
         {
           item.thumbnailLabel && (
-            <div className="image-gallery-thumbnail-label">
+            <span className="image-gallery-thumbnail-label">
               {item.thumbnailLabel}
-            </div>
+            </span>
           )
         }
-      </div>
+      </span>
     );
   }
 
