@@ -363,6 +363,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   .image-gallery-thumbnail-inner {
+    display: block;
     position: relative;
   }
 
