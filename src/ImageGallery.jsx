@@ -95,6 +95,7 @@ export default class ImageGallery extends React.Component {
     onTouchStart: func,
     onMouseOver: func,
     onMouseLeave: func,
+    onWindowResize: func,
     onThumbnailError: func,
     onThumbnailClick: func,
     renderCustomControls: func,
@@ -149,6 +150,7 @@ export default class ImageGallery extends React.Component {
     onTouchStart: null,
     onMouseOver: null,
     onMouseLeave: null,
+    onWindowResize: null,
     onThumbnailError: null,
     onThumbnailClick: null,
     renderCustomControls: null,
@@ -951,6 +953,7 @@ export default class ImageGallery extends React.Component {
 
   handleResize() {
     const { currentIndex } = this.state;
+    const { onWindowResize } = this.props;
     if (this.imageGallery && this.imageGallery.current) {
       this.setState({ galleryWidth: this.imageGallery.current.offsetWidth });
     }
@@ -966,6 +969,10 @@ export default class ImageGallery extends React.Component {
         this.setState({ thumbnailsWrapperHeight: this.thumbnailsWrapper.current.offsetHeight });
       } else {
         this.setState({ thumbnailsWrapperWidth: this.thumbnailsWrapper.current.offsetWidth });
+      }
+
+      if (onWindowResize) {
+        onWindowResize(this.thumbnailsWrapper.current.offsetWidth, this.thumbnailsWrapper.current.offsetHeight);
       }
     }
 
