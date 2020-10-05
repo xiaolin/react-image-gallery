@@ -970,10 +970,10 @@ export default class ImageGallery extends React.Component {
       } else {
         this.setState({ thumbnailsWrapperWidth: this.thumbnailsWrapper.current.offsetWidth });
       }
+    }
 
-      if (onWindowResize) {
-        onWindowResize(this.thumbnailsWrapper.current.offsetWidth, this.thumbnailsWrapper.current.offsetHeight);
-      }
+    if (this.thumbnailsWrapper && this.thumbnailsWrapper.current && onWindowResize) {
+      onWindowResize(this.state);
     }
 
     // Adjust thumbnail container when thumbnail width or height is adjusted
