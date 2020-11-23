@@ -44,6 +44,8 @@ export default class ImageGallery extends React.Component {
       bulletOnClick: func,
       description: string,
       original: string.isRequired,
+      height: number,
+      width: number,
       fullscreen: string,
       originalAlt: string,
       originalTitle: string,
@@ -1289,6 +1291,8 @@ export default class ImageGallery extends React.Component {
                 className="image-gallery-image"
                 alt={item.originalAlt}
                 src={itemSrc}
+                height={item.height}
+                width={item.width}
               />
             </picture>
           ) : (
