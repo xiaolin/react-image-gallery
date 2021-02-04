@@ -8,7 +8,7 @@ import {
 } from 'prop-types';
 import { useSwipeable } from 'react-swipeable';
 
-const SwipeableWrapper = ({
+const SwipeWrapper = ({
   slides,
   className,
   delta,
@@ -21,24 +21,24 @@ const SwipeableWrapper = ({
     onSwiping,
     onSwiped,
   });
-  if (slides && slides.length) {
-    return (
-      <div {...swipeHandlers} className="image-gallery-slides">
-        {slides}
-      </div>
-    );
-  }
-  return null;
+  return (
+    <div {...swipeHandlers} className="image-gallery-slides">
+      {slides}
+    </div>
+  );
 };
-SwipeableWrapper.propTypes = {
-  slides: arrayOf(shape({})).isRequired,
+SwipeWrapper.propTypes = {
+  slides: arrayOf(shape({})),
   className: string,
   delta: number,
-  onSwiped: func.isRequired,
-  onSwiping: func.isRequired,
+  onSwiped: func,
+  onSwiping: func,
 };
-SwipeableWrapper.defaultProps = {
+SwipeWrapper.defaultProps = {
   className: '',
   delta: 0,
+  slides: [],
+  onSwiping: () => {},
+  onSwiped: () => {},
 };
-export default SwipeableWrapper;
+export default SwipeWrapper;
