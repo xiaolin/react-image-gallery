@@ -224,7 +224,8 @@ class MyGallery extends React.Component {
       );
     },
   ```
-
+* `useWindowKeyDown`: Boolean, default `true`
+  * If `false`, keydown events will be listened for on the image gallery
 
 # Functions
 
