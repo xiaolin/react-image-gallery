@@ -73,6 +73,8 @@ class MyGallery extends React.Component {
     * `original` - image src url
     * `thumbnail` - image thumbnail src url
     * `fullscreen` - image for fullscreen (defaults to original)
+    * `height` - image height (html5 attribute)
+    * `width` - image width (html5 attribute)
     * `originalClass` - custom image class
     * `thumbnailClass` - custom thumbnail class
     * `renderItem` - Function for custom renderer (see renderItem below)
