@@ -9,7 +9,6 @@ import {
   arrayOf,
   bool,
   func,
-  node,
   number,
   oneOf,
   shape,
@@ -322,7 +321,7 @@ export default class ImageGallery extends React.Component {
   }
 
   componentWillUnmount() {
-    const { useWindowKeyDown } = this.props
+    const { useWindowKeyDown } = this.props;
     window.removeEventListener('mousedown', this.handleMouseDown);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
