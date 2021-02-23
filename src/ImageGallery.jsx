@@ -312,7 +312,7 @@ export default class ImageGallery extends React.Component {
         window.removeEventListener('keydown', this.handleKeyDown);
         this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
       }
-    } 
+    }
 
     if (startIndexUpdated || itemsChanged) {
       // TODO: this should be fix/removed if all it is doing
@@ -1323,6 +1323,8 @@ export default class ImageGallery extends React.Component {
               src={itemSrc}
               alt={item.originalAlt}
               srcSet={item.srcSet}
+              height={item.height}
+              width={item.width}
               sizes={item.sizes}
               title={item.originalTitle}
               onLoad={event => this.handleImageLoaded(event, item)}
