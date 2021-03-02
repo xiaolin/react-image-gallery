@@ -37,7 +37,7 @@ gulp.task('sass', () => {
 gulp.task('scripts', () => {
   watchify(browserify({
     entries: './example/app.js',
-    extensions: ['.jsx'],
+    extensions: ['.js'],
     debug: true,
   }).transform('babelify', babelOptions))
     .bundle()
@@ -52,7 +52,7 @@ gulp.task('demo-src', () => {
   process.env.NODE_ENV = 'production';
   browserify({
     entries: './example/app.js',
-    extensions: ['.jsx'],
+    extensions: ['.js'],
     debug: true,
   }).transform('babelify', babelOptions)
     .bundle()
@@ -68,14 +68,14 @@ gulp.task('demo-src', () => {
 });
 
 gulp.task('source-js', () => (
-  gulp.src('./src/ImageGallery.jsx')
+  gulp.src('./src/ImageGallery.js')
     .pipe(concat('image-gallery.js'))
     .pipe(babel(babelOptions))
     .pipe(gulp.dest('./build'))
 ));
 
 gulp.task('svg-js', () => (
-  gulp.src('./src/SVG.jsx')
+  gulp.src('./src/SVG.js')
     .pipe(concat('SVG.js'))
     .pipe(babel(babelOptions))
     .pipe(gulp.dest('./build'))
@@ -84,7 +84,7 @@ gulp.task('svg-js', () => (
 gulp.task('watch', () => {
   livereload.listen();
   gulp.watch(['styles/**/*.scss'], ['sass']);
-  gulp.watch(['src/*.jsx', 'src/icons/*.jsx', 'example/app.js'], ['scripts']);
+  gulp.watch(['src/*.js', 'src/icons/*.js', 'example/app.js'], ['scripts']);
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
