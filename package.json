@@ -8,6 +8,9 @@
     "build": "gulp build",
     "lint": "eslint --ext .js,.jsx src"
   },
+  "engines": {
+    "node": "<12"
+  },
   "repository": {
     "type": "git",
     "url": "https://github.com/xiaolin/react-image-gallery.git"
@@ -53,10 +56,10 @@
     "gulp-babel": "^6.1.2",
     "gulp-clean-css": "^2.3.1",
     "gulp-concat": "^2.6.0",
-    "gulp-connect": "^3.2.2",
+    "gulp-connect": "^5.7.0",
     "gulp-livereload": "^3.8.0",
     "gulp-rename": "^1.2.0",
-    "gulp-sass": "^2.3.2",
+    "gulp-sass": "^4.1.0",
     "gulp-uglify": "^1.5.3",
     "react": "^16.9.0",
     "react-dom": "^16.9.0",

@@ -253,8 +253,8 @@ Each PR should be specific and isolated to the issue you're trying to fix. Pleas
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
 cd react-image-gallery
-npm install
-npm start
+yarn install
+yarn start
 ```
 
 Then open [`localhost:8001`](http://localhost:8001) in a browser.
