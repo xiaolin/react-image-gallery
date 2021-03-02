@@ -272,7 +272,7 @@ export default class ImageGallery extends React.Component {
       startIndex,
       thumbnailPosition,
       showThumbnails,
-      useWindowKeyDown
+      useWindowKeyDown,
     } = this.props;
     const { currentIndex } = this.state;
     const itemsSizeChanged = prevProps.items.length !== items.length;
