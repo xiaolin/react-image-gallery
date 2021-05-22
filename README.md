@@ -227,7 +227,8 @@ class MyGallery extends React.Component {
     },
   ```
 * `useWindowKeyDown`: Boolean, default `true`
-  * If `false`, keydown events will be listened for on the image gallery
+  * If `true`, listens to keydown events on window (window.addEventListener)
+  * If `false`, listens to keydown events on image gallery element (imageGalleryElement.addEventListener)
 
 # Functions
 
