@@ -60,15 +60,6 @@ class App extends React.Component {
     ].concat(this._getStaticImages());
   }
 
-  componentDidUpdate(prevProps, prevState) {
-    if (this.state.slideInterval !== prevState.slideInterval ||
-        this.state.slideDuration !== prevState.slideDuration) {
-      // refresh setInterval
-      this._imageGallery.pause();
-      this._imageGallery.play();
-    }
-  }
-
   _onImageClick(event) {
     console.debug('clicked on image', event.target, 'at index', this._imageGallery.getCurrentIndex());
   }
