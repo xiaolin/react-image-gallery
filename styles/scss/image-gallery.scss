@@ -5,6 +5,7 @@ $ig-black: #000 !default;
 $ig-blue: #337ab7 !default;
 $ig-background-black: rgba(0, 0, 0, .4) !default;
 $ig-transparent: rgba(0, 0, 0, 0) !default;
+$ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 
 @mixin vendor-prefix($name, $value) {
   @each $vendor in ('-webkit-', '-moz-', '-ms-', '-o-', '') {
@@ -15,7 +16,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
 // SVG ICON STYLES
 .image-gallery-icon {
   color: $ig-white;
-  transition: all .2s ease-out;
+  transition: all .3s ease-out;
   appearance: none;
   background-color: transparent;
   border: 0;
@@ -23,7 +24,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   outline: none;
   position: absolute;
   z-index: 4;
-  filter: drop-shadow(0 2px 2px lighten($ig-black, 10%));
+  filter: drop-shadow($ig-shadow);
 
   @media (min-width: $ig-small-screen) {
     // Don't hover on screens smaller than small
@@ -55,8 +56,8 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   padding: 20px;
 
   .image-gallery-svg {
-    height: 36px;
-    width: 36px;
+    height: 28px;
+    width: 28px;
   }
 
   @media (max-width: $ig-small-screen) {
@@ -250,13 +251,13 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
     background-color: transparent;
     border: 1px solid $ig-white;
     border-radius: 50%;
-    box-shadow: 0 1px 0 lighten($ig-black, 10%);
+    box-shadow: $ig-shadow;
     cursor: pointer;
     display: inline-block;
     margin: 0 5px;
     outline: none;
     padding: 5px;
-    transition: background .2s ease-out;
+    transition: all .2s ease-out;
 
     @media (max-width: $ig-small-screen) {
       margin: 0 3px;
@@ -267,14 +268,22 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
       padding: 2.7px;
     }
 
-    &:focus,
+    &:focus {
+      transform: scale(1.2);
+    }
+
     &:hover {
       background: $ig-blue;
-      transform: scale(1.1);
+      border: 1px solid $ig-blue;
     }
 
     &.active {
+      transform: scale(1.2);
       background: $ig-white;
+    }
+
+    &.active:hover {
+      background: $ig-blue;
     }
   }
 }
@@ -339,7 +348,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   .image-gallery-thumbnails-container {
     cursor: pointer;
     text-align: center;
-    transition: transform .45s ease-out;
+    transition: transform .3s ease-out;
     white-space: nowrap;
   }
 
@@ -363,6 +372,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   }
 
   .image-gallery-thumbnail-inner {
+    display: block;
     position: relative;
   }
 
@@ -394,7 +404,7 @@ $ig-transparent: rgba(0, 0, 0, 0) !default;
   padding: 5%;
   position: absolute;
   top: 50%;
-  text-shadow: 1px 1px 0 black;
+  text-shadow: $ig-shadow;
   transform: translateY(-50%);
   white-space: normal;
   width: 100%;
