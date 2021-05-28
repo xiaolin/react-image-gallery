@@ -26,8 +26,7 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   z-index: 4;
   filter: drop-shadow($ig-shadow);
 
-  @media (min-width: $ig-small-screen) {
-    // Don't hover on screens smaller than small
+  @media (hover: hover) and (pointer: fine) {
     &:hover {
       color: $ig-blue;
       .image-gallery-svg {
@@ -270,20 +269,25 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 
     &:focus {
       transform: scale(1.2);
-    }
-
-    &:hover {
       background: $ig-blue;
       border: 1px solid $ig-blue;
     }
 
     &.active {
       transform: scale(1.2);
+      border: 1px solid $ig-white;
       background: $ig-white;
     }
 
-    &.active:hover {
-      background: $ig-blue;
+    @media (hover: hover) and (pointer: fine) {
+      &:hover {
+        background: $ig-blue;
+        border: 1px solid $ig-blue;
+      }
+
+      &.active:hover {
+        background: $ig-blue;
+      }
     }
   }
 }
@@ -383,13 +387,23 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   }
 
   &.active,
-  &:hover,
   &:focus {
     outline: none;
     border: 4px solid $ig-blue;
 
     @media (max-width: $ig-small-screen) {
       border: 3px solid $ig-blue;
+    }
+  }
+
+  @media (hover: hover) and (pointer: fine) {
+    &:hover {
+      outline: none;
+      border: 4px solid $ig-blue;
+
+      @media (max-width: $ig-small-screen) {
+        border: 3px solid $ig-blue;
+      }
     }
   }
 
