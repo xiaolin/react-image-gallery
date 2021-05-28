@@ -1,12 +1,12 @@
 {
   "name": "react-image-gallery",
-  "version": "1.0.9",
+  "version": "1.0.10",
   "description": "React carousel image gallery component with thumbnail and mobile support",
   "main": "./build/image-gallery.js",
   "scripts": {
     "start": "gulp dev",
     "test": "jest",
-    "build": "gulp build",
+    "build": "yarn test && gulp build",
     "lint": "eslint --ext .js,.jsx src"
   },
   "engines": {
@@ -75,8 +75,8 @@
     "gulp-sass": "^4.1.0",
     "gulp-uglify": "^1.5.3",
     "jest": "^26.6.3",
-    "react": "^16.9.0",
-    "react-dom": "^16.9.0",
+    "react": "^17.0.2",
+    "react-dom": "^17.0.2",
     "vinyl-buffer": "^1.0.0",
     "vinyl-source-stream": "^1.1.0",
     "watchify": "^3.8.0"
