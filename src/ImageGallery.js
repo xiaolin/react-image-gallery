@@ -321,8 +321,7 @@ export default class ImageGallery extends React.Component {
     }
 
     if (startIndexUpdated || itemsChanged) {
-      // TODO: this should be fix/removed if all it is doing
-      // is resetting the gallery currentIndext state
+      // TODO: this should be fix/removed
       this.setState({ currentIndex: startIndex });
     }
   }
@@ -976,11 +975,18 @@ export default class ImageGallery extends React.Component {
     if (this.resizeObserver
         && this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
       this.resizeObserver.unobserve(this.imageGallerySlideWrapper.current);
+      this.resizeObserver = null;
     }
   }
 
   handleResize() {
     const { currentIndex } = this.state;
+
+    // if there is no resizeObserver, component has been unmounted
+    if (!this.resizeObserver) {
+      return;
+    }
+
     if (this.imageGallery && this.imageGallery.current) {
       this.setState({ galleryWidth: this.imageGallery.current.offsetWidth });
     }
