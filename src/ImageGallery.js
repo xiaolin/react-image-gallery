@@ -42,7 +42,7 @@ export default class ImageGallery extends React.Component {
       bulletClass: string,
       bulletOnClick: func,
       description: string,
-      original: string.isRequired,
+      original: string,
       height: number,
       width: number,
       fullscreen: string,
@@ -654,7 +654,7 @@ export default class ImageGallery extends React.Component {
       const slide = (
         <div
           aria-label={`Go to Slide ${index + 1}`}
-          key={`slide-${item.original}-${index}`}
+          key={`slide-${index}`}
           tabIndex="-1"
           className={`image-gallery-slide ${alignment} ${originalClass}`}
           style={slideStyle}
@@ -689,7 +689,7 @@ export default class ImageGallery extends React.Component {
         );
         thumbnails.push(
           <button
-            key={`thumbnail-${item.original}-${index}`}
+            key={`thumbnail-${index}`}
             type="button"
             tabIndex="0"
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -722,7 +722,7 @@ export default class ImageGallery extends React.Component {
         bullets.push(
           <button
             type="button"
-            key={`bullet-${item.original}-${index}`}
+            key={`bullet-${index}`}
             className={igBulletClass}
             onClick={bulletOnClick}
             aria-pressed={currentIndex === index ? 'true' : 'false'}
@@ -1314,7 +1314,7 @@ export default class ImageGallery extends React.Component {
               {
                 item.imageSet.map((source, index) => (
                   <source
-                    key={`media-${source.srcSet}-${index}`}
+                    key={`media-${index}`}
                     media={source.media}
                     srcSet={source.srcSet}
                     type={source.type}
