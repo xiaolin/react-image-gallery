@@ -360,6 +360,8 @@ export default class ImageGallery extends React.Component {
 
   onThumbnailClick(event, index) {
     const { onThumbnailClick } = this.props;
+    // blur element to remove outline cause by focus
+    event.target.parentNode.parentNode.blur();
     this.slideToIndex(index, event);
     if (onThumbnailClick) {
       onThumbnailClick(event, index);
@@ -712,6 +714,8 @@ export default class ImageGallery extends React.Component {
           if (item.bulletOnClick) {
             item.bulletOnClick({ item, itemIndex: index, currentIndex });
           }
+          // blur element to remove outline cause by focus
+          event.target.blur();
           return this.slideToIndex.call(this, index, event);
         };
         const igBulletClass = clsx(
