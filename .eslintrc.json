@@ -3,7 +3,8 @@
     "airbnb"
   ],
   "rules": {
-    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }]
+    "react/jsx-filename-extension": [1, { "extensions": [".js", ".jsx"] }],
+    "react/no-array-index-key": "off"
   },
   "parser": "babel-eslint",
   "plugins": ["react", "jsx-a11y", "import"],
