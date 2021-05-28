@@ -269,6 +269,7 @@ export default class ImageGallery extends React.Component {
       items,
       lazyLoad,
       slideDuration,
+      slideInterval,
       startIndex,
       thumbnailPosition,
       showThumbnails,
@@ -280,6 +281,12 @@ export default class ImageGallery extends React.Component {
     const startIndexUpdated = prevProps.startIndex !== startIndex;
     const thumbnailsPositionChanged = prevProps.thumbnailPosition !== thumbnailPosition;
     const showThumbnailsChanged = prevProps.showThumbnails !== showThumbnails;
+
+    if (slideInterval !== prevProps.slideInterval || slideDuration !== prevProps.slideDuration) {
+      // refresh setInterval
+      this.pause();
+      this.play();
+    }
 
     if (thumbnailsPositionChanged) {
       // re-initialize resizeObserver because slides was unmounted and mounted again
