@@ -295,6 +295,14 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 .image-gallery-thumbnails-wrapper {
   position: relative;
 
+  &.thumbnails-swipe-horizontal {
+    touch-action: pan-y;
+  }
+
+  &.thumbnails-swipe-vertical {
+    touch-action: pan-x;
+  }
+
   &.thumbnails-wrapper-rtl {
     direction: rtl;
   }
@@ -352,7 +360,6 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   .image-gallery-thumbnails-container {
     cursor: pointer;
     text-align: center;
-    transition: transform .3s ease-out;
     white-space: nowrap;
   }
 
