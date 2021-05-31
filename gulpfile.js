@@ -81,6 +81,13 @@ gulp.task('svg-js', () => (
     .pipe(gulp.dest('./build'))
 ));
 
+gulp.task('swipe-wrapper-js', () => (
+  gulp.src('./src/SwipeWrapper.js')
+    .pipe(concat('SwipeWrapper.js'))
+    .pipe(babel(babelOptions))
+    .pipe(gulp.dest('./build'))
+));
+
 gulp.task('watch', () => {
   livereload.listen();
   gulp.watch(['styles/**/*.scss'], ['sass']);
