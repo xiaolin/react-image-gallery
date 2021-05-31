@@ -116,6 +116,7 @@ class MyGallery extends React.Component {
 * `disableKeyDown`: Boolean, default `false`
   * disables keydown listener for keyboard shortcuts (left arrow, right arrow, esc key)
 * `disableSwipe`: Boolean, default `false`
+* `disableThumbnailSwipe`: Boolean, default `false`
 * `onErrorImageURL`: String, default `undefined`
   * an image src pointing to your default image if an image fails to load
   * handles both slide image, and thumbnail image
