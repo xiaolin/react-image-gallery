@@ -95,5 +95,5 @@ gulp.task('watch', () => {
 });
 
 gulp.task('dev', ['watch', 'scripts', 'sass', 'server']);
-gulp.task('build', ['source-js', 'svg-js', 'sass']);
+gulp.task('build', ['source-js', 'svg-js', 'swipe-wrapper-js', 'sass']);
 gulp.task('demo', ['demo-src']);
