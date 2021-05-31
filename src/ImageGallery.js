@@ -43,8 +43,10 @@ export default class ImageGallery extends React.Component {
       bulletOnClick: func,
       description: string,
       original: string,
-      height: number,
-      width: number,
+      originalHeight: number,
+      originalWidth: number,
+      thumbnailHeight: number,
+      thumbnailWidth: number,
       fullscreen: string,
       originalAlt: string,
       originalTitle: string,
@@ -1329,8 +1331,8 @@ export default class ImageGallery extends React.Component {
                 className="image-gallery-image"
                 alt={item.originalAlt}
                 src={itemSrc}
-                height={item.height}
-                width={item.width}
+                height={item.originalHeight}
+                width={item.originalWidth}
               />
             </picture>
           ) : (
@@ -1339,8 +1341,8 @@ export default class ImageGallery extends React.Component {
               src={itemSrc}
               alt={item.originalAlt}
               srcSet={item.srcSet}
-              height={item.height}
-              width={item.width}
+              height={item.originalHeight}
+              width={item.originalWidth}
               sizes={item.sizes}
               title={item.originalTitle}
               onLoad={event => this.handleImageLoaded(event, item)}
@@ -1369,6 +1371,8 @@ export default class ImageGallery extends React.Component {
         <img
           className="image-gallery-thumbnail-image"
           src={item.thumbnail}
+          height={item.thumbnailHeight}
+          width={item.thumbnailWidth}
           alt={item.thumbnailAlt}
           title={item.thumbnailTitle}
           onError={handleThumbnailError}
