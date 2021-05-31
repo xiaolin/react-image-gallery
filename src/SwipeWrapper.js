@@ -1,44 +1,45 @@
 import React from 'react';
 import {
-  shape,
   string,
+  node,
   number,
   func,
-  arrayOf,
 } from 'prop-types';
 import { useSwipeable } from 'react-swipeable';
 
 const SwipeWrapper = ({
-  slides,
+  children,
   className,
   delta,
   onSwiping,
   onSwiped,
 }) => {
   const swipeHandlers = useSwipeable({
-    className,
     delta,
     onSwiping,
     onSwiped,
   });
+
   return (
-    <div {...swipeHandlers} className="image-gallery-slides">
-      {slides}
+    <div {...swipeHandlers} className={className}>
+      {children}
     </div>
   );
 };
+
 SwipeWrapper.propTypes = {
-  slides: arrayOf(shape({})),
+  children: node.isRequired,
   className: string,
   delta: number,
   onSwiped: func,
   onSwiping: func,
 };
+
 SwipeWrapper.defaultProps = {
   className: '',
   delta: 0,
-  slides: [],
   onSwiping: () => {},
   onSwiped: () => {},
 };
+
 export default SwipeWrapper;
