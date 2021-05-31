@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { LEFT, RIGHT } from 'react-swipeable';
+import { LEFT, RIGHT, UP, DOWN } from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
@@ -76,7 +76,6 @@ export default class ImageGallery extends React.Component {
     disableKeyDown: bool,
     disableSwipe: bool,
     useBrowserFullscreen: bool,
-    preventDefaultTouchmoveEvent: bool,
     onErrorImageURL: string,
     indexSeparator: string,
     thumbnailPosition: oneOf(['top', 'bottom', 'left', 'right']),
@@ -133,7 +132,6 @@ export default class ImageGallery extends React.Component {
     useTranslate3D: true,
     isRTL: false,
     useBrowserFullscreen: true,
-    preventDefaultTouchmoveEvent: false,
     flickThreshold: 0.4,
     stopPropagation: false,
     indexSeparator: ' / ',
@@ -844,22 +842,20 @@ export default class ImageGallery extends React.Component {
   }
 
   handleSwiping({ event, absX, dir }) {
-    const { preventDefaultTouchmoveEvent, disableSwipe, stopPropagation } = this.props;
+    const { disableSwipe, stopPropagation } = this.props;
     const {
       galleryWidth,
       isTransitioning,
-      scrollingUpDown,
-      scrollingLeftRight,
     } = this.state;
 
     if (disableSwipe) return;
+
     const { swipingTransitionDuration } = this.props;
+
     this.setScrollDirection(dir);
     if (stopPropagation) event.stopPropagation();
-    if ((preventDefaultTouchmoveEvent || scrollingLeftRight) && event.cancelable) {
-      event.preventDefault();
-    }
-    if (!isTransitioning && !scrollingUpDown) {
+
+    if (!isTransitioning) {
       const side = dir === RIGHT ? 1 : -1;
 
       let currentSlideOffset = (absX / galleryWidth * 100);
@@ -905,19 +901,18 @@ export default class ImageGallery extends React.Component {
       this.setState({ scrollingLeftRight: false });
     }
 
-    if (!scrollingUpDown) { // don't swipe if user is scrolling
-      // if it is RTL the direction is reversed
-      const swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
-      const isFlick = velocity > flickThreshold;
-      this.handleOnSwipedTo(swipeDirection, isFlick);
-    }
+    // if it is RTL the direction is reversed
+    const swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
+    const isSwipeUpOrDown = dir === UP || dir === DOWN;
+    const isLeftRightFlick = (velocity > flickThreshold) && !isSwipeUpOrDown;
+    this.handleOnSwipedTo(swipeDirection, isLeftRightFlick);
   }
 
-  handleOnSwipedTo(swipeDirection, isFlick) {
+  handleOnSwipedTo(swipeDirection, isLeftRightFlick) {
     const { currentIndex, isTransitioning } = this.state;
     let slideTo = currentIndex;
 
-    if ((this.sufficientSwipe() || isFlick) && !isTransitioning) {
+    if ((this.sufficientSwipe() || isLeftRightFlick) && !isTransitioning) {
       // slideto the next/prev slide
       slideTo += swipeDirection;
     }
@@ -1505,14 +1500,8 @@ export default class ImageGallery extends React.Component {
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
           {
             showThumbnails && (
-              <div
-                className={thumbnailWrapperClass}
-                style={this.getThumbnailBarHeight()}
-              >
-                <div
-                  className="image-gallery-thumbnails"
-                  ref={this.thumbnailsWrapper}
-                >
+              <div className={thumbnailWrapperClass} style={this.getThumbnailBarHeight()}>
+                <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper}>
                   <div
                     ref={this.thumbnails}
                     className="image-gallery-thumbnails-container"
