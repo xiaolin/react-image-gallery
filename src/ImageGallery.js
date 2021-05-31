@@ -1,6 +1,6 @@
 import clsx from 'clsx';
 import React from 'react';
-import { Swipeable, LEFT, RIGHT } from 'react-swipeable';
+import { LEFT, RIGHT } from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
@@ -15,6 +15,7 @@ import {
   string,
 } from 'prop-types';
 import SVG from './SVG';
+import SwipeWrapper from './SwipeWrapper';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -1437,16 +1438,13 @@ export default class ImageGallery extends React.Component {
                   </React.Fragment>
                 )
               }
-              <Swipeable
+              <SwipeWrapper
                 className="image-gallery-swipe"
                 delta={0}
                 onSwiping={this.handleSwiping}
                 onSwiped={this.handleOnSwiped}
-              >
-                <div className="image-gallery-slides">
-                  {slides}
-                </div>
-              </Swipeable>
+                slides={slides}
+              />
             </React.Fragment>
           ) : (
             <div className="image-gallery-slides">
