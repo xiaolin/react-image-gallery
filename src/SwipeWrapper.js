@@ -13,7 +13,6 @@ const SwipeWrapper = ({
   delta,
   onSwiping,
   onSwiped,
-  touchAction,
 }) => {
   const swipeHandlers = useSwipeable({
     delta,
@@ -21,7 +20,7 @@ const SwipeWrapper = ({
     onSwiped,
   });
   return (
-    <div {...swipeHandlers} className={className} style={{ touchAction }}>
+    <div {...swipeHandlers} className={className}>
       {children}
     </div>
   );
@@ -33,7 +32,6 @@ SwipeWrapper.propTypes = {
   delta: number,
   onSwiped: func,
   onSwiping: func,
-  touchAction: string,
 };
 
 SwipeWrapper.defaultProps = {
@@ -41,7 +39,6 @@ SwipeWrapper.defaultProps = {
   delta: 0,
   onSwiping: () => {},
   onSwiped: () => {},
-  touchAction: 'pan-x',
 };
 
 export default SwipeWrapper;

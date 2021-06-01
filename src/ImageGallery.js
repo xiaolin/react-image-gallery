@@ -1,10 +1,15 @@
 import clsx from 'clsx';
 import React from 'react';
-import { LEFT, RIGHT, UP, DOWN } from 'react-swipeable';
 import throttle from 'lodash.throttle';
 import debounce from 'lodash.debounce';
 import isEqual from 'lodash.isequal';
 import ResizeObserver from 'resize-observer-polyfill';
+import {
+  LEFT,
+  RIGHT,
+  UP,
+  DOWN,
+} from 'react-swipeable';
 import {
   arrayOf,
   bool,
