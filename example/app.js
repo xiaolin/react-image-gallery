@@ -208,6 +208,8 @@ class App extends React.Component {
           useTranslate3D
           flickThreshold={1.0}
           onImageGalleryWidthInitialized={() => {console.log('onImageGalleryWidthInitialized');}}
+          lazyLoad={true}
+          lazyLoadNext={false}
         />
         <div style={{'height': 300}} />
         <div style={{'height': 300}} />

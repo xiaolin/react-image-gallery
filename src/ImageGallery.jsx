@@ -12,6 +12,12 @@ const screenChangeEvents = [
   'webkitfullscreenchange'
 ];
 
+const Constants = Object.freeze({
+  LEFT: ' left',
+  CENTER: ' center',
+  RIGHT: ' right',
+});
+
 export default class ImageGallery extends React.Component {
 
   constructor(props) {
@@ -44,6 +50,7 @@ export default class ImageGallery extends React.Component {
     showNav: PropTypes.bool,
     autoPlay: PropTypes.bool,
     lazyLoad: PropTypes.bool,
+    lazyLoadNext: PropTypes.bool,
     showIndex: PropTypes.bool,
     showBullets: PropTypes.bool,
     showThumbnails: PropTypes.bool,
@@ -96,6 +103,7 @@ export default class ImageGallery extends React.Component {
     showNav: true,
     autoPlay: false,
     lazyLoad: false,
+    lazyLoadNext: true,
     showIndex: false,
     showBullets: false,
     showThumbnails: true,
@@ -671,29 +679,26 @@ export default class ImageGallery extends React.Component {
     // LEFT, and RIGHT alignments are necessary for lazyLoad
     let {currentIndex} = this.state;
     let alignment = '';
-    const LEFT = 'left';
-    const CENTER = 'center';
-    const RIGHT = 'right';
 
     switch (index) {
       case (currentIndex - 1):
-        alignment = ` ${LEFT}`;
+        alignment = Constants.LEFT;
         break;
       case (currentIndex):
-        alignment = ` ${CENTER}`;
+        alignment = Constants.CENTER;
         break;
       case (currentIndex + 1):
-        alignment = ` ${RIGHT}`;
+        alignment = Constants.RIGHT;
         break;
     }
 
     if (this.props.items.length >= 3) {
       if (index === 0 && currentIndex === this.props.items.length - 1) {
         // set first slide as right slide if were sliding right from last slide
-        alignment = ` ${RIGHT}`;
+        alignment = Constants.RIGHT;
       } else if (index === this.props.items.length - 1 && currentIndex === 0) {
         // set last slide as left slide if were sliding left from first slide
-        alignment = ` ${LEFT}`;
+        alignment = Constants.LEFT;
       }
     }
 
@@ -864,11 +869,11 @@ export default class ImageGallery extends React.Component {
   }
 
   _slideLeft = (event) => {
-    this.props.isRTL ? this._slideNext() : this.ـslidePrevious();
+    this.props.isRTL ? this._slideNext(event) : this.ـslidePrevious(event);
   };
 
   _slideRight = (event) => {
-    this.props.isRTL ? this.ـslidePrevious() : this._slideNext();
+    this.props.isRTL ? this.ـslidePrevious(event) : this._slideNext(event);
   };
 
   ـslidePrevious = (event) => {
@@ -954,6 +959,19 @@ export default class ImageGallery extends React.Component {
     }
   };
 
+  _shouldShowItem = (alignment, index) => {
+    const showNext = this.props.lazyLoadNext && alignment;
+    const showMain = !this.props.lazyLoadNext && (alignment === Constants.CENTER);
+
+    const showItem =
+        !this.props.lazyLoad ||
+        showNext ||
+        showMain ||
+        this._lazyLoaded[index];
+
+    return showItem;
+  };
+
   render() {
     const {
       currentIndex,
@@ -991,8 +1009,9 @@ export default class ImageGallery extends React.Component {
       const renderThumbInner = item.renderThumbInner ||
         this.props.renderThumbInner || this._renderThumbInner;
 
-      const showItem = !this.props.lazyLoad || alignment || this._lazyLoaded[index];
-      if (showItem && this.props.lazyLoad) {
+
+      const showItem = this._shouldShowItem(alignment, index);
+      if (showItem && this.props.lazyLoad && !this._lazyLoaded[index]) {
         this._lazyLoaded[index] = true;
       }
 

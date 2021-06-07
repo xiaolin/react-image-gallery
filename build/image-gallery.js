@@ -42,6 +42,12 @@ function _inherits(subClass, superClass) { if (typeof superClass !== "function" 
 
 var screenChangeEvents = ['fullscreenchange', 'MSFullscreenChange', 'mozfullscreenchange', 'webkitfullscreenchange'];
 
+var Constants = Object.freeze({
+  LEFT: ' left',
+  CENTER: ' center',
+  RIGHT: ' right'
+});
+
 var ImageGallery = function (_React$Component) {
   _inherits(ImageGallery, _React$Component);
 
@@ -260,11 +266,11 @@ var ImageGallery = function (_React$Component) {
     };
 
     _this._slideLeft = function (event) {
-      _this.props.isRTL ? _this._slideNext() : _this.ـslidePrevious();
+      _this.props.isRTL ? _this._slideNext(event) : _this.ـslidePrevious(event);
     };
 
     _this._slideRight = function (event) {
-      _this.props.isRTL ? _this.ـslidePrevious() : _this._slideNext();
+      _this.props.isRTL ? _this.ـslidePrevious(event) : _this._slideNext(event);
     };
 
     _this.ـslidePrevious = function (event) {
@@ -341,6 +347,15 @@ var ImageGallery = function (_React$Component) {
       if (_this.props.onThumbnailClick) {
         _this.props.onThumbnailClick(event, index);
       }
+    };
+
+    _this._shouldShowItem = function (alignment, index) {
+      var showNext = _this.props.lazyLoadNext && alignment;
+      var showMain = !_this.props.lazyLoadNext && alignment === Constants.CENTER;
+
+      var showItem = !_this.props.lazyLoad || showNext || showMain || _this._lazyLoaded[index];
+
+      return showItem;
     };
 
     _this.state = {
@@ -718,29 +733,26 @@ var ImageGallery = function (_React$Component) {
       var currentIndex = this.state.currentIndex;
 
       var alignment = '';
-      var LEFT = 'left';
-      var CENTER = 'center';
-      var RIGHT = 'right';
 
       switch (index) {
         case currentIndex - 1:
-          alignment = ' ' + LEFT;
+          alignment = Constants.LEFT;
           break;
         case currentIndex:
-          alignment = ' ' + CENTER;
+          alignment = Constants.CENTER;
           break;
         case currentIndex + 1:
-          alignment = ' ' + RIGHT;
+          alignment = Constants.RIGHT;
           break;
       }
 
       if (this.props.items.length >= 3) {
         if (index === 0 && currentIndex === this.props.items.length - 1) {
           // set first slide as right slide if were sliding right from last slide
-          alignment = ' ' + RIGHT;
+          alignment = Constants.RIGHT;
         } else if (index === this.props.items.length - 1 && currentIndex === 0) {
           // set last slide as left slide if were sliding left from first slide
-          alignment = ' ' + LEFT;
+          alignment = Constants.LEFT;
         }
       }
 
@@ -969,8 +981,8 @@ var ImageGallery = function (_React$Component) {
 
         var renderThumbInner = item.renderThumbInner || _this5.props.renderThumbInner || _this5._renderThumbInner;
 
-        var showItem = !_this5.props.lazyLoad || alignment || _this5._lazyLoaded[index];
-        if (showItem && _this5.props.lazyLoad) {
+        var showItem = _this5._shouldShowItem(alignment, index);
+        if (showItem && _this5.props.lazyLoad && !_this5._lazyLoaded[index]) {
           _this5._lazyLoaded[index] = true;
         }
 
@@ -1166,6 +1178,7 @@ ImageGallery.propTypes = {
   showNav: _propTypes2.default.bool,
   autoPlay: _propTypes2.default.bool,
   lazyLoad: _propTypes2.default.bool,
+  lazyLoadNext: _propTypes2.default.bool,
   showIndex: _propTypes2.default.bool,
   showBullets: _propTypes2.default.bool,
   showThumbnails: _propTypes2.default.bool,
@@ -1217,6 +1230,7 @@ ImageGallery.defaultProps = {
   showNav: true,
   autoPlay: false,
   lazyLoad: false,
+  lazyLoadNext: true,
   showIndex: false,
   showBullets: false,
   showThumbnails: true,
