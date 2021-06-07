@@ -64,7 +64,7 @@
     "lodash.debounce": "^4.0.8",
     "lodash.throttle": "^4.1.1",
     "prop-types": "^15.5.8",
-    "react-swipeable": "SectorLabs/react-swipeable#4.3.0-sl",
+    "react-swipeable": "SectorLabs/react-swipeable#v4.3.0-sl",
     "resize-observer-polyfill": "^1.5.0"
   }
 }
