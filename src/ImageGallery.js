@@ -904,7 +904,6 @@ export default class ImageGallery extends React.Component {
     dir,
   }) {
     const {
-      disableThumbnailSwipe,
       stopPropagation,
       swipingThumbnailTransitionDuration,
     } = this.props;
