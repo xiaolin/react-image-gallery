@@ -255,6 +255,7 @@ Each PR should be specific and isolated to the issue you're trying to fix. Pleas
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
 cd react-image-gallery
+npm install --global yarn
 yarn install
 yarn start
 ```
