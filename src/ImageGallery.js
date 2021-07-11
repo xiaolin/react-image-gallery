@@ -1,7 +1,7 @@
 import clsx from 'clsx';
 import React from 'react';
-import throttle from 'lodash/throttle';
-import debounce from 'lodash/debounce';
+import throttle from 'lodash-es/throttle';
+import debounce from 'lodash-es/debounce';
 import isEqual from 'react-fast-compare';
 import ResizeObserver from 'resize-observer-polyfill';
 import {
