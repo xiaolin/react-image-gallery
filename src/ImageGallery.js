@@ -919,6 +919,7 @@ export default class ImageGallery extends React.Component {
     let totalSwipeableLength;
     let hasSwipedPassedEnd;
     let hasSwipedPassedStart;
+    let isThumbnailBarSmallerThanContainer;
 
     if (this.isThumbnailVertical()) {
       const slideY = dir === DOWN ? absY : -absY;
@@ -927,6 +928,7 @@ export default class ImageGallery extends React.Component {
         - thumbnailsWrapperHeight + emptySpaceMargin;
       hasSwipedPassedEnd = Math.abs(thumbsTranslate) > totalSwipeableLength;
       hasSwipedPassedStart = thumbsTranslate > emptySpaceMargin;
+      isThumbnailBarSmallerThanContainer = thumbsElement.scrollHeight <= thumbnailsWrapperHeight;
     } else {
       const slideX = dir === RIGHT ? absX : -absX;
       thumbsTranslate = thumbsSwipedTranslate + slideX;
@@ -934,6 +936,12 @@ export default class ImageGallery extends React.Component {
         - thumbnailsWrapperWidth + emptySpaceMargin;
       hasSwipedPassedEnd = Math.abs(thumbsTranslate) > totalSwipeableLength;
       hasSwipedPassedStart = thumbsTranslate > emptySpaceMargin;
+      isThumbnailBarSmallerThanContainer = thumbsElement.scrollWidth <= thumbnailsWrapperWidth;
+    }
+
+    if (isThumbnailBarSmallerThanContainer) {
+      // no need to swipe a thumbnail bar smaller/shorter than its container
+      return;
     }
 
     if ((dir === LEFT || dir === UP) && hasSwipedPassedEnd) {
