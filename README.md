@@ -250,7 +250,7 @@ Each PR should be specific and isolated to the issue you're trying to fix. Pleas
 * Comment your code
 * Write [clean](https://github.com/ryanmcdermott/clean-code-javascript) code
 
-# Build the example locally (requires node <= 11)
+# Build the example locally (requires node >= 12.13)
 
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
