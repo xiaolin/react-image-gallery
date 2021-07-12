@@ -13,6 +13,7 @@ const jsOutput = Object.assign({}, config, {
     path: path.resolve(__dirname, 'build'),
     filename: 'image-gallery.js',
     library: 'ImageGallery',
+    globalObject: 'this',
     libraryTarget: 'umd',
   },
   resolve: {
