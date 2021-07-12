@@ -86,7 +86,9 @@ class App extends React.Component {
   }
 
   _handleInputChange(state, event) {
-    this.setState({[state]: event.target.value});
+    if (event.target.value > 0) {
+      this.setState({[state]: event.target.value});
+    }
   }
 
   _handleCheckboxChange(state, event) {
