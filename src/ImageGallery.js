@@ -423,7 +423,11 @@ class ImageGallery extends React.Component {
       translate = `translate3d(${translateX}%, 0, 0)`;
     }
 
+    // don't show some slides while transitioning to avoid background transitions
+    const isVisible = this.isSlideVisible(index);
+
     return {
+      display: isVisible ? 'inherit' : 'none',
       WebkitTransform: translate,
       MozTransform: translate,
       msTransform: translate,
@@ -524,14 +528,7 @@ class ImageGallery extends React.Component {
         </div>
       );
 
-      if (infinite) {
-        // don't add some slides while transitioning to avoid background transitions
-        if (this.shouldPushSlideOnInfiniteMode(index)) {
-          slides.push(slide);
-        }
-      } else {
-        slides.push(slide);
-      }
+      slides.push(slide);
 
       if (showThumbnails) {
         const igThumbnailClass = clsx(
@@ -631,9 +628,9 @@ class ImageGallery extends React.Component {
     return isTransitioning && indexIsNotPreviousOrNextSlide;
   }
 
-  shouldPushSlideOnInfiniteMode(index) {
+  isSlideVisible(index) {
     /*
-      Push (show) slide if slide is the current slide and the next slide
+      Show slide if slide is the current slide and the next slide
       OR
       The slide is going more than one slide left or right, but not going from
       first to last and not going from last to first
