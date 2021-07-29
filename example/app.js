@@ -33,29 +33,15 @@ class App extends React.Component {
         thumbnail: `${PREFIX_URL}4v.jpg`,
         original: `${PREFIX_URL}4v.jpg`,
         embedUrl: 'https://www.youtube.com/embed/4pSzhZ76GdM?autoplay=1&showinfo=0',
-        description: 'Render custom slides within the gallery',
+        description: 'Render custom slides (such as videos)',
         renderItem: this._renderVideo.bind(this)
-      },
-      {
-        original: `${PREFIX_URL}image_set_default.jpg`,
-        thumbnail: `${PREFIX_URL}image_set_thumb.jpg`,
-        imageSet: [
-          {
-            srcSet: `${PREFIX_URL}image_set_cropped.jpg`,
-            media : '(max-width: 1280px)',
-          },
-          {
-            srcSet: `${PREFIX_URL}image_set_default.jpg`,
-            media : '(min-width: 1280px)',
-          }
-        ]
       },
       {
         original: `${PREFIX_URL}1.jpg`,
         thumbnail: `${PREFIX_URL}1t.jpg`,
         originalClass: 'featured-slide',
         thumbnailClass: 'featured-thumb',
-        description: 'Custom class for slides & thumbnails'
+        description: 'Custom class for slides & thumbnails',
       },
     ].concat(this._getStaticImages());
   }
@@ -186,7 +172,6 @@ class App extends React.Component {
         <ImageGallery
           ref={i => this._imageGallery = i}
           items={this.images}
-          lazyLoad={false}
           onClick={this._onImageClick.bind(this)}
           onImageLoad={this._onImageLoad}
           onSlide={this._onSlide.bind(this)}

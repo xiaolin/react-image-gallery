@@ -20,6 +20,7 @@ import {
   string,
 } from 'prop-types';
 import SVG from 'src/SVG';
+import Item from 'src/Item';
 import SwipeWrapper from 'src/SwipeWrapper';
 
 const screenChangeEvents = [
@@ -64,6 +65,7 @@ class ImageGallery extends React.Component {
     this.imageGallerySlideWrapper = React.createRef();
 
     // bindings
+    this.handleImageLoaded = this.handleImageLoaded.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
@@ -472,7 +474,6 @@ class ImageGallery extends React.Component {
   getSlideItems() {
     const { currentIndex } = this.state;
     const {
-      infinite,
       items,
       slideOnThumbnailOver,
       onClick,
@@ -530,7 +531,8 @@ class ImageGallery extends React.Component {
 
       slides.push(slide);
 
-      if (showThumbnails) {
+      // Don't add thumbnails if there is none
+      if (showThumbnails && item.thumbnail) {
         const igThumbnailClass = clsx(
           'image-gallery-thumbnail',
           thumbnailClass,
@@ -1215,11 +1217,11 @@ class ImageGallery extends React.Component {
     return false;
   }
 
-  handleImageLoaded(event, item) {
+  handleImageLoaded(event, original) {
     const { onImageLoad } = this.props;
-    const imageExists = this.loadedImages[item.original];
+    const imageExists = this.loadedImages[original];
     if (!imageExists && onImageLoad) {
-      this.loadedImages[item.original] = true; // prevent from call again
+      this.loadedImages[original] = true; // prevent from call again
       // image just loaded, call onImageLoad
       onImageLoad(event);
     }
@@ -1229,58 +1231,22 @@ class ImageGallery extends React.Component {
     const { isFullscreen } = this.state;
     const { onImageError } = this.props;
     const handleImageError = onImageError || this.handleImageError;
-    const itemSrc = isFullscreen ? (item.fullscreen || item.original) : item.original;
 
     return (
-      <div>
-        {
-          item.imageSet ? (
-            <picture
-              onLoad={event => this.handleImageLoaded(event, item)}
-              onError={handleImageError}
-            >
-              {
-                item.imageSet.map((source, index) => (
-                  <source
-                    key={`media-${index}`}
-                    media={source.media}
-                    srcSet={source.srcSet}
-                    type={source.type}
-                  />
-                ))
-              }
-              <img
-                className="image-gallery-image"
-                alt={item.originalAlt}
-                src={itemSrc}
-                height={item.originalHeight}
-                width={item.originalWidth}
-              />
-            </picture>
-          ) : (
-            <img
-              className="image-gallery-image"
-              src={itemSrc}
-              alt={item.originalAlt}
-              srcSet={item.srcSet}
-              height={item.originalHeight}
-              width={item.originalWidth}
-              sizes={item.sizes}
-              title={item.originalTitle}
-              onLoad={event => this.handleImageLoaded(event, item)}
-              onError={handleImageError}
-            />
-          )
-        }
-
-        {
-          item.description && (
-            <span className="image-gallery-description">
-              {item.description}
-            </span>
-          )
-        }
-      </div>
+      <Item
+        description={item.description}
+        fullscreen={item.fullscreen}
+        handleImageLoaded={this.handleImageLoaded}
+        isFullscreen={isFullscreen}
+        onImageError={handleImageError}
+        original={item.original}
+        originalAlt={item.originalAlt}
+        originalHeight={item.originalHeight}
+        originalWidth={item.originalWidth}
+        originalTitle={item.originalTitle}
+        sizes={item.sizes}
+        srcSet={item.srcSet}
+      />
     );
   }
 
@@ -1428,7 +1394,7 @@ class ImageGallery extends React.Component {
         <div className={igContentClass}>
           {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
           {
-            showThumbnails && (
+            showThumbnails && thumbnails.length > 0 ? (
               <SwipeWrapper
                 className={thumbnailWrapperClass}
                 delta={0}
@@ -1446,7 +1412,7 @@ class ImageGallery extends React.Component {
                   </div>
                 </div>
               </SwipeWrapper>
-            )
+            ) : null
           }
           {(thumbnailPosition === 'top' || thumbnailPosition === 'left') && slideWrapper}
         </div>
