@@ -68,6 +68,7 @@ class ImageGallery extends React.Component {
     this.handleImageLoaded = this.handleImageLoaded.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
@@ -105,6 +106,7 @@ class ImageGallery extends React.Component {
       this.imageGallery.current.addEventListener('keydown', this.handleKeyDown);
     }
     window.addEventListener('mousedown', this.handleMouseDown);
+    window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
   }
@@ -174,6 +176,7 @@ class ImageGallery extends React.Component {
   componentWillUnmount() {
     const { useWindowKeyDown } = this.props;
     window.removeEventListener('mousedown', this.handleMouseDown);
+    window.removeEventListener('touchmove', this.handleTouchMove);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
     if (this.playPauseIntervalId) {
@@ -236,18 +239,6 @@ class ImageGallery extends React.Component {
       this.thumbnailMouseOverTimer = null;
       if (autoPlay) {
         this.play();
-      }
-    }
-  }
-
-  setScrollDirection(dir) {
-    const { scrollingUpDown, scrollingLeftRight } = this.state;
-
-    if (!scrollingUpDown && !scrollingLeftRight) {
-      if (dir === LEFT || dir === RIGHT) {
-        this.setState({ scrollingLeftRight: true });
-      } else {
-        this.setState({ scrollingUpDown: true });
       }
     }
   }
@@ -695,14 +686,28 @@ class ImageGallery extends React.Component {
     const {
       galleryWidth,
       isTransitioning,
+      scrollingUpDown,
+      scrollingLeftRight,
     } = this.state;
+
+    // if the initial swiping is up/down prevent moving the slides until swipe ends
+    if ((dir === UP || dir === DOWN || scrollingUpDown) && !scrollingLeftRight) {
+      if (!scrollingUpDown) {
+        this.setState({ scrollingUpDown: true });
+      }
+      return;
+    }
+
+    if ((dir === LEFT || dir === RIGHT) && !scrollingLeftRight) {
+      this.setState({ scrollingLeftRight: true });
+    }
 
     if (disableSwipe) return;
 
     const { swipingTransitionDuration } = this.props;
-
-    this.setScrollDirection(dir);
-    if (stopPropagation) event.stopPropagation();
+    if (stopPropagation) {
+      event.preventDefault();
+    }
 
     if (!isTransitioning) {
       const side = dir === RIGHT ? 1 : -1;
@@ -820,12 +825,12 @@ class ImageGallery extends React.Component {
     const { isRTL } = this.props;
     if (stopPropagation) event.stopPropagation();
     if (scrollingUpDown) {
-      // user stopped scrollingUpDown
+      // user stopped scrollingUpDown, reset
       this.setState({ scrollingUpDown: false });
     }
 
     if (scrollingLeftRight) {
-      // user stopped scrollingLeftRight
+      // user stopped scrollingLeftRight, reset
       this.setState({ scrollingLeftRight: false });
     }
 
@@ -852,6 +857,14 @@ class ImageGallery extends React.Component {
     }
 
     this.unthrottledSlideToIndex(slideTo);
+  }
+
+  handleTouchMove(event) {
+    const { scrollingLeftRight } = this.state;
+    if (scrollingLeftRight) {
+      // prevent background scrolling up and down while swiping left and right
+      event.preventDefault();
+    }
   }
 
   handleMouseDown() {
