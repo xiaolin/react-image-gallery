@@ -79,7 +79,7 @@ class MyGallery extends React.Component {
     * `thumbnailWidth` - image width (html5 attribute)
     * `originalClass` - custom image class
     * `thumbnailClass` - custom thumbnail class
-    * `renderItem` - Function for custom renderer (see renderItem below)
+    * `renderItem` - Function for custom rendering a specific slide (see renderItem below)
     * `renderThumbInner` - Function for custom thumbnail renderer (see renderThumbInner below)
     * `originalAlt` - image alt
     * `thumbnailAlt` - thumbnail image alt
@@ -87,7 +87,6 @@ class MyGallery extends React.Component {
     * `thumbnailTitle` - thumbnail image title
     * `thumbnailLabel` - label for thumbnail
     * `description` - description for image
-    * `imageSet` - array of `<source>` using `<picture>` element (see [`app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js) for example)
     * `srcSet` - image srcset (html5 attribute)
     * `sizes` - image sizes (html5 attribute)
     * `bulletClass` - extra class for the bullet of the item
@@ -163,12 +162,11 @@ class MyGallery extends React.Component {
     }
   ```
 * `renderItem`: Function, custom item rendering
+  * NOTE: Highly suggest looking into a render cache such as React.memo if you plan to override renderItem
   * On a specific item `[{thumbnail: '...', renderItem: this.myRenderItem}]`
-  or
-  * As a prop passed into `ImageGallery` to completely override `_renderItem`, see source for reference
+  * As a prop passed into `ImageGallery` to completely override `renderItem`, see source for renderItem implementation
 * `renderThumbInner`: Function, custom thumbnail rendering
   * On a specific item `[{thumbnail: '...', renderThumbInner: this.myRenderThumbInner}]`
-  or
   * As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
 
 * `renderLeftNav`: Function, custom left nav component
