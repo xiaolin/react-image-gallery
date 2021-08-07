@@ -689,20 +689,20 @@ class ImageGallery extends React.Component {
     const {
       galleryWidth,
       isTransitioning,
-      scrollingUpDown,
-      scrollingLeftRight,
+      swipingUpDown,
+      swipingLeftRight,
     } = this.state;
 
     // if the initial swiping is up/down prevent moving the slides until swipe ends
-    if ((dir === UP || dir === DOWN || scrollingUpDown) && !scrollingLeftRight) {
-      if (!scrollingUpDown) {
-        this.setState({ scrollingUpDown: true });
+    if ((dir === UP || dir === DOWN || swipingUpDown) && !swipingLeftRight) {
+      if (!swipingUpDown) {
+        this.setState({ swipingUpDown: true });
       }
       return;
     }
 
-    if ((dir === LEFT || dir === RIGHT) && !scrollingLeftRight) {
-      this.setState({ scrollingLeftRight: true });
+    if ((dir === LEFT || dir === RIGHT) && !swipingLeftRight) {
+      this.setState({ swipingLeftRight: true });
     }
 
     if (disableSwipe) return;
@@ -748,7 +748,36 @@ class ImageGallery extends React.Component {
       thumbsSwipedTranslate,
       thumbnailsWrapperHeight,
       thumbnailsWrapperWidth,
+      swipingUpDown,
+      swipingLeftRight,
     } = this.state;
+
+    if (this.isThumbnailVertical()) {
+      // if the initial swiping is left/right, prevent moving the thumbnail bar until swipe ends
+      if ((dir === LEFT || dir === RIGHT || swipingLeftRight) && !swipingUpDown) {
+        if (!swipingLeftRight) {
+          this.setState({ swipingLeftRight: true });
+        }
+        return;
+      }
+
+      if ((dir === UP || dir === DOWN) && !swipingUpDown) {
+        this.setState({ swipingUpDown: true });
+      }
+    } else {
+      // if the initial swiping is up/down, prevent moving the thumbnail bar until swipe ends
+      if ((dir === UP || dir === DOWN || swipingUpDown) && !swipingLeftRight) {
+        if (!swipingUpDown) {
+          this.setState({ swipingUpDown: true });
+        }
+        return;
+      }
+
+      if ((dir === LEFT || dir === RIGHT) && !swipingLeftRight) {
+        this.setState({ swipingLeftRight: true });
+      }
+    }
+
     const thumbsElement = this.thumbnails && this.thumbnails.current;
     const emptySpaceMargin = 20; // 20px to add some margin to show empty space
 
@@ -806,6 +835,7 @@ class ImageGallery extends React.Component {
   handleOnThumbnailSwiped() {
     const { thumbsTranslate } = this.state;
     const { slideDuration } = this.props;
+    this.resetSwipingDirection();
     this.setState({
       isSwipingThumbnail: true,
       thumbsSwipedTranslate: thumbsTranslate,
@@ -819,23 +849,27 @@ class ImageGallery extends React.Component {
     return Math.abs(currentSlideOffset) > swipeThreshold;
   }
 
+  resetSwipingDirection() {
+    const { swipingUpDown, swipingLeftRight } = this.state;
+    if (swipingUpDown) {
+      // user stopped swipingUpDown, reset
+      this.setState({ swipingUpDown: false });
+    }
+
+    if (swipingLeftRight) {
+      // user stopped swipingLeftRight, reset
+      this.setState({ swipingLeftRight: false });
+    }
+  }
+
   handleOnSwiped({ event, dir, velocity }) {
     const { disableSwipe, stopPropagation, flickThreshold } = this.props;
-    const { scrollingUpDown, scrollingLeftRight } = this.state;
 
     if (disableSwipe) return;
 
     const { isRTL } = this.props;
     if (stopPropagation) event.stopPropagation();
-    if (scrollingUpDown) {
-      // user stopped scrollingUpDown, reset
-      this.setState({ scrollingUpDown: false });
-    }
-
-    if (scrollingLeftRight) {
-      // user stopped scrollingLeftRight, reset
-      this.setState({ scrollingLeftRight: false });
-    }
+    this.resetSwipingDirection();
 
     // if it is RTL the direction is reversed
     const swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
@@ -863,8 +897,8 @@ class ImageGallery extends React.Component {
   }
 
   handleTouchMove(event) {
-    const { scrollingLeftRight } = this.state;
-    if (scrollingLeftRight) {
+    const { swipingLeftRight } = this.state;
+    if (swipingLeftRight) {
       // prevent background scrolling up and down while swiping left and right
       event.preventDefault();
     }
