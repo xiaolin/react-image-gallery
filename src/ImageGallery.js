@@ -19,8 +19,11 @@ import {
   shape,
   string,
 } from 'prop-types';
-import SVG from 'src/SVG';
 import Item from 'src/Item';
+import Fullscreen from 'src/controls/Fullscreen';
+import LeftNav from 'src/controls/LeftNav';
+import RightNav from 'src/controls/RightNav';
+import PlayPause from 'src/controls/PlayPause';
 import SwipeWrapper from 'src/SwipeWrapper';
 
 const screenChangeEvents = [
@@ -554,7 +557,7 @@ class ImageGallery extends React.Component {
           if (item.bulletOnClick) {
             item.bulletOnClick({ item, itemIndex: index, currentIndex });
           }
-          // blur element to remove outline cause by focus
+          // blur element to remove outline caused by focus
           event.target.blur();
           return this.slideToIndex.call(this, index, event);
         };
@@ -1033,26 +1036,18 @@ class ImageGallery extends React.Component {
 
   slideLeft(event) {
     const { isRTL } = this.props;
-    if (isRTL) {
-      this.slideNext(event);
-    } else {
-      this.slidePrevious(event);
-    }
+    this.slideTo(event, isRTL ? 'right' : 'left')
   }
 
   slideRight(event) {
     const { isRTL } = this.props;
-    if (isRTL) {
-      this.slidePrevious(event);
-    } else {
-      this.slideNext(event);
-    }
+    this.slideTo(event, isRTL ? 'left' : 'right')
   }
 
-  slidePrevious(event) {
+  slideTo(event, direction) {
     const { currentIndex, currentSlideOffset, isTransitioning } = this.state;
     const { items } = this.props;
-    const nextIndex = currentIndex - 1;
+    const nextIndex = currentIndex + (direction === 'left' ? -1 : 1)
 
     if (isTransitioning) return;
 
@@ -1062,30 +1057,11 @@ class ImageGallery extends React.Component {
         on the correct side for transitioning
       */
       this.setState({
-        currentSlideOffset: currentSlideOffset + 0.001, // this will reset once index changes
+        // this will reset once index changes
+        currentSlideOffset: currentSlideOffset + (direction === 'left' ? 0.001 : -0.001),
         slideStyle: { transition: 'none' }, // move the slide over instantly
       }, () => {
         // add 25ms timeout to avoid delay in moving slides over
-        window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
-      });
-    } else {
-      this.slideToIndex(nextIndex, event);
-    }
-  }
-
-  slideNext(event) {
-    const { currentIndex, currentSlideOffset, isTransitioning } = this.state;
-    const { items } = this.props;
-    const nextIndex = currentIndex + 1;
-
-    if (isTransitioning) return;
-
-    if (items.length === 2) {
-      // same as above for 2 slides
-      this.setState({
-        currentSlideOffset: currentSlideOffset - 0.001,
-        slideStyle: { transition: 'none' },
-      }, () => {
         window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
       });
     } else {
@@ -1563,46 +1539,16 @@ ImageGallery.defaultProps = {
   slideOnThumbnailOver: false,
   swipeThreshold: 30,
   renderLeftNav: (onClick, disabled) => (
-    <button
-      type="button"
-      className="image-gallery-icon image-gallery-left-nav"
-      disabled={disabled}
-      onClick={onClick}
-      aria-label="Previous Slide"
-    >
-      <SVG icon="left" viewBox="6 0 12 24" />
-    </button>
+    <LeftNav onClick={onClick} disabled={disabled} />
   ),
   renderRightNav: (onClick, disabled) => (
-    <button
-      type="button"
-      className="image-gallery-icon image-gallery-right-nav"
-      disabled={disabled}
-      onClick={onClick}
-      aria-label="Next Slide"
-    >
-      <SVG icon="right" viewBox="6 0 12 24" />
-    </button>
+    <RightNav onClick={onClick} disabled={disabled} />
   ),
   renderPlayPauseButton: (onClick, isPlaying) => (
-    <button
-      type="button"
-      className="image-gallery-icon image-gallery-play-button"
-      onClick={onClick}
-      aria-label="Play or Pause Slideshow"
-    >
-      <SVG strokeWidth={2} icon={isPlaying ? 'pause' : 'play'} />
-    </button>
+    <PlayPause onClick={onClick} isPlaying={isPlaying} />
   ),
   renderFullscreenButton: (onClick, isFullscreen) => (
-    <button
-      type="button"
-      className="image-gallery-icon image-gallery-fullscreen-button"
-      onClick={onClick}
-      aria-label="Open Fullscreen"
-    >
-      <SVG strokeWidth={2} icon={isFullscreen ? 'minimize' : 'maximize'} />
-    </button>
+    <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
   ),
   useWindowKeyDown: true,
 };

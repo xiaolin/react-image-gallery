@@ -170,60 +170,48 @@ class MyGallery extends React.Component {
   * As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
 
 * `renderLeftNav`: Function, custom left nav component
+  * See [`<LeftNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/LeftNav.js)
   * Use this to render a custom left nav control
-  * Passes `onClick` callback that will slide to the previous item and `disabled` argument for when to disable the nav
+  * Args:
+    * `onClick` callback that will slide to the previous item
+    * `disabled` boolean for when the nav is disabled
   ```javascript
-    renderLeftNav(onClick, disabled) {
-      return (
-        <button
-          className='image-gallery-custom-left-nav'
-          disabled={disabled}
-          onClick={onClick}/>
-      )
-    }
+    renderLeftNav: (onClick, disabled) => (
+      <LeftNav onClick={onClick} disabled={disabled} />
+    )
   ```
 * `renderRightNav`: Function, custom right nav component
+  * See [`<RightNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/RightNav.js)
   * Use this to render a custom right nav control
-  * Passes `onClick` callback that will slide to the next item and `disabled` argument for when to disable the nav
+  * Args:
+    * `onClick` callback that will slide to the next item
+    * `disabled` boolean for when the nav is disabled
   ```javascript
-    renderRightNav(onClick, disabled) {
-      return (
-        <button
-          className='image-gallery-custom-right-nav'
-          disabled={disabled}
-          onClick={onClick}/>
-      )
-    }
+    renderRightNav: (onClick, disabled) => (
+      <RightNav onClick={onClick} disabled={disabled} />
+    )
   ```
 * `renderPlayPauseButton`: Function, play pause button component
+  * See [`<PlayPause />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/PlayPause.js)
   * Use this to render a custom play pause button
-  * Passes `onClick` callback that will toggle play/pause and `isPlaying` argument for when gallery is playing
+  * Args:
+    * `onClick` callback that will toggle play/pause
+    * `isPlaying` boolean for when gallery is playing
   ```javascript
-    renderPlayPauseButton: (onClick, isPlaying) => {
-      return (
-        <button
-          type='button'
-          className={
-            `image-gallery-play-button${isPlaying ? ' active' : ''}`}
-          onClick={onClick}
-        />
-      );
-    }
+    renderPlayPauseButton: (onClick, isPlaying) => (
+      <PlayPause onClick={onClick} isPlaying={isPlaying} />
+    )
   ```
 * `renderFullscreenButton`: Function, custom fullscreen button component
+  * See [`<Fullscreen />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/Fullscreen.js)
   * Use this to render a custom fullscreen button
-  * Passes `onClick` callback that will toggle fullscreen and `isFullscreen` argument for when fullscreen is active
+  * Args:
+    * `onClick` callback that will toggle fullscreen
+    * `isFullscreen` argument for when fullscreen is active
   ```javascript
-    renderFullscreenButton: (onClick, isFullscreen) => {
-      return (
-        <button
-          type='button'
-          className={
-            `image-gallery-fullscreen-button${isFullscreen ? ' active' : ''}`}
-          onClick={onClick}
-        />
-      );
-    },
+    renderFullscreenButton: (onClick, isFullscreen) => (
+      <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
+    ),
   ```
 * `useWindowKeyDown`: Boolean, default `true`
   * If `true`, listens to keydown events on window (window.addEventListener)

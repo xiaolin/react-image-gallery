@@ -19,5 +19,6 @@
         "react"
     ],
     "rules": {
+        "react/display-name": "off"
     }
 }
