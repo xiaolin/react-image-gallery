@@ -21,7 +21,6 @@ React image gallery is a React component for building image galleries and carous
 * RTL support
 * Responsive design
 * Tons of customization options (see props below)
-* Lightweight ~13.1kb gzipped
 
 ## Getting started
 
