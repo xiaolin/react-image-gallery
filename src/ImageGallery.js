@@ -66,6 +66,8 @@ class ImageGallery extends React.Component {
     this.thumbnailsWrapper = React.createRef();
     this.thumbnails = React.createRef();
     this.imageGallerySlideWrapper = React.createRef();
+    this.thumbnailsCustomControlPrev = React.createRef();
+    this.thumbnailsCustomControlNext = React.createRef();
 
     // bindings
     this.handleImageLoaded = this.handleImageLoaded.bind(this);
@@ -961,6 +963,9 @@ class ImageGallery extends React.Component {
 
   handleResize() {
     const { currentIndex } = this.state;
+    const customControlMarginVertical = 5;
+    let thumbnailsCustomControlPrevHeight = 0;
+    let thumbnailsCustomControlNextHeight = 0;
 
     // if there is no resizeObserver, component has been unmounted
     if (!this.resizeObserver) {
@@ -972,8 +977,18 @@ class ImageGallery extends React.Component {
     }
 
     if (this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
+      if (this.thumbnailsCustomControlPrev.current) {
+        thumbnailsCustomControlPrevHeight = this.thumbnailsCustomControlPrev.current.offsetHeight + customControlMarginVertical;
+      }
+
+      if (this.thumbnailsCustomControlNext.current) {
+        thumbnailsCustomControlNextHeight = this.thumbnailsCustomControlNext.current.offsetHeight + customControlMarginVertical;
+      }
+
       this.setState({
-        gallerySlideWrapperHeight: this.imageGallerySlideWrapper.current.offsetHeight,
+        gallerySlideWrapperHeight: this.imageGallerySlideWrapper.current.offsetHeight
+            - thumbnailsCustomControlPrevHeight
+            - thumbnailsCustomControlNextHeight,
       });
     }
 
@@ -1325,6 +1340,8 @@ class ImageGallery extends React.Component {
       showNav,
       showPlayButton,
       renderPlayPauseButton,
+      renderThumbnailsCustomControlPrev,
+      renderThumbnailsCustomControlNext,
     } = this.props;
 
     const thumbnailStyle = this.getThumbnailStyle();
@@ -1400,13 +1417,18 @@ class ImageGallery extends React.Component {
     );
 
     const igClass = clsx('image-gallery', additionalClass, { 'fullscreen-modal': modalFullscreen });
-    const igContentClass = clsx('image-gallery-content', thumbnailPosition, { fullscreen: isFullscreen });
+    const igContentClass = clsx('image-gallery-content',
+        thumbnailPosition,
+        { fullscreen: isFullscreen },
+        { 'image-gallery-content-custom-controls': renderThumbnailsCustomControlPrev || renderThumbnailsCustomControlNext },
+    );
     const thumbnailWrapperClass = clsx(
       'image-gallery-thumbnails-wrapper',
       thumbnailPosition,
       { 'thumbnails-wrapper-rtl': !this.isThumbnailVertical() && isRTL },
       { 'thumbnails-swipe-horizontal': !this.isThumbnailVertical() && !disableThumbnailSwipe },
       { 'thumbnails-swipe-vertical': this.isThumbnailVertical() && !disableThumbnailSwipe },
+      { 'thumbnails-swipe-custom-controls': renderThumbnailsCustomControlPrev || renderThumbnailsCustomControlNext },
     );
     return (
       <div
@@ -1424,6 +1446,17 @@ class ImageGallery extends React.Component {
                 onSwiping={!disableThumbnailSwipe && this.handleThumbnailSwiping}
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
+                {renderThumbnailsCustomControlPrev && (
+                    <div
+                        ref={this.thumbnailsCustomControlPrev} className="image-gallery-thumbnails-custom-control prev">
+                      {renderThumbnailsCustomControlPrev()}
+                    </div>
+                )}
+                {renderThumbnailsCustomControlNext && (
+                    <div ref={this.thumbnailsCustomControlNext} className="image-gallery-thumbnails-custom-control next">
+                      {renderThumbnailsCustomControlNext()}
+                    </div>
+                )}
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
                   <div
                     ref={this.thumbnails}
@@ -1517,6 +1550,8 @@ ImageGallery.propTypes = {
   renderFullscreenButton: func,
   renderItem: func,
   renderThumbInner: func,
+  renderThumbnailsCustomControlPrev: func,
+  renderThumbnailsCustomControlNext: func,
   stopPropagation: bool,
   additionalClass: string,
   useTranslate3D: bool,
@@ -1568,6 +1603,8 @@ ImageGallery.defaultProps = {
   onThumbnailClick: null,
   renderCustomControls: null,
   renderThumbInner: null,
+  renderThumbnailsCustomControlPrev: null,
+  renderThumbnailsCustomControlNext: null,
   renderItem: null,
   slideInterval: 3000,
   slideOnThumbnailOver: false,
