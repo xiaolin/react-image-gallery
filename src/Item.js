@@ -14,6 +14,7 @@ const Item = React.memo(({
   originalTitle,
   sizes,
   srcSet,
+  loading,
 }) => {
   const itemSrc = isFullscreen ? (fullscreen || original) : original;
 
@@ -30,6 +31,7 @@ const Item = React.memo(({
         title={originalTitle}
         onLoad={event => handleImageLoaded(event, original)}
         onError={onImageError}
+        loading={loading}
       />
       {
         description && (
@@ -57,6 +59,7 @@ Item.propTypes = {
   originalTitle: string,
   sizes: string,
   srcSet: string,
+  loading: string,
 };
 
 Item.defaultProps = {
@@ -69,6 +72,7 @@ Item.defaultProps = {
   originalTitle: '',
   sizes: '',
   srcSet: '',
+  loading: 'eager',
 };
 
 export default Item;
