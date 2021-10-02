@@ -75,8 +75,10 @@ class MyGallery extends React.Component {
     * `fullscreen` - image for fullscreen (defaults to original)
     * `originalHeight` - image height (html5 attribute)
     * `originalWidth` - image width (html5 attribute)
+    * `loading` - image loading. Either "lazy" or "eager" (html5 attribute)
     * `thumbnailHeight` - image height (html5 attribute)
     * `thumbnailWidth` - image width (html5 attribute)
+    * `thumbnailLoading` - image loading. Either "lazy" or "eager" (html5 attribute)
     * `originalClass` - custom image class
     * `thumbnailClass` - custom thumbnail class
     * `renderItem` - Function for custom rendering a specific slide (see renderItem below)
