@@ -125,7 +125,7 @@ class ImageGallery extends React.Component {
       showThumbnails,
       useWindowKeyDown,
     } = this.props;
-    const { currentIndex } = this.state;
+    const { currentIndex, isPlaying } = this.state;
     const itemsSizeChanged = prevProps.items.length !== items.length;
     const itemsChanged = !isEqual(prevProps.items, items);
     const startIndexUpdated = prevProps.startIndex !== startIndex;
@@ -134,8 +134,10 @@ class ImageGallery extends React.Component {
 
     if (slideInterval !== prevProps.slideInterval || slideDuration !== prevProps.slideDuration) {
       // refresh setInterval
-      this.pause();
-      this.play();
+      if (isPlaying) {
+        this.pause();
+        this.play();
+      }
     }
 
     if (thumbnailsPositionChanged) {
