@@ -1429,14 +1429,14 @@ class ImageGallery extends React.Component {
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
-                  <div
+                  <nav
                     ref={this.thumbnails}
                     className="image-gallery-thumbnails-container"
                     style={thumbnailStyle}
                     aria-label="Thumbnail Navigation"
                   >
                     {thumbnails}
-                  </div>
+                  </nav>
                 </div>
               </SwipeWrapper>
             ) : null
