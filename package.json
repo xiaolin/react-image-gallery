@@ -60,8 +60,8 @@
     "postcss": "^8.2.10",
     "postcss-loader": "^5.2.0",
     "prop-types": "^15.5.8",
-    "react": "^17.0.2",
-    "react-dom": "^17.0.2",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
     "react-fast-compare": "^3.2.0",
     "react-swipeable": "6.0.1",
     "remove-files-webpack-plugin": "^1.4.5",
@@ -76,7 +76,7 @@
     "webpack-dev-server": "^3.11.2"
   },
   "peerDependencies": {
-    "react": "^16.0.0 || ^17.0.0"
+    "react": "^16.0.0 || ^17.0.0 || ^18.0.0"
   },
   "dependencies": {
   }
