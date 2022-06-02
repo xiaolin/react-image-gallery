@@ -4,6 +4,8 @@ import throttle from 'lodash-es/throttle';
 import debounce from 'lodash-es/debounce';
 import isEqual from 'react-fast-compare';
 import ResizeObserver from 'resize-observer-polyfill';
+// Import viewport utils method
+import getCurrentViewport from './utils/getCurrentViewport';
 import {
   LEFT,
   RIGHT,
@@ -15,6 +17,7 @@ import {
   bool,
   func,
   number,
+  object,
   oneOf,
   shape,
   string,
@@ -60,6 +63,8 @@ class ImageGallery extends React.Component {
       isFullscreen: false,
       isSwipingThumbnail: false,
       isPlaying: false,
+      // Set initial thumbnail position by viewport size in thumbnailPositions prop
+      viewportThumbnailPosition: props.thumbnailPositions[getCurrentViewport()]
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -86,6 +91,8 @@ class ImageGallery extends React.Component {
     this.slideRight = this.slideRight.bind(this);
     this.toggleFullScreen = this.toggleFullScreen.bind(this);
     this.togglePlay = this.togglePlay.bind(this);
+    // Method for reseting thumbnail position
+    this.setViewportThumbnailPosition = this.setViewportThumbnailPosition.bind(this);
 
     // Used to update the throttle if slideDuration changes
     this.unthrottledSlideToIndex = this.slideToIndex;
@@ -112,6 +119,8 @@ class ImageGallery extends React.Component {
     window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
     this.initResizeObserver(this.imageGallerySlideWrapper);
     this.addScreenChangeEvent();
+    // Set thumbnail position on resize based on viewport when component is mounted
+    window.addEventListener('resize', debounce(this.setViewportThumbnailPosition, 300));
   }
 
   componentDidUpdate(prevProps, prevState) {
@@ -121,7 +130,7 @@ class ImageGallery extends React.Component {
       slideDuration,
       slideInterval,
       startIndex,
-      thumbnailPosition,
+      thumbnailPositions,
       showThumbnails,
       useWindowKeyDown,
     } = this.props;
@@ -129,7 +138,7 @@ class ImageGallery extends React.Component {
     const itemsSizeChanged = prevProps.items.length !== items.length;
     const itemsChanged = !isEqual(prevProps.items, items);
     const startIndexUpdated = prevProps.startIndex !== startIndex;
-    const thumbnailsPositionChanged = prevProps.thumbnailPosition !== thumbnailPosition;
+    const thumbnailsPositionChanged = prevProps.thumbnailPositions !== thumbnailPositions;
     const showThumbnailsChanged = prevProps.showThumbnails !== showThumbnails;
 
     if (slideInterval !== prevProps.slideInterval || slideDuration !== prevProps.slideDuration) {
@@ -139,8 +148,10 @@ class ImageGallery extends React.Component {
         this.play();
       }
     }
-
+    
     if (thumbnailsPositionChanged) {
+      // Set thumbnail position on resize when thumbnailPositions prop changes
+      debounce(this.setViewportThumbnailPosition(), 300)
       // re-initialize resizeObserver because slides was unmounted and mounted again
       this.removeResizeObserver();
       this.initResizeObserver(this.imageGallerySlideWrapper);
@@ -195,6 +206,21 @@ class ImageGallery extends React.Component {
       window.removeEventListener('keydown', this.handleKeyDown);
     } else {
       this.imageGallery.current.removeEventListener('keydown', this.handleKeyDown);
+    }
+    // Clean thumbnail effect when component unmounts
+    window.removeEventListener('resize', debounce(this.setViewportThumbnailPosition, 300));
+  }
+
+  // Set thumbnail position based on current viewport size
+  // Defaults to 'bottom'
+  setViewportThumbnailPosition() {
+    const { thumbnailPositions } = this.props;
+    const viewport = getCurrentViewport();
+    const thumbnailPositionViewports = Object.keys(thumbnailPositions);
+    if (thumbnailPositionViewports.includes(viewport)) {
+      this.setState({viewportThumbnailPosition: thumbnailPositions[viewport] })
+    } else {
+      this.setState({viewportThumbnailPosition: 'bottom' })
     }
   }
 
@@ -1124,8 +1150,8 @@ class ImageGallery extends React.Component {
   }
 
   isThumbnailVertical() {
-    const { thumbnailPosition } = this.props;
-    return thumbnailPosition === 'left' || thumbnailPosition === 'right';
+    // Returns true if current thumbnail position set by viewport is in vertical orientation
+    return this.state.viewportThumbnailPosition === 'left' || this.state.viewportThumbnailPosition === 'right';
   }
 
   addScreenChangeEvent() {
@@ -1309,6 +1335,7 @@ class ImageGallery extends React.Component {
       isFullscreen,
       modalFullscreen,
       isPlaying,
+      viewportThumbnailPosition
     } = this.state;
 
     const {
@@ -1317,7 +1344,6 @@ class ImageGallery extends React.Component {
       indexSeparator, // deprecate soon, and allow custom render
       isRTL,
       items,
-      thumbnailPosition,
       renderFullscreenButton,
       renderCustomControls,
       renderLeftNav,
@@ -1331,11 +1357,13 @@ class ImageGallery extends React.Component {
       renderPlayPauseButton,
     } = this.props;
 
+
     const thumbnailStyle = this.getThumbnailStyle();
     const { slides, thumbnails, bullets } = this.getSlideItems();
+    
     const slideWrapperClass = clsx(
       'image-gallery-slide-wrapper',
-      thumbnailPosition,
+      viewportThumbnailPosition, // Render slide wrapper with viewport thumbnail position
       { 'image-gallery-rtl': isRTL },
     );
 
@@ -1404,14 +1432,19 @@ class ImageGallery extends React.Component {
     );
 
     const igClass = clsx('image-gallery', additionalClass, { 'fullscreen-modal': modalFullscreen });
-    const igContentClass = clsx('image-gallery-content', thumbnailPosition, { fullscreen: isFullscreen });
+    const igContentClass = clsx(
+      'image-gallery-content',
+      viewportThumbnailPosition, // Render content element with viewport thumbnail position
+      { fullscreen: isFullscreen }
+    );
     const thumbnailWrapperClass = clsx(
       'image-gallery-thumbnails-wrapper',
-      thumbnailPosition,
+      viewportThumbnailPosition,  // Render thumbnail wrapper with viewport thumbnail position
       { 'thumbnails-wrapper-rtl': !this.isThumbnailVertical() && isRTL },
       { 'thumbnails-swipe-horizontal': !this.isThumbnailVertical() && !disableThumbnailSwipe },
       { 'thumbnails-swipe-vertical': this.isThumbnailVertical() && !disableThumbnailSwipe },
     );
+    
     return (
       <div
         ref={this.imageGallery}
@@ -1419,7 +1452,7 @@ class ImageGallery extends React.Component {
         aria-live="polite"
       >
         <div className={igContentClass}>
-          {(thumbnailPosition === 'bottom' || thumbnailPosition === 'right') && slideWrapper}
+          {(viewportThumbnailPosition === 'bottom' || viewportThumbnailPosition === 'right') && slideWrapper}
           {
             showThumbnails && thumbnails.length > 0 ? (
               <SwipeWrapper
@@ -1441,7 +1474,7 @@ class ImageGallery extends React.Component {
               </SwipeWrapper>
             ) : null
           }
-          {(thumbnailPosition === 'top' || thumbnailPosition === 'left') && slideWrapper}
+          {(viewportThumbnailPosition === 'top' || viewportThumbnailPosition === 'left') && slideWrapper}
         </div>
 
       </div>
@@ -1493,7 +1526,7 @@ ImageGallery.propTypes = {
   useBrowserFullscreen: bool,
   onErrorImageURL: string,
   indexSeparator: string,
-  thumbnailPosition: oneOf(['top', 'bottom', 'left', 'right']),
+  thumbnailPositions: object, // Thumbnail positions prop
   startIndex: number,
   slideDuration: number,
   slideInterval: number,
@@ -1552,7 +1585,7 @@ ImageGallery.defaultProps = {
   flickThreshold: 0.4,
   stopPropagation: false,
   indexSeparator: ' / ',
-  thumbnailPosition: 'bottom',
+  thumbnailPositions: { 'xs': 'bottom', 'sm': 'bottom', 'md': 'bottom', 'lg': 'bottom', 'xl': 'bottom', '2xl': 'bottom' },
   startIndex: 0,
   slideDuration: 450,
   swipingTransitionDuration: 0,

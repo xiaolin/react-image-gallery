@@ -2,6 +2,8 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import ImageGallery from 'src/ImageGallery';
+// Import viewport utils method
+import getCurrentViewport from '../src/utils/getCurrentViewport';
 
 const PREFIX_URL = 'https://raw.githubusercontent.com/xiaolin/react-image-gallery/master/static/';
 
@@ -23,7 +25,8 @@ class App extends React.Component {
       slideDuration: 450,
       slideInterval: 2000,
       slideOnThumbnailOver: false,
-      thumbnailPosition: 'bottom',
+      // Set viewports thumbnail positions as desired
+      thumbnailPositions: { 'xs': 'top', 'sm': 'bottom', 'md': 'bottom', 'lg': 'left', 'xl': 'right', '2xl': 'left' },
       showVideo: {},
       useWindowKeyDown: true,
     };
@@ -82,7 +85,10 @@ class App extends React.Component {
   }
 
   _handleThumbnailPositionChange(event) {
-    this.setState({thumbnailPosition: event.target.value});
+    // Update thumbnail position object with position set from input field
+    const newPositionsObject = { ...this.state.thumbnailPositions }
+    newPositionsObject[getCurrentViewport()] = event.target.value
+    this.setState({thumbnailPositions: newPositionsObject});
   }
 
   _getStaticImages() {
@@ -186,7 +192,7 @@ class App extends React.Component {
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
           isRTL={this.state.isRTL}
-          thumbnailPosition={this.state.thumbnailPosition}
+          thumbnailPositions={this.state.thumbnailPositions}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
           slideOnThumbnailOver={this.state.slideOnThumbnailOver}
@@ -227,7 +233,7 @@ class App extends React.Component {
                   <span className='app-interval-label'>Thumbnail Bar Position</span>
                   <select
                     className='app-interval-input'
-                    value={this.state.thumbnailPosition}
+                    value={this.state.thumbnailPositions[getCurrentViewport()]}
                     onChange={this._handleThumbnailPositionChange.bind(this)}
                   >
                     <option value='bottom'>Bottom</option>
