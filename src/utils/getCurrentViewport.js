@@ -19,6 +19,5 @@ export default function getCurrentViewport() {
   } else if (dimension.width < 640) {
     viewport = 'xs'
   }
-  console.log(dimension.width)
   return viewport;
 }
