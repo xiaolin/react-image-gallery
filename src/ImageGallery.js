@@ -525,7 +525,16 @@ class ImageGallery extends React.Component {
           onMouseLeave={onMouseLeave}
           role="button"
         >
-          {showItem ? handleRenderItem(item) : <div style={{ height: '100%' }} />}
+          {showItem ? (
+            handleRenderItem({
+              ...item,
+              currentIndex,
+              index,
+              isActive: index === currentIndex,
+            })
+          ) : (
+            <div style={{ height: "100%" }} />
+          )}
         </div>
       );
 
