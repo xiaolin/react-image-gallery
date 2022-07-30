@@ -1324,6 +1324,7 @@ class ImageGallery extends React.Component {
       thumbnailPosition,
       renderFullscreenButton,
       renderCustomControls,
+      renderThumbnailsCustomControls,
       renderLeftNav,
       renderRightNav,
       renderThumbnailsTopNav,
@@ -1443,6 +1444,8 @@ class ImageGallery extends React.Component {
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
+                  {/* Render thumbnails custom controls */}
+                  {renderThumbnailsCustomControls && renderThumbnailsCustomControls()}
                   {/* Show thumbnails navigation */}
                   {
                     showThumbnailsNav && (thumbnailPosition === 'top' || thumbnailPosition === 'bottom') && (
@@ -1551,6 +1554,7 @@ ImageGallery.propTypes = {
   onThumbnailError: func,
   onThumbnailClick: func,
   renderCustomControls: func,
+  renderThumbnailsCustomControls: func,
   renderLeftNav: func,
   renderRightNav: func,
   renderThumbnailsTopNav: func,
@@ -1612,6 +1616,7 @@ ImageGallery.defaultProps = {
   onThumbnailError: null,
   onThumbnailClick: null,
   renderCustomControls: null,
+  renderThumbnailsCustomControls: null,
   renderThumbInner: null,
   renderItem: null,
   slideInterval: 3000,
