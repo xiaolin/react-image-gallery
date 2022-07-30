@@ -125,6 +125,65 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 .image-gallery-right-nav {
   right: 0;
 }
+
+// Start of thumbnails icons styles
+.thumbnails-left-nav,
+.thumbnails-right-nav,
+.thumbnails-top-nav,
+.thumbnails-bottom-nav {
+  padding: 5px;
+
+  .image-gallery-svg {
+    height: 50px;
+    width: 50px;
+  }
+
+  @media (max-width: $ig-small-screen) {
+    .image-gallery-svg {
+      height: 40px;
+      width: 40px;
+    }
+  }
+
+  @media (max-width: $ig-xsmall-screen) {
+    .image-gallery-svg {
+      height: 30px;
+      width: 30px;
+    }
+  }
+
+  &[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none;
+  }
+}
+
+.thumbnails-left-nav,
+.thumbnails-right-nav {
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+.thumbnails-left-nav {
+  left: 0;
+}
+
+.thumbnails-right-nav {
+  right: 0;
+}
+.thumbnails-top-nav, 
+.thumbnails-bottom-nav {
+  left: 50%;
+  transform: translateX(-50%);
+}
+.thumbnails-top-nav {
+  top: 0;
+}
+.thumbnails-bottom-nav {
+  bottom: 0;
+}
+// End of thumbnails icons styles
 // End of Icon styles
 
 .image-gallery {
@@ -337,6 +396,12 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
       }
 
     }
+
+    .thumbnails-nav-showed {
+      height: 75%;
+      margin-top: 65px;
+      overflow: hidden;
+    }
   }
 
   &.left,
@@ -345,6 +410,14 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 
     @media (max-width: $ig-small-screen) {
       margin: 0 3px;
+    }
+  }
+  &.top,
+  &.bottom {
+    .thumbnails-nav-showed {
+      width: 88%;
+      overflow: hidden;
+      margin: auto;
     }
   }
 }

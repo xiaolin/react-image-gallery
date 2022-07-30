@@ -25,6 +25,10 @@ import LeftNav from 'src/controls/LeftNav';
 import RightNav from 'src/controls/RightNav';
 import PlayPause from 'src/controls/PlayPause';
 import SwipeWrapper from 'src/SwipeWrapper';
+import ThumbnailsLeftNav from 'src/controls/ThumbnailsLeftNav';
+import ThumbnailsRightNav from 'src/controls/ThumbnailsRightNav';
+import ThumbnailsTopNav from 'src/controls/ThumbnailsTopNav';
+import ThumbnailsBottomNav from 'src/controls/ThumbnailsBottomNav';
 
 const screenChangeEvents = [
   'fullscreenchange',
@@ -1322,6 +1326,10 @@ class ImageGallery extends React.Component {
       renderCustomControls,
       renderLeftNav,
       renderRightNav,
+      renderThumbnailsTopNav,
+      renderThumbnailsBottomNav,
+      renderThumbnailsLeftNav,
+      renderThumbnailsRightNav,
       showBullets,
       showFullscreenButton,
       showIndex,
@@ -1413,6 +1421,10 @@ class ImageGallery extends React.Component {
       { 'thumbnails-swipe-horizontal': !this.isThumbnailVertical() && !disableThumbnailSwipe },
       { 'thumbnails-swipe-vertical': this.isThumbnailVertical() && !disableThumbnailSwipe },
     );
+    const thumbnailsLimiterClass = clsx(
+      'image-gallery-thumbnails-limiter',
+      { 'thumbnails-nav-showed': showThumbnailsNav },
+    )
     return (
       <div
         ref={this.imageGallery}
@@ -1431,21 +1443,31 @@ class ImageGallery extends React.Component {
               >
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
                   {
-                    showThumbnailsNav && (
+                    showThumbnailsNav && (thumbnailPosition === 'top' || thumbnailPosition === 'bottom') && (
                       <React.Fragment>
-                        {renderLeftNav(this.slideLeft, !this.canSlideLeft())}
-                        {renderRightNav(this.slideRight, !this.canSlideRight())}
+                        {renderThumbnailsLeftNav(this.slideLeft, !this.canSlideLeft())}
+                        {renderThumbnailsRightNav(this.slideRight, !this.canSlideRight())}
                       </React.Fragment>
                     )
                   }
-                  <nav
-                    ref={this.thumbnails}
-                    className="image-gallery-thumbnails-container"
-                    style={thumbnailStyle}
-                    aria-label="Thumbnail Navigation"
-                  >
-                    {thumbnails}
-                  </nav>
+                  {
+                    showThumbnailsNav && (thumbnailPosition === 'left' || thumbnailPosition === 'right') && (
+                      <React.Fragment>
+                        {renderThumbnailsTopNav(this.slideLeft, !this.canSlideLeft())}
+                        {renderThumbnailsBottomNav(this.slideRight, !this.canSlideRight())}
+                      </React.Fragment>
+                    )
+                  }
+                  <div className={thumbnailsLimiterClass}>
+                    <nav
+                      ref={this.thumbnails}
+                      className="image-gallery-thumbnails-container"
+                      style={thumbnailStyle}
+                      aria-label="Thumbnail Navigation"
+                    >
+                      {thumbnails}
+                    </nav>
+                  </div>
                 </div>
               </SwipeWrapper>
             ) : null
@@ -1529,6 +1551,10 @@ ImageGallery.propTypes = {
   renderCustomControls: func,
   renderLeftNav: func,
   renderRightNav: func,
+  renderThumbnailsTopNav: func,
+  renderThumbnailsBottomNav: func,
+  renderThumbnailsLeftNav: func,
+  renderThumbnailsRightNav: func,
   renderPlayPauseButton: func,
   renderFullscreenButton: func,
   renderItem: func,
@@ -1594,6 +1620,18 @@ ImageGallery.defaultProps = {
   ),
   renderRightNav: (onClick, disabled) => (
     <RightNav onClick={onClick} disabled={disabled} />
+  ),
+  renderThumbnailsTopNav: (onClick, disabled) => (
+    <ThumbnailsTopNav onClick={onClick} disabled={disabled} />
+  ),
+  renderThumbnailsBottomNav: (onClick, disabled) => (
+    <ThumbnailsBottomNav onClick={onClick} disabled={disabled} />
+  ),
+  renderThumbnailsLeftNav: (onClick, disabled) => (
+    <ThumbnailsLeftNav onClick={onClick} disabled={disabled} />
+  ),
+  renderThumbnailsRightNav: (onClick, disabled) => (
+    <ThumbnailsRightNav onClick={onClick} disabled={disabled} />
   ),
   renderPlayPauseButton: (onClick, isPlaying) => (
     <PlayPause onClick={onClick} isPlaying={isPlaying} />

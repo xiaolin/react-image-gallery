@@ -3,6 +3,8 @@ import { number, oneOf, string } from 'prop-types';
 
 const left = <polyline points="15 18 9 12 15 6" />;
 const right = <polyline points="9 18 15 12 9 6" />;
+const top = <polyline points="19.326 14.81 13.68 9.026 7.674 14.81" />;
+const bottom = <polyline points="19.323 9 13.677 15 7.677 9" />
 const maximize = <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />;
 const minimize = <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />;
 const play = <polygon points="5 3 19 12 5 21 5 3" />;
@@ -16,6 +18,8 @@ const pause = (
 const iconMapper = {
   left,
   right,
+  top,
+  bottom,
   maximize,
   minimize,
   play,
@@ -50,6 +54,8 @@ SVG.propTypes = {
   icon: oneOf([
     'left',
     'right',
+    'top',
+    'bottom',
     'maximize',
     'minimize',
     'play',
