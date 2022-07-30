@@ -173,8 +173,12 @@ class ImageGallery extends React.Component {
     }
 
     if (startIndexUpdated || itemsChanged) {
-      // TODO: this should be fix/removed
-      this.setState({ currentIndex: startIndex });
+      // reset to start index if new items are added
+      // do not transition when new items are added
+      this.setState({
+        currentIndex: startIndex,
+        slideStyle: { transition: 'none' },
+      });
     }
   }
 
