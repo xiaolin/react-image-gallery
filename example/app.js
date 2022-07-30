@@ -14,6 +14,7 @@ class App extends React.Component {
       showBullets: true,
       infinite: true,
       showThumbnails: true,
+      showThumbnailsNav: false,
       showFullscreenButton: true,
       showGalleryFullscreenButton: true,
       showPlayButton: true,
@@ -183,6 +184,7 @@ class App extends React.Component {
           showFullscreenButton={this.state.showFullscreenButton && this.state.showGalleryFullscreenButton}
           showPlayButton={this.state.showPlayButton && this.state.showGalleryPlayButton}
           showThumbnails={this.state.showThumbnails}
+          showThumbnailsNav={this.state.showThumbnailsNav}
           showIndex={this.state.showIndex}
           showNav={this.state.showNav}
           isRTL={this.state.isRTL}
@@ -279,6 +281,14 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, 'showThumbnails')}
                   checked={this.state.showThumbnails}/>
                   <label htmlFor='show_thumbnails'>show thumbnails</label>
+              </li>
+              <li>
+                <input
+                  id='show_thumbnails_nav'
+                  type='checkbox'
+                  onChange={this._handleCheckboxChange.bind(this, 'showThumbnailsNav')}
+                  checked={this.state.showThumbnailsNav}/>
+                  <label htmlFor='show_thumbnails_nav'>show thumbs navigation</label>
               </li>
               <li>
                 <input

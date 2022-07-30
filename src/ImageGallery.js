@@ -1326,6 +1326,7 @@ class ImageGallery extends React.Component {
       showFullscreenButton,
       showIndex,
       showThumbnails,
+      showThumbnailsNav,
       showNav,
       showPlayButton,
       renderPlayPauseButton,
@@ -1429,6 +1430,14 @@ class ImageGallery extends React.Component {
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
+                  {
+                    showThumbnailsNav && (
+                      <React.Fragment>
+                        {renderLeftNav(this.slideLeft, !this.canSlideLeft())}
+                        {renderRightNav(this.slideRight, !this.canSlideRight())}
+                      </React.Fragment>
+                    )
+                  }
                   <nav
                     ref={this.thumbnails}
                     className="image-gallery-thumbnails-container"
@@ -1484,6 +1493,7 @@ ImageGallery.propTypes = {
   showIndex: bool,
   showBullets: bool,
   showThumbnails: bool,
+  showThumbnailsNav: bool,
   showPlayButton: bool,
   showFullscreenButton: bool,
   disableThumbnailScroll: bool,
@@ -1540,6 +1550,7 @@ ImageGallery.defaultProps = {
   showIndex: false,
   showBullets: false,
   showThumbnails: true,
+  showThumbnailsNav: false,
   showPlayButton: true,
   showFullscreenButton: true,
   disableThumbnailScroll: false,
