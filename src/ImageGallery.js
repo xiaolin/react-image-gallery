@@ -1421,6 +1421,7 @@ class ImageGallery extends React.Component {
       { 'thumbnails-swipe-horizontal': !this.isThumbnailVertical() && !disableThumbnailSwipe },
       { 'thumbnails-swipe-vertical': this.isThumbnailVertical() && !disableThumbnailSwipe },
     );
+    // Add class if thumbnails navigation are showed
     const thumbnailsLimiterClass = clsx(
       'image-gallery-thumbnails-limiter',
       { 'thumbnails-nav-showed': showThumbnailsNav },
@@ -1442,6 +1443,7 @@ class ImageGallery extends React.Component {
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
                 <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
+                  {/* Show thumbnails navigation */}
                   {
                     showThumbnailsNav && (thumbnailPosition === 'top' || thumbnailPosition === 'bottom') && (
                       <React.Fragment>

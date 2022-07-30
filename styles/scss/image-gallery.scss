@@ -397,6 +397,7 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 
     }
 
+    // Give space to thumbnails navigation
     .thumbnails-nav-showed {
       height: 75%;
       margin-top: 65px;
@@ -414,6 +415,8 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   }
   &.top,
   &.bottom {
+    // Give space to thumbnails navigation
+    // when positions are top or bottom
     .thumbnails-nav-showed {
       width: 88%;
       overflow: hidden;
