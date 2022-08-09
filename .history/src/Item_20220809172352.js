@@ -60,7 +60,6 @@ Item.propTypes = {
   sizes: string,
   srcSet: string,
   loading: string,
-  isCanvas : bool,
 };
 
 Item.defaultProps = {
