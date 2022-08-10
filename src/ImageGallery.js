@@ -427,7 +427,7 @@ class ImageGallery extends React.Component {
 
     // don't show some slides while transitioning to avoid background transitions
     const isVisible = this.isSlideVisible(index);
-
+    let hidden;
     if (isCanvas === true) {
       hidden =
           'isCanvas' in items[this.getCurrentIndex()] && items[this.getCurrentIndex()].isCanvas
