@@ -60,7 +60,7 @@ class ImageGallery extends React.Component {
       isFullscreen: false,
       isSwipingThumbnail: false,
       isPlaying: false,
-      isVerticalSlide: props.isVerticalSlide
+      slideVertically: props.slideVertically
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -420,10 +420,10 @@ class ImageGallery extends React.Component {
       translateX = this.getTranslateXForTwoSlide(index);
     }
 
-    let translate = `translate(${translateX}%, 0)`;
+    let translate = slideVertically ? `translate(0, ${translateX}%)` : `translate(${translateX}%, 0)`;
 
     if (useTranslate3D) {
-      translate = `translate3d(${translateX}%, 0, 0)`;
+      translate = slideVertically ? `translate3d(0, ${translateX}%, 0)` : `translate3d(${translateX}%, 0, 0)`;
     }
 
     // don't show some slides while transitioning to avoid background transitions
@@ -1533,7 +1533,7 @@ ImageGallery.propTypes = {
   useTranslate3D: bool,
   isRTL: bool,
   useWindowKeyDown: bool,
-  isVerticalSlide: bool
+  slideVertically: bool
 };
 
 ImageGallery.defaultProps = {
@@ -1597,7 +1597,7 @@ ImageGallery.defaultProps = {
     <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
   ),
   useWindowKeyDown: true,
-  isVerticalSlide: false
+  slideVertically: false
 };
 
 export default ImageGallery;
