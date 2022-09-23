@@ -60,6 +60,7 @@ class ImageGallery extends React.Component {
       isFullscreen: false,
       isSwipingThumbnail: false,
       isPlaying: false,
+      isVerticalSlide: props.isVerticalSlide
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -895,7 +896,7 @@ class ImageGallery extends React.Component {
 
     // If we can't swipe left or right, stay in the current index (noop)
     if ((swipeDirection === -1 && !this.canSlideLeft())
-        || (swipeDirection === 1 && !this.canSlideRight())) {
+      || (swipeDirection === 1 && !this.canSlideRight())) {
       slideTo = currentIndex;
     }
 
@@ -959,7 +960,7 @@ class ImageGallery extends React.Component {
 
   removeResizeObserver() {
     if (this.resizeObserver
-        && this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
+      && this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
       this.resizeObserver.unobserve(this.imageGallerySlideWrapper.current);
       this.resizeObserver = null;
     }
@@ -1532,6 +1533,7 @@ ImageGallery.propTypes = {
   useTranslate3D: bool,
   isRTL: bool,
   useWindowKeyDown: bool,
+  isVerticalSlide: bool
 };
 
 ImageGallery.defaultProps = {
@@ -1595,6 +1597,7 @@ ImageGallery.defaultProps = {
     <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
   ),
   useWindowKeyDown: true,
+  isVerticalSlide: false
 };
 
 export default ImageGallery;
