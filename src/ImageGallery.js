@@ -389,7 +389,7 @@ class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, currentSlideOffset, slideStyle } = this.state;
+    const { currentIndex, currentSlideOffset, slideStyle, slideVertically } = this.state;
     const {
       infinite,
       items,
