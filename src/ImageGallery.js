@@ -71,6 +71,7 @@ class ImageGallery extends React.Component {
     this.handleImageLoaded = this.handleImageLoaded.bind(this);
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
+    this.handleResize = this.handleResize.bind(this);
     this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
@@ -110,7 +111,9 @@ class ImageGallery extends React.Component {
     }
     window.addEventListener('mousedown', this.handleMouseDown);
     window.addEventListener('touchmove', this.handleTouchMove, { passive: false });
-    this.initResizeObserver(this.imageGallerySlideWrapper);
+    // we're using resize observer to help with detecting containers size changes as images load
+    this.initSlideWrapperResizeObserver(this.imageGallerySlideWrapper);
+    this.initThumbnailWrapperResizeObserver(this.thumbnailsWrapper);
     this.addScreenChangeEvent();
   }
 
@@ -141,9 +144,10 @@ class ImageGallery extends React.Component {
     }
 
     if (thumbnailsPositionChanged) {
-      // re-initialize resizeObserver because slides was unmounted and mounted again
+      // re-initialize resizeObserver because element was unmounted and mounted again
       this.removeResizeObserver();
-      this.initResizeObserver(this.imageGallerySlideWrapper);
+      this.initSlideWrapperResizeObserver(this.imageGallerySlideWrapper);
+      this.initThumbnailWrapperResizeObserver(this.thumbnailsWrapper);
     }
 
     if (itemsSizeChanged || showThumbnailsChanged) {
@@ -268,10 +272,13 @@ class ImageGallery extends React.Component {
   getThumbsTranslate(indexDifference) {
     const { disableThumbnailScroll, items } = this.props;
     const { thumbnailsWrapperWidth, thumbnailsWrapperHeight } = this.state;
-    let totalScroll;
+    // the scroll space that is hidden on the left & right / top & bottom
+    // when the screen is not large enough to fit all thumbnails
+    let hiddenScroll;
     const thumbsElement = this.thumbnails && this.thumbnails.current;
 
     if (disableThumbnailScroll) return 0;
+
 
     if (thumbsElement) {
       // total scroll required to see the last thumbnail
@@ -279,15 +286,16 @@ class ImageGallery extends React.Component {
         if (thumbsElement.scrollHeight <= thumbnailsWrapperHeight) {
           return 0;
         }
-        totalScroll = thumbsElement.scrollHeight - thumbnailsWrapperHeight;
+        hiddenScroll = thumbsElement.scrollHeight - thumbnailsWrapperHeight;
       } else {
         if (thumbsElement.scrollWidth <= thumbnailsWrapperWidth || thumbnailsWrapperWidth <= 0) {
           return 0;
         }
-        totalScroll = thumbsElement.scrollWidth - thumbnailsWrapperWidth;
+        hiddenScroll = thumbsElement.scrollWidth - thumbnailsWrapperWidth;
       }
-      // scroll-x required per index change
-      const perIndexScroll = totalScroll / (items.length - 1);
+
+      // scroll-x or y required per index change
+      const perIndexScroll = hiddenScroll / (items.length - 1);
       return indexDifference * perIndexScroll;
     }
     return 0;
@@ -958,18 +966,24 @@ class ImageGallery extends React.Component {
   }
 
   removeResizeObserver() {
-    if (this.resizeObserver
+    if (this.resizeSlideWrapperObserver
         && this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
-      this.resizeObserver.unobserve(this.imageGallerySlideWrapper.current);
-      this.resizeObserver = null;
+      this.resizeSlideWrapperObserver.unobserve(this.imageGallerySlideWrapper.current);
+      this.resizeSlideWrapperObserver = null;
+    }
+
+    if (this.resizeThumbnailWrapperObserver
+        && this.thumbnailsWrapper && this.thumbnailsWrapper.current) {
+      this.resizeThumbnailWrapperObserver.unobserve(this.thumbnailsWrapper.current);
+      this.resizeThumbnailWrapperObserver = null;
     }
   }
 
   handleResize() {
     const { currentIndex } = this.state;
 
-    // if there is no resizeObserver, component has been unmounted
-    if (!this.resizeObserver) {
+    // component has been unmounted
+    if (!this.imageGallery) {
       return;
     }
 
@@ -983,26 +997,29 @@ class ImageGallery extends React.Component {
       });
     }
 
-    if (this.thumbnailsWrapper && this.thumbnailsWrapper.current) {
-      if (this.isThumbnailVertical()) {
-        this.setState({ thumbnailsWrapperHeight: this.thumbnailsWrapper.current.offsetHeight });
-      } else {
-        this.setState({ thumbnailsWrapperWidth: this.thumbnailsWrapper.current.offsetWidth });
-      }
-    }
-
     // Adjust thumbnail container when thumbnail width or height is adjusted
     this.setThumbsTranslate(-this.getThumbsTranslate(currentIndex));
   }
 
-  initResizeObserver(element) {
-    this.resizeObserver = new ResizeObserver(debounce((entries) => {
+  initSlideWrapperResizeObserver(element) {
+    // keeps track of gallery height changes for vertical thumbnail height
+    this.resizeSlideWrapperObserver = new ResizeObserver(debounce((entries) => {
       if (!entries) return;
-      entries.forEach(() => {
-        this.handleResize();
+      entries.forEach((entry) => {
+        this.setState({ thumbnailsWrapperWidth: entry.contentRect.width }, this.handleResize);
       });
-    }, 300));
-    this.resizeObserver.observe(element.current);
+    }, 50));
+    this.resizeSlideWrapperObserver.observe(element.current);
+  }
+
+  initThumbnailWrapperResizeObserver(element) {
+    this.resizeThumbnailWrapperObserver = new ResizeObserver(debounce((entries) => {
+      if (!entries) return;
+      entries.forEach((entry) => {
+        this.setState({ thumbnailsWrapperHeight: entry.contentRect.height }, this.handleResize);
+      });
+    }, 50));
+    this.resizeThumbnailWrapperObserver.observe(element.current);
   }
 
   toggleFullScreen() {
@@ -1432,7 +1449,11 @@ class ImageGallery extends React.Component {
                 onSwiping={!disableThumbnailSwipe && this.handleThumbnailSwiping}
                 onSwiped={!disableThumbnailSwipe && this.handleOnThumbnailSwiped}
               >
-                <div className="image-gallery-thumbnails" ref={this.thumbnailsWrapper} style={this.getThumbnailBarHeight()}>
+                <div
+                  className="image-gallery-thumbnails"
+                  ref={this.thumbnailsWrapper}
+                  style={this.getThumbnailBarHeight()}
+                >
                   <nav
                     ref={this.thumbnails}
                     className="image-gallery-thumbnails-container"

@@ -1,9 +1,10 @@
 import React from 'react';
-import ReactDOM from 'react-dom';
+import { createRoot } from 'react-dom/client';
 
 import ImageGallery from 'src/ImageGallery';
 
 const PREFIX_URL = 'https://raw.githubusercontent.com/xiaolin/react-image-gallery/master/static/';
+
 
 class App extends React.Component {
 
@@ -110,12 +111,15 @@ class App extends React.Component {
   }
 
   _toggleShowVideo(url) {
-    this.state.showVideo[url] = !Boolean(this.state.showVideo[url]);
+    const showVideo = this.state;
     this.setState({
-      showVideo: this.state.showVideo
+      showVideo: {
+        ...showVideo,
+        [url]: !showVideo[url]
+      }
     });
 
-    if (this.state.showVideo[url]) {
+    if (!showVideo[url]) {
       if (this.state.showPlayButton) {
         this.setState({showGalleryPlayButton: false});
       }
@@ -167,7 +171,6 @@ class App extends React.Component {
 
   render() {
     return (
-
       <section className='app'>
         <ImageGallery
           ref={i => this._imageGallery = i}
@@ -329,4 +332,6 @@ class App extends React.Component {
   }
 }
 
-ReactDOM.render(<App/>, document.getElementById('root'));
+const container = document.getElementById('root');
+const root = createRoot(container);
+root.render(<App />);
