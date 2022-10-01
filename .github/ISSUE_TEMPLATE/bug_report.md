@@ -1,3 +1,11 @@
+---
+name: Feature request
+about: Suggest an idea for this project
+title: ''
+labels: ''
+assignees: ''
+
+---
 
 **Checklist before opening an issue**\
 Lots of issues are opened that are unrelated to this package, please take a moment to ensure the issue is not on your end 🙏.
