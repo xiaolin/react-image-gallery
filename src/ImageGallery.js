@@ -150,9 +150,20 @@ class ImageGallery extends React.Component {
       this.initThumbnailWrapperResizeObserver(this.thumbnailsWrapper);
     }
 
+    // re-inititalize if thumbnails are shown again
+    if (showThumbnailsChanged && showThumbnails) {
+      this.initThumbnailWrapperResizeObserver(this.thumbnailsWrapper);
+    }
+
+    // remove thumbnails resize observer if not showing thumbnails
+    if (showThumbnailsChanged && !showThumbnails) {
+      this.removeThumbnailsResizeObserver();
+    }
+
     if (itemsSizeChanged || showThumbnailsChanged) {
       this.handleResize();
     }
+
     if (prevState.currentIndex !== currentIndex) {
       this.slideThumbnailBar();
     }
@@ -965,18 +976,21 @@ class ImageGallery extends React.Component {
     }
   }
 
+  removeThumbnailsResizeObserver() {
+    if (this.resizeThumbnailWrapperObserver
+        && this.thumbnailsWrapper && this.thumbnailsWrapper.current) {
+      this.resizeThumbnailWrapperObserver.unobserve(this.thumbnailsWrapper.current);
+      this.resizeThumbnailWrapperObserver = null;
+    }
+  }
+
   removeResizeObserver() {
     if (this.resizeSlideWrapperObserver
         && this.imageGallerySlideWrapper && this.imageGallerySlideWrapper.current) {
       this.resizeSlideWrapperObserver.unobserve(this.imageGallerySlideWrapper.current);
       this.resizeSlideWrapperObserver = null;
     }
-
-    if (this.resizeThumbnailWrapperObserver
-        && this.thumbnailsWrapper && this.thumbnailsWrapper.current) {
-      this.resizeThumbnailWrapperObserver.unobserve(this.thumbnailsWrapper.current);
-      this.resizeThumbnailWrapperObserver = null;
-    }
+    this.removeThumbnailsResizeObserver();
   }
 
   handleResize() {
@@ -1002,6 +1016,7 @@ class ImageGallery extends React.Component {
   }
 
   initSlideWrapperResizeObserver(element) {
+    if (element && !element.current) return;
     // keeps track of gallery height changes for vertical thumbnail height
     this.resizeSlideWrapperObserver = new ResizeObserver(debounce((entries) => {
       if (!entries) return;
@@ -1013,6 +1028,7 @@ class ImageGallery extends React.Component {
   }
 
   initThumbnailWrapperResizeObserver(element) {
+    if (element && !element.current) return; // thumbnails are not always available
     this.resizeThumbnailWrapperObserver = new ResizeObserver(debounce((entries) => {
       if (!entries) return;
       entries.forEach((entry) => {
