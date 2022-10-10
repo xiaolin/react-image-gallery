@@ -163,8 +163,8 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
     max-height: calc(100vh - 80px); // 80 px for the thumbnail space
   }
 
-  &.image-gallery-left,
-  &.image-gallery-right {
+  &.image-gallery-thumbnails-left,
+  &.image-gallery-thumbnails-right {
     .image-gallery-slide .image-gallery-image {
       max-height: 100vh;
     }
@@ -174,8 +174,8 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
 .image-gallery-slide-wrapper {
   position: relative;
 
-  &.image-gallery-left,
-  &.image-gallery-right {
+  &.image-gallery-thumbnails-left,
+  &.image-gallery-thumbnails-right {
     display: inline-block;
     width: calc(100% - 110px); // 100px + 10px for margin
 
