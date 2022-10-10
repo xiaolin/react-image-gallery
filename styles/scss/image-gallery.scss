@@ -306,8 +306,8 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   &.thumbnails-wrapper-rtl {
     direction: rtl;
   }
-  &.image-gallery-left,
-  &.image-gallery-right {
+  &.image-gallery-thumbnails-left,
+  &.image-gallery-thumbnails-right {
     display: inline-block;
     vertical-align: top;
     width: 100px;
@@ -339,8 +339,8 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
     }
   }
 
-  &.image-gallery-left,
-  &.image-gallery-right {
+  &.image-gallery-thumbnails-left,
+  &.image-gallery-thumbnails-right {
     margin: 0 5px;
 
     @media (max-width: $ig-small-screen) {

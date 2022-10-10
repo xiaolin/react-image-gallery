@@ -295,15 +295,23 @@ class ImageGallery extends React.Component {
 
   getThumbnailPositionClassName(thumbnailPosition) {
     // get the specific thumbnailPosition className
-    const leftClassName = 'image-gallery-left';
-    const rightClassName = 'image-gallery-right';
+    const leftClassName = 'image-gallery-thumbnails-left';
+    const rightClassName = 'image-gallery-thumbnails-right';
+    const bottomClassName = 'image-gallery-thumbnails-bottom';
+    const topClassName = 'image-gallery-thumbnails-top';
 
     switch (thumbnailPosition) {
-      case ('left'):
+      case 'left':
         thumbnailPosition = ` ${leftClassName}`;
         break;
-      case ('right'):
+      case 'right':
         thumbnailPosition = ` ${rightClassName}`;
+        break;
+      case 'bottom':
+        thumbnailPosition = ` ${bottomClassName}`;
+        break;
+      case 'top':
+        thumbnailPosition = ` ${topClassName}`;
         break;
       default:
         break;
