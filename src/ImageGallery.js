@@ -312,14 +312,41 @@ class ImageGallery extends React.Component {
     return 0;
   }
 
+  getThumbnailPositionClassName(thumbnailPosition) {
+    // get the specific thumbnailPosition className
+    const leftClassName = 'image-gallery-thumbnails-left';
+    const rightClassName = 'image-gallery-thumbnails-right';
+    const bottomClassName = 'image-gallery-thumbnails-bottom';
+    const topClassName = 'image-gallery-thumbnails-top';
+
+    switch (thumbnailPosition) {
+      case 'left':
+        thumbnailPosition = ` ${leftClassName}`;
+        break;
+      case 'right':
+        thumbnailPosition = ` ${rightClassName}`;
+        break;
+      case 'bottom':
+        thumbnailPosition = ` ${bottomClassName}`;
+        break;
+      case 'top':
+        thumbnailPosition = ` ${topClassName}`;
+        break;
+      default:
+        break;
+    }
+
+    return thumbnailPosition;
+  }
+
   getAlignmentClassName(index) {
     // Necessary for lazing loading
     const { currentIndex } = this.state;
     const { infinite, items } = this.props;
     let alignment = '';
-    const leftClassName = 'left';
-    const centerClassName = 'center';
-    const rightClassName = 'right';
+    const leftClassName = 'image-gallery-left';
+    const centerClassName = 'image-gallery-center';
+    const rightClassName = 'image-gallery-right';
 
     switch (index) {
       case (currentIndex - 1):
@@ -1372,7 +1399,7 @@ class ImageGallery extends React.Component {
     const { slides, thumbnails, bullets } = this.getSlideItems();
     const slideWrapperClass = clsx(
       'image-gallery-slide-wrapper',
-      thumbnailPosition,
+      this.getThumbnailPositionClassName(thumbnailPosition),
       { 'image-gallery-rtl': isRTL },
     );
 
@@ -1441,10 +1468,10 @@ class ImageGallery extends React.Component {
     );
 
     const igClass = clsx('image-gallery', additionalClass, { 'fullscreen-modal': modalFullscreen });
-    const igContentClass = clsx('image-gallery-content', thumbnailPosition, { fullscreen: isFullscreen });
+    const igContentClass = clsx('image-gallery-content', this.getThumbnailPositionClassName(thumbnailPosition), { fullscreen: isFullscreen });
     const thumbnailWrapperClass = clsx(
       'image-gallery-thumbnails-wrapper',
-      thumbnailPosition,
+      this.getThumbnailPositionClassName(thumbnailPosition),
       { 'thumbnails-wrapper-rtl': !this.isThumbnailVertical() && isRTL },
       { 'thumbnails-swipe-horizontal': !this.isThumbnailVertical() && !disableThumbnailSwipe },
       { 'thumbnails-swipe-vertical': this.isThumbnailVertical() && !disableThumbnailSwipe },
