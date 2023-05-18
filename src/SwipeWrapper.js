@@ -7,13 +7,21 @@ import {
 } from 'prop-types';
 import { useSwipeable } from 'react-swipeable';
 
-const SwipeWrapper = ({
-  children,
-  className,
-  delta,
-  onSwiping,
-  onSwiped,
-}) => {
+const defaultProps = {
+  className: '',
+  delta: 0,
+  onSwiping: () => {},
+  onSwiped: () => {},
+};
+
+const SwipeWrapper = (props) => {
+  const {
+    children,
+    className,
+    delta,
+    onSwiping,
+    onSwiped,
+  } = {...defaultProps, ...props};
   const swipeHandlers = useSwipeable({
     delta,
     onSwiping,
@@ -32,13 +40,6 @@ SwipeWrapper.propTypes = {
   delta: number,
   onSwiped: func,
   onSwiping: func,
-};
-
-SwipeWrapper.defaultProps = {
-  className: '',
-  delta: 0,
-  onSwiping: () => {},
-  onSwiped: () => {},
 };
 
 export default SwipeWrapper;
