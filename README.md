@@ -225,8 +225,7 @@ The following functions can be accessed using [refs](https://reactjs.org/docs/re
 
 * `play()`: plays the slides
 * `pause()`: pauses the slides
-* `fullScreen()`: activates full screen
-* `exitFullScreen()`: deactivates full screen
+* `toggleFullScreen()`: toggles full screen
 * `slideToIndex(index)`: slides to a specific index
 * `getCurrentIndex()`: returns the current index
 
