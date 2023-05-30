@@ -1,21 +1,35 @@
 import React from 'react';
 import { bool, func, string } from 'prop-types';
 
-const Item = React.memo(({
-  description,
-  fullscreen, // fullscreen version of img
-  handleImageLoaded,
-  isFullscreen,
-  onImageError,
-  original,
-  originalAlt,
-  originalHeight,
-  originalWidth,
-  originalTitle,
-  sizes,
-  srcSet,
-  loading,
-}) => {
+const defaultProps = {
+  description: '',
+  fullscreen: '',
+  isFullscreen: false,
+  originalAlt: '',
+  originalHeight: '',
+  originalWidth: '',
+  originalTitle: '',
+  sizes: '',
+  srcSet: '',
+  loading: 'eager',
+};
+
+const Item = React.memo((props) => {
+  const {
+    description,
+    fullscreen, // fullscreen version of img
+    handleImageLoaded,
+    isFullscreen,
+    onImageError,
+    original,
+    originalAlt,
+    originalHeight,
+    originalWidth,
+    originalTitle,
+    sizes,
+    srcSet,
+    loading,
+  } = {...defaultProps, ...props};
   const itemSrc = isFullscreen ? (fullscreen || original) : original;
 
   return (
@@ -60,19 +74,6 @@ Item.propTypes = {
   sizes: string,
   srcSet: string,
   loading: string,
-};
-
-Item.defaultProps = {
-  description: '',
-  fullscreen: '',
-  isFullscreen: false,
-  originalAlt: '',
-  originalHeight: '',
-  originalWidth: '',
-  originalTitle: '',
-  sizes: '',
-  srcSet: '',
-  loading: 'eager',
 };
 
 export default Item;
