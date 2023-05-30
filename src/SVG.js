@@ -22,12 +22,17 @@ const iconMapper = {
   pause,
 };
 
+const defaultProps = {
+  strokeWidth: 1,
+  viewBox: '0 0 24 24',
+};
+
 const SVG = (props) => {
   const {
     strokeWidth,
     viewBox,
     icon,
-  } = props;
+  } = {...defaultProps, ...props};
   return (
     <svg
       className="image-gallery-svg"
@@ -55,11 +60,6 @@ SVG.propTypes = {
     'play',
     'pause',
   ]).isRequired,
-};
-
-SVG.defaultProps = {
-  strokeWidth: 1,
-  viewBox: '0 0 24 24',
 };
 
 export default SVG;
