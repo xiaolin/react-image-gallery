@@ -68,6 +68,7 @@ class MyGallery extends React.Component {
 
 # Props
 
+* `ref`: Reference to root div
 * `items`: (required) Array of objects, see example above,
   * Available Properties
     * `original` - image src url
