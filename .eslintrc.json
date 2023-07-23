@@ -1,24 +1,45 @@
 {
-    "env": {
-        "browser": true,
-        "es2021": true
+  "env": {
+    "browser": true,
+    "es2021": true
+  },
+  "extends": [
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:prettier/recommended", // Enable eslint-plugin-prettier and eslint-config-prettier
+    "plugin:import/errors", // Enable eslint-plugin-import
+    "plugin:import/warnings",
+    "plugin:jsx-a11y/recommended", // Enable eslint-plugin-jsx-a11y
+    "plugin:react-hooks/recommended"
+  ],
+  "parser": "babel-eslint",
+  "parserOptions": {
+    "ecmaFeatures": {
+      "jsx": true
     },
-    "extends": [
-        "eslint:recommended",
-        "plugin:react/recommended"
-    ],
-    "parser": "babel-eslint",
-    "parserOptions": {
-        "ecmaFeatures": {
-            "jsx": true
-        },
-        "ecmaVersion": 12,
-        "sourceType": "module"
+    "ecmaVersion": 12,
+    "sourceType": "module"
+  },
+  "plugins": ["react"],
+  "rules": {
+    "react/display-name": "off"
+  },
+  "settings": {
+    "react": {
+      "version": "detect"
     },
-    "plugins": [
-        "react"
-    ],
-    "rules": {
-        "react/display-name": "off"
+    "import/resolver": {
+      "alias": {
+        "map": [["src", "./src"]]
+      }
     }
+  },
+  "overrides": [
+    {
+      "files": ["*.js", "*.jsx"],
+      "rules": {
+        "prettier/prettier": ["error", { "trailingComma": "es5" }]
+      }
+    }
+  ]
 }

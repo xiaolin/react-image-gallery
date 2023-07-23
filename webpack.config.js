@@ -1,25 +1,28 @@
-
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
-  entry: ['./example/app.js', './example/app.css', './styles/scss/image-gallery.scss'],
+  entry: [
+    "./example/app.js",
+    "./example/app.css",
+    "./styles/scss/image-gallery.scss",
+  ],
   output: {
-    path: path.resolve(__dirname, 'example'),
-    filename: 'example.js',
-    publicPath: '/dist/'
+    path: path.resolve(__dirname, "example"),
+    filename: "example.js",
+    publicPath: "/dist/",
   },
   resolve: {
-    extensions: ['.js'],
+    extensions: [".js"],
     alias: {
-      src: path.resolve(__dirname, 'src/'),
+      src: path.resolve(__dirname, "src/"),
     },
   },
   module: {
     rules: [
       {
         test: /\.(js|jsx)$/,
-        loader: 'babel-loader',
+        loader: "babel-loader",
       },
       {
         test: /\.(css|scss)$/i,
@@ -31,19 +34,19 @@ module.exports = {
           // Compiles Sass to CSS
           "sass-loader",
         ],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'image-gallery.css',
+      filename: "image-gallery.css",
     }),
   ],
   devServer: {
-    host: '0.0.0.0',
+    host: "0.0.0.0",
     port: 8001,
     historyApiFallback: {
-      rewrites: [{ from: /\//, to: '/example/index.html' }],
+      rewrites: [{ from: /\//, to: "/example/index.html" }],
     },
   },
 };
