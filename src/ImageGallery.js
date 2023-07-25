@@ -49,7 +49,7 @@ class ImageGallery extends React.Component {
       isFullscreen: false,
       isSwipingThumbnail: false,
       isPlaying: false,
-      slideVertically: props.slideVertically
+      slideVertically: props.slideVertically,
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -450,7 +450,8 @@ class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, currentSlideOffset, slideStyle } = this.state;
+    const { currentIndex, currentSlideOffset, slideStyle, slideVertically } =
+      this.state;
     const { infinite, items, useTranslate3D, isRTL } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
@@ -477,10 +478,14 @@ class ImageGallery extends React.Component {
       translateValue = this.getTranslateXForTwoSlide(index);
     }
 
-    let translate = slideVertically ? `translate(0, ${translateValue}%)` : `translate(${translateValue}%, 0)`;
+    let translate = slideVertically
+      ? `translate(0, ${translateValue}%)`
+      : `translate(${translateValue}%, 0)`;
 
     if (useTranslate3D) {
-      translate = slideVertically ? `translate3d(0, ${translateValue}%, 0)` : `translate3d(${translateValue}%, 0, 0)`;
+      translate = slideVertically
+        ? `translate3d(0, ${translateValue}%, 0)`
+        : `translate3d(${translateValue}%, 0, 0)`;
     }
 
     // don't show some slides while transitioning to avoid background transitions
@@ -1638,7 +1643,7 @@ ImageGallery.propTypes = {
   useTranslate3D: bool,
   isRTL: bool,
   useWindowKeyDown: bool,
-  slideVertically: bool
+  slideVertically: bool,
 };
 
 ImageGallery.defaultProps = {
