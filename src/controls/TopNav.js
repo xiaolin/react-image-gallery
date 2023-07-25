@@ -2,25 +2,25 @@ import React from "react";
 import { bool, func } from "prop-types";
 import SVG from "src/SVG";
 
-const LeftNav = React.memo(({ disabled, onClick }) => {
+const TopNav = React.memo(({ disabled, onClick }) => {
   return (
     <button
       type="button"
-      className="image-gallery-icon image-gallery-left-nav"
+      className="image-gallery-icon image-gallery-top-nav"
       disabled={disabled}
       onClick={onClick}
       aria-label="Previous Slide"
     >
-      <SVG icon="left" viewBox="6 0 12 24" />
+      <SVG icon="top" viewBox="6 0 12 24" />
     </button>
   );
 });
 
-LeftNav.displayName = "LeftNav";
+TopNav.displayName = "TopNav";
 
-LeftNav.propTypes = {
+TopNav.propTypes = {
   disabled: bool.isRequired,
   onClick: func.isRequired,
 };
 
-export default LeftNav;
+export default TopNav;
