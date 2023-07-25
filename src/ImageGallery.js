@@ -12,6 +12,8 @@ import LeftNav from "src/controls/LeftNav";
 import RightNav from "src/controls/RightNav";
 import PlayPause from "src/controls/PlayPause";
 import SwipeWrapper from "src/SwipeWrapper";
+import TopNav from "./controls/TopNav";
+import BottomNav from "./controls/BottomNav";
 
 const screenChangeEvents = [
   "fullscreenchange",
@@ -1423,8 +1425,13 @@ class ImageGallery extends React.Component {
   }
 
   render() {
-    const { currentIndex, isFullscreen, modalFullscreen, isPlaying } =
-      this.state;
+    const {
+      currentIndex,
+      isFullscreen,
+      modalFullscreen,
+      isPlaying,
+      slideVertically,
+    } = this.state;
 
     const {
       additionalClass,
@@ -1437,6 +1444,8 @@ class ImageGallery extends React.Component {
       renderCustomControls,
       renderLeftNav,
       renderRightNav,
+      renderTopNav,
+      renderBottomNav,
       showBullets,
       showFullscreenButton,
       showIndex,
@@ -1461,8 +1470,12 @@ class ImageGallery extends React.Component {
           <React.Fragment>
             {showNav && (
               <React.Fragment>
-                {renderLeftNav(this.slideLeft, !this.canSlideLeft())}
-                {renderRightNav(this.slideRight, !this.canSlideRight())}
+                {slideVertically
+                  ? renderTopNav(this.slideLeft, !this.canSlideLeft())
+                  : renderLeftNav(this.slideLeft, !this.canSlideLeft())}
+                {slideVertically
+                  ? renderBottomNav(this.slideRight, !this.canSlideRight())
+                  : renderRightNav(this.slideRight, !this.canSlideRight())}
               </React.Fragment>
             )}
             <SwipeWrapper
@@ -1634,6 +1647,8 @@ ImageGallery.propTypes = {
   renderCustomControls: func,
   renderLeftNav: func,
   renderRightNav: func,
+  renderTopNav: func,
+  renderBottomNav: func,
   renderPlayPauseButton: func,
   renderFullscreenButton: func,
   renderItem: func,
@@ -1700,6 +1715,12 @@ ImageGallery.defaultProps = {
   ),
   renderRightNav: (onClick, disabled) => (
     <RightNav onClick={onClick} disabled={disabled} />
+  ),
+  renderTopNav: (onClick, disabled) => (
+    <TopNav onClick={onClick} disabled={disabled} />
+  ),
+  renderBottomNav: (onClick, disabled) => (
+    <BottomNav onClick={onClick} disabled={disabled} />
   ),
   renderPlayPauseButton: (onClick, isPlaying) => (
     <PlayPause onClick={onClick} isPlaying={isPlaying} />
