@@ -774,7 +774,8 @@ class ImageGallery extends React.Component {
   }
 
   handleSwiping({ event, absX, dir }) {
-    const { disableSwipe, stopPropagation } = this.props;
+    const { disableSwipe, stopPropagation, swipingTransitionDuration } =
+      this.props;
     const {
       galleryWidth,
       isTransitioning,
@@ -797,15 +798,28 @@ class ImageGallery extends React.Component {
 
     if (disableSwipe) return;
 
-    const { swipingTransitionDuration } = this.props;
     if (stopPropagation) {
       event.preventDefault();
     }
 
     if (!isTransitioning) {
-      const side = dir === RIGHT ? 1 : -1;
+      const isSwipeLeftOrRight = dir === LEFT || dir === RIGHT;
+      const isSwipeTopOrDown = dir === UP || dir === DOWN;
+
+      if (isSwipeLeftOrRight && slideVertically) return;
+      if (isSwipeTopOrDown && !slideVertically) return;
+
+      const sides = {
+        [LEFT]: -1,
+        [RIGHT]: 1,
+        [UP]: -1,
+        [DOWN]: 1,
+      };
+
+      const side = sides[dir];
 
       let currentSlideOffset = (absX / galleryWidth) * 100;
+
       if (Math.abs(currentSlideOffset) >= 100) {
         currentSlideOffset = 100;
       }
@@ -964,16 +978,20 @@ class ImageGallery extends React.Component {
     if (slideVertically) swipeDirection = dir === UP ? 1 : -1;
 
     const isSwipeUpOrDown = dir === UP || dir === DOWN;
+    const isSwipeLeftOrRight = dir === LEFT || dir === RIGHT;
     const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
+    const isTopDownFlick = velocity > flickThreshold && !isSwipeLeftOrRight;
 
-    this.handleOnSwipedTo(swipeDirection, isLeftRightFlick);
+    const isFlick = slideVertically ? isTopDownFlick : isLeftRightFlick;
+
+    this.handleOnSwipedTo(swipeDirection, isFlick);
   }
 
-  handleOnSwipedTo(swipeDirection, isLeftRightFlick) {
+  handleOnSwipedTo(swipeDirection, isFlick) {
     const { currentIndex, isTransitioning } = this.state;
     let slideTo = currentIndex;
 
-    if ((this.sufficientSwipe() || isLeftRightFlick) && !isTransitioning) {
+    if ((this.sufficientSwipe() || isFlick) && !isTransitioning) {
       // slideto the next/prev slide
       slideTo += swipeDirection;
     }
@@ -1493,7 +1511,13 @@ class ImageGallery extends React.Component {
               onSwiping={this.handleSwiping}
               onSwiped={this.handleOnSwiped}
             >
-              <div className="image-gallery-slides">{slides}</div>
+              <div
+                className="image-gallery-slides"
+                // disable touch-action for touch screen devices when vertical sliding is active
+                style={{ touchAction: slideVertically ? "none" : "unset" }}
+              >
+                {slides}
+              </div>
             </SwipeWrapper>
           </React.Fragment>
         ) : (
