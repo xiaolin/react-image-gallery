@@ -775,15 +775,20 @@ class ImageGallery extends React.Component {
 
   handleSwiping({ event, absX, dir }) {
     const { disableSwipe, stopPropagation } = this.props;
-    const { galleryWidth, isTransitioning, swipingUpDown, swipingLeftRight } =
-      this.state;
+    const {
+      galleryWidth,
+      isTransitioning,
+      swipingUpDown,
+      swipingLeftRight,
+      slideVertically,
+    } = this.state;
 
     // if the initial swiping is up/down prevent moving the slides until swipe ends
     if ((dir === UP || dir === DOWN || swipingUpDown) && !swipingLeftRight) {
       if (!swipingUpDown) {
         this.setState({ swipingUpDown: true });
       }
-      return;
+      if (!slideVertically) return;
     }
 
     if ((dir === LEFT || dir === RIGHT) && !swipingLeftRight) {
@@ -946,6 +951,7 @@ class ImageGallery extends React.Component {
 
   handleOnSwiped({ event, dir, velocity }) {
     const { disableSwipe, stopPropagation, flickThreshold } = this.props;
+    const { slideVertically } = this.state;
 
     if (disableSwipe) return;
 
@@ -954,9 +960,12 @@ class ImageGallery extends React.Component {
     this.resetSwipingDirection();
 
     // if it is RTL the direction is reversed
-    const swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
+    let swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
+    if (slideVertically) swipeDirection = dir === UP ? 1 : -1;
+
     const isSwipeUpOrDown = dir === UP || dir === DOWN;
     const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
+
     this.handleOnSwipedTo(swipeDirection, isLeftRightFlick);
   }
 
