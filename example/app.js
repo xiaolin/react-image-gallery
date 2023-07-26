@@ -86,7 +86,6 @@ class App extends React.Component {
 
   _handleCheckboxChange(state, event) {
     this.setState({ [state]: event.target.checked });
-    console.log(state, event.target.checked);
   }
 
   _handleThumbnailPositionChange(event) {
