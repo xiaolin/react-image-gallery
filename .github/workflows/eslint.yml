@@ -32,10 +32,8 @@ jobs:
 
       - name: Install ESLint
         run: |
-          npm install eslint@8.0.0
+          yarn
 
       - name: Run ESLint
-        run: npx eslint .
-          --config .eslintrc.json
-          --ext .js,.jsx,.ts,.tsx
+        run: yarn lint
         continue-on-error: true
