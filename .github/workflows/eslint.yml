@@ -36,4 +36,4 @@ jobs:
 
       - name: Run ESLint
         run: yarn lint
-        continue-on-error: true
+        continue-on-error: false
