@@ -3,10 +3,11 @@ body {
   padding: 0;
   background: #f4f6f9;
   color: #222;
-  font-family: 'Raleway', sans-serif;
+  font-family: "Raleway", sans-serif;
 }
 
-ul, li {
+ul,
+li {
   padding: 0;
   margin: 0;
   list-style: none;
@@ -33,6 +34,7 @@ label {
 .play-button {
   cursor: pointer;
   position: absolute;
+  border: 0;
   left: 0;
   top: 0;
   bottom: 0;
@@ -40,12 +42,12 @@ label {
   margin: auto;
   height: 60px;
   width: 100px;
-  background-color: rgba(0, 0, 0, 0.7);
-  border-radius: 5px;
+  background-color: rgba(0, 0, 0, 0.9);
+  border-radius: 8px;
 }
 
 .play-button:hover {
-  background-color: rgba(0, 0, 0, 0.9);
+  background-color: rgba(0, 0, 0);
 }
 
 .play-button:after {
@@ -61,16 +63,17 @@ label {
 }
 
 .close-video::before {
-  content: '✖';
+  content: "✕";
   cursor: pointer;
   position: absolute;
   right: 0;
-  top: 0;
-  font-size: 20px;
+  bottom: 50px;
+  font-size: 30px;
   padding: 20px;
   z-index: 1;
-  line-height: .7;
+  line-height: 0.7;
   display: block;
+  text-shadow: 0 2px 2px #1a1a1a;
   color: #fff;
 }
 
@@ -88,13 +91,11 @@ label {
   height: 100%;
 }
 
-
 .app .image-gallery,
 .app-sandbox {
   margin: 0 auto;
   width: 65%;
 }
-
 
 @media (max-width: 1320px) {
   .app-sandbox-content {
@@ -116,7 +117,6 @@ label {
 }
 
 @media (max-width: 768px) {
-
   .app-header {
     font-size: 20px;
   }
