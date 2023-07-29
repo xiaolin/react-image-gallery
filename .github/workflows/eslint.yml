@@ -39,9 +39,3 @@ jobs:
           --config .eslintrc.json
           --ext .js,.jsx,.ts,.tsx
         continue-on-error: true
-
-      - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
