@@ -7,7 +7,7 @@
 # More details at https://github.com/eslint/eslint
 # and https://eslint.org
 
-name: ESLint
+name: ESLint / Jest
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
 
 jobs:
   eslint:
-    name: Run eslint scanning
+    name: eslint scanning
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,10 +30,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install ESLint
-        run: |
-          yarn
+      - name: Install Packages
+        run: yarn
 
       - name: Run ESLint
         run: yarn lint
+        continue-on-error: false
+
+  jest:
+    name: jest scanning
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        run: yarn
+
+      - name: Run jest
+        run: yarn jest
         continue-on-error: false
