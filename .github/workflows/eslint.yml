@@ -7,7 +7,7 @@
 # More details at https://github.com/eslint/eslint
 # and https://eslint.org
 
-name: ESLint / Jest
+name: workflow
 
 on:
   push:
@@ -20,7 +20,7 @@ on:
 
 jobs:
   eslint:
-    name: eslint scanning
+    name: Eslint
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -38,7 +38,7 @@ jobs:
         continue-on-error: false
 
   jest:
-    name: jest scanning
+    name: Jest
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -51,6 +51,6 @@ jobs:
       - name: Install Packages
         run: yarn
 
-      - name: Run jest
+      - name: Run Jest
         run: yarn jest
         continue-on-error: false

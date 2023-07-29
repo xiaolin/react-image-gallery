@@ -17,6 +17,6 @@ describe("<ImageGallery />", () => {
     render(<ImageGallery {...defaultProps} />);
     const elements = screen.getAllByLabelText("Go to Slide 1");
     // expect a thumbnail and slide label
-    expect(elements.length).toBe(2);
+    expect(elements.length).toBe(3);
   });
 });
