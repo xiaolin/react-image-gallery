@@ -10,7 +10,8 @@
     "plugin:import/errors", // Enable eslint-plugin-import
     "plugin:import/warnings",
     "plugin:jsx-a11y/recommended", // Enable eslint-plugin-jsx-a11y
-    "plugin:react-hooks/recommended"
+    "plugin:react-hooks/recommended",
+    "plugin:jest/recommended"
   ],
   "parser": "babel-eslint",
   "parserOptions": {
@@ -20,7 +21,7 @@
     "ecmaVersion": 12,
     "sourceType": "module"
   },
-  "plugins": ["react"],
+  "plugins": ["react", "jest"],
   "rules": {
     "react/display-name": "off"
   },
