@@ -245,12 +245,15 @@ class ImageGallery extends React.Component {
 
   onThumbnailClick(event, index) {
     const { onThumbnailClick } = this.props;
+    const { currentIndex } = this.state;
     // blur element to remove outline cause by focus
     event.target.parentNode.parentNode.blur();
+   if(currentIndex!==index){
     this.slideToIndex(index, event);
-    if (onThumbnailClick) {
-      onThumbnailClick(event, index);
-    }
+   }
+   if (onThumbnailClick) {
+    onThumbnailClick(event, index);
+  }
   }
 
   onThumbnailMouseOver(event, index) {
