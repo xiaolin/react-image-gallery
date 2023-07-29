@@ -34,6 +34,7 @@ function isEnterOrSpaceKey(event) {
   return key === ENTER_KEY_CODE || key === SPACEBAR_KEY_CODE;
 }
 
+// testing workflow on github
 class ImageGallery extends React.Component {
   constructor(props) {
     super(props);
