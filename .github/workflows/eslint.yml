@@ -7,20 +7,20 @@
 # More details at https://github.com/eslint/eslint
 # and https://eslint.org
 
-name: ESLint
+name: workflow
 
 on:
   push:
-    branches: [ "master" ]
+    branches: ["master"]
   pull_request:
     # The branches below must be a subset of the branches above
-    branches: [ "master" ]
+    branches: ["master"]
   schedule:
-    - cron: '35 15 * * 3'
+    - cron: "35 15 * * 3"
 
 jobs:
   eslint:
-    name: Run eslint scanning
+    name: Eslint
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -30,21 +30,27 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v3
 
-      - name: Install ESLint
-        run: |
-          npm install eslint@7.23.0
-          npm install @microsoft/eslint-formatter-sarif@2.1.7
+      - name: Install Packages
+        run: yarn
 
       - name: Run ESLint
-        run: npx eslint .
-          --config .eslintrc.js
-          --ext .js,.jsx,.ts,.tsx
-          --format @microsoft/eslint-formatter-sarif
-          --output-file eslint-results.sarif
-        continue-on-error: true
+        run: yarn lint
+        continue-on-error: false
 
-      - name: Upload analysis results to GitHub
-        uses: github/codeql-action/upload-sarif@v2
-        with:
-          sarif_file: eslint-results.sarif
-          wait-for-processing: true
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        run: yarn
+
+      - name: Run Jest
+        run: yarn jest
+        continue-on-error: false

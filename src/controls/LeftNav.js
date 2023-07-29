@@ -1,11 +1,8 @@
-import React from 'react';
-import { bool, func } from 'prop-types';
-import SVG from 'src/SVG';
+import React from "react";
+import { bool, func } from "prop-types";
+import SVG from "src/SVG";
 
-const LeftNav = React.memo(({
-  disabled,
-  onClick,
-}) => {
+const LeftNav = React.memo(({ disabled, onClick }) => {
   return (
     <button
       type="button"
@@ -19,12 +16,11 @@ const LeftNav = React.memo(({
   );
 });
 
-LeftNav.displayName = 'LeftNav';
+LeftNav.displayName = "LeftNav";
 
 LeftNav.propTypes = {
   disabled: bool.isRequired,
   onClick: func.isRequired,
 };
-
 
 export default LeftNav;

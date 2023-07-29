@@ -1,11 +1,8 @@
-import React from 'react';
-import { bool, func } from 'prop-types';
-import SVG from 'src/SVG';
+import React from "react";
+import { bool, func } from "prop-types";
+import SVG from "src/SVG";
 
-const Fullscreen = React.memo(({
-  isFullscreen,
-  onClick,
-}) => {
+const Fullscreen = React.memo(({ isFullscreen, onClick }) => {
   return (
     <button
       type="button"
@@ -13,17 +10,16 @@ const Fullscreen = React.memo(({
       onClick={onClick}
       aria-label="Open Fullscreen"
     >
-      <SVG strokeWidth={2} icon={isFullscreen ? 'minimize' : 'maximize'} />
+      <SVG strokeWidth={2} icon={isFullscreen ? "minimize" : "maximize"} />
     </button>
   );
 });
 
-Fullscreen.displayName = 'Fullscreen';
+Fullscreen.displayName = "Fullscreen";
 
 Fullscreen.propTypes = {
   isFullscreen: bool.isRequired,
   onClick: func.isRequired,
 };
-
 
 export default Fullscreen;

@@ -1,11 +1,8 @@
-import React from 'react';
-import { bool, func } from 'prop-types';
-import SVG from 'src/SVG';
+import React from "react";
+import { bool, func } from "prop-types";
+import SVG from "src/SVG";
 
-const PlayPause = React.memo(({
-  isPlaying,
-  onClick,
-}) => {
+const PlayPause = React.memo(({ isPlaying, onClick }) => {
   return (
     <button
       type="button"
@@ -13,17 +10,16 @@ const PlayPause = React.memo(({
       onClick={onClick}
       aria-label="Play or Pause Slideshow"
     >
-      <SVG strokeWidth={2} icon={isPlaying ? 'pause' : 'play'} />
+      <SVG strokeWidth={2} icon={isPlaying ? "pause" : "play"} />
     </button>
   );
 });
 
-PlayPause.displayName = 'PlayPause';
+PlayPause.displayName = "PlayPause";
 
 PlayPause.propTypes = {
   isPlaying: bool.isRequired,
   onClick: func.isRequired,
 };
-
 
 export default PlayPause;
