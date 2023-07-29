@@ -69,7 +69,7 @@
     "react": "^18.0.0",
     "react-dom": "^18.0.0",
     "react-fast-compare": "^3.2.0",
-    "react-swipeable": "6.0.1",
+    "react-swipeable": "7.0.1",
     "remove-files-webpack-plugin": "^1.4.5",
     "resize-observer-polyfill": "^1.5.0",
     "sass": "^1.35.2",
