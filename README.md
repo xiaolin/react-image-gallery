@@ -176,7 +176,7 @@ class MyGallery extends React.Component {
   - As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
 
 - `renderLeftNav`: Function, custom left nav component
-  - See [`<LeftNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/LeftNav.js)
+  - See [`<LeftNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/LeftNav.js)
   - Use this to render a custom left nav control
   - Args:
     - `onClick` callback that will slide to the previous item
@@ -187,7 +187,7 @@ class MyGallery extends React.Component {
   );
   ```
 - `renderRightNav`: Function, custom right nav component
-  - See [`<RightNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/RightNav.js)
+  - See [`<RightNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/RightNav.js)
   - Use this to render a custom right nav control
   - Args:
     - `onClick` callback that will slide to the next item
@@ -198,7 +198,7 @@ class MyGallery extends React.Component {
   );
   ```
 - `renderPlayPauseButton`: Function, play pause button component
-  - See [`<PlayPause />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/PlayPause.js)
+  - See [`<PlayPause />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/PlayPause.js)
   - Use this to render a custom play pause button
   - Args:
     - `onClick` callback that will toggle play/pause
@@ -209,7 +209,7 @@ class MyGallery extends React.Component {
   );
   ```
 - `renderFullscreenButton`: Function, custom fullscreen button component
-  - See [`<Fullscreen />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/controls/Fullscreen.js)
+  - See [`<Fullscreen />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/Fullscreen.js)
   - Use this to render a custom fullscreen button
   - Args:
     - `onClick` callback that will toggle fullscreen

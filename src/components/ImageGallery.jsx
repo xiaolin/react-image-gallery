@@ -6,12 +6,12 @@ import isEqual from "react-fast-compare";
 import ResizeObserver from "resize-observer-polyfill";
 import { LEFT, RIGHT, UP, DOWN } from "react-swipeable";
 import { arrayOf, bool, func, number, oneOf, shape, string } from "prop-types";
-import Item from "src/Item";
-import Fullscreen from "src/controls/Fullscreen";
-import LeftNav from "src/controls/LeftNav";
-import RightNav from "src/controls/RightNav";
-import PlayPause from "src/controls/PlayPause";
-import SwipeWrapper from "src/SwipeWrapper";
+import Item from "src/components/Item";
+import Fullscreen from "src/components/controls/Fullscreen";
+import LeftNav from "src/components/controls/LeftNav";
+import RightNav from "src/components/controls/RightNav";
+import PlayPause from "src/components/controls/PlayPause";
+import SwipeWrapper from "src/components/SwipeWrapper";
 
 const screenChangeEvents = [
   "fullscreenchange",

@@ -1,6 +1,6 @@
 import React from "react";
 import { bool, func } from "prop-types";
-import SVG from "src/SVG";
+import SVG from "src/components/SVG";
 
 const Fullscreen = React.memo(({ isFullscreen, onClick }) => {
   return (
