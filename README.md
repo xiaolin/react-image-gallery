@@ -95,8 +95,6 @@ class MyGallery extends React.Component {
     - `srcSet` - image srcset (html5 attribute)
     - `sizes` - image sizes (html5 attribute)
     - `bulletClass` - extra class for the bullet of the item
-    - `bulletOnClick` - `callback({item, itemIndex, currentIndex})`
-      - A function that will be called upon bullet click.
 - `infinite`: Boolean, default `true`
   - infinite sliding
 - `lazyLoad`: Boolean, default `false`
@@ -144,6 +142,7 @@ class MyGallery extends React.Component {
 - `onThumbnailError`: Function, `callback(event)`
   - overrides onErrorImage
 - `onThumbnailClick`: Function, `callback(event, index)`
+- `onBulletClick`: Function, `callback(event, index)`
 - `onImageLoad`: Function, `callback(event)`
 - `onSlide`: Function, `callback(currentIndex)`
 - `onBeforeSlide`: Function, `callback(nextIndex)`
