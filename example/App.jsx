@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import ImageGallery from "src/ImageGallery";
+import ImageGallery from "src/components/ImageGallery";
 
 const PREFIX_URL =
   "https://raw.githubusercontent.com/xiaolin/react-image-gallery/master/static/";

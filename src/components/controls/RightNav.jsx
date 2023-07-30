@@ -1,6 +1,6 @@
 import React from "react";
 import { bool, func } from "prop-types";
-import SVG from "src/SVG";
+import SVG from "src/components/SVG";
 
 const RightNav = React.memo(({ disabled, onClick }) => {
   return (

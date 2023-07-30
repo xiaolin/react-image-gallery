@@ -1,57 +1,56 @@
-
-const path = require('path');
-const MiniCssExtractPlugin = require('mini-css-extract-plugin');
-const RemovePlugin = require('remove-files-webpack-plugin');
+const path = require("path");
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const RemovePlugin = require("remove-files-webpack-plugin");
 
 const config = {
-  mode: 'production',
+  mode: "production",
 };
 
 const jsOutput = Object.assign({}, config, {
-  entry: [ './src/ImageGallery.js', ],
+  entry: ["./src/components/ImageGallery.jsx"],
   output: {
-    path: path.resolve(__dirname, 'build'),
-    filename: 'image-gallery.js',
-    library: 'ImageGallery',
-    globalObject: 'this',
-    libraryTarget: 'umd',
+    path: path.resolve(__dirname, "build"),
+    filename: "image-gallery.js",
+    library: "ImageGallery",
+    globalObject: "this",
+    libraryTarget: "umd",
   },
   resolve: {
     alias: {
-      src: path.resolve(__dirname, 'src/'),
+      src: path.resolve(__dirname, "src/"),
     },
-    extensions: ['.js']
+    extensions: [".js", ".jsx"],
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
+        test: /\.(js|jsx)$/,
         exclude: /node_modules/,
-        loader: 'babel-loader',
-      }
-    ]
+        loader: "babel-loader",
+      },
+    ],
   },
   externals: {
     // Don't bundle react or react-dom
     react: {
-      commonjs: 'react',
-      commonjs2: 'react',
-      amd: 'react',
-      root: 'React',
+      commonjs: "react",
+      commonjs2: "react",
+      amd: "react",
+      root: "React",
     },
-    'react-dom': {
-      commonjs: 'react-dom',
-      commonjs2: 'react-dom',
-      amd: 'react-dom',
-      root: 'ReactDOM',
+    "react-dom": {
+      commonjs: "react-dom",
+      commonjs2: "react-dom",
+      amd: "react-dom",
+      root: "ReactDOM",
     },
   },
 });
 
 const cssOutput = Object.assign({}, config, {
-  entry: './styles/scss/image-gallery.scss',
+  entry: "./styles/scss/image-gallery.scss",
   output: {
-    path: path.resolve(__dirname, 'styles/css'),
+    path: path.resolve(__dirname, "styles/css"),
   },
   module: {
     rules: [
@@ -60,16 +59,16 @@ const cssOutput = Object.assign({}, config, {
         use: [
           MiniCssExtractPlugin.loader,
           // Translates CSS into CommonJS
-          'css-loader',
+          "css-loader",
           // Compiles Sass to CSS
-          'sass-loader',
+          "sass-loader",
         ],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'image-gallery.css',
+      filename: "image-gallery.css",
     }),
     new RemovePlugin({
       /**
@@ -78,36 +77,36 @@ const cssOutput = Object.assign({}, config, {
       after: {
         test: [
           {
-            folder: 'styles/css',
+            folder: "styles/css",
             method: (absoluteItemPath) => {
-              return new RegExp(/\.js$/, 'm').test(absoluteItemPath);
+              return new RegExp(/\.js$/, "m").test(absoluteItemPath);
             },
-          }
-        ]
-      }
+          },
+        ],
+      },
     }),
   ],
 });
 
 const jsDemoOutput = Object.assign({}, config, {
-  entry: [ './example/app.js', ],
+  entry: ["./example/App.jsx"],
   output: {
-    path: path.resolve(__dirname, 'demo'),
-    filename: 'demo.mini.js',
+    path: path.resolve(__dirname, "demo"),
+    filename: "demo.mini.js",
   },
   resolve: {
     alias: {
-      src: path.resolve(__dirname, 'src/'),
+      src: path.resolve(__dirname, "src/"),
     },
-    extensions: ['.js']
+    extensions: [".js", ".jsx"],
   },
   module: {
     rules: [
       {
-        test: /\.js$/,
-        loader: 'babel-loader',
-      }
-    ]
+        test: /\.(js|jsx)$/,
+        loader: "babel-loader",
+      },
+    ],
   },
   plugins: [
     new RemovePlugin({
@@ -117,21 +116,21 @@ const jsDemoOutput = Object.assign({}, config, {
       after: {
         test: [
           {
-            folder: 'demo',
+            folder: "demo",
             method: (absoluteItemPath) => {
               return new RegExp(/\.txt$/).test(absoluteItemPath);
             },
-          }
-        ]
-      }
+          },
+        ],
+      },
     }),
   ],
 });
 
 const cssDemoOutput = Object.assign({}, config, {
-  entry: ['./styles/scss/image-gallery.scss', './example/app.css'],
+  entry: ["./styles/scss/image-gallery.scss", "./example/App.css"],
   output: {
-    path: path.resolve(__dirname, 'demo'),
+    path: path.resolve(__dirname, "demo"),
   },
   module: {
     rules: [
@@ -140,16 +139,16 @@ const cssDemoOutput = Object.assign({}, config, {
         use: [
           MiniCssExtractPlugin.loader,
           // Translates CSS into CommonJS
-          'css-loader',
+          "css-loader",
           // Compiles Sass to CSS
-          'sass-loader',
+          "sass-loader",
         ],
-      }
-    ]
+      },
+    ],
   },
   plugins: [
     new MiniCssExtractPlugin({
-      filename: 'demo.mini.css',
+      filename: "demo.mini.css",
     }),
     new RemovePlugin({
       /**
@@ -158,13 +157,13 @@ const cssDemoOutput = Object.assign({}, config, {
       after: {
         test: [
           {
-            folder: 'demo',
+            folder: "demo",
             method: (absoluteItemPath) => {
               return new RegExp(/\.js$/).test(absoluteItemPath);
             },
-          }
-        ]
-      }
+          },
+        ],
+      },
     }),
   ],
 });
