@@ -1,17 +1,17 @@
-import React from 'react';
-import { bool, func, string } from 'prop-types';
+import React from "react";
+import { bool, func, string } from "prop-types";
 
 const defaultProps = {
-  description: '',
-  fullscreen: '',
+  description: "",
+  fullscreen: "",
   isFullscreen: false,
-  originalAlt: '',
-  originalHeight: '',
-  originalWidth: '',
-  originalTitle: '',
-  sizes: '',
-  srcSet: '',
-  loading: 'eager',
+  originalAlt: "",
+  originalHeight: "",
+  originalWidth: "",
+  originalTitle: "",
+  sizes: "",
+  srcSet: "",
+  loading: "eager",
 };
 
 const Item = React.memo((props) => {
@@ -29,8 +29,8 @@ const Item = React.memo((props) => {
     sizes,
     srcSet,
     loading,
-  } = {...defaultProps, ...props};
-  const itemSrc = isFullscreen ? (fullscreen || original) : original;
+  } = { ...defaultProps, ...props };
+  const itemSrc = isFullscreen ? fullscreen || original : original;
 
   return (
     <React.Fragment>
@@ -43,22 +43,18 @@ const Item = React.memo((props) => {
         width={originalWidth}
         sizes={sizes}
         title={originalTitle}
-        onLoad={event => handleImageLoaded(event, original)}
+        onLoad={(event) => handleImageLoaded(event, original)}
         onError={onImageError}
         loading={loading}
       />
-      {
-        description && (
-          <span className="image-gallery-description">
-            {description}
-          </span>
-        )
-      }
+      {description && (
+        <span className="image-gallery-description">{description}</span>
+      )}
     </React.Fragment>
   );
 });
 
-Item.displayName = 'Item';
+Item.displayName = "Item";
 
 Item.propTypes = {
   description: string,

@@ -3,8 +3,8 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 
 module.exports = {
   entry: [
-    "./example/app.js",
-    "./example/app.css",
+    "./example/App.jsx",
+    "./example/App.css",
     "./styles/scss/image-gallery.scss",
   ],
   output: {
@@ -13,7 +13,7 @@ module.exports = {
     publicPath: "/dist/",
   },
   resolve: {
-    extensions: [".js"],
+    extensions: [".js", ".jsx"],
     alias: {
       src: path.resolve(__dirname, "src/"),
     },

@@ -12,8 +12,8 @@ import LeftNav from "src/controls/LeftNav";
 import RightNav from "src/controls/RightNav";
 import PlayPause from "src/controls/PlayPause";
 import SwipeWrapper from "src/SwipeWrapper";
-import TopNav from "./controls/TopNav";
-import BottomNav from "./controls/BottomNav";
+import TopNav from "../controls/TopNav";
+import BottomNav from "../controls/BottomNav";
 
 const screenChangeEvents = [
   "fullscreenchange",
