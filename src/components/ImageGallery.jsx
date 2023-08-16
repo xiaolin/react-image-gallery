@@ -6,14 +6,14 @@ import isEqual from "react-fast-compare";
 import ResizeObserver from "resize-observer-polyfill";
 import { LEFT, RIGHT, UP, DOWN } from "react-swipeable";
 import { arrayOf, bool, func, number, oneOf, shape, string } from "prop-types";
-import Item from "src/Item";
-import Fullscreen from "src/controls/Fullscreen";
-import LeftNav from "src/controls/LeftNav";
-import RightNav from "src/controls/RightNav";
-import PlayPause from "src/controls/PlayPause";
-import SwipeWrapper from "src/SwipeWrapper";
-import TopNav from "./controls/TopNav";
-import BottomNav from "./controls/BottomNav";
+import Item from "src/components/Item";
+import Fullscreen from "src/components/controls/Fullscreen";
+import LeftNav from "src/components/controls/LeftNav";
+import RightNav from "src/components/controls/RightNav";
+import PlayPause from "src/components/controls/PlayPause";
+import SwipeWrapper from "src/components/SwipeWrapper";
+import TopNav from "src/components/controls/TopNav";
+import BottomNav from "src/components/controls/BottomNav";
 
 const screenChangeEvents = [
   "fullscreenchange",
@@ -51,7 +51,6 @@ class ImageGallery extends React.Component {
       isFullscreen: false,
       isSwipingThumbnail: false,
       isPlaying: false,
-      slideVertically: props.slideVertically,
     };
     this.loadedImages = {};
     this.imageGallery = React.createRef();
@@ -476,9 +475,9 @@ class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, currentSlideOffset, slideStyle, slideVertically } =
+    const { currentIndex, currentSlideOffset, slideStyle } =
       this.state;
-    const { infinite, items, useTranslate3D, isRTL } = this.props;
+    const { infinite, items, useTranslate3D, isRTL, slideVertically } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
@@ -796,8 +795,9 @@ class ImageGallery extends React.Component {
       isTransitioning,
       swipingUpDown,
       swipingLeftRight,
-      slideVertically,
     } = this.state;
+
+    const { slideVertically } = this.props;
 
     // if the initial swiping is up/down prevent moving the slides until swipe ends
     if ((dir === UP || dir === DOWN || swipingUpDown) && !swipingLeftRight) {
@@ -980,7 +980,7 @@ class ImageGallery extends React.Component {
 
   handleOnSwiped({ event, dir, velocity }) {
     const { disableSwipe, stopPropagation, flickThreshold } = this.props;
-    const { slideVertically } = this.state;
+    const { slideVertically } = this.props;
 
     if (disableSwipe) return;
 
@@ -1477,8 +1477,9 @@ class ImageGallery extends React.Component {
       isFullscreen,
       modalFullscreen,
       isPlaying,
-      slideVertically,
     } = this.state;
+
+    const { slideVertically } = this.props;
 
     const {
       additionalClass,
