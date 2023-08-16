@@ -247,14 +247,38 @@ class ImageGallery extends React.Component {
   }
 
   onThumbnailClick(event, index) {
-    const { onThumbnailClick } = this.props;
+    const { onThumbnailClick, items } = this.props;
+    const { currentIndex } = this.state;
     // blur element to remove outline cause by focus
     event.target.parentNode.parentNode.blur();
-    this.slideToIndex(index, event);
+    if (currentIndex !== index) {
+      if (items.length === 2) {
+        this.slideToIndexWithStyleReset(index, event);
+      } else {
+        this.slideToIndex(index, event);
+      }
+    }
     if (onThumbnailClick) {
       onThumbnailClick(event, index);
     }
   }
+
+  onBulletClick = (event, index) => {
+    const { onBulletClick, items } = this.props;
+    const { currentIndex } = this.state;
+    // blur element to remove outline caused by focus
+    event.target.blur();
+    if (currentIndex !== index) {
+      if (items.length === 2) {
+        this.slideToIndexWithStyleReset(index, event);
+      } else {
+        this.slideToIndex(index, event);
+      }
+    }
+    if (onBulletClick) {
+      onBulletClick(event, index);
+    }
+  };
 
   onThumbnailMouseOver(event, index) {
     if (this.thumbnailMouseOverTimer) {
@@ -633,15 +657,6 @@ class ImageGallery extends React.Component {
       }
 
       if (showBullets) {
-        // generate bullet elements and store them in array
-        const bulletOnClick = (event) => {
-          if (item.bulletOnClick) {
-            item.bulletOnClick({ item, itemIndex: index, currentIndex });
-          }
-          // blur element to remove outline caused by focus
-          event.target.blur();
-          return this.slideToIndex.call(this, index, event);
-        };
         const igBulletClass = clsx("image-gallery-bullet", item.bulletClass, {
           active: currentIndex === index,
         });
@@ -650,7 +665,7 @@ class ImageGallery extends React.Component {
             type="button"
             key={`bullet-${index}`}
             className={igBulletClass}
-            onClick={bulletOnClick}
+            onClick={(event) => this.onBulletClick(event, index)}
             aria-pressed={currentIndex === index ? "true" : "false"}
             aria-label={`Go to Slide ${index + 1}`}
           />
@@ -753,13 +768,13 @@ class ImageGallery extends React.Component {
   }
 
   canSlideLeft() {
-    const { infinite, isRTL } = this.props;
-    return infinite || (isRTL ? this.canSlideNext() : this.canSlidePrevious());
+    const { infinite } = this.props;
+    return infinite || this.canSlidePrevious();
   }
 
   canSlideRight() {
-    const { infinite, isRTL } = this.props;
-    return infinite || (isRTL ? this.canSlidePrevious() : this.canSlideNext());
+    const { infinite } = this.props;
+    return infinite || this.canSlideNext();
   }
 
   canSlidePrevious() {
@@ -1231,32 +1246,37 @@ class ImageGallery extends React.Component {
   }
 
   slideTo(event, direction) {
-    const { currentIndex, currentSlideOffset, isTransitioning } = this.state;
+    const { currentIndex, isTransitioning } = this.state;
     const { items } = this.props;
     const nextIndex = currentIndex + (direction === "left" ? -1 : 1);
 
     if (isTransitioning) return;
 
     if (items.length === 2) {
-      /*
-        When there are only 2 slides fake a tiny swipe to get the slides
-        on the correct side for transitioning
-      */
-      this.setState(
-        {
-          // this will reset once index changes
-          currentSlideOffset:
-            currentSlideOffset + (direction === "left" ? 0.001 : -0.001),
-          slideStyle: { transition: "none" }, // move the slide over instantly
-        },
-        () => {
-          // add 25ms timeout to avoid delay in moving slides over
-          window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
-        }
-      );
+      this.slideToIndexWithStyleReset(nextIndex, event);
     } else {
       this.slideToIndex(nextIndex, event);
     }
+  }
+
+  slideToIndexWithStyleReset(nextIndex, event) {
+    /*
+    When there are only 2 slides fake a tiny swipe to get the slides
+    on the correct side for transitioning
+    */
+    const { currentIndex, currentSlideOffset } = this.state;
+    this.setState(
+      {
+        // this will reset once index changes
+        currentSlideOffset:
+          currentSlideOffset + (currentIndex > nextIndex ? 0.001 : -0.001),
+        slideStyle: { transition: "none" }, // move the slide over instantly
+      },
+      () => {
+        // add 25ms timeout to avoid delay in moving slides over
+        window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
+      }
+    );
   }
 
   handleThumbnailMouseOver(event, index) {
@@ -1675,6 +1695,7 @@ ImageGallery.propTypes = {
   onTouchStart: func,
   onMouseOver: func,
   onMouseLeave: func,
+  onBulletClick: func,
   onThumbnailError: func,
   onThumbnailClick: func,
   renderCustomControls: func,
@@ -1734,6 +1755,7 @@ ImageGallery.defaultProps = {
   onTouchStart: null,
   onMouseOver: null,
   onMouseLeave: null,
+  onBulletClick: null,
   onThumbnailError: null,
   onThumbnailClick: null,
   renderCustomControls: null,

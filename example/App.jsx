@@ -1,7 +1,7 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
 
-import ImageGallery from "../src/components/ImageGallery";
+import ImageGallery from "src/components/ImageGallery";
 
 const PREFIX_URL =
   "https://raw.githubusercontent.com/xiaolin/react-image-gallery/master/static/";
@@ -25,9 +25,10 @@ class App extends React.Component {
       slideInterval: 2000,
       slideOnThumbnailOver: false,
       thumbnailPosition: "bottom",
-      showVideo: {},
+      showVideo: false,
       useWindowKeyDown: true,
     };
+    this._toggleShowVideo = this._toggleShowVideo.bind(this);
 
     this.images = [
       {
@@ -105,7 +106,7 @@ class App extends React.Component {
   }
 
   _resetVideo() {
-    this.setState({ showVideo: {} });
+    this.setState({ showVideo: false });
 
     if (this.state.showPlayButton) {
       this.setState({ showGalleryPlayButton: true });
@@ -116,16 +117,13 @@ class App extends React.Component {
     }
   }
 
-  _toggleShowVideo(url) {
-    const showVideo = this.state;
+  _toggleShowVideo() {
+    const { showVideo } = this.state;
     this.setState({
-      showVideo: {
-        ...showVideo,
-        [url]: !showVideo[url],
-      },
+      showVideo: !showVideo,
     });
 
-    if (!showVideo[url]) {
+    if (!showVideo) {
       if (this.state.showPlayButton) {
         this.setState({ showGalleryPlayButton: false });
       }
@@ -139,24 +137,26 @@ class App extends React.Component {
   _renderVideo(item) {
     return (
       <div>
-        {this.state.showVideo[item.embedUrl] ? (
+        {this.state.showVideo ? (
           <div className="video-wrapper">
-            <a
-              className="close-video"
-              onClick={this._toggleShowVideo.bind(this, item.embedUrl)}
-            ></a>
+            <button className="close-video" onClick={this._toggleShowVideo} />
             <iframe
+              title="sample video"
               width="560"
               height="315"
               src={item.embedUrl}
-              frameBorder="0"
+              style={{ border: "none" }}
               allowFullScreen
-            ></iframe>
+            />
           </div>
         ) : (
-          <a onClick={this._toggleShowVideo.bind(this, item.embedUrl)}>
-            <div className="play-button"></div>
-            <img className="image-gallery-image" src={item.original} />
+          <>
+            <button className="play-button" onClick={this._toggleShowVideo} />
+            <img
+              alt="sample video cover"
+              className="image-gallery-image"
+              src={item.original}
+            />
             {item.description && (
               <span
                 className="image-gallery-description"
@@ -165,7 +165,7 @@ class App extends React.Component {
                 {item.description}
               </span>
             )}
-          </a>
+          </>
         )}
       </div>
     );

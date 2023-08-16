@@ -1,0 +1,56 @@
+# This workflow uses actions that are not certified by GitHub.
+# They are provided by a third-party and are governed by
+# separate terms of service, privacy policy, and support
+# documentation.
+# ESLint is a tool for identifying and reporting on patterns
+# found in ECMAScript/JavaScript code.
+# More details at https://github.com/eslint/eslint
+# and https://eslint.org
+
+name: workflow
+
+on:
+  push:
+    branches: ["master"]
+  pull_request:
+    # The branches below must be a subset of the branches above
+    branches: ["master"]
+  schedule:
+    - cron: "35 15 * * 3"
+
+jobs:
+  eslint:
+    name: Eslint
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read # only required for a private repository by github/codeql-action/upload-sarif to get the Action run status
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        run: yarn
+
+      - name: Run ESLint
+        run: yarn lint
+        continue-on-error: false
+
+  jest:
+    name: Jest
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      security-events: write
+      actions: read
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Install Packages
+        run: yarn
+
+      - name: Run Jest
+        run: yarn jest
+        continue-on-error: false
