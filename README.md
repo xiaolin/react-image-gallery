@@ -30,14 +30,17 @@ React Image Gallery requires **React 16.0.0 or later.**
 npm install react-image-gallery
 ```
 
-### Style import (with webpack)
+### Style import options
 
 ```
-# SCSS
+# scss file import
 @import "~react-image-gallery/styles/scss/image-gallery.scss";
 
-# CSS
+# css file import
 @import "~react-image-gallery/styles/css/image-gallery.css";
+
+# js file import (using webpack)
+import "react-image-gallery/styles/css/image-gallery.css";
 ```
 
 ### Example
@@ -46,7 +49,8 @@ Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image
 
 ```js
 import ImageGallery from "react-image-gallery";
-import "react-image-gallery/styles/css/image-gallery.css"; 
+// import stylesheet if you're not already using CSS @import
+import "react-image-gallery/styles/css/image-gallery.css";
 
 const images = [
   {
