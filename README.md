@@ -46,6 +46,7 @@ Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image
 
 ```js
 import ImageGallery from "react-image-gallery";
+import "react-image-gallery/styles/css/image-gallery.css"; 
 
 const images = [
   {
