@@ -12,6 +12,8 @@ import LeftNav from "src/components/controls/LeftNav";
 import RightNav from "src/components/controls/RightNav";
 import PlayPause from "src/components/controls/PlayPause";
 import SwipeWrapper from "src/components/SwipeWrapper";
+import TopNav from "src/components/controls/TopNav";
+import BottomNav from "src/components/controls/BottomNav";
 
 const screenChangeEvents = [
   "fullscreenchange",
@@ -473,37 +475,42 @@ class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, currentSlideOffset, slideStyle } = this.state;
-    const { infinite, items, useTranslate3D, isRTL } = this.props;
+    const { currentIndex, currentSlideOffset, slideStyle } =
+      this.state;
+    const { infinite, items, useTranslate3D, isRTL, slideVertically } = this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
     // calculates where the other slides belong based on currentIndex
     // if it is RTL the base line should be reversed
-    let translateX =
+    let translateValue =
       (baseTranslateX + index * 100) * (isRTL ? -1 : 1) + currentSlideOffset;
 
     if (infinite && items.length > 2) {
       if (currentIndex === 0 && index === totalSlides) {
         // make the last slide the slide before the first
         // if it is RTL the base line should be reversed
-        translateX = -100 * (isRTL ? -1 : 1) + currentSlideOffset;
+        translateValue = -100 * (isRTL ? -1 : 1) + currentSlideOffset;
       } else if (currentIndex === totalSlides && index === 0) {
         // make the first slide the slide after the last
         // if it is RTL the base line should be reversed
-        translateX = 100 * (isRTL ? -1 : 1) + currentSlideOffset;
+        translateValue = 100 * (isRTL ? -1 : 1) + currentSlideOffset;
       }
     }
 
     // Special case when there are only 2 items with infinite on
     if (infinite && items.length === 2) {
-      translateX = this.getTranslateXForTwoSlide(index);
+      translateValue = this.getTranslateXForTwoSlide(index);
     }
 
-    let translate = `translate(${translateX}%, 0)`;
+    let translate = slideVertically
+      ? `translate(0, ${translateValue}%)`
+      : `translate(${translateValue}%, 0)`;
 
     if (useTranslate3D) {
-      translate = `translate3d(${translateX}%, 0, 0)`;
+      translate = slideVertically
+        ? `translate3d(0, ${translateValue}%, 0)`
+        : `translate3d(${translateValue}%, 0, 0)`;
     }
 
     // don't show some slides while transitioning to avoid background transitions
@@ -781,16 +788,23 @@ class ImageGallery extends React.Component {
   }
 
   handleSwiping({ event, absX, dir }) {
-    const { disableSwipe, stopPropagation } = this.props;
-    const { galleryWidth, isTransitioning, swipingUpDown, swipingLeftRight } =
-      this.state;
+    const { disableSwipe, stopPropagation, swipingTransitionDuration } =
+      this.props;
+    const {
+      galleryWidth,
+      isTransitioning,
+      swipingUpDown,
+      swipingLeftRight,
+    } = this.state;
+
+    const { slideVertically } = this.props;
 
     // if the initial swiping is up/down prevent moving the slides until swipe ends
     if ((dir === UP || dir === DOWN || swipingUpDown) && !swipingLeftRight) {
       if (!swipingUpDown) {
         this.setState({ swipingUpDown: true });
       }
-      return;
+      if (!slideVertically) return;
     }
 
     if ((dir === LEFT || dir === RIGHT) && !swipingLeftRight) {
@@ -799,15 +813,28 @@ class ImageGallery extends React.Component {
 
     if (disableSwipe) return;
 
-    const { swipingTransitionDuration } = this.props;
     if (stopPropagation) {
       event.preventDefault();
     }
 
     if (!isTransitioning) {
-      const side = dir === RIGHT ? 1 : -1;
+      const isSwipeLeftOrRight = dir === LEFT || dir === RIGHT;
+      const isSwipeTopOrDown = dir === UP || dir === DOWN;
+
+      if (isSwipeLeftOrRight && slideVertically) return;
+      if (isSwipeTopOrDown && !slideVertically) return;
+
+      const sides = {
+        [LEFT]: -1,
+        [RIGHT]: 1,
+        [UP]: -1,
+        [DOWN]: 1,
+      };
+
+      const side = sides[dir];
 
       let currentSlideOffset = (absX / galleryWidth) * 100;
+
       if (Math.abs(currentSlideOffset) >= 100) {
         currentSlideOffset = 100;
       }
@@ -953,6 +980,7 @@ class ImageGallery extends React.Component {
 
   handleOnSwiped({ event, dir, velocity }) {
     const { disableSwipe, stopPropagation, flickThreshold } = this.props;
+    const { slideVertically } = this.props;
 
     if (disableSwipe) return;
 
@@ -961,17 +989,24 @@ class ImageGallery extends React.Component {
     this.resetSwipingDirection();
 
     // if it is RTL the direction is reversed
-    const swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
+    let swipeDirection = (dir === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
+    if (slideVertically) swipeDirection = dir === UP ? 1 : -1;
+
     const isSwipeUpOrDown = dir === UP || dir === DOWN;
+    const isSwipeLeftOrRight = dir === LEFT || dir === RIGHT;
     const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
-    this.handleOnSwipedTo(swipeDirection, isLeftRightFlick);
+    const isTopDownFlick = velocity > flickThreshold && !isSwipeLeftOrRight;
+
+    const isFlick = slideVertically ? isTopDownFlick : isLeftRightFlick;
+
+    this.handleOnSwipedTo(swipeDirection, isFlick);
   }
 
-  handleOnSwipedTo(swipeDirection, isLeftRightFlick) {
+  handleOnSwipedTo(swipeDirection, isFlick) {
     const { currentIndex, isTransitioning } = this.state;
     let slideTo = currentIndex;
 
-    if ((this.sufficientSwipe() || isLeftRightFlick) && !isTransitioning) {
+    if ((this.sufficientSwipe() || isFlick) && !isTransitioning) {
       // slideto the next/prev slide
       slideTo += swipeDirection;
     }
@@ -1437,8 +1472,14 @@ class ImageGallery extends React.Component {
   }
 
   render() {
-    const { currentIndex, isFullscreen, modalFullscreen, isPlaying } =
-      this.state;
+    const {
+      currentIndex,
+      isFullscreen,
+      modalFullscreen,
+      isPlaying,
+    } = this.state;
+
+    const { slideVertically } = this.props;
 
     const {
       additionalClass,
@@ -1451,6 +1492,8 @@ class ImageGallery extends React.Component {
       renderCustomControls,
       renderLeftNav,
       renderRightNav,
+      renderTopNav,
+      renderBottomNav,
       showBullets,
       showFullscreenButton,
       showIndex,
@@ -1475,8 +1518,12 @@ class ImageGallery extends React.Component {
           <React.Fragment>
             {showNav && (
               <React.Fragment>
-                {renderLeftNav(this.slideLeft, !this.canSlideLeft())}
-                {renderRightNav(this.slideRight, !this.canSlideRight())}
+                {slideVertically
+                  ? renderTopNav(this.slideLeft, !this.canSlideLeft())
+                  : renderLeftNav(this.slideLeft, !this.canSlideLeft())}
+                {slideVertically
+                  ? renderBottomNav(this.slideRight, !this.canSlideRight())
+                  : renderRightNav(this.slideRight, !this.canSlideRight())}
               </React.Fragment>
             )}
             <SwipeWrapper
@@ -1485,7 +1532,13 @@ class ImageGallery extends React.Component {
               onSwiping={this.handleSwiping}
               onSwiped={this.handleOnSwiped}
             >
-              <div className="image-gallery-slides">{slides}</div>
+              <div
+                className="image-gallery-slides"
+                // disable touch-action for touch screen devices when vertical sliding is active
+                style={{ touchAction: slideVertically ? "none" : "unset" }}
+              >
+                {slides}
+              </div>
             </SwipeWrapper>
           </React.Fragment>
         ) : (
@@ -1649,6 +1702,8 @@ ImageGallery.propTypes = {
   renderCustomControls: func,
   renderLeftNav: func,
   renderRightNav: func,
+  renderTopNav: func,
+  renderBottomNav: func,
   renderPlayPauseButton: func,
   renderFullscreenButton: func,
   renderItem: func,
@@ -1658,6 +1713,7 @@ ImageGallery.propTypes = {
   useTranslate3D: bool,
   isRTL: bool,
   useWindowKeyDown: bool,
+  slideVertically: bool,
 };
 
 ImageGallery.defaultProps = {
@@ -1709,11 +1765,18 @@ ImageGallery.defaultProps = {
   slideInterval: 3000,
   slideOnThumbnailOver: false,
   swipeThreshold: 30,
+  slideVertically: false,
   renderLeftNav: (onClick, disabled) => (
     <LeftNav onClick={onClick} disabled={disabled} />
   ),
   renderRightNav: (onClick, disabled) => (
     <RightNav onClick={onClick} disabled={disabled} />
+  ),
+  renderTopNav: (onClick, disabled) => (
+    <TopNav onClick={onClick} disabled={disabled} />
+  ),
+  renderBottomNav: (onClick, disabled) => (
+    <BottomNav onClick={onClick} disabled={disabled} />
   ),
   renderPlayPauseButton: (onClick, isPlaying) => (
     <PlayPause onClick={onClick} isPlaying={isPlaying} />

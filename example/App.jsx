@@ -19,6 +19,7 @@ class App extends React.Component {
       showPlayButton: true,
       showGalleryPlayButton: true,
       showNav: true,
+      slideVertically: false,
       isRTL: false,
       slideDuration: 450,
       slideInterval: 2000,
@@ -201,6 +202,7 @@ class App extends React.Component {
           slideOnThumbnailOver={this.state.slideOnThumbnailOver}
           additionalClass="app-image-gallery"
           useWindowKeyDown={this.state.useWindowKeyDown}
+          slideVertically={this.state.slideVertically}
         />
 
         <div className="app-sandbox">
@@ -332,6 +334,18 @@ class App extends React.Component {
                   checked={this.state.showIndex}
                 />
                 <label htmlFor="show_index">show index</label>
+              </li>
+              <li>
+                <input
+                  id="slide_vertically"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(
+                    this,
+                    "slideVertically"
+                  )}
+                  checked={this.state.slideVertically}
+                />
+                <label htmlFor="slide_vertically">slide vertically</label>
               </li>
               <li>
                 <input

@@ -86,6 +86,46 @@ $ig-shadow: 0 2px 2px lighten($ig-black, 10%);
   left: 0;
 }
 
+.image-gallery-top-nav,
+.image-gallery-bottom-nav {
+  padding: 10px 10px;
+  left: 50%;
+  transform: translateX(-50%);
+
+  .image-gallery-svg {
+    height: 120px;
+    width: 60px;
+  }
+
+  @media (max-width: $ig-small-screen) {
+    .image-gallery-svg {
+      height: 72px;
+      width: 36px;
+    }
+  }
+
+  @media (max-width: $ig-xsmall-screen) {
+    .image-gallery-svg {
+      height: 48px;
+      width: 24px;
+    }
+  }
+
+  &[disabled] {
+    cursor: disabled;
+    opacity: .6;
+    pointer-events: none;
+  }
+}
+
+.image-gallery-top-nav {
+  top: 0;
+}
+
+.image-gallery-bottom-nav {
+  bottom: 0;
+}
+
 .image-gallery-left-nav,
 .image-gallery-right-nav {
   padding: 50px 10px;
