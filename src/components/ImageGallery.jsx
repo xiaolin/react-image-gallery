@@ -45,6 +45,7 @@ class ImageGallery extends React.Component {
       thumbsSwipedTranslate: 0,
       currentSlideOffset: 0,
       galleryWidth: 0,
+      galleryHeight: 0,
       thumbnailsWrapperWidth: 0,
       thumbnailsWrapperHeight: 0,
       thumbsStyle: { transition: `all ${props.slideDuration}ms ease-out` },
@@ -63,7 +64,6 @@ class ImageGallery extends React.Component {
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleMouseDown = this.handleMouseDown.bind(this);
     this.handleResize = this.handleResize.bind(this);
-    this.handleTouchMove = this.handleTouchMove.bind(this);
     this.handleOnSwiped = this.handleOnSwiped.bind(this);
     this.handleScreenChange = this.handleScreenChange.bind(this);
     this.handleSwiping = this.handleSwiping.bind(this);
@@ -103,9 +103,6 @@ class ImageGallery extends React.Component {
       this.imageGallery.current.addEventListener("keydown", this.handleKeyDown);
     }
     window.addEventListener("mousedown", this.handleMouseDown);
-    window.addEventListener("touchmove", this.handleTouchMove, {
-      passive: false,
-    });
     // we're using resize observer to help with detecting containers size changes as images load
     this.initSlideWrapperResizeObserver(this.imageGallerySlideWrapper);
     this.initThumbnailWrapperResizeObserver(this.thumbnailsWrapper);
@@ -207,7 +204,6 @@ class ImageGallery extends React.Component {
   componentWillUnmount() {
     const { useWindowKeyDown } = this.props;
     window.removeEventListener("mousedown", this.handleMouseDown);
-    window.removeEventListener("touchmove", this.handleTouchMove);
     this.removeScreenChangeEvent();
     this.removeResizeObserver();
     if (this.playPauseIntervalId) {
@@ -475,9 +471,9 @@ class ImageGallery extends React.Component {
   }
 
   getSlideStyle(index) {
-    const { currentIndex, currentSlideOffset, slideStyle } =
-      this.state;
-    const { infinite, items, useTranslate3D, isRTL, slideVertically } = this.props;
+    const { currentIndex, currentSlideOffset, slideStyle } = this.state;
+    const { infinite, items, useTranslate3D, isRTL, slideVertically } =
+      this.props;
     const baseTranslateX = -100 * currentIndex;
     const totalSlides = items.length - 1;
 
@@ -787,11 +783,12 @@ class ImageGallery extends React.Component {
     return currentIndex < items.length - 1;
   }
 
-  handleSwiping({ event, absX, dir }) {
+  handleSwiping({ event, absX, absY, dir }) {
     const { disableSwipe, stopPropagation, swipingTransitionDuration } =
       this.props;
     const {
       galleryWidth,
+      galleryHeight,
       isTransitioning,
       swipingUpDown,
       swipingLeftRight,
@@ -834,6 +831,9 @@ class ImageGallery extends React.Component {
       const side = sides[dir];
 
       let currentSlideOffset = (absX / galleryWidth) * 100;
+      if (slideVertically) {
+        currentSlideOffset = (absY / galleryHeight) * 100;
+      }
 
       if (Math.abs(currentSlideOffset) >= 100) {
         currentSlideOffset = 100;
@@ -1022,14 +1022,6 @@ class ImageGallery extends React.Component {
     this.unthrottledSlideToIndex(slideTo);
   }
 
-  handleTouchMove(event) {
-    const { swipingLeftRight } = this.state;
-    if (swipingLeftRight) {
-      // prevent background scrolling up and down while swiping left and right
-      event.preventDefault();
-    }
-  }
-
   handleMouseDown() {
     // keep track of mouse vs keyboard usage for a11y
     this.imageGallery.current.classList.add("image-gallery-using-mouse");
@@ -1113,7 +1105,10 @@ class ImageGallery extends React.Component {
     }
 
     if (this.imageGallery && this.imageGallery.current) {
-      this.setState({ galleryWidth: this.imageGallery.current.offsetWidth });
+      this.setState({
+        galleryWidth: this.imageGallery.current.offsetWidth,
+        galleryHeight: this.imageGallery.current.offsetHeight,
+      });
     }
 
     if (
@@ -1472,14 +1467,8 @@ class ImageGallery extends React.Component {
   }
 
   render() {
-    const {
-      currentIndex,
-      isFullscreen,
-      modalFullscreen,
-      isPlaying,
-    } = this.state;
-
-    const { slideVertically } = this.props;
+    const { currentIndex, isFullscreen, modalFullscreen, isPlaying } =
+      this.state;
 
     const {
       additionalClass,
@@ -1500,6 +1489,7 @@ class ImageGallery extends React.Component {
       showThumbnails,
       showNav,
       showPlayButton,
+      slideVertically,
       renderPlayPauseButton,
     } = this.props;
 
@@ -1510,6 +1500,10 @@ class ImageGallery extends React.Component {
       this.getThumbnailPositionClassName(thumbnailPosition),
       { "image-gallery-rtl": isRTL }
     );
+
+    const bulletsClass = clsx("image-gallery-bullets", {
+      "image-gallery-bullets-vertical": slideVertically,
+    });
 
     const slideWrapper = (
       <div ref={this.imageGallerySlideWrapper} className={slideWrapperClass}>
@@ -1532,13 +1526,7 @@ class ImageGallery extends React.Component {
               onSwiping={this.handleSwiping}
               onSwiped={this.handleOnSwiped}
             >
-              <div
-                className="image-gallery-slides"
-                // disable touch-action for touch screen devices when vertical sliding is active
-                style={{ touchAction: slideVertically ? "none" : "unset" }}
-              >
-                {slides}
-              </div>
+              <div className="image-gallery-slides">{slides}</div>
             </SwipeWrapper>
           </React.Fragment>
         ) : (
@@ -1546,7 +1534,7 @@ class ImageGallery extends React.Component {
         )}
         {showPlayButton && renderPlayPauseButton(this.togglePlay, isPlaying)}
         {showBullets && (
-          <div className="image-gallery-bullets">
+          <div className={bulletsClass}>
             <div
               className="image-gallery-bullets-container"
               role="navigation"

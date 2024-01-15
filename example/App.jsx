@@ -16,7 +16,7 @@ class App extends React.Component {
       showThumbnails: true,
       showFullscreenButton: true,
       showGalleryFullscreenButton: true,
-      showPlayButton: true,
+      showPlayButton: false,
       showGalleryPlayButton: true,
       showNav: true,
       slideVertically: false,
