@@ -175,6 +175,7 @@ class App extends React.Component {
     return (
       <section className="app">
         <ImageGallery
+        // renderLeftNav= {(onclick, disabled) => (<p onClick={onclick}>hello</p>)}
           ref={(i) => (this._imageGallery = i)}
           items={this.images}
           onClick={this._onImageClick.bind(this)}

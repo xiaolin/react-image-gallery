@@ -762,14 +762,16 @@ class ImageGallery extends React.Component {
     return items.length >= 2;
   }
 
+  //SOLVED BY hunxjunedo : https://github.com/xiaolin/react-image-gallery/issues/767
   canSlideLeft() {
-    const { infinite } = this.props;
-    return infinite || this.canSlidePrevious();
+    const { infinite, isRTL } = this.props;
+    //so basically is the list is right to left, the canSlideLeft depends on canSlideNext instead of canSlideRight
+    return infinite || (isRTL ? this.canSlideNext() : this.canSlidePrevious());
   }
 
   canSlideRight() {
-    const { infinite } = this.props;
-    return infinite || this.canSlideNext();
+    const { infinite, isRTL } = this.props;
+    return infinite || (isRTL ? this.canSlidePrevious() : this.canSlideNext() )
   }
 
   canSlidePrevious() {
@@ -779,7 +781,7 @@ class ImageGallery extends React.Component {
 
   canSlideNext() {
     const { currentIndex } = this.state;
-    const { items } = this.props;
+    const { items, isRTL } = this.props;
     return currentIndex < items.length - 1;
   }
 
