@@ -765,14 +765,14 @@ class ImageGallery extends React.Component {
   //SOLVED BY hunxjunedo : https://github.com/xiaolin/react-image-gallery/issues/767
   //removed some minor errors, rmeove semi-colon
   canSlideLeft() {
-    const { infinite, isRTL } = this.props
+    const { infinite, isRTL } = this.props;
     //so basically is the list is right to left, the canSlideLeft depends on canSlideNext instead of canSlideRight
-    return infinite || (isRTL ? this.canSlideNext() : this.canSlidePrevious())
+    return infinite || (isRTL ? this.canSlideNext() : this.canSlidePrevious());
   }
 
   canSlideRight() {
-    const { infinite, isRTL } = this.props
-    return infinite || (isRTL ? this.canSlidePrevious() : this.canSlideNext() )
+    const { infinite, isRTL } = this.props;
+    return infinite || isRTL ? this.canSlidePrevious() : this.canSlideNext(); 
   }
 
   canSlidePrevious() {
