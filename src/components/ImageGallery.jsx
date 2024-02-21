@@ -772,7 +772,7 @@ class ImageGallery extends React.Component {
 
   canSlideRight() {
     const { infinite, isRTL } = this.props;
-    return infinite || isRTL ? this.canSlidePrevious() : this.canSlideNext(); 
+    return infinite || isRTL ? this.canSlidePrevious() : this.canSlideNext();
   }
 
   canSlidePrevious() {
