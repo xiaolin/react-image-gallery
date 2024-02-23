@@ -764,7 +764,7 @@ class ImageGallery extends React.Component {
 
   canSlideLeft() {
     const { infinite, isRTL } = this.props;
-    //so basically is the list is right to left (isRTL), the logic is inversed
+    //reverse the logic if the slider has isRTL enabled
     return infinite || (isRTL ? this.canSlideNext() : this.canSlidePrevious());
   }
 
