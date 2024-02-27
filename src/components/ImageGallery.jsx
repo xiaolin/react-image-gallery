@@ -1194,8 +1194,8 @@ class ImageGallery extends React.Component {
   }
 
   slideToIndex(index, event) {
-    const { currentIndex, isTransitioning } = this.state;
-    const { items, slideDuration, onBeforeSlide } = this.props;
+    const { currentIndex, isTransitioning, currentSlideOffset } = this.state;
+    const { items, slideDuration, onBeforeSlide, infinite } = this.props;
 
     if (!isTransitioning) {
       if (event) {
@@ -1218,16 +1218,35 @@ class ImageGallery extends React.Component {
         onBeforeSlide(nextIndex);
       }
 
-      this.setState(
-        {
-          previousIndex: currentIndex,
-          currentIndex: nextIndex,
-          isTransitioning: nextIndex !== currentIndex,
-          currentSlideOffset: 0,
-          slideStyle: { transition: `all ${slideDuration}ms ease-out` },
-        },
-        this.onSliding
-      );
+      const slideHandler = () => {
+        this.setState(
+          {
+            previousIndex: currentIndex,
+            currentIndex: nextIndex,
+            isTransitioning: nextIndex !== currentIndex,
+            currentSlideOffset: 0,
+            slideStyle: { transition: `all ${slideDuration}ms ease-out` },
+          },
+          this.onSliding
+        );
+      };
+
+      if (infinite && items.length === 2) {
+        this.setState(
+          {
+            // this will reset once index changes
+            currentSlideOffset:
+              currentSlideOffset + (currentIndex > index ? 0.001 : -0.001),
+            slideStyle: { transition: "none" }, // move the slide over instantly
+          },
+          () => {
+            // add 25ms timeout to avoid delay in moving slides over
+            window.setTimeout(slideHandler, 25);
+          }
+        );
+      } else {
+        slideHandler();
+      }
     }
   }
 
@@ -1243,36 +1262,11 @@ class ImageGallery extends React.Component {
 
   slideTo(event, direction) {
     const { currentIndex, isTransitioning } = this.state;
-    const { items } = this.props;
     const nextIndex = currentIndex + (direction === "left" ? -1 : 1);
 
     if (isTransitioning) return;
 
-    if (items.length === 2) {
-      this.slideToIndexWithStyleReset(nextIndex, event);
-    } else {
-      this.slideToIndex(nextIndex, event);
-    }
-  }
-
-  slideToIndexWithStyleReset(nextIndex, event) {
-    /*
-    When there are only 2 slides fake a tiny swipe to get the slides
-    on the correct side for transitioning
-    */
-    const { currentIndex, currentSlideOffset } = this.state;
-    this.setState(
-      {
-        // this will reset once index changes
-        currentSlideOffset:
-          currentSlideOffset + (currentIndex > nextIndex ? 0.001 : -0.001),
-        slideStyle: { transition: "none" }, // move the slide over instantly
-      },
-      () => {
-        // add 25ms timeout to avoid delay in moving slides over
-        window.setTimeout(() => this.slideToIndex(nextIndex, event), 25);
-      }
-    );
+    this.slideToIndex(nextIndex, event);
   }
 
   handleThumbnailMouseOver(event, index) {
