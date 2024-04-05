@@ -1492,6 +1492,7 @@ class ImageGallery extends React.Component {
       showPlayButton,
       slideVertically,
       renderPlayPauseButton,
+      swipeConfig
     } = this.props;
 
     const thumbnailStyle = this.getThumbnailStyle();
@@ -1522,6 +1523,7 @@ class ImageGallery extends React.Component {
               </React.Fragment>
             )}
             <SwipeWrapper
+              swipeConfig={swipeConfig}
               className="image-gallery-swipe"
               delta={0}
               onSwiping={this.handleSwiping}
@@ -1589,6 +1591,7 @@ class ImageGallery extends React.Component {
             slideWrapper}
           {showThumbnails && thumbnails.length > 0 ? (
             <SwipeWrapper
+              swipeConfig={swipeConfig}
               className={thumbnailWrapperClass}
               delta={0}
               onSwiping={!disableThumbnailSwipe && this.handleThumbnailSwiping}

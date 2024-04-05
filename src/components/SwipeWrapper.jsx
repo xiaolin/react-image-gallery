@@ -10,11 +10,12 @@ const defaultProps = {
 };
 
 const SwipeWrapper = (props) => {
-  const { children, className, delta, onSwiping, onSwiped } = {
+  const { children, className, delta, onSwiping, onSwiped, swipeConfig = {} } = {
     ...defaultProps,
     ...props,
   };
   const swipeHandlers = useSwipeable({
+    ...swipeConfig,
     delta,
     onSwiping,
     onSwiped,
