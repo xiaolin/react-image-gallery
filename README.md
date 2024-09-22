@@ -45,7 +45,7 @@ import "react-image-gallery/styles/css/image-gallery.css";
 
 ### Example
 
-Need more example? See [`example/app.js`](https://github.com/xiaolin/react-image-gallery/blob/master/example/app.js)
+Need more example? See [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
 
 ```js
 import ImageGallery from "react-image-gallery";
