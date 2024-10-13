@@ -2,7 +2,8 @@ import React from "react";
 import { bool, func } from "prop-types";
 import SVG from "src/components/SVG";
 
-const PlayPause = React.memo(({ isPlaying, onClick }) => {
+const PlayPause =Control + Shift + m
+        React.memo(({ isPlaying, onClick }) => {
   return (
     <button
       type="button"
