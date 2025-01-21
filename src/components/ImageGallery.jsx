@@ -2,7 +2,6 @@ import clsx from "clsx";
 import React from "react";
 import throttle from "lodash-es/throttle";
 import debounce from "lodash-es/debounce";
-import isEqual from "react-fast-compare";
 import ResizeObserver from "resize-observer-polyfill";
 import { LEFT, RIGHT, UP, DOWN } from "react-swipeable";
 import { arrayOf, bool, func, number, oneOf, shape, string } from "prop-types";
@@ -14,6 +13,7 @@ import PlayPause from "src/components/controls/PlayPause";
 import SwipeWrapper from "src/components/SwipeWrapper";
 import TopNav from "src/components/controls/TopNav";
 import BottomNav from "src/components/controls/BottomNav";
+import { isEqual } from "lodash-es";
 
 const screenChangeEvents = [
   "fullscreenchange",

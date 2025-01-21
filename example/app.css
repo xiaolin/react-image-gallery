@@ -79,7 +79,8 @@ label {
 
 .video-wrapper {
   position: relative;
-  padding: 33.35% 0; /* 16:9 */
+  padding: 33.35% 0;
+  /* 16:9 */
   height: 0;
 }
 
@@ -126,7 +127,7 @@ label {
     margin: 10px 0;
   }
 
-  .app-buttons li + li {
+  .app-buttons li+li {
     padding: 0;
   }
 
@@ -148,6 +149,7 @@ label {
 }
 
 @media (max-width: 1024px) {
+
   .app .image-gallery,
   .app-sandbox {
     width: 100%;

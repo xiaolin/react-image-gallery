@@ -72,7 +72,7 @@
     "react-swipeable": "7.0.1",
     "remove-files-webpack-plugin": "^1.4.5",
     "resize-observer-polyfill": "^1.5.0",
-    "sass": "^1.35.2",
+    "sass": "^1.83.4",
     "sass-loader": "^12.1.0",
     "style-loader": "^2.0.0",
     "url-loader": "^4.1.1",
