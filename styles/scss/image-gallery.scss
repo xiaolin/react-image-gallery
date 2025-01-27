@@ -1,3 +1,5 @@
+@use "sass:color";
+
 $ig-small-screen: 768px !default;
 $ig-xsmall-screen: 480px !default;
 $ig-white: #fff !default;
@@ -5,7 +7,7 @@ $ig-black: #000 !default;
 $ig-blue: #337ab7 !default;
 $ig-background-black: rgba(0, 0, 0, 0.4) !default;
 $ig-transparent: rgba(0, 0, 0, 0) !default;
-$ig-shadow: 0 2px 2px lighten($ig-black, 10%);
+$ig-shadow: 0 2px 2px color.adjust($ig-black, $lightness: 10%);
 
 @mixin vendor-prefix($name, $value) {
   @each $vendor in ("-webkit-", "-moz-", "-ms-", "-o-", "") {

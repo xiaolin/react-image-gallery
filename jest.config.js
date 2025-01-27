@@ -7,7 +7,7 @@ module.exports = {
     "^.+\\.(js|jsx)$": "babel-jest",
   },
   testMatch: ["**/__tests__/**/*.js?(x)", "**/?(*.)+(spec|test).js?(x)"], // File patterns for test files
-  setupFilesAfterEnv: ["@testing-library/jest-dom/extend-expect"], // Setup file to extend Jest with RTL matchers
+  setupFilesAfterEnv: ["@testing-library/jest-dom"], // Setup file to extend Jest with RTL matchers
   moduleNameMapper: {
     "\\.(css|less|scss|sass)$": "identity-obj-proxy",
     "^src/(.*)$": path.resolve(__dirname, "src/$1"), // Add the moduleNameMapper for your alias
