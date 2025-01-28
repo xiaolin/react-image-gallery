@@ -6,11 +6,46 @@ const config = {
   mode: "production",
 };
 
+const jsEsOutput = Object.assign({}, config, {
+  entry: ["./src/components/ImageGallery.jsx"],
+  output: {
+    path: path.resolve(__dirname, "build"),
+    filename: "image-gallery.es.js",
+    globalObject: "this",
+    library: {
+      type: "module",
+    },
+  },
+  experiments: {
+    outputModule: true,
+  },
+  externalsType: "module",
+  resolve: {
+    alias: {
+      src: path.resolve(__dirname, "src/"),
+    },
+    extensions: [".js", ".jsx"],
+  },
+  module: {
+    rules: [
+      {
+        test: /\.(js|jsx)$/,
+        exclude: /node_modules/,
+        loader: "babel-loader",
+      },
+    ],
+  },
+  externals: {
+    react: "react",
+    "react-dom": "react-dom",
+  },
+});
+
 const jsOutput = Object.assign({}, config, {
   entry: ["./src/components/ImageGallery.jsx"],
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "image-gallery.js",
+    filename: "image-gallery.umd.js",
     library: "ImageGallery",
     globalObject: "this",
     libraryTarget: "umd",
@@ -168,4 +203,4 @@ const cssDemoOutput = Object.assign({}, config, {
   ],
 });
 
-module.exports = [jsOutput, cssOutput, jsDemoOutput, cssDemoOutput];
+module.exports = [jsEsOutput, jsOutput, cssOutput, jsDemoOutput, cssDemoOutput];
