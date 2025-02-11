@@ -1064,9 +1064,7 @@ class ImageGallery extends React.Component {
   handleImageError(event) {
     const { onErrorImageURL } = this.props;
     if (onErrorImageURL && event.target.src.indexOf(onErrorImageURL) === -1) {
-      /* eslint-disable no-param-reassign */
       event.target.src = onErrorImageURL;
-      /* eslint-enable no-param-reassign */
     }
   }
 
