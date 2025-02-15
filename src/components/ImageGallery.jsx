@@ -603,7 +603,7 @@ class ImageGallery extends React.Component {
           tabIndex="-1"
           className={`image-gallery-slide ${alignment} ${originalClass}`}
           style={slideStyle}
-          onClick={onClick}
+          onClick={(event) => onClick(event, index)}
           onKeyUp={this.handleSlideKeyUp}
           onTouchMove={onTouchMove}
           onTouchEnd={onTouchEnd}
