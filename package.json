@@ -24,7 +24,8 @@
       "import": "./build/image-gallery.es.js",
       "require": "./build/image-gallery.umd.js"
     },
-    "./styles/css/image-gallery.css": "./styles/css/image-gallery.css"
+    "./styles/css/image-gallery.css": "./styles/css/image-gallery.css",
+    "./styles/scss/image-gallery": "./styles/scss/image-gallery.scss"
   },
   "style": "styles/css/image-gallery.css",
   "keywords": [
