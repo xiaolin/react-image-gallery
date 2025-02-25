@@ -10,8 +10,8 @@ assignees: ''
 <!--- NOTE: Issues that do not follow the template below will be closed -->
 
 **Checklist before opening an issue**\
-Lots of issues are opened that are unrelated to this package, please take a moment to ensure the issue is not on your end 🙏.
-- [ ] Did you try google?
+Lots of issues are opened that are unrelated to this lib, please take a moment to ensure the issue is not on your end 🙏.
+- [ ] Did you try google/chatgpt?
 - [ ] Did you search for previous Issues in this repo?
 
 **Describe the bug**\
