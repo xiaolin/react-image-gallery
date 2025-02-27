@@ -155,7 +155,7 @@ class MyGallery extends React.Component {
   - When fullscreen is toggled a boolean is passed to the callback
 - `onPause`: Function, `callback(currentIndex)`
 - `onPlay`: Function, `callback(currentIndex)`
-- `onClick`: Function, `callback(event)`
+- `onClick`: Function, `callback(event, imageIndex)`
 - `onTouchMove`: Function, `callback(event) on gallery slide`
 - `onTouchEnd`: Function, `callback(event) on gallery slide`
 - `onTouchStart`: Function, `callback(event) on gallery slide`
