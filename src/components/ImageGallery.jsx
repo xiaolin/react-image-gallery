@@ -1436,6 +1436,7 @@ class ImageGallery extends React.Component {
         sizes={item.sizes}
         loading={item.loading}
         srcSet={item.srcSet}
+        rotate={item.rotate}
       />
     );
   }
@@ -1644,6 +1645,7 @@ ImageGallery.propTypes = {
       imageSet: imageSetType,
       srcSet: string,
       sizes: string,
+      rotate: number, // 图片旋转角度，支持任意数值（通常为 0, 90, 180, 270）
     })
   ).isRequired,
   showNav: bool,
