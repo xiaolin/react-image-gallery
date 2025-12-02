@@ -1355,12 +1355,18 @@ class ImageGallery extends React.Component {
   }
 
   pauseOrPlay() {
-    const { infinite } = this.props;
+    const { infinite, items } = this.props;
     const { currentIndex } = this.state;
     if (!infinite && !this.canSlideRight()) {
       this.pause();
     } else {
-      this.slideToIndex(currentIndex + 1);
+      const nextIndex = currentIndex + 1;
+      // Handle 2 slides the same way as manual sliding
+      if (items.length === 2) {
+        this.slideToIndexWithStyleReset(nextIndex);
+      } else {
+        this.slideToIndex(nextIndex);
+      }
     }
   }
 
