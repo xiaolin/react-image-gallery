@@ -96,9 +96,13 @@ class App extends React.Component {
   _getStaticImages() {
     let images = [];
     for (let i = 2; i < 12; i++) {
+      // 为部分图片添加旋转效果作为示例
+      const rotateAngle = i === 3 ? 90 : i === 5 ? 180 : i === 7 ? 270 : 0;
       images.push({
         original: `${PREFIX_URL}${i}.jpg`,
         thumbnail: `${PREFIX_URL}${i}t.jpg`,
+        rotate: rotateAngle,
+        description: rotateAngle > 0 ? `旋转 ${rotateAngle}° 的图片` : undefined,
       });
     }
 

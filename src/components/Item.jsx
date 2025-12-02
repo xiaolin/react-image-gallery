@@ -1,5 +1,5 @@
 import React from "react";
-import { bool, func, string } from "prop-types";
+import { bool, func, number, string } from "prop-types";
 
 const defaultProps = {
   description: "",
@@ -12,6 +12,7 @@ const defaultProps = {
   sizes: "",
   srcSet: "",
   loading: "eager",
+  rotate: 0,
 };
 
 const Item = React.memo((props) => {
@@ -29,8 +30,12 @@ const Item = React.memo((props) => {
     sizes,
     srcSet,
     loading,
+    rotate,
   } = { ...defaultProps, ...props };
   const itemSrc = isFullscreen ? fullscreen || original : original;
+  
+  // 构建图片样式，支持旋转变换
+  const imageStyle = rotate !== 0 ? { transform: `rotate(${rotate}deg)` } : undefined;
 
   return (
     <React.Fragment>
@@ -43,6 +48,7 @@ const Item = React.memo((props) => {
         width={originalWidth}
         sizes={sizes}
         title={originalTitle}
+        style={imageStyle}
         onLoad={(event) => handleImageLoaded(event, original)}
         onError={onImageError}
         loading={loading}
@@ -70,6 +76,7 @@ Item.propTypes = {
   sizes: string,
   srcSet: string,
   loading: string,
+  rotate: number, // 图片旋转角度，支持任意数值（通常为 0, 90, 180, 270）
 };
 
 export default Item;
