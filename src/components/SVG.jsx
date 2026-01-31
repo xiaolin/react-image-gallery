@@ -5,12 +5,8 @@ const left = <polyline points="15 18 9 12 15 6" />;
 const right = <polyline points="9 18 15 12 9 6" />;
 const top = <polyline points="6 15 12 9 18 15" />;
 const bottom = <polyline points="6 9 12 15 18 9" />;
-const maximize = (
-  <path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3" />
-);
-const minimize = (
-  <path d="M8 3v3a2 2 0 0 1-2 2H3m18 0h-3a2 2 0 0 1-2-2V3m0 18v-3a2 2 0 0 1 2-2h3M3 16h3a2 2 0 0 1 2 2v3" />
-);
+const maximize = <path d="M8 3H3v5m18 0V3h-5m0 18h5v-5M3 16v5h5" />;
+const minimize = <path d="M8 3v5H3m18 0h-5V3m0 18v-5h5M3 16h5v5" />;
 const play = <polygon points="5 3 19 12 5 21 5 3" />;
 const pause = (
   <React.Fragment>
@@ -42,8 +38,8 @@ const SVG = (props) => {
       className="image-gallery-svg"
       fill="none"
       stroke="currentColor"
-      strokeLinecap="round"
-      strokeLinejoin="round"
+      strokeLinecap="square"
+      strokeLinejoin="miter"
       strokeWidth={strokeWidth}
       viewBox={viewBox}
       xmlns="http://www.w3.org/2000/svg"

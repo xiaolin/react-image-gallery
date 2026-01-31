@@ -86,7 +86,7 @@ describe("<SVG />", () => {
     const svg = document.querySelector(".image-gallery-svg");
     expect(svg).toHaveAttribute("fill", "none");
     expect(svg).toHaveAttribute("stroke", "currentColor");
-    expect(svg).toHaveAttribute("stroke-linecap", "round");
-    expect(svg).toHaveAttribute("stroke-linejoin", "round");
+    expect(svg).toHaveAttribute("stroke-linecap", "square");
+    expect(svg).toHaveAttribute("stroke-linejoin", "miter");
   });
 });

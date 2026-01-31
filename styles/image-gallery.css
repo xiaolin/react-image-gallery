@@ -1,16 +1,19 @@
 /**
  * React Image Gallery - Styles
  * 
+ * Design System: Base-4 spacing scale
+ * Spacing: 2, 4, 8, 12, 16, 20, 24, 32, 48, 64, 80, 96, 120px
+ * 
  * CSS Custom Properties for theming:
  * --ig-primary-color: Primary/accent color (default: #337ab7)
  * --ig-white: Icon and text color (default: #fff)
  * --ig-black: Background color in fullscreen (default: #000)
  * --ig-background-overlay: Overlay background (default: rgba(0, 0, 0, 0.4))
- * --ig-thumbnail-size: Thumbnail dimensions (default: 100px)
- * --ig-thumbnail-size-small: Thumbnail size on small screens (default: 81px)
+ * --ig-thumbnail-size: Thumbnail dimensions (default: 96px)
+ * --ig-thumbnail-size-small: Thumbnail size on small screens (default: 80px)
  * --ig-thumbnail-border-width: Thumbnail border width (default: 4px)
  * --ig-thumbnail-border-width-small: Thumbnail border on small screens (default: 3px)
- * --ig-bullet-size: Bullet size (default: 5px)
+ * --ig-bullet-size: Bullet size (default: 4px)
  * --ig-bullet-size-small: Bullet size on small screens (default: 3px)
  */
 
@@ -19,11 +22,11 @@
   --ig-white: #fff;
   --ig-black: #000;
   --ig-background-overlay: rgba(0, 0, 0, 0.4);
-  --ig-thumbnail-size: 100px;
-  --ig-thumbnail-size-small: 81px;
+  --ig-thumbnail-size: 96px;
+  --ig-thumbnail-size-small: 80px;
   --ig-thumbnail-border-width: 4px;
   --ig-thumbnail-border-width-small: 3px;
-  --ig-bullet-size: 5px;
+  --ig-bullet-size: 4px;
   --ig-bullet-size-small: 3px;
 }
 
@@ -70,14 +73,14 @@
 
 .image-gallery-fullscreen-button .image-gallery-svg,
 .image-gallery-play-button .image-gallery-svg {
-  height: 28px;
-  width: 28px;
+  height: 32px;
+  width: 32px;
 }
 
 @media (max-width: 768px) {
   .image-gallery-fullscreen-button,
   .image-gallery-play-button {
-    padding: 15px;
+    padding: 16px;
   }
   .image-gallery-fullscreen-button .image-gallery-svg,
   .image-gallery-play-button .image-gallery-svg {
@@ -89,7 +92,7 @@
 @media (max-width: 480px) {
   .image-gallery-fullscreen-button,
   .image-gallery-play-button {
-    padding: 10px;
+    padding: 12px;
   }
   .image-gallery-fullscreen-button .image-gallery-svg,
   .image-gallery-play-button .image-gallery-svg {
@@ -109,7 +112,7 @@
 /* Top & Bottom navigation */
 .image-gallery-top-nav,
 .image-gallery-bottom-nav {
-  padding: 10px;
+  padding: 12px;
   left: 50%;
   transform: translateX(-50%);
 }
@@ -117,7 +120,7 @@
 .image-gallery-top-nav .image-gallery-svg,
 .image-gallery-bottom-nav .image-gallery-svg {
   height: 120px;
-  width: 90px;
+  width: 96px;
 }
 
 @media (max-width: 768px) {
@@ -132,7 +135,7 @@
   .image-gallery-top-nav .image-gallery-svg,
   .image-gallery-bottom-nav .image-gallery-svg {
     height: 48px;
-    width: 36px;
+    width: 32px;
   }
 }
 
@@ -154,7 +157,7 @@
 /* Left & Right navigation */
 .image-gallery-left-nav,
 .image-gallery-right-nav {
-  padding: 50px 10px;
+  padding: 48px 12px;
   top: 50%;
   transform: translateY(-50%);
 }
@@ -162,14 +165,14 @@
 .image-gallery-left-nav .image-gallery-svg,
 .image-gallery-right-nav .image-gallery-svg {
   height: 120px;
-  width: 60px;
+  width: 64px;
 }
 
 @media (max-width: 768px) {
   .image-gallery-left-nav .image-gallery-svg,
   .image-gallery-right-nav .image-gallery-svg {
     height: 72px;
-    width: 36px;
+    width: 32px;
   }
 }
 
@@ -207,6 +210,9 @@
   user-select: none;
   -webkit-tap-highlight-color: transparent;
   position: relative;
+  /* Prevent mobile overscroll/pull-to-refresh */
+  overscroll-behavior: none;
+  -webkit-overflow-scrolling: touch;
 }
 
 .image-gallery.fullscreen-modal {
@@ -264,18 +270,30 @@
 .image-gallery-slide-wrapper.image-gallery-thumbnails-left,
 .image-gallery-slide-wrapper.image-gallery-thumbnails-right {
   display: inline-block;
-  width: calc(100% - 110px);
+  width: calc(100% - 112px);
 }
 
 @media (max-width: 768px) {
   .image-gallery-slide-wrapper.image-gallery-thumbnails-left,
   .image-gallery-slide-wrapper.image-gallery-thumbnails-right {
-    width: calc(100% - 87px);
+    width: calc(100% - 88px);
   }
 }
 
 .image-gallery-slide-wrapper.image-gallery-rtl {
   direction: rtl;
+}
+
+.image-gallery-swipe {
+  overflow: hidden;
+  /* GPU acceleration */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  /* Prevent overscroll during swipe */
+  overscroll-behavior: contain;
+  touch-action: pan-y pinch-zoom;
 }
 
 /* ==========================================================================
@@ -289,6 +307,14 @@
   white-space: nowrap;
   text-align: center;
   touch-action: none;
+  /* GPU acceleration for smooth swiping */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform: translateZ(0);
+  transform: translateZ(0);
+  contain: layout style paint;
+  isolation: isolate;
+  overscroll-behavior: none;
 }
 
 .image-gallery-slide {
@@ -296,6 +322,12 @@
   position: absolute;
   top: 0;
   width: 100%;
+  /* GPU acceleration for smooth swiping */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
+  -webkit-transform-style: preserve-3d;
+  transform-style: preserve-3d;
+  will-change: transform;
 }
 
 .image-gallery-slide.image-gallery-center {
@@ -309,20 +341,20 @@
 
 .image-gallery-slide .image-gallery-description {
   background: var(--ig-background-overlay, rgba(0, 0, 0, 0.4));
-  bottom: 70px;
+  bottom: 72px;
   color: var(--ig-white, #fff);
   left: 0;
   line-height: 1;
-  padding: 10px 20px;
+  padding: 12px 20px;
   position: absolute;
   white-space: normal;
 }
 
 @media (max-width: 768px) {
   .image-gallery-slide .image-gallery-description {
-    bottom: 45px;
+    bottom: 48px;
     font-size: 0.8em;
-    padding: 8px 15px;
+    padding: 8px 16px;
   }
 }
 
@@ -354,9 +386,9 @@
   box-shadow: 0 2px 2px rgba(0, 0, 0, 0.6);
   cursor: pointer;
   display: inline-block;
-  margin: 0 5px;
+  margin: 0 4px;
   outline: none;
-  padding: var(--ig-bullet-size, 5px);
+  padding: var(--ig-bullet-size, 4px);
   transition: all 0.2s ease-out;
 }
 
@@ -369,7 +401,7 @@
 
 @media (max-width: 480px) {
   .image-gallery-bullets .image-gallery-bullet {
-    padding: 2.7px;
+    padding: 3px;
   }
 }
 
@@ -412,14 +444,14 @@
 
 @media (max-width: 768px) {
   .image-gallery-bullets.image-gallery-bullets-vertical .image-gallery-bullet {
-    margin: 6px 0;
+    margin: 8px 0;
     padding: var(--ig-bullet-size-small, 3px);
   }
 }
 
 @media (max-width: 480px) {
   .image-gallery-bullets.image-gallery-bullets-vertical .image-gallery-bullet {
-    padding: 2.7px;
+    padding: 3px;
   }
 }
 
@@ -447,13 +479,13 @@
 .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right {
   display: inline-block;
   vertical-align: top;
-  width: var(--ig-thumbnail-size, 100px);
+  width: var(--ig-thumbnail-size, 96px);
 }
 
 @media (max-width: 768px) {
   .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-left,
   .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right {
-    width: var(--ig-thumbnail-size-small, 81px);
+    width: var(--ig-thumbnail-size-small, 80px);
   }
 }
 
@@ -494,13 +526,13 @@
 
 .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-left,
 .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right {
-  margin: 0 5px;
+  margin: 0 4px;
 }
 
 @media (max-width: 768px) {
   .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-left,
   .image-gallery-thumbnails-wrapper.image-gallery-thumbnails-right {
-    margin: 0 3px;
+    margin: 0 4px;
   }
 }
 
@@ -510,12 +542,12 @@
 
 .image-gallery-thumbnails {
   overflow: hidden;
-  padding: 5px 0;
+  padding: 4px 0;
 }
 
 @media (max-width: 768px) {
   .image-gallery-thumbnails {
-    padding: 3px 0;
+    padding: 4px 0;
   }
 }
 
@@ -529,7 +561,7 @@
   display: inline-block;
   border: var(--ig-thumbnail-border-width, 4px) solid transparent;
   transition: border 0.3s ease-out;
-  width: var(--ig-thumbnail-size, 100px);
+  width: var(--ig-thumbnail-size, 96px);
   background: transparent;
   padding: 0;
 }
@@ -537,7 +569,7 @@
 @media (max-width: 768px) {
   .image-gallery-thumbnail {
     border: var(--ig-thumbnail-border-width-small, 3px) solid transparent;
-    width: var(--ig-thumbnail-size-small, 81px);
+    width: var(--ig-thumbnail-size-small, 80px);
   }
 }
 
