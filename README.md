@@ -20,6 +20,7 @@ React image gallery is a React component for building image galleries and carous
 - Custom rendered slides
 - RTL support
 - Responsive design
+- CSS custom properties for theming
 - Tons of customization options (see props below)
 
 ## Getting started
@@ -30,17 +31,54 @@ React Image Gallery requires **React 16.0.0 or later.**
 npm install react-image-gallery
 ```
 
-### Style import options
+### Zero-config (Recommended)
 
+Starting with version 2.0, styles are automatically injected when you import the component. No separate CSS import required!
+
+```js
+import ImageGallery from "react-image-gallery";
+
+// That's it! Styles are automatically injected.
 ```
-# scss file import
-@import "~react-image-gallery/styles/scss/image-gallery.scss";
 
-# css file import
+### Manual style import (Optional)
+
+If you prefer to manage styles yourself (for customization, bundling optimization, or to prevent auto-injection):
+
+```css
+/* CSS @import */
 @import "~react-image-gallery/styles/css/image-gallery.css";
+```
 
-# js file import (using webpack)
+```js
+// JS import (using webpack or similar bundler)
 import "react-image-gallery/styles/css/image-gallery.css";
+```
+
+Note: If you import the CSS manually, it will be detected and auto-injection will be skipped.
+
+### Theming with CSS Custom Properties
+
+Customize the gallery appearance by overriding CSS custom properties:
+
+```css
+/* In your CSS or styled component */
+.image-gallery {
+  --ig-primary-color: #ff6b6b; /* Primary/accent color */
+  --ig-white: #ffffff; /* Icon and text color */
+  --ig-black: #000000; /* Background color in fullscreen */
+  --ig-background-overlay: rgba(0, 0, 0, 0.5); /* Overlay background */
+  --ig-thumbnail-size: 120px; /* Thumbnail dimensions */
+  --ig-thumbnail-border-width: 3px; /* Thumbnail border width */
+}
+```
+
+Or apply globally:
+
+```css
+:root {
+  --ig-primary-color: #e91e63;
+}
 ```
 
 ### Example
@@ -49,8 +87,6 @@ Need more example? See [`example/App.jsx`](https://github.com/xiaolin/react-imag
 
 ```js
 import ImageGallery from "react-image-gallery";
-// import stylesheet if you're not already using CSS @import
-import "react-image-gallery/styles/css/image-gallery.css";
 
 const images = [
   {
@@ -67,10 +103,8 @@ const images = [
   },
 ];
 
-class MyGallery extends React.Component {
-  render() {
-    return <ImageGallery items={images} />;
-  }
+function MyGallery() {
+  return <ImageGallery items={images} />;
 }
 ```
 

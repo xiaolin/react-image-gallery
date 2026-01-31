@@ -17,6 +17,9 @@ const compat = new FlatCompat({
 });
 
 export default [
+  {
+    ignores: ["**/*.cjs"],
+  },
   ...fixupConfigRules(
     compat.extends(
       "eslint:recommended",
@@ -57,6 +60,9 @@ export default [
       },
 
       "import/resolver": {
+        node: {
+          extensions: [".js", ".jsx", ".ts", ".json"],
+        },
         alias: {
           map: [["src", "./src"]],
           extensions: [".ts", ".js", ".jsx", ".json"],

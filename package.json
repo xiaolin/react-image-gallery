@@ -24,10 +24,10 @@
       "import": "./build/image-gallery.es.js",
       "require": "./build/image-gallery.umd.js"
     },
-    "./styles/css/image-gallery.css": "./styles/css/image-gallery.css",
-    "./styles/scss/image-gallery": "./styles/scss/image-gallery.scss"
+    "./build/image-gallery.css": "./build/image-gallery.css",
+    "./styles/image-gallery.css": "./styles/image-gallery.css"
   },
-  "style": "styles/css/image-gallery.css",
+  "style": "build/image-gallery.css",
   "keywords": [
     "react",
     "carousel",
@@ -66,6 +66,7 @@
     "babel-loader": "^9.2.1",
     "clsx": "^2.1.1",
     "css-loader": "^7.1.2",
+    "css-minimizer-webpack-plugin": "^7.0.4",
     "eslint": "9.19.0",
     "eslint-config-prettier": "^10.0.1",
     "eslint-import-resolver-alias": "^1.1.2",
@@ -92,8 +93,6 @@
     "react-swipeable": "7.0.2",
     "remove-files-webpack-plugin": "^1.5.0",
     "resize-observer-polyfill": "^1.5.1",
-    "sass": "^1.83.4",
-    "sass-loader": "^16.0.4",
     "style-loader": "^4.0.0",
     "url-loader": "^4.1.1",
     "webpack": "^5.97.1",

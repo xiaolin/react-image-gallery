@@ -1,9 +1,33 @@
 const path = require("path");
+const fs = require("fs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+const TerserPlugin = require("terser-webpack-plugin");
 const RemovePlugin = require("remove-files-webpack-plugin");
+const webpack = require("webpack");
+
+// Read CSS file and prepare for bundling
+function getCSSContent() {
+  try {
+    const cssPath = path.resolve(__dirname, "styles/image-gallery.css");
+    const css = fs.readFileSync(cssPath, "utf8");
+    // Escape backticks and backslashes for template literal
+    return css.replace(/\\/g, "\\\\").replace(/`/g, "\\`");
+  } catch (e) {
+    console.warn("Warning: Could not read CSS file for bundling:", e.message);
+    return "";
+  }
+}
 
 const config = {
   mode: "production",
+  optimization: {
+    minimizer: [
+      new TerserPlugin({
+        extractComments: false,
+      }),
+    ],
+  },
 };
 
 const jsEsOutput = Object.assign({}, config, {
@@ -35,6 +59,11 @@ const jsEsOutput = Object.assign({}, config, {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      __GALLERY_CSS__: JSON.stringify(getCSSContent()),
+    }),
+  ],
   externals: {
     react: "react",
     "react-dom": "react-dom",
@@ -65,6 +94,11 @@ const jsOutput = Object.assign({}, config, {
       },
     ],
   },
+  plugins: [
+    new webpack.DefinePlugin({
+      __GALLERY_CSS__: JSON.stringify(getCSSContent()),
+    }),
+  ],
   externals: {
     // Don't bundle react or react-dom
     react: {
@@ -83,36 +117,30 @@ const jsOutput = Object.assign({}, config, {
 });
 
 const cssOutput = Object.assign({}, config, {
-  entry: "./styles/scss/image-gallery.scss",
+  entry: "./styles/image-gallery.css",
   output: {
-    path: path.resolve(__dirname, "styles/css"),
+    path: path.resolve(__dirname, "build"),
   },
   module: {
     rules: [
       {
-        test: /\.(css|scss)$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
-        ],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
+  },
+  optimization: {
+    minimizer: [new CssMinimizerPlugin()],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "image-gallery.css",
     }),
     new RemovePlugin({
-      /**
-       * After compilation permanently remove empty JS files created from CSS entries.
-       */
       after: {
         test: [
           {
-            folder: "styles/css",
+            folder: "build",
             method: (absoluteItemPath) => {
               return new RegExp(/\.js$/, "m").test(absoluteItemPath);
             },
@@ -163,32 +191,26 @@ const jsDemoOutput = Object.assign({}, config, {
 });
 
 const cssDemoOutput = Object.assign({}, config, {
-  entry: ["./styles/scss/image-gallery.scss", "./example/App.css"],
+  entry: ["./styles/image-gallery.css"],
   output: {
     path: path.resolve(__dirname, "demo"),
   },
   module: {
     rules: [
       {
-        test: /\.(css|scss)$/i,
-        use: [
-          MiniCssExtractPlugin.loader,
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
-        ],
+        test: /\.css$/i,
+        use: [MiniCssExtractPlugin.loader, "css-loader"],
       },
     ],
+  },
+  optimization: {
+    minimizer: [new CssMinimizerPlugin()],
   },
   plugins: [
     new MiniCssExtractPlugin({
       filename: "demo.mini.css",
     }),
     new RemovePlugin({
-      /**
-       * After compilation permanently remove empty JS files created from CSS entries.
-       */
       after: {
         test: [
           {

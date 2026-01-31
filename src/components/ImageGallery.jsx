@@ -14,6 +14,10 @@ import PlayPause from "src/components/controls/PlayPause";
 import SwipeWrapper from "src/components/SwipeWrapper";
 import TopNav from "src/components/controls/TopNav";
 import BottomNav from "src/components/controls/BottomNav";
+import { injectStyles } from "src/components/styleInjector";
+
+// Auto-inject styles when module loads
+injectStyles();
 
 const screenChangeEvents = [
   "fullscreenchange",

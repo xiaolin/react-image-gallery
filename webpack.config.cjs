@@ -1,11 +1,11 @@
 const path = require("path");
-const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const webpack = require("webpack");
 
 module.exports = {
   entry: [
     "./example/App.jsx",
-    "./example/App.css",
-    "./styles/scss/image-gallery.scss",
+    "./example/app.css",
+    "./styles/image-gallery.css",
   ],
   output: {
     path: path.resolve(__dirname, "example"),
@@ -25,21 +25,15 @@ module.exports = {
         loader: "babel-loader",
       },
       {
-        test: /\.(css|scss)$/i,
-        use: [
-          // Creates `style` nodes from JS strings
-          "style-loader",
-          // Translates CSS into CommonJS
-          "css-loader",
-          // Compiles Sass to CSS
-          "sass-loader",
-        ],
+        test: /\.css$/i,
+        use: ["style-loader", "css-loader"],
       },
     ],
   },
   plugins: [
-    new MiniCssExtractPlugin({
-      filename: "image-gallery.css",
+    // In dev mode, CSS is loaded via style-loader, so we don't need to inject
+    new webpack.DefinePlugin({
+      __GALLERY_CSS__: JSON.stringify(""),
     }),
   ],
   devServer: {
