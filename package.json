@@ -2,8 +2,9 @@
   "name": "react-image-gallery",
   "version": "2.0.0",
   "description": "React carousel image gallery component with thumbnail and mobile support",
-  "main": "./build/image-gallery.umd.js",
+  "main": "./build/image-gallery.cjs",
   "module": "./build/image-gallery.es.js",
+  "types": "./build/types/types.d.ts",
   "type": "module",
   "files": [
     "build",
@@ -11,6 +12,7 @@
   ],
   "scripts": {
     "test": "jest",
+    "test:package": "bash scripts/test-package.sh",
     "lint": "eslint src",
     "start": "webpack serve --hot --mode development --static ./example",
     "build": "webpack --config webpack.build.cjs"
@@ -22,8 +24,9 @@
   "exports": {
     ".": {
       "import": "./build/image-gallery.es.js",
-      "require": "./build/image-gallery.umd.js"
+      "require": "./build/image-gallery.cjs"
     },
+    "./package.json": "./package.json",
     "./build/image-gallery.css": "./build/image-gallery.css",
     "./styles/image-gallery.css": "./styles/image-gallery.css"
   },

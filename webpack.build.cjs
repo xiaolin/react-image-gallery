@@ -89,7 +89,7 @@ const jsOutput = Object.assign({}, config, {
   entry: ["./src/components/ImageGallery.tsx"],
   output: {
     path: path.resolve(__dirname, "build"),
-    filename: "image-gallery.umd.js",
+    filename: "image-gallery.cjs",
     library: "ImageGallery",
     globalObject: "this",
     libraryTarget: "umd",
