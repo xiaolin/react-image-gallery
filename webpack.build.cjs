@@ -41,7 +41,7 @@ const config = {
 };
 
 const jsEsOutput = Object.assign({}, config, {
-  entry: ["./src/components/ImageGallery.jsx"],
+  entry: ["./src/components/ImageGallery.tsx"],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "image-gallery.es.js",
@@ -58,10 +58,15 @@ const jsEsOutput = Object.assign({}, config, {
     alias: {
       src: path.resolve(__dirname, "src/"),
     },
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: "ts-loader",
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -81,7 +86,7 @@ const jsEsOutput = Object.assign({}, config, {
 });
 
 const jsOutput = Object.assign({}, config, {
-  entry: ["./src/components/ImageGallery.jsx"],
+  entry: ["./src/components/ImageGallery.tsx"],
   output: {
     path: path.resolve(__dirname, "build"),
     filename: "image-gallery.umd.js",
@@ -93,10 +98,15 @@ const jsOutput = Object.assign({}, config, {
     alias: {
       src: path.resolve(__dirname, "src/"),
     },
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: "ts-loader",
+      },
       {
         test: /\.(js|jsx)$/,
         exclude: /node_modules/,
@@ -171,10 +181,15 @@ const jsDemoOutput = Object.assign({}, config, {
     alias: {
       src: path.resolve(__dirname, "src/"),
     },
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
   },
   module: {
     rules: [
+      {
+        test: /\.(ts|tsx)$/,
+        exclude: /node_modules/,
+        loader: "ts-loader",
+      },
       {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",

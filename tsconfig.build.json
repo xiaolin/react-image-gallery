@@ -1,0 +1,8 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "declaration": false,
+    "declarationDir": null
+  },
+  "exclude": ["node_modules", "build", "**/*.test.ts", "**/*.test.tsx"]
+}

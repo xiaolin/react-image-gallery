@@ -13,7 +13,7 @@ module.exports = {
     publicPath: "/dist/",
   },
   resolve: {
-    extensions: [".js", ".jsx"],
+    extensions: [".ts", ".tsx", ".js", ".jsx"],
     alias: {
       src: path.resolve(__dirname, "src/"),
     },
@@ -21,8 +21,14 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(ts|tsx)$/,
+        loader: "ts-loader",
+        exclude: /node_modules/,
+      },
+      {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",
+        exclude: /node_modules/,
       },
       {
         test: /\.css$/i,

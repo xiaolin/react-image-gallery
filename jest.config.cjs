@@ -4,9 +4,13 @@ module.exports = {
   testEnvironment: "jsdom", // Use jsdom environment for DOM-related tests
   roots: ["./src", "./example"], // The root directory for running tests
   transform: {
+    "^.+\\.(ts|tsx)$": "ts-jest",
     "^.+\\.(js|jsx)$": "babel-jest",
   },
-  testMatch: ["**/__tests__/**/*.js?(x)", "**/?(*.)+(spec|test).js?(x)"], // File patterns for test files
+  testMatch: [
+    "**/__tests__/**/*.(js|jsx|ts|tsx)",
+    "**/?(*.)+(spec|test).(js|jsx|ts|tsx)",
+  ], // File patterns for test files
   setupFilesAfterEnv: [
     "@testing-library/jest-dom",
     "<rootDir>/src/setupTests.js",
@@ -16,4 +20,5 @@ module.exports = {
     "^src/(.*)$": path.resolve(__dirname, "src/$1"), // Add the moduleNameMapper for your alias
   },
   transformIgnorePatterns: ["/node_modules/(?!(lodash-es)/)"],
+  moduleFileExtensions: ["ts", "tsx", "js", "jsx", "json", "node"],
 };

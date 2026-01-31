@@ -334,7 +334,9 @@
   min-height: 0;
 }
 
-.image-gallery-slides-container.vertical .image-gallery-slide .image-gallery-image {
+.image-gallery-slides-container.vertical
+  .image-gallery-slide
+  .image-gallery-image {
   height: 100%;
   width: auto;
   max-width: 100%;
