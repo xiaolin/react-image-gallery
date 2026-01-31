@@ -166,8 +166,6 @@ function MyGallery() {
   - transition duration during image slide in milliseconds
 - `swipingTransitionDuration`: Number, default `0`
   - transition duration while swiping in milliseconds
-- `swipingThumbnailTransitionDuration`: Number, default `0`
-  - transition duration while swiping thumbnails in milliseconds
 - `slideInterval`: Number, default `3000`
 - `slideOnThumbnailOver`: Boolean, default `false`
 - `slideVertically`: Boolean, default `false`

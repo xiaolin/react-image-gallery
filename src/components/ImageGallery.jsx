@@ -140,7 +140,6 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     stopPropagation = false,
     swipeThreshold = 30,
     swipingTransitionDuration = 0,
-    swipingThumbnailTransitionDuration = 0,
     thumbnailPosition = "bottom",
     useBrowserFullscreen = true,
     useTranslate3D = true,
@@ -452,12 +451,12 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
 
       if (stopPropagation) event.stopPropagation();
 
-      const swipingTransition = {
-        transition: `transform ${swipingThumbnailTransitionDuration}ms ease-out`,
-      };
-
       setThumbsTranslate(newThumbsTranslate);
-      setThumbsStyle(swipingTransition);
+      // Only set transition style once at start of swipe to avoid re-renders
+      if (!isSwipingThumbnail) {
+        setThumbsStyle({ transition: "none" });
+        setIsSwipingThumbnail(true);
+      }
     },
     [
       isThumbnailVertical,
@@ -465,28 +464,22 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
       thumbnailsWrapperWidth,
       thumbsSwipedTranslate,
       stopPropagation,
-      swipingThumbnailTransitionDuration,
+      isSwipingThumbnail,
       swipingUpDown,
       swipingLeftRight,
       thumbnailsRef,
       setThumbsTranslate,
       setThumbsStyle,
+      setIsSwipingThumbnail,
     ]
   );
 
   const handleOnThumbnailSwiped = useCallback(() => {
     resetSwipingDirection();
-    setIsSwipingThumbnail(true);
     setThumbsSwipedTranslate(thumbsTranslate);
-    setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
-  }, [
-    resetSwipingDirection,
-    thumbsTranslate,
-    slideDuration,
-    setIsSwipingThumbnail,
-    setThumbsSwipedTranslate,
-    setThumbsStyle,
-  ]);
+    // Keep transition: none - thumbnails are already at final position
+    // Transition will be set by slideThumbnailBar when currentIndex changes
+  }, [resetSwipingDirection, thumbsTranslate, setThumbsSwipedTranslate]);
 
   // ============= Keyboard Handler =============
   const handleKeyDown = useCallback(
@@ -1177,7 +1170,6 @@ ImageGallery.propTypes = {
   startIndex: number,
   stopPropagation: bool,
   swipeThreshold: number,
-  swipingThumbnailTransitionDuration: number,
   swipingTransitionDuration: number,
   thumbnailPosition: oneOf(["top", "bottom", "left", "right"]),
   useBrowserFullscreen: bool,
@@ -1228,7 +1220,6 @@ ImageGallery.defaultProps = {
   startIndex: 0,
   slideDuration: 450,
   swipingTransitionDuration: 0,
-  swipingThumbnailTransitionDuration: 0,
   onSlide: null,
   onBeforeSlide: null,
   onScreenChange: null,

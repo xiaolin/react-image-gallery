@@ -25,6 +25,7 @@ export function useThumbnails({
   const thumbnailsWrapperRef = useRef(null);
   const thumbnailsRef = useRef(null);
   const resizeObserverRef = useRef(null);
+  const previousIndexRef = useRef(currentIndex);
 
   const isThumbnailVertical = useCallback(() => {
     return thumbnailPosition === "left" || thumbnailPosition === "right";
@@ -74,6 +75,9 @@ export function useThumbnails({
 
     const nextTranslate = -getThumbsTranslate(currentIndex);
 
+    // Restore transition for smooth auto-scroll when slide changes
+    setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
+
     if (currentIndex === 0) {
       setThumbsTranslate(0);
       setThumbsSwipedTranslate(0);
@@ -81,11 +85,20 @@ export function useThumbnails({
       setThumbsTranslate(nextTranslate);
       setThumbsSwipedTranslate(nextTranslate);
     }
-  }, [currentIndex, getThumbsTranslate, isSwipingThumbnail]);
+  }, [
+    currentIndex,
+    getThumbsTranslate,
+    isSwipingThumbnail,
+    slideDuration,
+    setThumbsStyle,
+  ]);
 
-  // Slide thumbnail bar when currentIndex changes
+  // Slide thumbnail bar only when currentIndex actually changes (not on other re-renders)
   useEffect(() => {
-    slideThumbnailBar();
+    if (previousIndexRef.current !== currentIndex) {
+      previousIndexRef.current = currentIndex;
+      slideThumbnailBar();
+    }
   }, [currentIndex, slideThumbnailBar]);
 
   // Get thumbnail container style
