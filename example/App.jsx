@@ -1,6 +1,5 @@
 import React from "react";
 import { createRoot } from "react-dom/client";
-
 import ImageGallery from "src/components/ImageGallery";
 
 const PREFIX_URL =
@@ -141,12 +140,12 @@ class App extends React.Component {
           <div className="video-wrapper">
             <button className="close-video" onClick={this._toggleShowVideo} />
             <iframe
-              title="sample video"
-              width="560"
+              allowFullScreen
               height="315"
               src={item.embedUrl}
               style={{ border: "none" }}
-              allowFullScreen
+              title="sample video"
+              width="560"
             />
           </div>
         ) : (
@@ -176,33 +175,33 @@ class App extends React.Component {
       <section className="app">
         <ImageGallery
           ref={(i) => (this._imageGallery = i)}
-          items={this.images}
-          onClick={this._onImageClick.bind(this)}
-          onImageLoad={this._onImageLoad}
-          onSlide={this._onSlide.bind(this)}
-          onPause={this._onPause.bind(this)}
-          onScreenChange={this._onScreenChange.bind(this)}
-          onPlay={this._onPlay.bind(this)}
+          additionalClass="app-image-gallery"
           infinite={this.state.infinite}
+          isRTL={this.state.isRTL}
+          items={this.images}
           showBullets={this.state.showBullets}
           showFullscreenButton={
             this.state.showFullscreenButton &&
             this.state.showGalleryFullscreenButton
           }
+          showIndex={this.state.showIndex}
+          showNav={this.state.showNav}
           showPlayButton={
             this.state.showPlayButton && this.state.showGalleryPlayButton
           }
           showThumbnails={this.state.showThumbnails}
-          showIndex={this.state.showIndex}
-          showNav={this.state.showNav}
-          isRTL={this.state.isRTL}
-          thumbnailPosition={this.state.thumbnailPosition}
           slideDuration={parseInt(this.state.slideDuration)}
           slideInterval={parseInt(this.state.slideInterval)}
           slideOnThumbnailOver={this.state.slideOnThumbnailOver}
-          additionalClass="app-image-gallery"
-          useWindowKeyDown={this.state.useWindowKeyDown}
           slideVertically={this.state.slideVertically}
+          thumbnailPosition={this.state.thumbnailPosition}
+          useWindowKeyDown={this.state.useWindowKeyDown}
+          onClick={this._onImageClick.bind(this)}
+          onImageLoad={this._onImageLoad}
+          onPause={this._onPause.bind(this)}
+          onPlay={this._onPlay.bind(this)}
+          onScreenChange={this._onScreenChange.bind(this)}
+          onSlide={this._onSlide.bind(this)}
         />
 
         <div className="app-sandbox">
@@ -216,11 +215,11 @@ class App extends React.Component {
                   <input
                     className="app-interval-input"
                     type="text"
+                    value={this.state.slideInterval}
                     onChange={this._handleInputChange.bind(
                       this,
                       "slideInterval"
                     )}
-                    value={this.state.slideInterval}
                   />
                 </div>
               </li>
@@ -231,11 +230,11 @@ class App extends React.Component {
                   <input
                     className="app-interval-input"
                     type="text"
+                    value={this.state.slideDuration}
                     onChange={this._handleInputChange.bind(
                       this,
                       "slideDuration"
                     )}
-                    value={this.state.slideDuration}
                   />
                 </div>
               </li>
@@ -262,109 +261,109 @@ class App extends React.Component {
             <ul className="app-checkboxes">
               <li>
                 <input
+                  checked={this.state.infinite}
                   id="infinite"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(this, "infinite")}
-                  checked={this.state.infinite}
                 />
                 <label htmlFor="infinite">allow infinite sliding</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showFullscreenButton}
                   id="show_fullscreen"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "showFullscreenButton"
                   )}
-                  checked={this.state.showFullscreenButton}
                 />
                 <label htmlFor="show_fullscreen">show fullscreen button</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showPlayButton}
                   id="show_playbutton"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "showPlayButton"
                   )}
-                  checked={this.state.showPlayButton}
                 />
                 <label htmlFor="show_playbutton">show play button</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showBullets}
                   id="show_bullets"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "showBullets"
                   )}
-                  checked={this.state.showBullets}
                 />
                 <label htmlFor="show_bullets">show bullets</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showThumbnails}
                   id="show_thumbnails"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "showThumbnails"
                   )}
-                  checked={this.state.showThumbnails}
                 />
                 <label htmlFor="show_thumbnails">show thumbnails</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showNav}
                   id="show_navigation"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(this, "showNav")}
-                  checked={this.state.showNav}
                 />
                 <label htmlFor="show_navigation">show navigation</label>
               </li>
               <li>
                 <input
+                  checked={this.state.showIndex}
                   id="show_index"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(this, "showIndex")}
-                  checked={this.state.showIndex}
                 />
                 <label htmlFor="show_index">show index</label>
               </li>
               <li>
                 <input
+                  checked={this.state.slideVertically}
                   id="slide_vertically"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "slideVertically"
                   )}
-                  checked={this.state.slideVertically}
                 />
                 <label htmlFor="slide_vertically">slide vertically</label>
               </li>
               <li>
                 <input
+                  checked={this.state.isRTL}
                   id="is_rtl"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(this, "isRTL")}
-                  checked={this.state.isRTL}
                 />
                 <label htmlFor="is_rtl">is right to left</label>
               </li>
               <li>
                 <input
+                  checked={this.state.slideOnThumbnailOver}
                   id="slide_on_thumbnail_hover"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "slideOnThumbnailOver"
                   )}
-                  checked={this.state.slideOnThumbnailOver}
                 />
                 <label htmlFor="slide_on_thumbnail_hover">
                   slide on mouse over thumbnails
@@ -372,13 +371,13 @@ class App extends React.Component {
               </li>
               <li>
                 <input
+                  checked={this.state.useWindowKeyDown}
                   id="use_window_keydown"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
                     "useWindowKeyDown"
                   )}
-                  checked={this.state.useWindowKeyDown}
                 />
                 <label htmlFor="use_window_keydown">use window keydown</label>
               </li>
