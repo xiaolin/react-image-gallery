@@ -47,12 +47,12 @@ If you prefer to manage styles yourself (for customization, bundling optimizatio
 
 ```css
 /* CSS @import */
-@import "~react-image-gallery/styles/css/image-gallery.css";
+@import "~react-image-gallery/styles/image-gallery.css";
 ```
 
 ```js
 // JS import (using webpack or similar bundler)
-import "react-image-gallery/styles/css/image-gallery.css";
+import "react-image-gallery/styles/image-gallery.css";
 ```
 
 Note: If you import the CSS manually, it will be detected and auto-injection will be skipped.
