@@ -177,7 +177,9 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     slideToIndexWithStyleReset,
     slideLeft,
     slideRight,
-    getSlideStyle,
+    getContainerStyle,
+    getExtendedSlides,
+    getAlignmentClass,
     setCurrentSlideOffset,
     setSlideStyle,
   } = useGalleryNavigation({
@@ -783,13 +785,13 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     [onThumbnailError, handleImageError]
   );
 
-  // ============= Computed Slide Style =============
-  const computeSlideStyle = useCallback(
-    (index) => {
-      return getSlideStyle(index, { useTranslate3D, slideVertically });
-    },
-    [getSlideStyle, useTranslate3D, slideVertically]
-  );
+  // ============= Computed Container Style =============
+  const containerStyle = useMemo(() => {
+    return getContainerStyle({
+      useTranslate3D,
+      slideVertically,
+    });
+  }, [getContainerStyle, useTranslate3D, slideVertically]);
 
   // ============= Build Slide Items =============
   const slideItems = useMemo(() => {
@@ -797,62 +799,30 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     const thumbnails = [];
     const bullets = [];
 
-    const getAlignmentClassName = (index) => {
-      const leftClassName = "image-gallery-left";
-      const centerClassName = "image-gallery-center";
-      const rightClassName = "image-gallery-right";
-      let alignment = "";
+    // Get extended slides (with clones for infinite mode)
+    const { extendedItems, getSlideKey, getRealIndex } = getExtendedSlides();
 
-      switch (index) {
-        case currentIndex - 1:
-          alignment = ` ${leftClassName}`;
-          break;
-        case currentIndex:
-          alignment = ` ${centerClassName}`;
-          break;
-        case currentIndex + 1:
-          alignment = ` ${rightClassName}`;
-          break;
-        default:
-          break;
-      }
-
-      if (totalSlides >= 3 && infinite) {
-        if (index === 0 && currentIndex === totalSlides - 1) {
-          alignment = ` ${rightClassName}`;
-        } else if (index === totalSlides - 1 && currentIndex === 0) {
-          alignment = ` ${leftClassName}`;
-        }
-      }
-
-      return alignment;
-    };
-
-    items.forEach((item, index) => {
-      const alignment = getAlignmentClassName(index);
+    // Build slides from extended items (includes clones)
+    extendedItems.forEach((item, displayIdx) => {
+      const realIndex = getRealIndex(displayIdx);
+      const alignment = getAlignmentClass(displayIdx);
       const originalClass = item.originalClass ? ` ${item.originalClass}` : "";
-      const thumbnailClass = item.thumbnailClass
-        ? ` ${item.thumbnailClass}`
-        : "";
       const handleRenderItemFn =
         item.renderItem || renderItem || defaultRenderItem;
-      const handleRenderThumbInnerFn =
-        item.renderThumbInner || renderThumbInner || defaultRenderThumbInner;
 
-      const showItem = !lazyLoad || alignment || lazyLoadedRef.current[index];
-      if (showItem && lazyLoad && !lazyLoadedRef.current[index]) {
-        lazyLoadedRef.current[index] = true;
+      // For lazy loading, check the real index
+      const showItem =
+        !lazyLoad || alignment || lazyLoadedRef.current[realIndex];
+      if (showItem && lazyLoad && !lazyLoadedRef.current[realIndex]) {
+        lazyLoadedRef.current[realIndex] = true;
       }
-
-      const itemSlideStyle = computeSlideStyle(index);
 
       slides.push(
         <Slide
-          key={`slide-${index}`}
+          key={getSlideKey(displayIdx)}
           alignment={alignment}
-          index={index}
+          index={realIndex}
           originalClass={originalClass}
-          style={itemSlideStyle}
           onClick={onClick}
           onKeyUp={handleSlideKeyUp}
           onMouseLeave={onMouseLeave}
@@ -868,6 +838,15 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
           )}
         </Slide>
       );
+    });
+
+    // Thumbnails and bullets use the original items array (no clones)
+    items.forEach((item, index) => {
+      const thumbnailClass = item.thumbnailClass
+        ? ` ${item.thumbnailClass}`
+        : "";
+      const handleRenderThumbInnerFn =
+        item.renderThumbInner || renderThumbInner || defaultRenderThumbInner;
 
       if (showThumbnails && item.thumbnail) {
         thumbnails.push(
@@ -904,13 +883,12 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
   }, [
     items,
     currentIndex,
-    totalSlides,
-    infinite,
+    getExtendedSlides,
+    getAlignmentClass,
     lazyLoad,
     showThumbnails,
     showBullets,
     slideOnThumbnailOver,
-    computeSlideStyle,
     defaultRenderItem,
     defaultRenderThumbInner,
     renderItem,
@@ -1047,11 +1025,35 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
             onSwiped={handleOnSwiped}
             onSwiping={handleSwiping}
           >
-            <div className="image-gallery-slides">{slides}</div>
+            <div
+              className="image-gallery-slides"
+              style={slideVertically ? { height: gallerySlideWrapperHeight } : undefined}
+            >
+              <div
+                className={clsx("image-gallery-slides-container", {
+                  vertical: slideVertically,
+                })}
+                style={containerStyle}
+              >
+                {slides}
+              </div>
+            </div>
           </SwipeWrapper>
         </>
       ) : (
-        <div className="image-gallery-slides">{slides}</div>
+        <div
+          className="image-gallery-slides"
+          style={slideVertically ? { height: gallerySlideWrapperHeight } : undefined}
+        >
+          <div
+            className={clsx("image-gallery-slides-container", {
+              vertical: slideVertically,
+            })}
+            style={containerStyle}
+          >
+            {slides}
+          </div>
+        </div>
       )}
       {showPlayButton && renderPlayPauseButton(togglePlay, isPlaying)}
       {showBullets && (

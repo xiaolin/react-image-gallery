@@ -101,6 +101,77 @@ export function useThumbnails({
     }
   }, [currentIndex, slideThumbnailBar]);
 
+  // Reset transform when thumbnail position changes
+  // Force re-read dimensions from DOM since orientation changed
+  const previousPositionRef = useRef(thumbnailPosition);
+  useEffect(() => {
+    if (previousPositionRef.current !== thumbnailPosition) {
+      previousPositionRef.current = thumbnailPosition;
+
+      // Reset transforms immediately (no transition during position change)
+      setThumbsStyle({ transition: "none" });
+      setThumbsTranslate(0);
+      setThumbsSwipedTranslate(0);
+
+      // Use multiple rAF frames to ensure layout is complete
+      // First rAF: browser schedules next paint
+      // Second rAF: layout has been calculated
+      // setTimeout: ensure React state updates have flushed
+      const recalculatePosition = () => {
+        if (!thumbnailsWrapperRef.current || !thumbnailsRef.current) return;
+
+        const wrapperRect =
+          thumbnailsWrapperRef.current.getBoundingClientRect();
+        const newWrapperWidth = wrapperRect.width;
+        const newWrapperHeight = wrapperRect.height;
+
+        setThumbnailsWrapperWidth(newWrapperWidth);
+        setThumbnailsWrapperHeight(newWrapperHeight);
+
+        // Calculate new translate for current index using fresh dimensions
+        const isVertical =
+          thumbnailPosition === "left" || thumbnailPosition === "right";
+        const thumbsElement = thumbnailsRef.current;
+
+        let hiddenScroll;
+        if (isVertical) {
+          if (thumbsElement.scrollHeight <= newWrapperHeight) {
+            // No scrolling needed, just restore transition
+            setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
+            return;
+          }
+          hiddenScroll = thumbsElement.scrollHeight - newWrapperHeight;
+        } else {
+          if (thumbsElement.scrollWidth <= newWrapperWidth) {
+            // No scrolling needed, just restore transition
+            setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
+            return;
+          }
+          hiddenScroll = thumbsElement.scrollWidth - newWrapperWidth;
+        }
+
+        const perIndexScroll = hiddenScroll / (items.length - 1);
+        const newTranslate = -(currentIndex * perIndexScroll);
+
+        setThumbsTranslate(newTranslate);
+        setThumbsSwipedTranslate(newTranslate);
+
+        // Restore smooth transition for future movements
+        // Use rAF to ensure the translate is applied before enabling transition
+        requestAnimationFrame(() => {
+          setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
+        });
+      };
+
+      // Wait for layout to settle with multiple frames
+      requestAnimationFrame(() => {
+        requestAnimationFrame(() => {
+          setTimeout(recalculatePosition, 100);
+        });
+      });
+    }
+  }, [thumbnailPosition, currentIndex, items.length, slideDuration]);
+
   // Get thumbnail container style
   const getThumbnailStyle = useCallback(() => {
     const verticalTranslateValue = isRTL

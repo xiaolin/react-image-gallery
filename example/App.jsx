@@ -26,6 +26,7 @@ class App extends React.Component {
       thumbnailPosition: "bottom",
       showVideo: false,
       useWindowKeyDown: true,
+      lazyLoad: false,
     };
     this._toggleShowVideo = this._toggleShowVideo.bind(this);
 
@@ -179,6 +180,7 @@ class App extends React.Component {
           infinite={this.state.infinite}
           isRTL={this.state.isRTL}
           items={this.images}
+          lazyLoad={this.state.lazyLoad}
           showBullets={this.state.showBullets}
           showFullscreenButton={
             this.state.showFullscreenButton &&
@@ -267,6 +269,15 @@ class App extends React.Component {
                   onChange={this._handleCheckboxChange.bind(this, "infinite")}
                 />
                 <label htmlFor="infinite">allow infinite sliding</label>
+              </li>
+              <li>
+                <input
+                  checked={this.state.lazyLoad}
+                  id="lazy_load"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(this, "lazyLoad")}
+                />
+                <label htmlFor="lazy_load">lazy load images</label>
               </li>
               <li>
                 <input

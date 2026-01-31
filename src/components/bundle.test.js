@@ -109,7 +109,8 @@ describe("Bundle Verification Tests", () => {
       const { container } = render(<ImageGallery items={items} />);
 
       expect(container.querySelector(".image-gallery")).toBeInTheDocument();
-      expect(container.querySelectorAll(".image-gallery-slide").length).toBe(2);
+      // With infinite mode (default), 2 items + 2 clones = 4 slides
+      expect(container.querySelectorAll(".image-gallery-slide").length).toBe(4);
     });
   });
 
@@ -163,7 +164,8 @@ describe("Bundle Verification Tests", () => {
       const { container } = render(<Component items={items} />);
 
       expect(container.querySelector(".image-gallery")).toBeInTheDocument();
-      expect(container.querySelectorAll(".image-gallery-slide").length).toBe(2);
+      // With infinite mode (default), 2 items + 2 clones = 4 slides
+      expect(container.querySelectorAll(".image-gallery-slide").length).toBe(4);
     });
   });
 

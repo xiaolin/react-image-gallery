@@ -301,27 +301,20 @@
    ========================================================================== */
 
 .image-gallery-slides {
-  line-height: 0;
   overflow: hidden;
   position: relative;
-  white-space: nowrap;
-  text-align: center;
   touch-action: none;
   /* GPU acceleration for smooth swiping */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
-  -webkit-transform: translateZ(0);
-  transform: translateZ(0);
   contain: layout style paint;
   isolation: isolate;
   overscroll-behavior: none;
 }
 
-.image-gallery-slide {
-  left: 0;
-  position: absolute;
-  top: 0;
-  width: 100%;
+/* Flex container that holds all slides and gets transformed */
+.image-gallery-slides-container {
+  display: flex;
   /* GPU acceleration for smooth swiping */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
@@ -330,8 +323,29 @@
   will-change: transform;
 }
 
-.image-gallery-slide.image-gallery-center {
-  position: relative;
+.image-gallery-slides-container.vertical {
+  flex-direction: column;
+  height: 100%;
+}
+
+.image-gallery-slides-container.vertical .image-gallery-slide {
+  flex: 0 0 100%;
+  height: 100%;
+  min-height: 0;
+}
+
+.image-gallery-slides-container.vertical .image-gallery-slide .image-gallery-image {
+  height: 100%;
+  width: auto;
+  max-width: 100%;
+}
+
+.image-gallery-slide {
+  flex: 0 0 100%;
+  min-width: 0;
+  /* GPU acceleration for smooth swiping */
+  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
 }
 
 .image-gallery-slide .image-gallery-image {

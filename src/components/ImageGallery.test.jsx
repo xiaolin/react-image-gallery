@@ -1618,13 +1618,15 @@ describe("<ImageGallery />", () => {
     it("does not lazy load by default", () => {
       render(<ImageGallery {...defaultProps} />);
       const slides = document.querySelectorAll(".image-gallery-slide");
-      expect(slides.length).toBe(defaultItems.length);
+      // In infinite mode, we have 2 extra clone slides (one at start, one at end)
+      expect(slides.length).toBe(defaultItems.length + 2);
     });
 
     it("lazy loads images when lazyLoad is true", () => {
       render(<ImageGallery {...defaultProps} lazyLoad={true} />);
       const slides = document.querySelectorAll(".image-gallery-slide");
-      expect(slides.length).toBe(defaultItems.length);
+      // In infinite mode, we have 2 extra clone slides (one at start, one at end)
+      expect(slides.length).toBe(defaultItems.length + 2);
     });
 
     it("loads adjacent slides when lazyLoad is true", () => {
@@ -2149,15 +2151,21 @@ describe("<ImageGallery />", () => {
   describe("useTranslate3D", () => {
     it("uses translate3d by default", () => {
       render(<ImageGallery {...defaultProps} />);
-      const slide = document.querySelector(".image-gallery-slide");
-      const transform = slide.style.transform;
+      // Transform is now on the container, not individual slides
+      const container = document.querySelector(
+        ".image-gallery-slides-container"
+      );
+      const transform = container.style.transform;
       expect(transform).toContain("translate3d");
     });
 
     it("uses translate when useTranslate3D is false", () => {
       render(<ImageGallery {...defaultProps} useTranslate3D={false} />);
-      const slide = document.querySelector(".image-gallery-slide");
-      const transform = slide.style.transform;
+      // Transform is now on the container, not individual slides
+      const container = document.querySelector(
+        ".image-gallery-slides-container"
+      );
+      const transform = container.style.transform;
       expect(transform).not.toContain("translate3d");
     });
   });
@@ -2526,14 +2534,16 @@ describe("<ImageGallery />", () => {
     it("renders originalAlt as image alt", () => {
       render(<ImageGallery {...defaultProps} />);
       const images = document.querySelectorAll(".image-gallery-image");
-      const currentImage = images[0];
+      // In infinite mode, first image is a clone of last slide, so check index 1
+      const currentImage = images[1];
       expect(currentImage).toHaveAttribute("alt", "Image 1");
     });
 
     it("renders originalTitle as image title", () => {
       render(<ImageGallery {...defaultProps} />);
       const images = document.querySelectorAll(".image-gallery-image");
-      const currentImage = images[0];
+      // In infinite mode, first image is a clone of last slide, so check index 1
+      const currentImage = images[1];
       expect(currentImage).toHaveAttribute("title", "Title 1");
     });
 
