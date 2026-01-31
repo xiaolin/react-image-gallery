@@ -216,7 +216,7 @@ const jsDemoOutput = Object.assign({}, config, {
 });
 
 const cssDemoOutput = Object.assign({}, config, {
-  entry: ["./styles/image-gallery.css"],
+  entry: ["./styles/image-gallery.css", "./example/app.css"],
   output: {
     path: path.resolve(__dirname, "demo"),
   },

@@ -7,7 +7,10 @@
   "types": "./build/types/types.d.ts",
   "type": "module",
   "files": [
-    "build",
+    "build/image-gallery.css",
+    "build/image-gallery.es.js",
+    "build/image-gallery.cjs",
+    "build/types/types.d.ts",
     "styles"
   ],
   "scripts": {
@@ -15,11 +18,13 @@
     "test:package": "bash scripts/test-package.sh",
     "lint": "eslint src",
     "start": "webpack serve --hot --mode development --static ./example",
-    "build": "webpack --config webpack.build.cjs"
+    "build": "webpack --config webpack.build.cjs && rm -rf build/types/components",
+    "publish:dry-run": "npm publish --dry-run",
+    "prepublish:check": "npm run lint && npm test && npm run build && npm run publish:dry-run"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/xiaolin/react-image-gallery.git"
+    "url": "git+https://github.com/xiaolin/react-image-gallery.git"
   },
   "exports": {
     ".": {
