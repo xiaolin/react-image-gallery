@@ -25,6 +25,16 @@ const config = {
     minimizer: [
       new TerserPlugin({
         extractComments: false,
+        terserOptions: {
+          compress: {
+            drop_console: true,
+            passes: 2,
+          },
+          mangle: true,
+          format: {
+            comments: false,
+          },
+        },
       }),
     ],
   },

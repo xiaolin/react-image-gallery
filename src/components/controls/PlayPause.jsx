@@ -5,12 +5,12 @@ import SVG from "src/components/SVG";
 const PlayPause = React.memo(({ isPlaying, onClick }) => {
   return (
     <button
-      type="button"
-      className="image-gallery-icon image-gallery-play-button"
-      onClick={onClick}
       aria-label="Play or Pause Slideshow"
+      className="image-gallery-icon image-gallery-play-button"
+      type="button"
+      onClick={onClick}
     >
-      <SVG strokeWidth={2} icon={isPlaying ? "pause" : "play"} />
+      <SVG icon={isPlaying ? "pause" : "play"} strokeWidth={2} />
     </button>
   );
 });

@@ -31,10 +31,10 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Packages
-        run: yarn
+        run: npm install
 
       - name: Run ESLint
-        run: yarn lint
+        run: npm run lint
         continue-on-error: false
 
   jest:
@@ -49,8 +49,8 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Install Packages
-        run: yarn
+        run: npm install
 
       - name: Run Jest
-        run: yarn jest
+        run: npm test
         continue-on-error: false

@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect, useRef } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 
 /**
  * Custom hook for managing autoplay functionality
@@ -94,21 +94,25 @@ export function useAutoPlay({
     }
   }, [play, pause]);
 
+  // Refs for stable function access in effects
+  const playRef = useRef(play);
+  const pauseRef = useRef(pause);
+  playRef.current = play;
+  pauseRef.current = pause;
+
   // Reset interval when slideInterval or slideDuration changes
   useEffect(() => {
     if (isPlaying) {
-      pause(false);
-      play(false);
+      pauseRef.current(false);
+      playRef.current(false);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [slideInterval, slideDuration]);
+  }, [slideInterval, slideDuration, isPlaying]);
 
   // Start autoPlay if enabled
   useEffect(() => {
     if (autoPlay && !playPauseIntervalRef.current) {
-      play();
+      playRef.current();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [autoPlay]);
 
   // Clean up on unmount

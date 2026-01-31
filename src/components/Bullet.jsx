@@ -12,20 +12,20 @@ const Bullet = memo(function Bullet({ index, isActive, bulletClass, onClick }) {
 
   return (
     <button
-      type="button"
       key={`bullet-${index}`}
-      className={className}
-      onClick={onClick}
-      aria-pressed={isActive ? "true" : "false"}
       aria-label={`Go to Slide ${index + 1}`}
+      aria-pressed={isActive ? "true" : "false"}
+      className={className}
+      type="button"
+      onClick={onClick}
     />
   );
 });
 
 Bullet.propTypes = {
+  bulletClass: string,
   index: number.isRequired,
   isActive: bool,
-  bulletClass: string,
   onClick: func,
 };
 

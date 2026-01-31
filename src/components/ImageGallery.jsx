@@ -1,39 +1,35 @@
-import clsx from "clsx";
 import React, {
-  useState,
+  forwardRef,
   useCallback,
   useEffect,
-  useRef,
-  useMemo,
-  forwardRef,
   useImperativeHandle,
+  useMemo,
+  useRef,
+  useState,
 } from "react";
-import debounce from "lodash-es/debounce";
-import { LEFT, RIGHT, UP, DOWN } from "react-swipeable";
+import clsx from "clsx";
 import { arrayOf, bool, func, number, oneOf, shape, string } from "prop-types";
-
-// Components
-import Item from "src/components/Item";
+import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
+import Bullet from "src/components/Bullet";
+import BulletNav from "src/components/BulletNav";
+import BottomNav from "src/components/controls/BottomNav";
 import Fullscreen from "src/components/controls/Fullscreen";
 import LeftNav from "src/components/controls/LeftNav";
-import RightNav from "src/components/controls/RightNav";
 import PlayPause from "src/components/controls/PlayPause";
-import SwipeWrapper from "src/components/SwipeWrapper";
+import RightNav from "src/components/controls/RightNav";
 import TopNav from "src/components/controls/TopNav";
-import BottomNav from "src/components/controls/BottomNav";
-import Slide from "src/components/Slide";
-import Thumbnail from "src/components/Thumbnail";
-import BulletNav from "src/components/BulletNav";
-import IndexIndicator from "src/components/IndexIndicator";
-import Bullet from "src/components/Bullet";
-import ThumbnailBar from "src/components/ThumbnailBar";
-import { injectStyles } from "src/components/styleInjector";
-
-// Custom Hooks
-import { useGalleryNavigation } from "src/components/hooks/useGalleryNavigation";
-import { useFullscreen } from "src/components/hooks/useFullscreen";
 import { useAutoPlay } from "src/components/hooks/useAutoPlay";
+import { useFullscreen } from "src/components/hooks/useFullscreen";
+import { useGalleryNavigation } from "src/components/hooks/useGalleryNavigation";
 import { useThumbnails } from "src/components/hooks/useThumbnails";
+import IndexIndicator from "src/components/IndexIndicator";
+import Item from "src/components/Item";
+import Slide from "src/components/Slide";
+import { injectStyles } from "src/components/styleInjector";
+import SwipeWrapper from "src/components/SwipeWrapper";
+import Thumbnail from "src/components/Thumbnail";
+import ThumbnailBar from "src/components/ThumbnailBar";
+import debounce from "src/components/utils/debounce";
 
 // Auto-inject styles when module loads
 injectStyles();
@@ -110,25 +106,25 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     onTouchMove = null,
     onTouchStart = null,
     renderBottomNav = (onClick, disabled) => (
-      <BottomNav onClick={onClick} disabled={disabled} />
+      <BottomNav disabled={disabled} onClick={onClick} />
     ),
     renderCustomControls = null,
     renderFullscreenButton = (onClick, isFullscreen) => (
-      <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
+      <Fullscreen isFullscreen={isFullscreen} onClick={onClick} />
     ),
     renderItem = null,
     renderLeftNav = (onClick, disabled) => (
-      <LeftNav onClick={onClick} disabled={disabled} />
+      <LeftNav disabled={disabled} onClick={onClick} />
     ),
     renderPlayPauseButton = (onClick, isPlaying) => (
-      <PlayPause onClick={onClick} isPlaying={isPlaying} />
+      <PlayPause isPlaying={isPlaying} onClick={onClick} />
     ),
     renderRightNav = (onClick, disabled) => (
-      <RightNav onClick={onClick} disabled={disabled} />
+      <RightNav disabled={disabled} onClick={onClick} />
     ),
     renderThumbInner = null,
     renderTopNav = (onClick, disabled) => (
-      <TopNav onClick={onClick} disabled={disabled} />
+      <TopNav disabled={disabled} onClick={onClick} />
     ),
     showBullets = false,
     showFullscreenButton = true,
@@ -711,6 +707,36 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
     }
   }, []);
 
+  // ============= Refs for Stable Effect Callbacks =============
+  // These refs hold the latest function references, enabling stable callbacks
+  // that don't cause effect re-runs but always use fresh function implementations
+  const handleMouseDownRef = useRef(null);
+  const handleScreenChangeRef = useRef(null);
+  const initSlideWrapperResizeObserverRef = useRef(null);
+  const initThumbnailResizeObserverRef = useRef(null);
+  const removeSlideWrapperResizeObserverRef = useRef(null);
+  const removeThumbnailsResizeObserverRef = useRef(null);
+  const handleResizeRef = useRef(null);
+
+  // Keep refs updated with latest function references
+  handleMouseDownRef.current = handleMouseDown;
+  handleScreenChangeRef.current = handleScreenChange;
+  initSlideWrapperResizeObserverRef.current = initSlideWrapperResizeObserver;
+  initThumbnailResizeObserverRef.current = initThumbnailResizeObserver;
+  removeSlideWrapperResizeObserverRef.current =
+    removeSlideWrapperResizeObserver;
+  removeThumbnailsResizeObserverRef.current = removeThumbnailsResizeObserver;
+  handleResizeRef.current = handleResize;
+
+  // Stable handlers for mount effect - these never change identity
+  const stableHandleMouseDown = useCallback(() => {
+    handleMouseDownRef.current?.();
+  }, []);
+
+  const stableHandleScreenChange = useCallback(() => {
+    handleScreenChangeRef.current?.();
+  }, []);
+
   // ============= Render Helpers =============
   const defaultRenderItem = useCallback(
     (item) => {
@@ -722,15 +748,15 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
           fullscreen={item.fullscreen}
           handleImageLoaded={handleImageLoaded}
           isFullscreen={isFullscreen}
-          onImageError={handleError}
+          loading={item.loading}
           original={item.original}
           originalAlt={item.originalAlt}
           originalHeight={item.originalHeight}
-          originalWidth={item.originalWidth}
           originalTitle={item.originalTitle}
+          originalWidth={item.originalWidth}
           sizes={item.sizes}
-          loading={item.loading}
           srcSet={item.srcSet}
+          onImageError={handleError}
         />
       );
     },
@@ -744,13 +770,13 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
       return (
         <span className="image-gallery-thumbnail-inner">
           <img
-            className="image-gallery-thumbnail-image"
-            src={item.thumbnail}
-            height={item.thumbnailHeight}
-            width={item.thumbnailWidth}
             alt={item.thumbnailAlt}
-            title={item.thumbnailTitle}
+            className="image-gallery-thumbnail-image"
+            height={item.thumbnailHeight}
             loading={item.thumbnailLoading}
+            src={item.thumbnail}
+            title={item.thumbnailTitle}
+            width={item.thumbnailWidth}
             onError={handleError}
           />
           {item.thumbnailLabel && (
@@ -830,17 +856,17 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
       slides.push(
         <Slide
           key={`slide-${index}`}
-          index={index}
           alignment={alignment}
+          index={index}
           originalClass={originalClass}
           style={itemSlideStyle}
           onClick={onClick}
           onKeyUp={handleSlideKeyUp}
-          onTouchMove={onTouchMove}
-          onTouchEnd={onTouchEnd}
-          onTouchStart={onTouchStart}
-          onMouseOver={onMouseOver}
           onMouseLeave={onMouseLeave}
+          onMouseOver={onMouseOver}
+          onTouchEnd={onTouchEnd}
+          onTouchMove={onTouchMove}
+          onTouchStart={onTouchStart}
         >
           {showItem ? (
             handleRenderItemFn(item)
@@ -857,11 +883,11 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
             index={index}
             isActive={currentIndex === index}
             thumbnailClass={thumbnailClass}
-            onMouseLeave={slideOnThumbnailOver ? onThumbnailMouseLeave : null}
-            onMouseOver={(event) => handleThumbnailMouseOver(event, index)}
+            onClick={(event) => handleThumbnailClick(event, index)}
             onFocus={(event) => handleThumbnailMouseOver(event, index)}
             onKeyUp={(event) => handleThumbnailKeyUp(event, index)}
-            onClick={(event) => handleThumbnailClick(event, index)}
+            onMouseLeave={slideOnThumbnailOver ? onThumbnailMouseLeave : null}
+            onMouseOver={(event) => handleThumbnailMouseOver(event, index)}
           >
             {handleRenderThumbInnerFn(item)}
           </Thumbnail>
@@ -872,9 +898,9 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
         bullets.push(
           <Bullet
             key={`bullet-${index}`}
+            bulletClass={item.bulletClass}
             index={index}
             isActive={currentIndex === index}
-            bulletClass={item.bulletClass}
             onClick={(event) => handleBulletClick(event, index)}
           />
         );
@@ -912,80 +938,72 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
 
   // ============= Effects =============
 
-  // Initialize on mount
+  // Initialize on mount - uses stable refs to avoid stale closures
   useEffect(() => {
-    if (useWindowKeyDown) {
+    const galleryElement = imageGalleryRef.current;
+    const useWindowKey = useWindowKeyDown; // Capture initial value
+
+    if (useWindowKey) {
       window.addEventListener("keydown", stableHandleKeyDown);
     } else {
-      imageGalleryRef.current?.addEventListener("keydown", stableHandleKeyDown);
+      galleryElement?.addEventListener("keydown", stableHandleKeyDown);
     }
 
-    window.addEventListener("mousedown", handleMouseDown);
-    initSlideWrapperResizeObserver(imageGallerySlideWrapperRef);
-    initThumbnailResizeObserver(thumbnailsWrapperRef);
+    window.addEventListener("mousedown", stableHandleMouseDown);
+    initSlideWrapperResizeObserverRef.current?.(imageGallerySlideWrapperRef);
+    initThumbnailResizeObserverRef.current?.(thumbnailsWrapperRef);
 
     // Add screen change events
     screenChangeEvents.forEach((eventName) => {
-      document.addEventListener(eventName, handleScreenChange);
+      document.addEventListener(eventName, stableHandleScreenChange);
     });
 
     return () => {
       // Cleanup
-      window.removeEventListener("mousedown", handleMouseDown);
+      window.removeEventListener("mousedown", stableHandleMouseDown);
       window.removeEventListener("keydown", stableHandleKeyDown);
+      galleryElement?.removeEventListener("keydown", stableHandleKeyDown);
 
       screenChangeEvents.forEach((eventName) => {
-        document.removeEventListener(eventName, handleScreenChange);
+        document.removeEventListener(eventName, stableHandleScreenChange);
       });
 
-      removeSlideWrapperResizeObserver();
-      removeThumbnailsResizeObserver();
+      removeSlideWrapperResizeObserverRef.current?.();
+      removeThumbnailsResizeObserverRef.current?.();
     };
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-
-  // Handle useWindowKeyDown changes
-  useEffect(() => {
-    if (useWindowKeyDown) {
-      imageGalleryRef.current?.removeEventListener(
-        "keydown",
-        stableHandleKeyDown
-      );
-      window.addEventListener("keydown", stableHandleKeyDown);
-    } else {
-      window.removeEventListener("keydown", stableHandleKeyDown);
-      imageGalleryRef.current?.addEventListener("keydown", stableHandleKeyDown);
-    }
-  }, [useWindowKeyDown, stableHandleKeyDown]);
+  }, [
+    useWindowKeyDown,
+    stableHandleKeyDown,
+    stableHandleMouseDown,
+    stableHandleScreenChange,
+    thumbnailsWrapperRef,
+  ]);
 
   // Handle thumbnail position changes
   useEffect(() => {
-    removeSlideWrapperResizeObserver();
-    removeThumbnailsResizeObserver();
-    initSlideWrapperResizeObserver(imageGallerySlideWrapperRef);
-    initThumbnailResizeObserver(thumbnailsWrapperRef);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [thumbnailPosition]);
+    removeSlideWrapperResizeObserverRef.current?.();
+    removeThumbnailsResizeObserverRef.current?.();
+    initSlideWrapperResizeObserverRef.current?.(imageGallerySlideWrapperRef);
+    initThumbnailResizeObserverRef.current?.(thumbnailsWrapperRef);
+  }, [thumbnailPosition, thumbnailsWrapperRef]);
 
   // Handle showThumbnails changes
   useEffect(() => {
     if (showThumbnails) {
-      initThumbnailResizeObserver(thumbnailsWrapperRef);
+      initThumbnailResizeObserverRef.current?.(thumbnailsWrapperRef);
     } else {
-      removeThumbnailsResizeObserver();
+      removeThumbnailsResizeObserverRef.current?.();
     }
-    handleResize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [showThumbnails]);
+    handleResizeRef.current?.();
+  }, [showThumbnails, thumbnailsWrapperRef]);
 
   // Handle items changes - reset lazyLoaded
   useEffect(() => {
     if (lazyLoad) {
       lazyLoadedRef.current = [];
     }
-    handleResize();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [items]);
+    handleResizeRef.current?.();
+  }, [items, lazyLoad]);
 
   // Reset swiping thumbnail state after transitioning ends
   useEffect(() => {
@@ -1033,8 +1051,8 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
           <SwipeWrapper
             className="image-gallery-swipe"
             delta={0}
-            onSwiping={handleSwiping}
             onSwiped={handleOnSwiped}
+            onSwiping={handleSwiping}
           >
             <div className="image-gallery-slides">{slides}</div>
           </SwipeWrapper>
@@ -1051,8 +1069,8 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
       {showIndex && (
         <IndexIndicator
           currentIndex={currentIndex}
-          totalItems={totalSlides}
           indexSeparator={indexSeparator}
+          totalItems={totalSlides}
         />
       )}
     </div>
@@ -1069,24 +1087,24 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
   );
 
   return (
-    <div ref={imageGalleryRef} className={igClass} aria-live="polite">
+    <div ref={imageGalleryRef} aria-live="polite" className={igClass}>
       <div className={igContentClass}>
         {(thumbnailPosition === "bottom" || thumbnailPosition === "right") &&
           slideWrapper}
         {showThumbnails && thumbnails.length > 0 && (
           <ThumbnailBar
-            thumbnails={thumbnails}
-            thumbnailPosition={thumbnailPosition}
-            thumbnailStyle={getThumbnailStyle()}
+            disableThumbnailSwipe={disableThumbnailSwipe}
+            isRTL={isRTL}
             thumbnailBarHeight={getThumbnailBarHeight(
               gallerySlideWrapperHeight
             )}
-            isRTL={isRTL}
-            disableThumbnailSwipe={disableThumbnailSwipe}
-            onSwiping={handleThumbnailSwiping}
-            onSwiped={handleOnThumbnailSwiped}
-            thumbnailsWrapperRef={thumbnailsWrapperRef}
+            thumbnailPosition={thumbnailPosition}
+            thumbnails={thumbnails}
             thumbnailsRef={thumbnailsRef}
+            thumbnailStyle={getThumbnailStyle()}
+            thumbnailsWrapperRef={thumbnailsWrapperRef}
+            onSwiped={handleOnThumbnailSwiped}
+            onSwiping={handleThumbnailSwiping}
           />
         )}
         {(thumbnailPosition === "top" || thumbnailPosition === "left") &&
@@ -1098,7 +1116,16 @@ const ImageGallery = forwardRef(function ImageGallery(props, ref) {
 
 // ============= PropTypes =============
 ImageGallery.propTypes = {
+  additionalClass: string,
+  autoPlay: bool,
+  disableKeyDown: bool,
+  disableSwipe: bool,
+  disableThumbnailScroll: bool,
+  disableThumbnailSwipe: bool,
   flickThreshold: number,
+  indexSeparator: string,
+  infinite: bool,
+  isRTL: bool,
   items: arrayOf(
     shape({
       bulletClass: string,
@@ -1127,61 +1154,52 @@ ImageGallery.propTypes = {
       sizes: string,
     })
   ).isRequired,
-  showNav: bool,
-  autoPlay: bool,
   lazyLoad: bool,
-  infinite: bool,
-  showIndex: bool,
+  renderBottomNav: func,
+  renderCustomControls: func,
+  renderFullscreenButton: func,
+  renderItem: func,
+  renderLeftNav: func,
+  renderPlayPauseButton: func,
+  renderRightNav: func,
+  renderThumbInner: func,
+  renderTopNav: func,
   showBullets: bool,
-  showThumbnails: bool,
-  showPlayButton: bool,
   showFullscreenButton: bool,
-  disableThumbnailScroll: bool,
-  disableKeyDown: bool,
-  disableSwipe: bool,
-  disableThumbnailSwipe: bool,
-  useBrowserFullscreen: bool,
-  onErrorImageURL: string,
-  indexSeparator: string,
-  thumbnailPosition: oneOf(["top", "bottom", "left", "right"]),
-  startIndex: number,
+  showIndex: bool,
+  showNav: bool,
+  showPlayButton: bool,
+  showThumbnails: bool,
   slideDuration: number,
   slideInterval: number,
   slideOnThumbnailOver: bool,
+  slideVertically: bool,
+  startIndex: number,
+  stopPropagation: bool,
   swipeThreshold: number,
-  swipingTransitionDuration: number,
   swipingThumbnailTransitionDuration: number,
-  onSlide: func,
+  swipingTransitionDuration: number,
+  thumbnailPosition: oneOf(["top", "bottom", "left", "right"]),
+  useBrowserFullscreen: bool,
+  useTranslate3D: bool,
+  useWindowKeyDown: bool,
   onBeforeSlide: func,
-  onScreenChange: func,
+  onBulletClick: func,
+  onClick: func,
+  onErrorImageURL: string,
+  onImageError: func,
+  onImageLoad: func,
+  onMouseLeave: func,
+  onMouseOver: func,
   onPause: func,
   onPlay: func,
-  onClick: func,
-  onImageLoad: func,
-  onImageError: func,
-  onTouchMove: func,
-  onTouchEnd: func,
-  onTouchStart: func,
-  onMouseOver: func,
-  onMouseLeave: func,
-  onBulletClick: func,
-  onThumbnailError: func,
+  onScreenChange: func,
+  onSlide: func,
   onThumbnailClick: func,
-  renderCustomControls: func,
-  renderLeftNav: func,
-  renderRightNav: func,
-  renderTopNav: func,
-  renderBottomNav: func,
-  renderPlayPauseButton: func,
-  renderFullscreenButton: func,
-  renderItem: func,
-  renderThumbInner: func,
-  stopPropagation: bool,
-  additionalClass: string,
-  useTranslate3D: bool,
-  isRTL: bool,
-  useWindowKeyDown: bool,
-  slideVertically: bool,
+  onThumbnailError: func,
+  onTouchEnd: func,
+  onTouchMove: func,
+  onTouchStart: func,
 };
 
 ImageGallery.defaultProps = {
@@ -1235,22 +1253,22 @@ ImageGallery.defaultProps = {
   swipeThreshold: 30,
   slideVertically: false,
   renderLeftNav: (onClick, disabled) => (
-    <LeftNav onClick={onClick} disabled={disabled} />
+    <LeftNav disabled={disabled} onClick={onClick} />
   ),
   renderRightNav: (onClick, disabled) => (
-    <RightNav onClick={onClick} disabled={disabled} />
+    <RightNav disabled={disabled} onClick={onClick} />
   ),
   renderTopNav: (onClick, disabled) => (
-    <TopNav onClick={onClick} disabled={disabled} />
+    <TopNav disabled={disabled} onClick={onClick} />
   ),
   renderBottomNav: (onClick, disabled) => (
-    <BottomNav onClick={onClick} disabled={disabled} />
+    <BottomNav disabled={disabled} onClick={onClick} />
   ),
   renderPlayPauseButton: (onClick, isPlaying) => (
-    <PlayPause onClick={onClick} isPlaying={isPlaying} />
+    <PlayPause isPlaying={isPlaying} onClick={onClick} />
   ),
   renderFullscreenButton: (onClick, isFullscreen) => (
-    <Fullscreen onClick={onClick} isFullscreen={isFullscreen} />
+    <Fullscreen isFullscreen={isFullscreen} onClick={onClick} />
   ),
   useWindowKeyDown: true,
 };

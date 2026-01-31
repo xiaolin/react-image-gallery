@@ -14,8 +14,8 @@ const minimize = (
 const play = <polygon points="5 3 19 12 5 21 5 3" />;
 const pause = (
   <React.Fragment>
-    <rect x="6" y="4" width="4" height="16" />
-    <rect x="14" y="4" width="4" height="16" />
+    <rect height="16" width="4" x="6" y="4" />
+    <rect height="16" width="4" x="14" y="4" />
   </React.Fragment>
 );
 
@@ -40,13 +40,13 @@ const SVG = (props) => {
   return (
     <svg
       className="image-gallery-svg"
-      xmlns="http://www.w3.org/2000/svg"
-      viewBox={viewBox}
       fill="none"
       stroke="currentColor"
-      strokeWidth={strokeWidth}
       strokeLinecap="round"
       strokeLinejoin="round"
+      strokeWidth={strokeWidth}
+      viewBox={viewBox}
+      xmlns="http://www.w3.org/2000/svg"
     >
       {iconMapper[icon]}
     </svg>
@@ -54,8 +54,6 @@ const SVG = (props) => {
 };
 
 SVG.propTypes = {
-  strokeWidth: number,
-  viewBox: string,
   icon: oneOf([
     "left",
     "right",
@@ -66,6 +64,8 @@ SVG.propTypes = {
     "play",
     "pause",
   ]).isRequired,
+  strokeWidth: number,
+  viewBox: string,
 };
 
 export default SVG;

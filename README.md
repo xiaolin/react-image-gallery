@@ -33,7 +33,7 @@ npm install react-image-gallery
 
 ### Zero-config (Recommended)
 
-Starting with version 2.0, styles are automatically injected when you import the component. No separate CSS import required!
+Styles are automatically injected when you import the component. No separate CSS import required!
 
 ```js
 import ImageGallery from "react-image-gallery";
@@ -166,8 +166,12 @@ function MyGallery() {
   - transition duration during image slide in milliseconds
 - `swipingTransitionDuration`: Number, default `0`
   - transition duration while swiping in milliseconds
+- `swipingThumbnailTransitionDuration`: Number, default `0`
+  - transition duration while swiping thumbnails in milliseconds
 - `slideInterval`: Number, default `3000`
 - `slideOnThumbnailOver`: Boolean, default `false`
+- `slideVertically`: Boolean, default `false`
+  - if true, slides will transition vertically instead of horizontally
 - `flickThreshold`: Number (float), default `0.4`
   - Determines the max velocity of a swipe before it's considered a flick (lower = more sensitive)
 - `swipeThreshold`: Number, default `30`
@@ -214,7 +218,7 @@ function MyGallery() {
   - As a prop passed into `ImageGallery` to completely override `_renderThumbInner`, see source for reference
 
 - `renderLeftNav`: Function, custom left nav component
-  - See [`<LeftNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/LeftNav.js)
+  - See [`<LeftNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/LeftNav.jsx)
   - Use this to render a custom left nav control
   - Args:
     - `onClick` callback that will slide to the previous item
@@ -225,7 +229,7 @@ function MyGallery() {
   );
   ```
 - `renderRightNav`: Function, custom right nav component
-  - See [`<RightNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/RightNav.js)
+  - See [`<RightNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/RightNav.jsx)
   - Use this to render a custom right nav control
   - Args:
     - `onClick` callback that will slide to the next item
@@ -235,8 +239,30 @@ function MyGallery() {
     <RightNav onClick={onClick} disabled={disabled} />
   );
   ```
+- `renderTopNav`: Function, custom top nav component (for vertical sliding)
+  - See [`<TopNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/TopNav.jsx)
+  - Use this to render a custom top nav control when `slideVertically` is true
+  - Args:
+    - `onClick` callback that will slide to the previous item
+    - `disabled` boolean for when the nav is disabled
+  ```javascript
+  renderTopNav: (onClick, disabled) => (
+    <TopNav onClick={onClick} disabled={disabled} />
+  );
+  ```
+- `renderBottomNav`: Function, custom bottom nav component (for vertical sliding)
+  - See [`<BottomNav />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/BottomNav.jsx)
+  - Use this to render a custom bottom nav control when `slideVertically` is true
+  - Args:
+    - `onClick` callback that will slide to the next item
+    - `disabled` boolean for when the nav is disabled
+  ```javascript
+  renderBottomNav: (onClick, disabled) => (
+    <BottomNav onClick={onClick} disabled={disabled} />
+  );
+  ```
 - `renderPlayPauseButton`: Function, play pause button component
-  - See [`<PlayPause />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/PlayPause.js)
+  - See [`<PlayPause />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/PlayPause.jsx)
   - Use this to render a custom play pause button
   - Args:
     - `onClick` callback that will toggle play/pause
@@ -247,7 +273,7 @@ function MyGallery() {
   );
   ```
 - `renderFullscreenButton`: Function, custom fullscreen button component
-  - See [`<Fullscreen />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/Fullscreen.js)
+  - See [`<Fullscreen />`](https://github.com/xiaolin/react-image-gallery/blob/master/src/components/controls/Fullscreen.jsx)
   - Use this to render a custom fullscreen button
   - Args:
     - `onClick` callback that will toggle fullscreen
@@ -284,9 +310,8 @@ Each pull request (PR) should be specific and isolated to the issue you're tryin
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
 cd react-image-gallery
-npm install --global yarn
-yarn install
-yarn start
+npm install
+npm start
 ```
 
 Then open [`localhost:8001`](http://localhost:8001) in a browser.

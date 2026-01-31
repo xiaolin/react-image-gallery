@@ -20,8 +20,8 @@ const IndexIndicator = memo(function IndexIndicator({
 
 IndexIndicator.propTypes = {
   currentIndex: number.isRequired,
-  totalItems: number.isRequired,
   indexSeparator: string,
+  totalItems: number.isRequired,
 };
 
 IndexIndicator.defaultProps = {

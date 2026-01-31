@@ -35,17 +35,17 @@ const Item = React.memo((props) => {
   return (
     <React.Fragment>
       <img
-        className="image-gallery-image"
-        src={itemSrc}
         alt={originalAlt}
-        srcSet={srcSet}
+        className="image-gallery-image"
         height={originalHeight}
-        width={originalWidth}
-        sizes={sizes}
-        title={originalTitle}
-        onLoad={(event) => handleImageLoaded(event, original)}
-        onError={onImageError}
         loading={loading}
+        sizes={sizes}
+        src={itemSrc}
+        srcSet={srcSet}
+        title={originalTitle}
+        width={originalWidth}
+        onError={onImageError}
+        onLoad={(event) => handleImageLoaded(event, original)}
       />
       {description && (
         <span className="image-gallery-description">{description}</span>
@@ -61,15 +61,15 @@ Item.propTypes = {
   fullscreen: string, // fullscreen version of img
   handleImageLoaded: func.isRequired,
   isFullscreen: bool,
-  onImageError: func.isRequired,
+  loading: string,
   original: string.isRequired,
   originalAlt: string,
   originalHeight: string,
-  originalWidth: string,
   originalTitle: string,
+  originalWidth: string,
   sizes: string,
   srcSet: string,
-  loading: string,
+  onImageError: func.isRequired,
 };
 
 export default Item;

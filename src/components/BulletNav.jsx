@@ -17,9 +17,9 @@ const BulletNav = memo(function BulletNav({ bullets, slideVertically }) {
   return (
     <div className={bulletsClass}>
       <div
+        aria-label="Bullet Navigation"
         className="image-gallery-bullets-container"
         role="navigation"
-        aria-label="Bullet Navigation"
       >
         {bullets}
       </div>

@@ -24,10 +24,10 @@
  * 6. package.json is correctly configured for npm
  */
 
-import React from "react";
-import { render } from "@testing-library/react";
 import fs from "fs";
 import path from "path";
+import React from "react";
+import { render } from "@testing-library/react";
 
 // Root path for the project
 const ROOT = path.resolve(__dirname, "../..");

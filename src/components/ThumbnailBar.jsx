@@ -53,19 +53,19 @@ const ThumbnailBar = memo(function ThumbnailBar({
     <SwipeWrapper
       className={wrapperClassName}
       delta={0}
-      onSwiping={!disableThumbnailSwipe ? onSwiping : undefined}
       onSwiped={!disableThumbnailSwipe ? onSwiped : undefined}
+      onSwiping={!disableThumbnailSwipe ? onSwiping : undefined}
     >
       <div
-        className="image-gallery-thumbnails"
         ref={thumbnailsWrapperRef}
+        className="image-gallery-thumbnails"
         style={thumbnailBarHeight}
       >
         <nav
           ref={thumbnailsRef}
+          aria-label="Thumbnail Navigation"
           className="image-gallery-thumbnails-container"
           style={thumbnailStyle}
-          aria-label="Thumbnail Navigation"
         >
           {thumbnails}
         </nav>
@@ -75,16 +75,16 @@ const ThumbnailBar = memo(function ThumbnailBar({
 });
 
 ThumbnailBar.propTypes = {
-  thumbnails: arrayOf(node),
-  thumbnailPosition: string,
-  thumbnailStyle: object,
-  thumbnailBarHeight: object,
-  isRTL: bool,
   disableThumbnailSwipe: bool,
-  onSwiping: func,
-  onSwiped: func,
-  thumbnailsWrapperRef: object,
+  isRTL: bool,
+  thumbnailBarHeight: object,
+  thumbnailPosition: string,
+  thumbnails: arrayOf(node),
   thumbnailsRef: object,
+  thumbnailStyle: object,
+  thumbnailsWrapperRef: object,
+  onSwiped: func,
+  onSwiping: func,
 };
 
 ThumbnailBar.defaultProps = {

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent, act } from "@testing-library/react";
+import { act, fireEvent, render, screen } from "@testing-library/react";
 import ImageGallery from "./ImageGallery";
 
 // Mock ResizeObserver
@@ -220,8 +220,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          showIndex={true}
           indexSeparator=" of "
+          showIndex={true}
         />
       );
       const indexElement = document.querySelector(".image-gallery-index");
@@ -591,7 +591,7 @@ describe("<ImageGallery />", () => {
     });
 
     it("handles navigation with two slides correctly", () => {
-      render(<ImageGallery items={twoItems} infinite={true} />);
+      render(<ImageGallery infinite={true} items={twoItems} />);
       const nextButton = screen.getByLabelText("Next Slide");
 
       fireEvent.click(nextButton);
@@ -604,7 +604,7 @@ describe("<ImageGallery />", () => {
     });
 
     it("wraps correctly with two slides in infinite mode", () => {
-      render(<ImageGallery items={twoItems} infinite={true} startIndex={1} />);
+      render(<ImageGallery infinite={true} items={twoItems} startIndex={1} />);
       const nextButton = screen.getByLabelText("Next Slide");
 
       fireEvent.click(nextButton);
@@ -617,7 +617,7 @@ describe("<ImageGallery />", () => {
     });
 
     it("handles navigation with single slide", () => {
-      render(<ImageGallery items={singleItem} infinite={false} />);
+      render(<ImageGallery infinite={false} items={singleItem} />);
       // With single slide, canSlide() returns false and nav buttons are not rendered
       expect(screen.queryByLabelText("Previous Slide")).not.toBeInTheDocument();
       expect(screen.queryByLabelText("Next Slide")).not.toBeInTheDocument();
@@ -708,8 +708,8 @@ describe("<ImageGallery />", () => {
         <ImageGallery
           {...defaultProps}
           autoPlay={true}
-          slideInterval={500}
           slideDuration={100}
+          slideInterval={500}
         />
       );
 
@@ -728,9 +728,9 @@ describe("<ImageGallery />", () => {
         <ImageGallery
           {...defaultProps}
           autoPlay={true}
-          slideInterval={500}
-          slideDuration={100}
           infinite={true}
+          slideDuration={100}
+          slideInterval={500}
           startIndex={defaultItems.length - 1}
         />
       );
@@ -748,9 +748,9 @@ describe("<ImageGallery />", () => {
         <ImageGallery
           {...defaultProps}
           autoPlay={true}
-          slideInterval={500}
-          slideDuration={100}
           infinite={false}
+          slideDuration={100}
+          slideInterval={500}
           startIndex={defaultItems.length - 2}
         />
       );
@@ -774,9 +774,9 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          onPlay={onPlay}
-          onPause={onPause}
           slideInterval={1000}
+          onPause={onPause}
+          onPlay={onPlay}
         />
       );
 
@@ -794,9 +794,9 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
+          slideInterval={1000}
           startIndex={2}
           onPlay={onPlay}
-          slideInterval={1000}
         />
       );
 
@@ -811,9 +811,9 @@ describe("<ImageGallery />", () => {
         <ImageGallery
           {...defaultProps}
           autoPlay={true}
+          slideInterval={1000}
           startIndex={1}
           onPause={onPause}
-          slideInterval={1000}
         />
       );
 
@@ -866,7 +866,7 @@ describe("<ImageGallery />", () => {
     it("calls onSlide when slide changes", async () => {
       const onSlide = jest.fn();
       render(
-        <ImageGallery {...defaultProps} onSlide={onSlide} slideDuration={100} />
+        <ImageGallery {...defaultProps} slideDuration={100} onSlide={onSlide} />
       );
 
       const nextButton = screen.getByLabelText("Next Slide");
@@ -882,7 +882,7 @@ describe("<ImageGallery />", () => {
     it("calls onSlide with correct index after multiple navigations", () => {
       const onSlide = jest.fn();
       render(
-        <ImageGallery {...defaultProps} onSlide={onSlide} slideDuration={100} />
+        <ImageGallery {...defaultProps} slideDuration={100} onSlide={onSlide} />
       );
 
       const nextButton = screen.getByLabelText("Next Slide");
@@ -918,9 +918,9 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
+          slideDuration={100}
           onBeforeSlide={onBeforeSlide}
           onSlide={onSlide}
-          slideDuration={100}
         />
       );
 
@@ -1401,8 +1401,8 @@ describe("<ImageGallery />", () => {
       const customLeftNav = (onClick, disabled) => (
         <button
           data-testid="custom-left-nav"
-          onClick={onClick}
           disabled={disabled}
+          onClick={onClick}
         >
           Custom Left
         </button>
@@ -1415,8 +1415,8 @@ describe("<ImageGallery />", () => {
       const customLeftNav = (onClick, disabled) => (
         <button
           data-testid="custom-left-nav"
-          onClick={onClick}
           disabled={disabled}
+          onClick={onClick}
         >
           Custom Left
         </button>
@@ -1435,8 +1435,8 @@ describe("<ImageGallery />", () => {
       const customRightNav = (onClick, disabled) => (
         <button
           data-testid="custom-right-nav"
-          onClick={onClick}
           disabled={disabled}
+          onClick={onClick}
         >
           Custom Right
         </button>
@@ -1451,8 +1451,8 @@ describe("<ImageGallery />", () => {
       const customTopNav = (onClick, disabled) => (
         <button
           data-testid="custom-top-nav"
-          onClick={onClick}
           disabled={disabled}
+          onClick={onClick}
         >
           Custom Top
         </button>
@@ -1460,8 +1460,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          slideVertically={true}
           renderTopNav={customTopNav}
+          slideVertically={true}
         />
       );
       expect(screen.getByTestId("custom-top-nav")).toBeInTheDocument();
@@ -1471,8 +1471,8 @@ describe("<ImageGallery />", () => {
       const customBottomNav = (onClick, disabled) => (
         <button
           data-testid="custom-bottom-nav"
-          onClick={onClick}
           disabled={disabled}
+          onClick={onClick}
         >
           Custom Bottom
         </button>
@@ -1480,8 +1480,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          slideVertically={true}
           renderBottomNav={customBottomNav}
+          slideVertically={true}
         />
       );
       expect(screen.getByTestId("custom-bottom-nav")).toBeInTheDocument();
@@ -1544,8 +1544,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          useBrowserFullscreen={false}
           renderFullscreenButton={customFullscreen}
+          useBrowserFullscreen={false}
         />
       );
 
@@ -1674,8 +1674,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          slideVertically={true}
           showBullets={true}
+          slideVertically={true}
         />
       );
       const bullets = document.querySelector(".image-gallery-bullets");
@@ -2313,7 +2313,7 @@ describe("<ImageGallery />", () => {
 
     it("exposes getCurrentIndex method", () => {
       const ref = React.createRef();
-      render(<ImageGallery {...defaultProps} startIndex={3} ref={ref} />);
+      render(<ImageGallery {...defaultProps} ref={ref} startIndex={3} />);
 
       expect(ref.current.getCurrentIndex()).toBe(3);
     });
@@ -2336,8 +2336,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          autoPlay={true}
           ref={ref}
+          autoPlay={true}
           onPause={onPause}
         />
       );
@@ -2355,8 +2355,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          useBrowserFullscreen={false}
           ref={ref}
+          useBrowserFullscreen={false}
           onScreenChange={onScreenChange}
         />
       );
@@ -2374,8 +2374,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          useBrowserFullscreen={false}
           ref={ref}
+          useBrowserFullscreen={false}
           onScreenChange={onScreenChange}
         />
       );
@@ -2392,8 +2392,8 @@ describe("<ImageGallery />", () => {
       render(
         <ImageGallery
           {...defaultProps}
-          useBrowserFullscreen={false}
           ref={ref}
+          useBrowserFullscreen={false}
         />
       );
 
@@ -2418,7 +2418,7 @@ describe("<ImageGallery />", () => {
   // ===========================================
   describe("two-slide edge cases", () => {
     it("handles two-slide wrap forward", () => {
-      render(<ImageGallery items={twoItems} infinite={true} startIndex={1} />);
+      render(<ImageGallery infinite={true} items={twoItems} startIndex={1} />);
       const nextButton = screen.getByLabelText("Next Slide");
 
       fireEvent.click(nextButton);
@@ -2431,7 +2431,7 @@ describe("<ImageGallery />", () => {
     });
 
     it("handles two-slide wrap backward", () => {
-      render(<ImageGallery items={twoItems} infinite={true} />);
+      render(<ImageGallery infinite={true} items={twoItems} />);
       const prevButton = screen.getByLabelText("Previous Slide");
 
       fireEvent.click(prevButton);
@@ -2446,11 +2446,11 @@ describe("<ImageGallery />", () => {
     it("autoplay works correctly with two slides", () => {
       render(
         <ImageGallery
-          items={twoItems}
           autoPlay={true}
-          slideInterval={500}
-          slideDuration={100}
           infinite={true}
+          items={twoItems}
+          slideDuration={100}
+          slideInterval={500}
         />
       );
 
@@ -2464,7 +2464,7 @@ describe("<ImageGallery />", () => {
     });
 
     it("keyboard navigation works with two slides", () => {
-      render(<ImageGallery items={twoItems} infinite={true} />);
+      render(<ImageGallery infinite={true} items={twoItems} />);
 
       // Navigate with keyboard
       fireEvent.keyDown(window, { keyCode: 39 });
@@ -2483,14 +2483,14 @@ describe("<ImageGallery />", () => {
   // ===========================================
   describe("single slide edge cases", () => {
     it("handles single slide with infinite disabled", () => {
-      render(<ImageGallery items={singleItem} infinite={false} />);
+      render(<ImageGallery infinite={false} items={singleItem} />);
       // With a single slide, nav buttons are not rendered (canSlide returns false)
       expect(screen.queryByLabelText("Previous Slide")).not.toBeInTheDocument();
       expect(screen.queryByLabelText("Next Slide")).not.toBeInTheDocument();
     });
 
     it("handles single slide with infinite enabled", () => {
-      render(<ImageGallery items={singleItem} infinite={true} />);
+      render(<ImageGallery infinite={true} items={singleItem} />);
       // Single slide doesn't have nav buttons regardless of infinite setting
       // canSlide() returns false when items.length < 2
       const gallery = document.querySelector(".image-gallery");
@@ -2503,10 +2503,10 @@ describe("<ImageGallery />", () => {
     it("autoplay does nothing with single slide", () => {
       render(
         <ImageGallery
-          items={singleItem}
           autoPlay={true}
-          slideInterval={500}
           infinite={false}
+          items={singleItem}
+          slideInterval={500}
         />
       );
 

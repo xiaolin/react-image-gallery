@@ -20,20 +20,20 @@ const Slide = memo(function Slide({
 }) {
   return (
     <div
-      aria-label={`Go to Slide ${index + 1}`}
       key={`slide-${index}`}
-      tabIndex="-1"
+      aria-label={`Go to Slide ${index + 1}`}
       className={`image-gallery-slide ${alignment} ${originalClass}`}
-      style={style}
-      onClick={onClick}
-      onKeyUp={onKeyUp}
-      onTouchMove={onTouchMove}
-      onTouchEnd={onTouchEnd}
-      onTouchStart={onTouchStart}
-      onMouseOver={onMouseOver}
-      onFocus={onMouseOver}
-      onMouseLeave={onMouseLeave}
       role="button"
+      style={style}
+      tabIndex="-1"
+      onClick={onClick}
+      onFocus={onMouseOver}
+      onKeyUp={onKeyUp}
+      onMouseLeave={onMouseLeave}
+      onMouseOver={onMouseOver}
+      onTouchEnd={onTouchEnd}
+      onTouchMove={onTouchMove}
+      onTouchStart={onTouchStart}
     >
       {children}
     </div>
@@ -41,18 +41,18 @@ const Slide = memo(function Slide({
 });
 
 Slide.propTypes = {
-  index: number.isRequired,
   alignment: string,
+  children: node,
+  index: number.isRequired,
   originalClass: string,
   style: object,
   onClick: func,
   onKeyUp: func,
-  onTouchMove: func,
-  onTouchEnd: func,
-  onTouchStart: func,
-  onMouseOver: func,
   onMouseLeave: func,
-  children: node,
+  onMouseOver: func,
+  onTouchEnd: func,
+  onTouchMove: func,
+  onTouchStart: func,
 };
 
 Slide.defaultProps = {

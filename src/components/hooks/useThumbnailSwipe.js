@@ -1,5 +1,5 @@
-import { useState, useCallback } from "react";
-import { LEFT, RIGHT, UP, DOWN } from "react-swipeable";
+import { useCallback, useState } from "react";
+import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
 
 /**
  * Custom hook for handling thumbnail swipe gestures

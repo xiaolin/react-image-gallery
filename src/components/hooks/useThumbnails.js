@@ -1,5 +1,5 @@
-import { useState, useCallback, useRef, useEffect } from "react";
-import debounce from "lodash-es/debounce.js";
+import { useCallback, useEffect, useRef, useState } from "react";
+import debounce from "src/components/utils/debounce";
 
 /**
  * Custom hook for managing thumbnail bar state and navigation

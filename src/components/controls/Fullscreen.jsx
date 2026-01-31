@@ -5,12 +5,12 @@ import SVG from "src/components/SVG";
 const Fullscreen = React.memo(({ isFullscreen, onClick }) => {
   return (
     <button
-      type="button"
-      className="image-gallery-icon image-gallery-fullscreen-button"
-      onClick={onClick}
       aria-label="Open Fullscreen"
+      className="image-gallery-icon image-gallery-fullscreen-button"
+      type="button"
+      onClick={onClick}
     >
-      <SVG strokeWidth={2} icon={isFullscreen ? "minimize" : "maximize"} />
+      <SVG icon={isFullscreen ? "minimize" : "maximize"} strokeWidth={2} />
     </button>
   );
 });

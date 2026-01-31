@@ -5,11 +5,11 @@ import SVG from "src/components/SVG";
 const BottomNav = React.memo(({ disabled, onClick }) => {
   return (
     <button
-      type="button"
+      aria-label="Next Slide"
       className="image-gallery-icon image-gallery-bottom-nav"
       disabled={disabled}
+      type="button"
       onClick={onClick}
-      aria-label="Next Slide"
     >
       <SVG icon="bottom" viewBox="6 0 12 24" />
     </button>

@@ -1,5 +1,5 @@
 import React from "react";
-import { render, screen, fireEvent } from "@testing-library/react";
+import { fireEvent, render, screen } from "@testing-library/react";
 import Item from "./Item";
 
 describe("<Item />", () => {
@@ -37,8 +37,8 @@ describe("<Item />", () => {
     const { container } = render(
       <Item
         {...defaultProps}
-        srcSet="test-small.jpg 300w, test-large.jpg 800w"
         sizes="(max-width: 600px) 300px, 800px"
+        srcSet="test-small.jpg 300w, test-large.jpg 800w"
       />
     );
     const img = container.querySelector("img");
@@ -51,7 +51,7 @@ describe("<Item />", () => {
 
   it("renders with width and height", () => {
     const { container } = render(
-      <Item {...defaultProps} originalWidth="800" originalHeight="600" />
+      <Item {...defaultProps} originalHeight="600" originalWidth="800" />
     );
     const img = container.querySelector("img");
     expect(img).toHaveAttribute("width", "800");
