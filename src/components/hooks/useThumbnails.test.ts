@@ -1,5 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import type { GalleryItem } from "src/types";
+import type { GalleryItem, ThumbnailPosition } from "src/types";
 import { useThumbnails } from "./useThumbnails";
 
 describe("useThumbnails", () => {
@@ -9,10 +9,18 @@ describe("useThumbnails", () => {
       thumbnail: `thumb${i}.jpg`,
     }));
 
-  const defaultProps = {
+  const defaultProps: {
+    currentIndex: number;
+    items: GalleryItem[];
+    thumbnailPosition: ThumbnailPosition;
+    disableThumbnailScroll: boolean;
+    slideDuration: number;
+    isRTL: boolean;
+    useTranslate3D: boolean;
+  } = {
     currentIndex: 0,
     items: createItems(10),
-    thumbnailPosition: "bottom" as const,
+    thumbnailPosition: "bottom",
     disableThumbnailScroll: false,
     slideDuration: 450,
     isRTL: false,
@@ -233,9 +241,10 @@ describe("useThumbnails", () => {
   it("resets transforms when thumbnail position changes", () => {
     jest.useFakeTimers();
 
-    const { result, rerender } = renderHook((props) => useThumbnails(props), {
-      initialProps: defaultProps,
-    });
+    const { result, rerender } = renderHook(
+      (props: typeof defaultProps) => useThumbnails(props),
+      { initialProps: defaultProps }
+    );
 
     act(() => {
       result.current.setThumbsTranslate(-100);

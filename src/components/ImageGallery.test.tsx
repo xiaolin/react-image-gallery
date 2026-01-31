@@ -368,7 +368,7 @@ describe("<ImageGallery />", () => {
         {
           original: "image1.jpg",
           thumbnail: "thumb1.jpg",
-          originalHeight: 600,
+          originalHeight: "600",
         },
       ];
       render(<ImageGallery items={itemsWithHeight} />);
@@ -381,7 +381,7 @@ describe("<ImageGallery />", () => {
         {
           original: "image1.jpg",
           thumbnail: "thumb1.jpg",
-          originalWidth: 800,
+          originalWidth: "800",
         },
       ];
       render(<ImageGallery items={itemsWithWidth} />);
@@ -1856,14 +1856,6 @@ describe("<ImageGallery />", () => {
 
     it("respects swipeThreshold", () => {
       render(<ImageGallery {...defaultProps} swipeThreshold={50} />);
-      const gallery = document.querySelector(".image-gallery");
-      expect(gallery).toBeInTheDocument();
-    });
-
-    it("prevents swipe when preventDefaultTouchmoveEvent is true", () => {
-      render(
-        <ImageGallery {...defaultProps} preventDefaultTouchmoveEvent={true} />
-      );
       const gallery = document.querySelector(".image-gallery");
       expect(gallery).toBeInTheDocument();
     });

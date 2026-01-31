@@ -105,6 +105,7 @@ describe("Bundle Verification Tests", () => {
 
     it("can be dynamically imported and exports a React component", async () => {
       // Dynamic import of the actual build
+      // @ts-ignore - Build output doesn't have declaration file
       const module = await import("../../build/image-gallery.es.js");
 
       expect(module.default).toBeDefined();
@@ -113,6 +114,7 @@ describe("Bundle Verification Tests", () => {
     });
 
     it("renders correctly when imported from build", async () => {
+      // @ts-ignore - Build output doesn't have declaration file
       const module = await import("../../build/image-gallery.es.js");
       const ImageGallery = module.default;
 
@@ -262,6 +264,7 @@ describe("Bundle Verification Tests", () => {
     it('ES import: import ImageGallery from "react-image-gallery" works', async () => {
       // Simulates: import ImageGallery from "react-image-gallery"
       // This resolves to pkg.module -> ./build/image-gallery.es.js
+      // @ts-ignore - Build output doesn't have declaration file
       const module = await import("../../build/image-gallery.es.js");
       expect(module.default).toBeDefined();
     });
