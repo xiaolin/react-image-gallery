@@ -27,6 +27,7 @@ class App extends React.Component {
       showVideo: false,
       useWindowKeyDown: true,
       lazyLoad: false,
+      maxBullets: 0,
     };
     this._toggleShowVideo = this._toggleShowVideo.bind(this);
 
@@ -181,6 +182,9 @@ class App extends React.Component {
           isRTL={this.state.isRTL}
           items={this.images}
           lazyLoad={this.state.lazyLoad}
+          maxBullets={
+            this.state.maxBullets > 0 ? this.state.maxBullets : undefined
+          }
           showBullets={this.state.showBullets}
           showFullscreenButton={
             this.state.showFullscreenButton &&
@@ -237,6 +241,19 @@ class App extends React.Component {
                       this,
                       "slideDuration"
                     )}
+                  />
+                </div>
+              </li>
+
+              <li>
+                <div className="app-interval-input-group">
+                  <span className="app-interval-label">Max Bullets</span>
+                  <input
+                    className="app-interval-input"
+                    min="3"
+                    type="number"
+                    value={this.state.maxBullets}
+                    onChange={this._handleInputChange.bind(this, "maxBullets")}
                   />
                 </div>
               </li>

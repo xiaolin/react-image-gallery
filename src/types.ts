@@ -166,6 +166,8 @@ export interface ImageGalleryProps {
   onErrorImageURL?: string;
   /** Show bullet navigation */
   showBullets?: boolean;
+  /** Maximum number of bullets to show (minimum 3) */
+  maxBullets?: number;
   /** Show fullscreen toggle button */
   showFullscreenButton?: boolean;
   /** Show current/total index indicator */

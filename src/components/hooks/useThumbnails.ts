@@ -270,6 +270,49 @@ export function useThumbnails({
     }
   }, []);
 
+  // Recalculate thumbnail position when wrapper dimensions change (window resize)
+  useEffect(() => {
+    // Skip if dimensions are 0 (not yet measured)
+    if (thumbnailsWrapperWidth === 0 && thumbnailsWrapperHeight === 0) return;
+    // Only recalculate if not currently swiping
+    if (isSwipingThumbnail) return;
+
+    const thumbsElement = thumbnailsRef.current;
+    if (!thumbsElement) return;
+
+    const isVertical = isThumbnailVertical();
+    let hiddenScroll: number;
+
+    if (isVertical) {
+      if (thumbsElement.scrollHeight <= thumbnailsWrapperHeight) {
+        setThumbsTranslate(0);
+        setThumbsSwipedTranslate(0);
+        return;
+      }
+      hiddenScroll = thumbsElement.scrollHeight - thumbnailsWrapperHeight;
+    } else {
+      if (thumbsElement.scrollWidth <= thumbnailsWrapperWidth) {
+        setThumbsTranslate(0);
+        setThumbsSwipedTranslate(0);
+        return;
+      }
+      hiddenScroll = thumbsElement.scrollWidth - thumbnailsWrapperWidth;
+    }
+
+    const perIndexScroll = hiddenScroll / (items.length - 1);
+    const newTranslate = -(currentIndex * perIndexScroll);
+
+    setThumbsTranslate(newTranslate);
+    setThumbsSwipedTranslate(newTranslate);
+  }, [
+    thumbnailsWrapperWidth,
+    thumbnailsWrapperHeight,
+    currentIndex,
+    items.length,
+    isSwipingThumbnail,
+    isThumbnailVertical,
+  ]);
+
   // Clean up on unmount
   useEffect(() => {
     return () => {

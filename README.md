@@ -150,6 +150,8 @@ function MyGallery() {
 - `isRTL`: Boolean, default `false`
   - if true, gallery's direction will be from right-to-left (to support right-to-left languages)
 - `showBullets`: Boolean, default `false`
+- `maxBullets`: Number, default `undefined`
+  - Maximum number of bullets to show at once. Active bullet stays centered while bullets slide. Minimum value is 3.
 - `showIndex`: Boolean, default `false`
 - `autoPlay`: Boolean, default `false`
 - `disableThumbnailScroll`: Boolean, default `false`

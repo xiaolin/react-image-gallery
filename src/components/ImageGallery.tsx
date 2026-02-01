@@ -135,6 +135,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         <TopNav disabled={disabled} onClick={onClick} />
       ),
       showBullets = false,
+      maxBullets,
       showFullscreenButton = true,
       showIndex = false,
       showNav = true,
@@ -1105,7 +1106,12 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         )}
         {showPlayButton && renderPlayPauseButton(togglePlay, isPlaying)}
         {showBullets && (
-          <BulletNav bullets={bullets} slideVertically={slideVertically} />
+          <BulletNav
+            bullets={bullets}
+            currentIndex={currentIndex}
+            maxBullets={maxBullets}
+            slideVertically={slideVertically}
+          />
         )}
         {showFullscreenButton &&
           renderFullscreenButton(toggleFullScreen, isFullscreen)}

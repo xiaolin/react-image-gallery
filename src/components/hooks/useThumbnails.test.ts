@@ -270,4 +270,61 @@ describe("useThumbnails", () => {
 
     expect(result.current.thumbnailsWrapperHeight).toBe(0);
   });
+
+  describe("ResizeObserver behavior", () => {
+    it("initResizeObserver creates and observes element", () => {
+      const mockObserve = jest.fn();
+      const mockUnobserve = jest.fn();
+      const mockResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: mockObserve,
+        unobserve: mockUnobserve,
+        disconnect: jest.fn(),
+      }));
+      window.ResizeObserver = mockResizeObserver;
+
+      const { result } = renderHook(() => useThumbnails(defaultProps));
+
+      const mockElement = document.createElement("div");
+      const mockRef = { current: mockElement };
+
+      act(() => {
+        result.current.initResizeObserver(mockRef);
+      });
+
+      expect(mockResizeObserver).toHaveBeenCalled();
+      expect(mockObserve).toHaveBeenCalledWith(mockElement);
+    });
+
+    it("removeResizeObserver cleans up observer", () => {
+      const mockObserve = jest.fn();
+      const mockUnobserve = jest.fn();
+      const mockResizeObserver = jest.fn().mockImplementation(() => ({
+        observe: mockObserve,
+        unobserve: mockUnobserve,
+        disconnect: jest.fn(),
+      }));
+      window.ResizeObserver = mockResizeObserver;
+
+      const { result } = renderHook(() => useThumbnails(defaultProps));
+
+      // Set up the wrapper ref to have an element
+      const mockElement = document.createElement("div");
+      Object.defineProperty(result.current.thumbnailsWrapperRef, "current", {
+        value: mockElement,
+        writable: true,
+      });
+
+      // Initialize the observer first
+      act(() => {
+        result.current.initResizeObserver(result.current.thumbnailsWrapperRef);
+      });
+
+      // Now remove it
+      act(() => {
+        result.current.removeResizeObserver();
+      });
+
+      expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
+    });
+  });
 });
