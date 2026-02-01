@@ -16,8 +16,13 @@ cp "$DEMO_SOURCE/demo.mini.js" "$DEMO_DEST/app.min.js"
 
 echo "📤 Pushing to linxtion.github.io..."
 cd "$DEMO_DEST"
-git add app.min.css app.min.js
-git commit -m "Update react-image-gallery demo to $(node -p "require('$PROJECT_ROOT/package.json').version")"
-git push
 
-echo "✅ Demo deployed!"
+# Only commit and push if there are changes
+if git diff --quiet app.min.css app.min.js; then
+  echo "ℹ️  No demo changes to deploy"
+else
+  git add app.min.css app.min.js
+  git commit -m "Update react-image-gallery demo to $(node -p "require('$PROJECT_ROOT/package.json').version")"
+  git push
+  echo "✅ Demo deployed!"
+fi
