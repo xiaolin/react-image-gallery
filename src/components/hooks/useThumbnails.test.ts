@@ -327,4 +327,85 @@ describe("useThumbnails", () => {
       expect(mockUnobserve).toHaveBeenCalledWith(mockElement);
     });
   });
+
+  describe("swipe state management", () => {
+    it("does not reset translate when only isSwipingThumbnail changes (not dimensions)", () => {
+      // This test ensures the fix for thumbnail swipe position resetting is maintained
+      // The bug was: when isSwipingThumbnail changed from true to false,
+      // the resize-effect would run and reset thumbsTranslate to index-based position
+      const { result } = renderHook(() => useThumbnails(defaultProps));
+
+      // Simulate a swipe by setting translate and swiping state
+      act(() => {
+        result.current.setThumbsTranslate(-150);
+        result.current.setThumbsSwipedTranslate(-150);
+        result.current.setIsSwipingThumbnail(true);
+      });
+
+      expect(result.current.thumbsTranslate).toBe(-150);
+      expect(result.current.isSwipingThumbnail).toBe(true);
+
+      // Now simulate swipe ending by setting isSwipingThumbnail to false
+      act(() => {
+        result.current.setIsSwipingThumbnail(false);
+      });
+
+      // The translate should NOT be reset just because isSwipingThumbnail changed
+      // (dimensions haven't changed, so the resize-effect should not reset position)
+      expect(result.current.thumbsTranslate).toBe(-150);
+      expect(result.current.thumbsSwipedTranslate).toBe(-150);
+    });
+
+    it("allows setting translate values while swiping", () => {
+      const { result } = renderHook(() => useThumbnails(defaultProps));
+
+      // Start swiping
+      act(() => {
+        result.current.setIsSwipingThumbnail(true);
+        result.current.setThumbsStyle({ transition: "none" });
+      });
+
+      // Update translate during swipe
+      act(() => {
+        result.current.setThumbsTranslate(-50);
+      });
+      expect(result.current.thumbsTranslate).toBe(-50);
+
+      act(() => {
+        result.current.setThumbsTranslate(-100);
+      });
+      expect(result.current.thumbsTranslate).toBe(-100);
+
+      act(() => {
+        result.current.setThumbsTranslate(-150);
+      });
+      expect(result.current.thumbsTranslate).toBe(-150);
+    });
+
+    it("preserves swiped position after multiple swipe cycles", () => {
+      const { result } = renderHook(() => useThumbnails(defaultProps));
+
+      // First swipe cycle
+      act(() => {
+        result.current.setIsSwipingThumbnail(true);
+        result.current.setThumbsTranslate(-100);
+      });
+      act(() => {
+        result.current.setThumbsSwipedTranslate(-100);
+        result.current.setIsSwipingThumbnail(false);
+      });
+      expect(result.current.thumbsTranslate).toBe(-100);
+
+      // Second swipe cycle (should start from previous position)
+      act(() => {
+        result.current.setIsSwipingThumbnail(true);
+        result.current.setThumbsTranslate(-200);
+      });
+      act(() => {
+        result.current.setThumbsSwipedTranslate(-200);
+        result.current.setIsSwipingThumbnail(false);
+      });
+      expect(result.current.thumbsTranslate).toBe(-200);
+    });
+  });
 });

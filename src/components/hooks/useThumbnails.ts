@@ -271,9 +271,24 @@ export function useThumbnails({
   }, []);
 
   // Recalculate thumbnail position when wrapper dimensions change (window resize)
+  // Use a ref to track the previous dimensions to only react to actual size changes
+  const prevDimensionsRef = useRef({ width: 0, height: 0 });
   useEffect(() => {
     // Skip if dimensions are 0 (not yet measured)
     if (thumbnailsWrapperWidth === 0 && thumbnailsWrapperHeight === 0) return;
+
+    // Only recalculate if dimensions actually changed (not just on isSwipingThumbnail change)
+    const dimensionsChanged =
+      prevDimensionsRef.current.width !== thumbnailsWrapperWidth ||
+      prevDimensionsRef.current.height !== thumbnailsWrapperHeight;
+
+    if (!dimensionsChanged) return;
+
+    prevDimensionsRef.current = {
+      width: thumbnailsWrapperWidth,
+      height: thumbnailsWrapperHeight,
+    };
+
     // Only recalculate if not currently swiping
     if (isSwipingThumbnail) return;
 

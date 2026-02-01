@@ -504,9 +504,18 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     const handleOnThumbnailSwiped = useCallback(() => {
       resetSwipingDirection();
       setThumbsSwipedTranslate(thumbsTranslate);
-      // Keep transition: none - thumbnails are already at final position
-      // Transition will be set by slideThumbnailBar when currentIndex changes
-    }, [resetSwipingDirection, thumbsTranslate, setThumbsSwipedTranslate]);
+      // Reset swiping state so next swipe can work properly
+      setIsSwipingThumbnail(false);
+      // Restore transition for smooth scrolling when clicking thumbnails or auto-sliding
+      setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
+    }, [
+      resetSwipingDirection,
+      thumbsTranslate,
+      setThumbsSwipedTranslate,
+      setIsSwipingThumbnail,
+      setThumbsStyle,
+      slideDuration,
+    ]);
 
     // ============= Keyboard Handler =============
     const handleKeyDown = useCallback(
@@ -1016,13 +1025,6 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       }
       handleResizeRef.current?.();
     }, [items, lazyLoad]);
-
-    // Reset swiping thumbnail state after transitioning ends
-    useEffect(() => {
-      if (!isTransitioning && isSwipingThumbnail) {
-        setIsSwipingThumbnail(false);
-      }
-    }, [isTransitioning, isSwipingThumbnail, setIsSwipingThumbnail]);
 
     // ============= Imperative Handle for Refs =============
     useImperativeHandle(ref, () => ({
