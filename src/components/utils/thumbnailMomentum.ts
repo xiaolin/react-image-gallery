@@ -2,6 +2,13 @@
  * Utility functions for thumbnail momentum scrolling calculations
  */
 
+import {
+  DEFAULT_MAX_TRANSITION_DURATION,
+  DEFAULT_MOMENTUM_MULTIPLIER,
+  DEFAULT_SLIDE_DURATION,
+  MOMENTUM_EASING,
+} from "src/components/constants";
+
 export interface MomentumConfig {
   velocity: number;
   direction: string;
@@ -23,11 +30,11 @@ export interface MomentumResult {
 /**
  * Calculate momentum distance based on velocity
  * @param velocity - The swipe velocity (typically 0-2+)
- * @param multiplier - Pixels per velocity unit (default 150)
+ * @param multiplier - Pixels per velocity unit
  */
 export function calculateMomentumDistance(
   velocity: number,
-  multiplier: number = 150
+  multiplier: number = DEFAULT_MOMENTUM_MULTIPLIER
 ): number {
   return velocity * multiplier;
 }
@@ -74,8 +81,8 @@ export function clampTranslate(
  */
 export function calculateTransitionDuration(
   velocity: number,
-  baseDuration: number = 450,
-  maxDuration: number = 600
+  baseDuration: number = DEFAULT_SLIDE_DURATION,
+  maxDuration: number = DEFAULT_MAX_TRANSITION_DURATION
 ): number {
   return Math.min(maxDuration, baseDuration + velocity * 100);
 }
@@ -122,7 +129,7 @@ export function calculateMomentum(config: MomentumConfig): MomentumResult {
     velocity,
     slideDuration
   );
-  const transitionStyle = `all ${transitionDuration}ms cubic-bezier(0.25, 0.46, 0.45, 0.94)`;
+  const transitionStyle = `all ${transitionDuration}ms ${MOMENTUM_EASING}`;
 
   return {
     targetTranslate,

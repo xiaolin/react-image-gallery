@@ -485,7 +485,7 @@ describe("<ImageGallery />", () => {
       for (let i = 1; i < defaultItems.length; i++) {
         fireEvent.click(nextButton);
         act(() => {
-          jest.advanceTimersByTime(500);
+          jest.advanceTimersByTime(600);
         });
         const thumbnails = document.querySelectorAll(
           ".image-gallery-thumbnail"
@@ -500,7 +500,7 @@ describe("<ImageGallery />", () => {
 
       fireEvent.click(prevButton);
       act(() => {
-        jest.advanceTimersByTime(500);
+        jest.advanceTimersByTime(600);
       });
 
       const thumbnails = document.querySelectorAll(".image-gallery-thumbnail");
@@ -519,7 +519,7 @@ describe("<ImageGallery />", () => {
 
       fireEvent.click(nextButton);
       act(() => {
-        jest.advanceTimersByTime(500);
+        jest.advanceTimersByTime(600);
       });
 
       const thumbnails = document.querySelectorAll(".image-gallery-thumbnail");

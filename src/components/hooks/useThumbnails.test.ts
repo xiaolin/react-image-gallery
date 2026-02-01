@@ -22,7 +22,7 @@ describe("useThumbnails", () => {
     items: createItems(10),
     thumbnailPosition: "bottom",
     disableThumbnailScroll: false,
-    slideDuration: 450,
+    slideDuration: 550,
     isRTL: false,
     useTranslate3D: true,
   };

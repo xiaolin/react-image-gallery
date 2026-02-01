@@ -14,7 +14,7 @@ describe("useAutoPlay", () => {
   const defaultProps = {
     autoPlay: false,
     slideInterval: 3000,
-    slideDuration: 450,
+    slideDuration: 550,
     infinite: true,
     totalSlides: 5,
     currentIndex: 0,

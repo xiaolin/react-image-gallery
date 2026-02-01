@@ -164,7 +164,7 @@ function MyGallery() {
   - an image src pointing to your default image if an image fails to load
   - handles both slide image, and thumbnail image
 - `indexSeparator`: String, default `' / '`, ignored if `showIndex` is false
-- `slideDuration`: Number, default `450`
+- `slideDuration`: Number, default `550`
   - transition duration during image slide in milliseconds
 - `swipingTransitionDuration`: Number, default `0`
   - transition duration while swiping in milliseconds

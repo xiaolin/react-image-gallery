@@ -13,6 +13,13 @@ import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
 import type { SwipeEventData } from "react-swipeable";
 import Bullet from "src/components/Bullet";
 import BulletNav from "src/components/BulletNav";
+import {
+  DEFAULT_FLICK_THRESHOLD,
+  DEFAULT_SLIDE_DURATION,
+  DEFAULT_SLIDE_INTERVAL,
+  DEFAULT_SWIPE_THRESHOLD,
+  DEFAULT_SWIPING_TRANSITION_DURATION,
+} from "src/components/constants";
 import BottomNav from "src/components/controls/BottomNav";
 import Fullscreen from "src/components/controls/Fullscreen";
 import LeftNav from "src/components/controls/LeftNav";
@@ -91,7 +98,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       disableSwipe = false,
       disableThumbnailScroll = false,
       disableThumbnailSwipe = false,
-      flickThreshold = 0.4,
+      flickThreshold = DEFAULT_FLICK_THRESHOLD,
       indexSeparator = " / ",
       infinite = true,
       isRTL = false,
@@ -142,14 +149,14 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       showNav = true,
       showPlayButton = true,
       showThumbnails = true,
-      slideDuration = 450,
-      slideInterval = 3000,
+      slideDuration = DEFAULT_SLIDE_DURATION,
+      slideInterval = DEFAULT_SLIDE_INTERVAL,
       slideOnThumbnailOver = false,
       slideVertically = false,
       startIndex = 0,
       stopPropagation = false,
-      swipeThreshold = 30,
-      swipingTransitionDuration = 0,
+      swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
+      swipingTransitionDuration = DEFAULT_SWIPING_TRANSITION_DURATION,
       thumbnailPosition = "bottom",
       useBrowserFullscreen = true,
       useTranslate3D = true,

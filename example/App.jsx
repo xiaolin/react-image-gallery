@@ -20,7 +20,7 @@ class App extends React.Component {
       showNav: true,
       slideVertically: false,
       isRTL: false,
-      slideDuration: 450,
+      slideDuration: 550,
       slideInterval: 2000,
       slideOnThumbnailOver: false,
       thumbnailPosition: "bottom",

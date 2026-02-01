@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { MutableRefObject } from "react";
+import {
+  DEFAULT_SLIDE_DURATION,
+  DEFAULT_SLIDE_INTERVAL,
+} from "src/components/constants";
 import type { OnPauseCallback, OnPlayCallback, SlideEvent } from "src/types";
 
 interface UseAutoPlayProps {
@@ -34,8 +38,8 @@ interface UseAutoPlayReturn {
  */
 export function useAutoPlay({
   autoPlay = false,
-  slideInterval = 3000,
-  slideDuration = 450,
+  slideInterval = DEFAULT_SLIDE_INTERVAL,
+  slideDuration = DEFAULT_SLIDE_DURATION,
   infinite = true,
   totalSlides,
   currentIndex,

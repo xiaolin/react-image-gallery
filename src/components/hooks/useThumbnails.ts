@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, RefObject } from "react";
+import { DEFAULT_SLIDE_DURATION } from "src/components/constants";
 import debounce from "src/components/utils/debounce";
 import type { GalleryItem, ThumbnailPosition } from "src/types";
 
@@ -47,7 +48,7 @@ export function useThumbnails({
   items,
   thumbnailPosition = "bottom",
   disableThumbnailScroll = false,
-  slideDuration = 450,
+  slideDuration = DEFAULT_SLIDE_DURATION,
   isRTL = false,
   useTranslate3D = true,
 }: UseThumbnailsProps): UseThumbnailsReturn {

@@ -1,5 +1,9 @@
 import { useCallback, useEffect, useRef, useState } from "react";
 import type { CSSProperties, MutableRefObject } from "react";
+import {
+  DEFAULT_EASING,
+  DEFAULT_SLIDE_DURATION,
+} from "src/components/constants";
 import throttle from "src/components/utils/throttle";
 import type { GalleryItem } from "src/types";
 
@@ -76,7 +80,7 @@ export function useGalleryNavigation({
   startIndex = 0,
   infinite = true,
   isRTL = false,
-  slideDuration = 450,
+  slideDuration = DEFAULT_SLIDE_DURATION,
   onSlide,
   onBeforeSlide,
 }: UseGalleryNavigationProps): UseGalleryNavigationReturn {
@@ -90,7 +94,7 @@ export function useGalleryNavigation({
     infinite && items.length > 1 ? startIndex + 1 : startIndex
   );
   const [slideStyle, setSlideStyle] = useState<SlideStyle>({
-    transition: `all ${slideDuration}ms ease-out`,
+    transition: `transform ${slideDuration}ms ${DEFAULT_EASING}`,
   });
 
   const transitionTimerRef = useRef<number | null>(null);
@@ -175,7 +179,9 @@ export function useGalleryNavigation({
 
       // Re-enable transition after the instant jump
       jumpTimerRef.current = window.setTimeout(() => {
-        setSlideStyle({ transition: `all ${slideDuration}ms ease-out` });
+        setSlideStyle({
+          transition: `transform ${slideDuration}ms ${DEFAULT_EASING}`,
+        });
         isJumpingRef.current = false;
       }, 50);
     },
@@ -231,7 +237,9 @@ export function useGalleryNavigation({
       setDisplayIndex(nextDisplayIndex);
       setIsTransitioning(nextIndex !== currentIndex || willWrap);
       setCurrentSlideOffset(0);
-      setSlideStyle({ transition: `all ${slideDuration}ms ease-out` });
+      setSlideStyle({
+        transition: `transform ${slideDuration}ms ${DEFAULT_EASING}`,
+      });
 
       // Schedule clone jump if we're wrapping in infinite mode
       if (infinite && totalSlides > 1 && willWrap) {

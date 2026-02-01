@@ -105,8 +105,9 @@ describe("thumbnailMomentum", () => {
     });
 
     it("uses default values when not specified", () => {
-      expect(calculateTransitionDuration(0)).toBe(450);
-      expect(calculateTransitionDuration(1)).toBe(550);
+      expect(calculateTransitionDuration(0)).toBe(550);
+      expect(calculateTransitionDuration(1)).toBe(650);
+      expect(calculateTransitionDuration(2)).toBe(700); // capped at 700
     });
 
     it("respects custom maxDuration", () => {
@@ -200,7 +201,7 @@ describe("thumbnailMomentum", () => {
       const highVelocity = calculateMomentum({ ...baseConfig, velocity: 2 });
 
       expect(lowVelocity.transitionDuration).toBe(500); // 450 + 0.5 * 100
-      expect(highVelocity.transitionDuration).toBe(600); // 450 + 200, capped at 600
+      expect(highVelocity.transitionDuration).toBe(650); // 450 + 2 * 100
     });
 
     it("generates correct transition style string", () => {
