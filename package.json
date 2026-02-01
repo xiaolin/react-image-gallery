@@ -14,14 +14,16 @@
     "styles"
   ],
   "scripts": {
+    "//": "Release: run 'npm version patch|minor|major' to bump version, build, commit, tag, and push",
     "test": "jest",
     "test:package": "bash scripts/test-package.sh",
     "lint": "eslint src",
     "start": "webpack serve --hot --mode development --static ./example",
     "build": "webpack --config webpack.build.cjs && rm -rf build/types/components",
-    "publish:dry-run": "npm publish --dry-run",
-    "prepublish:check": "npm run lint && npm test && npm run build && npm run publish:dry-run",
-    "release": "npm login && npm publish"
+    "deploy-demo": "bash scripts/deploy-demo.sh",
+    "preversion": "npm run lint && npm test",
+    "version": "npm run build && git add -A",
+    "postversion": "git push && git push --tags && npm run deploy-demo"
   },
   "repository": {
     "type": "git",
