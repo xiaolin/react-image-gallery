@@ -20,7 +20,7 @@
     "lint": "eslint src",
     "start": "webpack serve --hot --mode development --static ./example",
     "build": "webpack --config webpack.build.cjs && rm -rf build/types/components",
-    "deploy-demo": "bash scripts/deploy-demo.sh",
+    "deploy-demo": "npm run build && bash scripts/deploy-demo.sh",
     "preversion": "npm run lint && npm test",
     "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags && npm run deploy-demo"
