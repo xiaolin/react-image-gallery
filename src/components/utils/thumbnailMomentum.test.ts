@@ -67,9 +67,9 @@ describe("thumbnailMomentum", () => {
   });
 
   describe("clampTranslate", () => {
-    it("clamps positive values to emptySpaceMargin", () => {
-      expect(clampTranslate(100, 500, 20)).toBe(20);
-      expect(clampTranslate(50, 500, 20)).toBe(20);
+    it("clamps positive values to 0 (start boundary)", () => {
+      expect(clampTranslate(100, 500)).toBe(0);
+      expect(clampTranslate(50, 500)).toBe(0);
     });
 
     it("clamps negative values to -maxScroll", () => {
@@ -83,13 +83,12 @@ describe("thumbnailMomentum", () => {
       expect(clampTranslate(0, 500, 20)).toBe(0);
     });
 
-    it("allows values up to emptySpaceMargin", () => {
-      expect(clampTranslate(20, 500, 20)).toBe(20);
-      expect(clampTranslate(10, 500, 20)).toBe(10);
+    it("allows translate of exactly 0 at start", () => {
+      expect(clampTranslate(0, 500)).toBe(0);
     });
 
-    it("uses default emptySpaceMargin of 20", () => {
-      expect(clampTranslate(100, 500)).toBe(20);
+    it("uses default emptySpaceMargin of 0 (strict bounds)", () => {
+      expect(clampTranslate(100, 500)).toBe(0);
     });
   });
 
@@ -179,8 +178,8 @@ describe("thumbnailMomentum", () => {
         currentTranslate: 0,
       });
 
-      // Would be 0 + 300 = 300, but clamped to emptySpaceMargin (20)
-      expect(result.targetTranslate).toBe(20);
+      // Would be 0 + 300 = 300, but clamped to 0 (start boundary)
+      expect(result.targetTranslate).toBe(0);
     });
 
     it("clamps to end boundary when swiping too far left", () => {
@@ -191,9 +190,9 @@ describe("thumbnailMomentum", () => {
         currentTranslate: -300,
       });
 
-      // maxScroll = 800 - 400 + 20 = 420
-      // Would be -300 + (-450) = -750, but clamped to -420
-      expect(result.targetTranslate).toBe(-420);
+      // maxScroll = 800 - 400 = 400
+      // Would be -300 + (-450) = -750, but clamped to -400
+      expect(result.targetTranslate).toBe(-400);
     });
 
     it("scales transition duration with velocity", () => {
@@ -222,7 +221,7 @@ describe("thumbnailMomentum", () => {
       expect(result.targetTranslate).toBe(-200);
     });
 
-    it("uses custom emptySpaceMargin", () => {
+    it("allows custom emptySpaceMargin if explicitly set", () => {
       const result = calculateMomentum({
         ...baseConfig,
         velocity: 2,
@@ -231,7 +230,7 @@ describe("thumbnailMomentum", () => {
         emptySpaceMargin: 50,
       });
 
-      // Would be 0 + 300 = 300, but clamped to emptySpaceMargin (50)
+      // Would be 0 + 300 = 300, but clamped to custom emptySpaceMargin (50)
       expect(result.targetTranslate).toBe(50);
     });
 

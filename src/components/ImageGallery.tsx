@@ -407,7 +407,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       ({ event, absX, absY, dir }: SwipeEventData) => {
         const direction = dir as SwipeDirection;
         const isVertical = isThumbnailVertical();
-        const emptySpaceMargin = 20;
+        const emptySpaceMargin = 0;
 
         if (isVertical) {
           if (
@@ -536,6 +536,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       [
         resetSwipingDirection,
         thumbsTranslate,
+        setThumbsTranslate,
         setThumbsSwipedTranslate,
         setIsSwipingThumbnail,
         setThumbsStyle,

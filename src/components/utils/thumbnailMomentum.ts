@@ -51,12 +51,12 @@ export function getMomentumDirection(
  * Clamp a translate value to valid bounds
  * @param translate - The proposed translate value
  * @param maxScroll - Maximum scroll distance (positive value)
- * @param emptySpaceMargin - Allowed margin at boundaries
+ * @param emptySpaceMargin - Allowed margin at boundaries (default 0 for strict bounds)
  */
 export function clampTranslate(
   translate: number,
   maxScroll: number,
-  emptySpaceMargin: number = 20
+  emptySpaceMargin: number = 0
 ): number {
   // Can't go past start (positive beyond margin)
   let clamped = Math.min(emptySpaceMargin, translate);
@@ -92,7 +92,7 @@ export function calculateMomentum(config: MomentumConfig): MomentumResult {
     scrollSize,
     wrapperSize,
     slideDuration,
-    emptySpaceMargin = 20,
+    emptySpaceMargin = 0,
     momentumMultiplier = 150,
   } = config;
 
