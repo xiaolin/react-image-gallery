@@ -345,6 +345,7 @@
 .image-gallery-slide {
   flex: 0 0 100%;
   min-width: 0;
+  position: relative;
   /* GPU acceleration for smooth swiping */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
