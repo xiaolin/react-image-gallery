@@ -219,8 +219,9 @@ body:has(.app.dark-mode) {
 
 @media (max-width: 768px) {
   .app .image-gallery {
-    width: calc(100% - 32px);
-    margin: 16px auto 32px;
+    width: 100%;
+    margin: 16px 0 32px;
+    box-shadow: none;
   }
 }
 
