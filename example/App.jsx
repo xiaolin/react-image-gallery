@@ -28,6 +28,7 @@ class App extends React.Component {
       useWindowKeyDown: true,
       lazyLoad: false,
       maxBullets: 0,
+      darkMode: false,
     };
     this._toggleShowVideo = this._toggleShowVideo.bind(this);
 
@@ -174,7 +175,56 @@ class App extends React.Component {
 
   render() {
     return (
-      <section className="app">
+      <section className={`app${this.state.darkMode ? " dark-mode" : ""}`}>
+        <div className="dark-mode-toggle">
+          <input
+            checked={this.state.darkMode}
+            id="dark_mode"
+            type="checkbox"
+            onChange={this._handleCheckboxChange.bind(this, "darkMode")}
+          />
+          <label htmlFor="dark_mode">
+            {this.state.darkMode ? "☀️ Light" : "🌙 Dark"}
+          </label>
+        </div>
+
+        <section className="gallery-demo">
+          <h1 className="gallery-demo-header">React Image Gallery</h1>
+          <h3 className="gallery-demo-header-3">
+            A beautiful, responsive, and customizable image gallery component
+            for React applications
+          </h3>
+          <div className="gallery-demo-subheader">
+            <a
+              aria-label="Star xiaolin/react-image-gallery on GitHub"
+              className="github-button"
+              data-icon="octicon-star"
+              data-show-count="true"
+              data-size="large"
+              href="https://github.com/xiaolin/react-image-gallery"
+            >
+              Star
+            </a>
+            <a
+              aria-label="Fork xiaolin/react-image-gallery on GitHub"
+              className="github-button"
+              data-icon="octicon-repo-forked"
+              data-show-count="true"
+              data-size="large"
+              href="https://github.com/xiaolin/react-image-gallery/fork"
+            >
+              Fork
+            </a>
+          </div>
+          <div className="feature-badges">
+            <span className="feature-badge">📱 Mobile Friendly</span>
+            <span className="feature-badge">⌨️ Keyboard Navigation</span>
+            <span className="feature-badge">🎨 Fully Customizable</span>
+            <span className="feature-badge">🖼️ Thumbnail Support</span>
+            <span className="feature-badge">📺 Fullscreen Mode</span>
+          </div>
+        </section>
+
         <ImageGallery
           ref={(i) => (this._imageGallery = i)}
           additionalClass="app-image-gallery"
@@ -278,59 +328,15 @@ class App extends React.Component {
             </ul>
 
             <ul className="app-checkboxes">
+              {/* Navigation & Controls */}
               <li>
                 <input
-                  checked={this.state.infinite}
-                  id="infinite"
+                  checked={this.state.showNav}
+                  id="show_navigation"
                   type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(this, "infinite")}
+                  onChange={this._handleCheckboxChange.bind(this, "showNav")}
                 />
-                <label htmlFor="infinite">allow infinite sliding</label>
-              </li>
-              <li>
-                <input
-                  checked={this.state.lazyLoad}
-                  id="lazy_load"
-                  type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(this, "lazyLoad")}
-                />
-                <label htmlFor="lazy_load">lazy load images</label>
-              </li>
-              <li>
-                <input
-                  checked={this.state.showFullscreenButton}
-                  id="show_fullscreen"
-                  type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(
-                    this,
-                    "showFullscreenButton"
-                  )}
-                />
-                <label htmlFor="show_fullscreen">show fullscreen button</label>
-              </li>
-              <li>
-                <input
-                  checked={this.state.showPlayButton}
-                  id="show_playbutton"
-                  type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(
-                    this,
-                    "showPlayButton"
-                  )}
-                />
-                <label htmlFor="show_playbutton">show play button</label>
-              </li>
-              <li>
-                <input
-                  checked={this.state.showBullets}
-                  id="show_bullets"
-                  type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(
-                    this,
-                    "showBullets"
-                  )}
-                />
-                <label htmlFor="show_bullets">show bullets</label>
+                <label htmlFor="show_navigation">Show arrows</label>
               </li>
               <li>
                 <input
@@ -342,16 +348,19 @@ class App extends React.Component {
                     "showThumbnails"
                   )}
                 />
-                <label htmlFor="show_thumbnails">show thumbnails</label>
+                <label htmlFor="show_thumbnails">Show thumbnails</label>
               </li>
               <li>
                 <input
-                  checked={this.state.showNav}
-                  id="show_navigation"
+                  checked={this.state.showBullets}
+                  id="show_bullets"
                   type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(this, "showNav")}
+                  onChange={this._handleCheckboxChange.bind(
+                    this,
+                    "showBullets"
+                  )}
                 />
-                <label htmlFor="show_navigation">show navigation</label>
+                <label htmlFor="show_bullets">Show bullet indicators</label>
               </li>
               <li>
                 <input
@@ -360,28 +369,44 @@ class App extends React.Component {
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(this, "showIndex")}
                 />
-                <label htmlFor="show_index">show index</label>
+                <label htmlFor="show_index">Show slide counter</label>
               </li>
+
+              {/* Buttons */}
               <li>
                 <input
-                  checked={this.state.slideVertically}
-                  id="slide_vertically"
+                  checked={this.state.showPlayButton}
+                  id="show_playbutton"
                   type="checkbox"
                   onChange={this._handleCheckboxChange.bind(
                     this,
-                    "slideVertically"
+                    "showPlayButton"
                   )}
                 />
-                <label htmlFor="slide_vertically">slide vertically</label>
+                <label htmlFor="show_playbutton">Show autoplay button</label>
               </li>
               <li>
                 <input
-                  checked={this.state.isRTL}
-                  id="is_rtl"
+                  checked={this.state.showFullscreenButton}
+                  id="show_fullscreen"
                   type="checkbox"
-                  onChange={this._handleCheckboxChange.bind(this, "isRTL")}
+                  onChange={this._handleCheckboxChange.bind(
+                    this,
+                    "showFullscreenButton"
+                  )}
                 />
-                <label htmlFor="is_rtl">is right to left</label>
+                <label htmlFor="show_fullscreen">Show fullscreen button</label>
+              </li>
+
+              {/* Behavior */}
+              <li>
+                <input
+                  checked={this.state.infinite}
+                  id="infinite"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(this, "infinite")}
+                />
+                <label htmlFor="infinite">Infinite loop</label>
               </li>
               <li>
                 <input
@@ -394,7 +419,7 @@ class App extends React.Component {
                   )}
                 />
                 <label htmlFor="slide_on_thumbnail_hover">
-                  slide on mouse over thumbnails
+                  Slide on thumbnail hover
                 </label>
               </li>
               <li>
@@ -407,7 +432,39 @@ class App extends React.Component {
                     "useWindowKeyDown"
                   )}
                 />
-                <label htmlFor="use_window_keydown">use window keydown</label>
+                <label htmlFor="use_window_keydown">Keyboard navigation</label>
+              </li>
+              <li>
+                <input
+                  checked={this.state.lazyLoad}
+                  id="lazy_load"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(this, "lazyLoad")}
+                />
+                <label htmlFor="lazy_load">Lazy load images</label>
+              </li>
+
+              {/* Direction */}
+              <li>
+                <input
+                  checked={this.state.slideVertically}
+                  id="slide_vertically"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(
+                    this,
+                    "slideVertically"
+                  )}
+                />
+                <label htmlFor="slide_vertically">Vertical sliding</label>
+              </li>
+              <li>
+                <input
+                  checked={this.state.isRTL}
+                  id="is_rtl"
+                  type="checkbox"
+                  onChange={this._handleCheckboxChange.bind(this, "isRTL")}
+                />
+                <label htmlFor="is_rtl">Right-to-left</label>
               </li>
             </ul>
           </div>
