@@ -1910,6 +1910,21 @@ describe("<ImageGallery />", () => {
       );
       expect(thumbnailContainer).toBeInTheDocument();
     });
+
+    it("renders thumbnail container with transform and transition styles for momentum scrolling", () => {
+      // This verifies the momentum scrolling infrastructure is in place
+      // The actual momentum calculations are tested in thumbnailMomentum.test.ts
+      render(<ImageGallery {...defaultProps} />);
+
+      const thumbnailContainer = document.querySelector(
+        ".image-gallery-thumbnails-container"
+      );
+      expect(thumbnailContainer).toBeInTheDocument();
+
+      const style = thumbnailContainer?.getAttribute("style");
+      expect(style).toContain("transform");
+      expect(style).toContain("transition");
+    });
   });
 
   // ===========================================

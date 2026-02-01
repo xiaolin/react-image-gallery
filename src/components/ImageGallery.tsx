@@ -31,6 +31,7 @@ import SwipeWrapper from "src/components/SwipeWrapper";
 import Thumbnail from "src/components/Thumbnail";
 import ThumbnailBar from "src/components/ThumbnailBar";
 import debounce from "src/components/utils/debounce";
+import { calculateMomentum } from "src/components/utils/thumbnailMomentum";
 import type {
   GalleryItem,
   ImageGalleryProps,
@@ -501,21 +502,50 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       ]
     );
 
-    const handleOnThumbnailSwiped = useCallback(() => {
-      resetSwipingDirection();
-      setThumbsSwipedTranslate(thumbsTranslate);
-      // Reset swiping state so next swipe can work properly
-      setIsSwipingThumbnail(false);
-      // Restore transition for smooth scrolling when clicking thumbnails or auto-sliding
-      setThumbsStyle({ transition: `all ${slideDuration}ms ease-out` });
-    }, [
-      resetSwipingDirection,
-      thumbsTranslate,
-      setThumbsSwipedTranslate,
-      setIsSwipingThumbnail,
-      setThumbsStyle,
-      slideDuration,
-    ]);
+    const handleOnThumbnailSwiped = useCallback(
+      ({ velocity, dir }: SwipeEventData) => {
+        resetSwipingDirection();
+
+        const thumbsElement = thumbnailsRef.current;
+        const isVertical = isThumbnailVertical();
+
+        // Get scroll dimensions
+        const scrollSize = isVertical
+          ? (thumbsElement?.scrollHeight ?? 0)
+          : (thumbsElement?.scrollWidth ?? 0);
+        const wrapperSize = isVertical
+          ? thumbnailsWrapperHeight
+          : thumbnailsWrapperWidth;
+
+        // Calculate momentum using utility function
+        const { targetTranslate, transitionStyle } = calculateMomentum({
+          velocity,
+          direction: dir,
+          isVertical,
+          currentTranslate: thumbsTranslate,
+          scrollSize,
+          wrapperSize,
+          slideDuration,
+        });
+
+        setThumbsStyle({ transition: transitionStyle });
+        setThumbsTranslate(targetTranslate);
+        setThumbsSwipedTranslate(targetTranslate);
+        setIsSwipingThumbnail(false);
+      },
+      [
+        resetSwipingDirection,
+        thumbsTranslate,
+        setThumbsSwipedTranslate,
+        setIsSwipingThumbnail,
+        setThumbsStyle,
+        slideDuration,
+        isThumbnailVertical,
+        thumbnailsRef,
+        thumbnailsWrapperHeight,
+        thumbnailsWrapperWidth,
+      ]
+    );
 
     // ============= Keyboard Handler =============
     const handleKeyDown = useCallback(
