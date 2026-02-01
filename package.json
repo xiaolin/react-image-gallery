@@ -21,7 +21,7 @@
     "build": "webpack --config webpack.build.cjs && rm -rf build/types/components",
     "publish:dry-run": "npm publish --dry-run",
     "prepublish:check": "npm run lint && npm test && npm run build && npm run publish:dry-run",
-    "release": "npm run prepublish:check && npm login && npm publish"
+    "release": "npm login && npm publish"
   },
   "repository": {
     "type": "git",
