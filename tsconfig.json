@@ -13,7 +13,7 @@
     "resolveJsonModule": true,
     "declaration": true,
     "declarationDir": "./build/types",
-    "baseUrl": ".",
+    "rootDir": "./src",
     "paths": {
       "src/*": ["./src/*"]
     },
