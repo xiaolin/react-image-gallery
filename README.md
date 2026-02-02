@@ -11,9 +11,7 @@
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-<br />
-
-<a href="http://linxtion.com/demo/react-image-gallery" target="_blank"><strong>🚀 View Live Demo →</strong></a>
+[![Live Demo](https://img.shields.io/badge/🚀_Live_Demo-Visit_Site-blue?style=for-the-badge)](http://linxtion.com/demo/react-image-gallery)
 
 ![React Image Gallery Demo](https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.gif)
 
