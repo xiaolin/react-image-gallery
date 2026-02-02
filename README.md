@@ -21,8 +21,6 @@
 
 <br />
 
----
-
 ## ✨ Features
 
 | Feature              | Description                                               |
@@ -37,8 +35,6 @@
 | 🎬 **Custom Slides** | Render videos, iframes, or any custom content             |
 
 <br />
-
----
 
 ## 🚀 Getting Started
 
@@ -68,8 +64,6 @@ function MyGallery() {
 For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
 
 <br />
-
----
 
 ## ⚙️ Props
 
@@ -155,8 +149,6 @@ For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-imag
 
 <br />
 
----
-
 ## 🔧 Functions
 
 The following functions can be accessed using [refs](https://reactjs.org/docs/refs-and-the-dom.html)
@@ -169,8 +161,6 @@ The following functions can be accessed using [refs](https://reactjs.org/docs/re
 
 <br />
 
----
-
 ## 🤝 Contributing
 
 Pull requests should be focused on a single issue. If you're unsure whether a change is useful or involves a major modification, please open an issue first.
@@ -179,8 +169,6 @@ Pull requests should be focused on a single issue. If you're unsure whether a ch
 - Comment your code
 
 <br />
-
----
 
 ## 🛠️ Build the example locally
 
@@ -196,8 +184,6 @@ npm start
 Then open [`localhost:8001`](http://localhost:8001) in a browser.
 
 <br />
-
----
 
 ## 📄 License
 
