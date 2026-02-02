@@ -7,11 +7,13 @@
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](https://www.npmjs.com/package/react-image-gallery)
 [![Bundle size](https://badgen.net/bundlephobia/minzip/react-image-gallery)](https://bundlephobia.com/package/react-image-gallery)
+[![CI](https://github.com/xiaolin/react-image-gallery/actions/workflows/ci.yml/badge.svg)](https://github.com/xiaolin/react-image-gallery/actions/workflows/ci.yml)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
 <br />
 
-### [🚀 View Live Demo](http://linxtion.com/demo/react-image-gallery)
+<a href="http://linxtion.com/demo/react-image-gallery" target="_blank"><strong>🚀 View Live Demo →</strong></a>
 
 ![React Image Gallery Demo](https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.gif)
 
