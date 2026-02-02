@@ -9,9 +9,13 @@
 [![Bundle size](https://badgen.net/bundlephobia/minzip/react-image-gallery)](https://bundlephobia.com/package/react-image-gallery)
 [![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-[Live Demo](http://linxtion.com/demo/react-image-gallery) · [Documentation](#props) · [Contributing](#contributing)
+<br />
 
-https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.mp4
+### [🚀 View Live Demo](http://linxtion.com/demo/react-image-gallery)
+
+<br />
+
+<video src="https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.mp4" autoplay loop muted playsinline></video>
 
 </div>
 
