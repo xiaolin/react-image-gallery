@@ -1,29 +1,38 @@
+<div align="center">
+
 # React Image Gallery
+
+**A responsive, customizable image gallery component for React**
 
 [![npm version](https://badge.fury.io/js/react-image-gallery.svg)](https://badge.fury.io/js/react-image-gallery)
 [![Download Count](http://img.shields.io/npm/dm/react-image-gallery.svg?style=flat)](https://www.npmjs.com/package/react-image-gallery)
 [![Bundle size](https://badgen.net/bundlephobia/minzip/react-image-gallery)](https://bundlephobia.com/package/react-image-gallery)
+[![TypeScript](https://img.shields.io/badge/TypeScript-Ready-blue.svg)](https://www.typescriptlang.org/)
 
-### Live Demo (try it on mobile for swipe support)
+[Live Demo](http://linxtion.com/demo/react-image-gallery) · [Documentation](#props) · [Contributing](#contributing)
 
-[`linxtion.com/demo/react-image-gallery`](http://linxtion.com/demo/react-image-gallery)
+https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.mp4
 
-![demo gif](https://github.com/xiaolin/react-image-gallery/raw/master/static/image_gallery_v1.0.2.gif)
+</div>
 
-React image gallery is a React component for building image galleries and carousels
+---
 
-## Features
+## ✨ Features
 
-- Mobile swipe gestures
-- Thumbnail navigation
-- Fullscreen support
-- Custom rendered slides
-- RTL support
-- Responsive design
-- CSS custom properties for theming
-- Tons of customization options (see props below)
+| Feature              | Description                                               |
+| -------------------- | --------------------------------------------------------- |
+| 📱 **Mobile Swipe**  | Native touch gestures for smooth mobile navigation        |
+| 🖼️ **Thumbnails**    | Customizable thumbnail navigation with multiple positions |
+| 📺 **Fullscreen**    | Browser fullscreen or CSS-based fullscreen modes          |
+| 🎨 **Theming**       | CSS custom properties for easy styling                    |
+| ⌨️ **Keyboard Nav**  | Arrow keys, escape, and custom key bindings               |
+| 🔄 **RTL Support**   | Right-to-left language support                            |
+| ↕️ **Vertical Mode** | Slide vertically instead of horizontally                  |
+| 🎬 **Custom Slides** | Render videos, iframes, or any custom content             |
 
-## Getting started
+---
+
+## 🚀 Getting started
 
 React Image Gallery requires **React 16.0.0 or later.**
 
@@ -57,7 +66,7 @@ import "react-image-gallery/styles/image-gallery.css";
 
 Note: If you import the CSS manually, it will be detected and auto-injection will be skipped.
 
-### Theming with CSS Custom Properties
+### 🎨 Theming with CSS Custom Properties
 
 Customize the gallery appearance by overriding CSS custom properties:
 
@@ -81,9 +90,9 @@ Or apply globally:
 }
 ```
 
-### Example
+### 📖 Example
 
-Need more example? See [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
+Need more examples? See [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
 
 ```js
 import ImageGallery from "react-image-gallery";
@@ -108,7 +117,9 @@ function MyGallery() {
 }
 ```
 
-# Props
+---
+
+## ⚙️ Props
 
 - `items`: (required) Array of objects, see example above,
   - Available Properties
@@ -287,7 +298,9 @@ function MyGallery() {
   - If `true`, listens to keydown events on window (window.addEventListener)
   - If `false`, listens to keydown events on image gallery element (imageGalleryElement.addEventListener)
 
-# Functions
+---
+
+## 🔧 Functions
 
 The following functions can be accessed using [refs](https://reactjs.org/docs/refs-and-the-dom.html)
 
@@ -297,7 +310,9 @@ The following functions can be accessed using [refs](https://reactjs.org/docs/re
 - `slideToIndex(index)`: slides to a specific index
 - `getCurrentIndex()`: returns the current index
 
-# Contributing
+---
+
+## 🤝 Contributing
 
 Each pull request (PR) should be specific and isolated to the issue you're trying to fix. Please do not stack features, chores, refactors, or enhancements in one PR. Describe your feature/implementation in the PR. If you're unsure whether it's useful or if it involves a major change, please open an issue first and seek feedback.
 
@@ -305,7 +320,11 @@ Each pull request (PR) should be specific and isolated to the issue you're tryin
 - Comment your code
 - Write [clean](https://github.com/ryanmcdermott/clean-code-javascript) code
 
-# Build the example locally (requires node >= 18.18)
+---
+
+## 🛠️ Build the example locally
+
+Requires Node.js >= 18.18
 
 ```
 git clone https://github.com/xiaolin/react-image-gallery.git
@@ -316,6 +335,8 @@ npm start
 
 Then open [`localhost:8001`](http://localhost:8001) in a browser.
 
-# License
+---
 
-MIT
+## 📄 License
+
+MIT © [Xiao Lin](https://github.com/xiaolin)
