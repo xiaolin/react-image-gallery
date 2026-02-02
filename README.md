@@ -13,9 +13,7 @@
 
 ### [🚀 View Live Demo](http://linxtion.com/demo/react-image-gallery)
 
-<br />
-
-<video src="https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.mp4" autoplay loop muted playsinline></video>
+![React Image Gallery Demo](https://github.com/xiaolin/react-image-gallery/raw/master/static/ig-demo.gif)
 
 </div>
 
