@@ -65,6 +65,55 @@ For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-imag
 
 <br />
 
+## 📘 TypeScript
+
+This package includes TypeScript definitions. Import types for props, items, and refs:
+
+```tsx
+import ImageGallery from "react-image-gallery";
+import type {
+  GalleryItem,
+  ImageGalleryProps,
+  ImageGalleryRef,
+} from "react-image-gallery";
+
+const images: GalleryItem[] = [
+  {
+    original: "https://picsum.photos/id/1018/1000/600/",
+    thumbnail: "https://picsum.photos/id/1018/250/150/",
+    originalAlt: "Mountain landscape",
+    description: "A beautiful mountain view",
+  },
+  {
+    original: "https://picsum.photos/id/1015/1000/600/",
+    thumbnail: "https://picsum.photos/id/1015/250/150/",
+    originalAlt: "Flowing river",
+  },
+  {
+    original: "https://picsum.photos/id/1019/1000/600/",
+    thumbnail: "https://picsum.photos/id/1019/250/150/",
+    originalAlt: "Sunset over the ocean",
+  },
+];
+
+function MyGallery() {
+  const galleryRef = useRef<ImageGalleryRef>(null);
+
+  const handleClick = () => {
+    galleryRef.current?.fullScreen();
+  };
+
+  return (
+    <>
+      <ImageGallery ref={galleryRef} items={images} />
+      <button onClick={handleClick}>Enter Fullscreen</button>
+    </>
+  );
+}
+```
+
+<br />
+
 ## ⚙️ Props
 
 - `items`: (required) Array of objects. Available properties:
@@ -153,9 +202,12 @@ For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-imag
 
 The following functions can be accessed using [refs](https://reactjs.org/docs/refs-and-the-dom.html)
 
-- `play()`: plays the slides
-- `pause()`: pauses the slides
-- `toggleFullScreen()`: toggles full screen
+- `play()`: starts the slideshow
+- `pause()`: pauses the slideshow
+- `togglePlay()`: toggles between play and pause
+- `fullScreen()`: enters fullscreen mode
+- `exitFullScreen()`: exits fullscreen mode
+- `toggleFullScreen()`: toggles fullscreen mode
 - `slideToIndex(index)`: slides to a specific index
 - `getCurrentIndex()`: returns the current index
 

@@ -6,6 +6,7 @@ import {
   SyntheticEvent,
   TouchEvent,
 } from "react";
+import type React from "react";
 
 // ============= Gallery Item Types =============
 
@@ -515,3 +516,11 @@ export type SwipeDirection = "Left" | "Right" | "Up" | "Down";
 export interface SVGProps {
   strokeWidth?: number;
 }
+
+// ============= Default Export Declaration =============
+// This declares the ImageGallery component type for consumers
+// The actual implementation is in ImageGallery.tsx
+declare const ImageGallery: React.ForwardRefExoticComponent<
+  ImageGalleryProps & React.RefAttributes<ImageGalleryRef>
+>;
+export default ImageGallery;

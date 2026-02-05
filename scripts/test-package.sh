@@ -165,9 +165,81 @@ for (const type of essentialTypes) {
     process.exit(1);
   }
 }
+
+// Check for default export declaration
+if (!typesContent.includes('export default')) {
+  console.error('❌ Missing default export in types');
+  process.exit(1);
+}
+console.log('✅ Default export is declared');
 EOF
 
 node test-types.mjs
+
+# Test TypeScript compilation with modern module resolution (node16/nodenext/bundler)
+echo -e "${YELLOW}🧪 Testing TypeScript compilation with modern moduleResolution...${NC}"
+npm install typescript @types/react --silent
+
+cat > test-ts.ts << 'EOF'
+import ImageGallery from 'react-image-gallery';
+import type { GalleryItem, ImageGalleryProps, ImageGalleryRef } from 'react-image-gallery';
+
+// Test default import is a valid component type
+const gallery: typeof ImageGallery = ImageGallery;
+
+// Test named type imports
+const item: GalleryItem = { original: 'test.jpg' };
+const props: ImageGalleryProps = { items: [item] };
+
+// Test ref type
+const ref: ImageGalleryRef | null = null;
+
+console.log('✅ TypeScript types work correctly');
+EOF
+
+# Test with moduleResolution: bundler (common modern setup)
+cat > tsconfig.json << 'EOF'
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["test-ts.ts"]
+}
+EOF
+
+if npx tsc --noEmit 2>&1; then
+  echo -e "${GREEN}✅ TypeScript compilation (bundler) passed${NC}"
+else
+  echo -e "${RED}❌ TypeScript compilation (bundler) failed${NC}"
+  exit 1
+fi
+
+# Test with moduleResolution: node16 (stricter, used by many projects)
+cat > tsconfig.json << 'EOF'
+{
+  "compilerOptions": {
+    "target": "ES2020",
+    "module": "Node16",
+    "moduleResolution": "Node16",
+    "strict": true,
+    "skipLibCheck": true,
+    "noEmit": true
+  },
+  "include": ["test-ts.ts"]
+}
+EOF
+
+if npx tsc --noEmit 2>&1; then
+  echo -e "${GREEN}✅ TypeScript compilation (node16) passed${NC}"
+else
+  echo -e "${RED}❌ TypeScript compilation (node16) failed${NC}"
+  exit 1
+fi
 
 # Cleanup
 echo -e "${YELLOW}🧹 Cleaning up...${NC}"
