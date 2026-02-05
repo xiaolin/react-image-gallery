@@ -13,7 +13,7 @@
 
 <br />
 
-**[🚀 View Live Demo](http://linxtion.com/demo/react-image-gallery)**
+**[▶️ SEE DEMO](http://linxtion.com/demo/react-image-gallery)**
 
 <br />
 
