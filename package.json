@@ -21,7 +21,7 @@
     "start": "webpack serve --hot --mode development --static ./example",
     "build": "webpack --config webpack.build.cjs && rm -rf build/types/components",
     "deploy-demo": "npm run build && bash scripts/deploy-demo.sh",
-    "preversion": "npm run lint && npm test",
+    "preversion": "npm run lint && npm test && npm run test:package",
     "version": "npm run build && git add -A",
     "postversion": "git push && git push --tags && npm run deploy-demo"
   },
