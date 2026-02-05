@@ -1,41 +1,32 @@
 ---
 name: Bug report
 about: Create a report to help us improve
-title: ''
-labels: ''
-assignees: ''
-
+title: ""
+labels: bug
+assignees: ""
 ---
 
-<!--- NOTE: Issues that do not follow the template below will be closed -->
+### Before submitting
 
-**Checklist before opening an issue**\
-Lots of issues are opened that are unrelated to this lib, please take a moment to ensure the issue is not on your end 🙏.
-- [ ] Did you try google/chatgpt?
-- [ ] Did you search for previous Issues in this repo?
+- [ ] I searched existing issues to avoid duplicates
 
-**Describe the bug**\
-A clear and concise description of what the bug is.
+### Bug description
 
-**Image Gallery Version**\
-What version of `react-image-gallery` are you using?
+<!-- What happened? What did you expect instead? -->
 
-**To Reproduce**\
-Steps to reproduce the behavior:
-1. Go to '...'
-2. Click on '....'
-3. Scroll down to '....'
-4. See error
+### Version
 
-**Expected behavior**\
-A clear and concise description of what you expected to happen.
+`react-image-gallery` version:
 
-**Screenshots**\
-If applicable, add screenshots to help explain your problem.
+### Reproduction
 
-**Client info (please complete the following information):**\
- - OS: [e.g. iOS]
- - Browser: [e.g. chrome, safari]
+<!-- Link to CodeSandbox/StackBlitz or steps to reproduce -->
 
-**Additional context**\
-Add any other context about the problem here.
+### Environment
+
+- Browser:
+- OS:
+
+### Screenshots (optional)
+
+<!-- Drag and drop images here if helpful -->
