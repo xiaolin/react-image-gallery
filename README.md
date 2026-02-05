@@ -42,75 +42,40 @@
 npm install react-image-gallery
 ```
 
-```jsx
-import ImageGallery from "react-image-gallery";
-
-const images = [
-  {
-    original: "https://picsum.photos/id/1018/1000/600/",
-    thumbnail: "https://picsum.photos/id/1018/250/150/",
-  },
-  {
-    original: "https://picsum.photos/id/1015/1000/600/",
-    thumbnail: "https://picsum.photos/id/1015/250/150/",
-  },
-];
-
-function MyGallery() {
-  return <ImageGallery items={images} />;
-}
-```
-
-For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
-
-<br />
-
-## 📘 TypeScript
-
-This package includes TypeScript definitions. Import types for props, items, and refs:
-
 ```tsx
+import { useRef } from "react";
 import ImageGallery from "react-image-gallery";
-import type {
-  GalleryItem,
-  ImageGalleryProps,
-  ImageGalleryRef,
-} from "react-image-gallery";
+import type { GalleryItem, ImageGalleryRef } from "react-image-gallery";
 
 const images: GalleryItem[] = [
   {
     original: "https://picsum.photos/id/1018/1000/600/",
     thumbnail: "https://picsum.photos/id/1018/250/150/",
-    originalAlt: "Mountain landscape",
-    description: "A beautiful mountain view",
   },
   {
     original: "https://picsum.photos/id/1015/1000/600/",
     thumbnail: "https://picsum.photos/id/1015/250/150/",
-    originalAlt: "Flowing river",
   },
   {
     original: "https://picsum.photos/id/1019/1000/600/",
     thumbnail: "https://picsum.photos/id/1019/250/150/",
-    originalAlt: "Sunset over the ocean",
   },
 ];
 
 function MyGallery() {
   const galleryRef = useRef<ImageGalleryRef>(null);
 
-  const handleClick = () => {
-    galleryRef.current?.fullScreen();
-  };
-
   return (
-    <>
-      <ImageGallery ref={galleryRef} items={images} />
-      <button onClick={handleClick}>Enter Fullscreen</button>
-    </>
+    <ImageGallery
+      ref={galleryRef}
+      items={images}
+      onSlide={(index) => console.log("Slid to", index)}
+    />
   );
 }
 ```
+
+For more examples, see [`example/App.jsx`](https://github.com/xiaolin/react-image-gallery/blob/master/example/App.jsx)
 
 <br />
 
