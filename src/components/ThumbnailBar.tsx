@@ -1,9 +1,8 @@
 import React, { memo } from "react";
 import type { CSSProperties, RefObject } from "react";
 import clsx from "clsx";
-import type { SwipeEventData } from "react-swipeable";
 import SwipeWrapper from "src/components/SwipeWrapper";
-import type { ThumbnailPosition } from "src/types";
+import type { SwipeEventData, ThumbnailPosition } from "src/types";
 
 interface ThumbnailBarProps {
   thumbnails?: React.ReactNode[];

@@ -9,8 +9,6 @@ import React, {
 } from "react";
 import type { CSSProperties, ForwardedRef, RefObject } from "react";
 import clsx from "clsx";
-import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
-import type { SwipeEventData } from "react-swipeable";
 import Bullet from "src/components/Bullet";
 import BulletNav from "src/components/BulletNav";
 import {
@@ -43,6 +41,8 @@ import type {
   GalleryItem,
   ImageGalleryProps,
   ImageGalleryRef,
+  SwipeDirection,
+  SwipeEventData,
   ThumbnailPosition,
 } from "src/types";
 
@@ -76,8 +76,6 @@ function getThumbnailPositionClassName(
   };
   return classNames[thumbnailPosition] || "";
 }
-
-type SwipeDirection = typeof LEFT | typeof RIGHT | typeof UP | typeof DOWN;
 
 /**
  * ImageGallery - A responsive and customizable image gallery component
@@ -285,14 +283,17 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       ({ event, absX, absY, dir }: SwipeEventData) => {
         const direction = dir as SwipeDirection;
         if (
-          (direction === UP || direction === DOWN || swipingUpDown) &&
+          (direction === "Up" || direction === "Down" || swipingUpDown) &&
           !swipingLeftRight
         ) {
           if (!swipingUpDown) setSwipingUpDown(true);
           if (!slideVertically) return;
         }
 
-        if ((direction === LEFT || direction === RIGHT) && !swipingLeftRight) {
+        if (
+          (direction === "Left" || direction === "Right") &&
+          !swipingLeftRight
+        ) {
           setSwipingLeftRight(true);
         }
 
@@ -303,17 +304,18 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         }
 
         if (!isTransitioning) {
-          const isSwipeLeftOrRight = direction === LEFT || direction === RIGHT;
-          const isSwipeTopOrDown = direction === UP || direction === DOWN;
+          const isSwipeLeftOrRight =
+            direction === "Left" || direction === "Right";
+          const isSwipeTopOrDown = direction === "Up" || direction === "Down";
 
           if (isSwipeLeftOrRight && slideVertically) return;
           if (isSwipeTopOrDown && !slideVertically) return;
 
           const sides: Record<SwipeDirection, number> = {
-            [LEFT]: -1,
-            [RIGHT]: 1,
-            [UP]: -1,
-            [DOWN]: 1,
+            Left: -1,
+            Right: 1,
+            Up: -1,
+            Down: 1,
           };
 
           const side = sides[direction];
@@ -386,11 +388,12 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         resetSwipingDirection();
 
         const direction = dir as SwipeDirection;
-        let swipeDirection = (direction === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
-        if (slideVertically) swipeDirection = direction === UP ? 1 : -1;
+        let swipeDirection = (direction === "Left" ? 1 : -1) * (isRTL ? -1 : 1);
+        if (slideVertically) swipeDirection = direction === "Up" ? 1 : -1;
 
-        const isSwipeUpOrDown = direction === UP || direction === DOWN;
-        const isSwipeLeftOrRight = direction === LEFT || direction === RIGHT;
+        const isSwipeUpOrDown = direction === "Up" || direction === "Down";
+        const isSwipeLeftOrRight =
+          direction === "Left" || direction === "Right";
         const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
         const isTopDownFlick = velocity > flickThreshold && !isSwipeLeftOrRight;
 
@@ -418,25 +421,27 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
 
         if (isVertical) {
           if (
-            (direction === LEFT || direction === RIGHT || swipingLeftRight) &&
+            (direction === "Left" ||
+              direction === "Right" ||
+              swipingLeftRight) &&
             !swipingUpDown
           ) {
             if (!swipingLeftRight) setSwipingLeftRight(true);
             return;
           }
-          if ((direction === UP || direction === DOWN) && !swipingUpDown) {
+          if ((direction === "Up" || direction === "Down") && !swipingUpDown) {
             setSwipingUpDown(true);
           }
         } else {
           if (
-            (direction === UP || direction === DOWN || swipingUpDown) &&
+            (direction === "Up" || direction === "Down" || swipingUpDown) &&
             !swipingLeftRight
           ) {
             if (!swipingUpDown) setSwipingUpDown(true);
             return;
           }
           if (
-            (direction === LEFT || direction === RIGHT) &&
+            (direction === "Left" || direction === "Right") &&
             !swipingLeftRight
           ) {
             setSwipingLeftRight(true);
@@ -453,7 +458,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         let isThumbnailBarSmallerThanContainer: boolean;
 
         if (isVertical) {
-          const slideY = direction === DOWN ? absY : -absY;
+          const slideY = direction === "Down" ? absY : -absY;
           newThumbsTranslate = thumbsSwipedTranslate + slideY;
           totalSwipeableLength =
             thumbsElement.scrollHeight -
@@ -465,7 +470,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
           isThumbnailBarSmallerThanContainer =
             thumbsElement.scrollHeight <= thumbnailsWrapperHeight;
         } else {
-          const slideX = direction === RIGHT ? absX : -absX;
+          const slideX = direction === "Right" ? absX : -absX;
           newThumbsTranslate = thumbsSwipedTranslate + slideX;
           totalSwipeableLength =
             thumbsElement.scrollWidth -
@@ -479,9 +484,12 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         }
 
         if (isThumbnailBarSmallerThanContainer) return;
-        if ((direction === LEFT || direction === UP) && hasSwipedPassedEnd)
+        if ((direction === "Left" || direction === "Up") && hasSwipedPassedEnd)
           return;
-        if ((direction === RIGHT || direction === DOWN) && hasSwipedPassedStart)
+        if (
+          (direction === "Right" || direction === "Down") &&
+          hasSwipedPassedStart
+        )
           return;
 
         if (stopPropagation) event.stopPropagation();

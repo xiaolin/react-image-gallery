@@ -502,7 +502,7 @@ export interface SwipeWrapperProps {
 }
 
 export interface SwipeEventData {
-  event: TouchEvent | MouseEvent;
+  event: globalThis.TouchEvent | globalThis.MouseEvent;
   absX: number;
   absY: number;
   dir: SwipeDirection;

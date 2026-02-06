@@ -1,9 +1,6 @@
 import { useCallback, useState } from "react";
 import type { CSSProperties } from "react";
-import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
-import type { SwipeEventData } from "react-swipeable";
-
-type SwipeDirection = typeof LEFT | typeof RIGHT | typeof UP | typeof DOWN;
+import type { SwipeDirection, SwipeEventData } from "src/types";
 
 interface UseSwipeProps {
   disableSwipe?: boolean;
@@ -77,7 +74,7 @@ export function useSwipe({
 
       // Handle swiping direction lock
       if (
-        (direction === UP || direction === DOWN || swipingUpDown) &&
+        (direction === "Up" || direction === "Down" || swipingUpDown) &&
         !swipingLeftRight
       ) {
         if (!swipingUpDown) {
@@ -86,7 +83,10 @@ export function useSwipe({
         if (!slideVertically) return;
       }
 
-      if ((direction === LEFT || direction === RIGHT) && !swipingLeftRight) {
+      if (
+        (direction === "Left" || direction === "Right") &&
+        !swipingLeftRight
+      ) {
         setSwipingLeftRight(true);
       }
 
@@ -97,17 +97,18 @@ export function useSwipe({
       }
 
       if (!isTransitioning) {
-        const isSwipeLeftOrRight = direction === LEFT || direction === RIGHT;
-        const isSwipeTopOrDown = direction === UP || direction === DOWN;
+        const isSwipeLeftOrRight =
+          direction === "Left" || direction === "Right";
+        const isSwipeTopOrDown = direction === "Up" || direction === "Down";
 
         if (isSwipeLeftOrRight && slideVertically) return;
         if (isSwipeTopOrDown && !slideVertically) return;
 
         const sides: Record<SwipeDirection, number> = {
-          [LEFT]: -1,
-          [RIGHT]: 1,
-          [UP]: -1,
-          [DOWN]: 1,
+          Left: -1,
+          Right: 1,
+          Up: -1,
+          Down: 1,
         };
 
         const side = sides[direction];
@@ -180,11 +181,11 @@ export function useSwipe({
       resetSwipingDirection();
 
       const direction = dir as SwipeDirection;
-      let swipeDirection = (direction === LEFT ? 1 : -1) * (isRTL ? -1 : 1);
-      if (slideVertically) swipeDirection = direction === UP ? 1 : -1;
+      let swipeDirection = (direction === "Left" ? 1 : -1) * (isRTL ? -1 : 1);
+      if (slideVertically) swipeDirection = direction === "Up" ? 1 : -1;
 
-      const isSwipeUpOrDown = direction === UP || direction === DOWN;
-      const isSwipeLeftOrRight = direction === LEFT || direction === RIGHT;
+      const isSwipeUpOrDown = direction === "Up" || direction === "Down";
+      const isSwipeLeftOrRight = direction === "Left" || direction === "Right";
       const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
       const isTopDownFlick = velocity > flickThreshold && !isSwipeLeftOrRight;
 

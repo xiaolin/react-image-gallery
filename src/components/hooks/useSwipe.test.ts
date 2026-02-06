@@ -1,6 +1,5 @@
 import { act, renderHook } from "@testing-library/react";
-import { DOWN, LEFT, RIGHT, UP } from "react-swipeable";
-import type { SwipeEventData } from "react-swipeable";
+import type { SwipeEventData } from "src/types";
 import { useSwipe } from "./useSwipe";
 
 describe("useSwipe", () => {
@@ -39,7 +38,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -62,7 +61,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: RIGHT,
+      dir: "Right",
       deltaX: 100,
       deltaY: 0,
       velocity: 0.5,
@@ -87,7 +86,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -112,7 +111,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -139,7 +138,7 @@ describe("useSwipe", () => {
     const swipingData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -156,7 +155,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -182,7 +181,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 10,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -10,
       deltaY: 0,
       velocity: 0.8, // High velocity = flick
@@ -208,7 +207,7 @@ describe("useSwipe", () => {
     const swipingData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -225,7 +224,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -251,7 +250,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 0,
       absY: 100,
-      dir: UP,
+      dir: "Up",
       deltaX: 0,
       deltaY: -100,
       velocity: 0.5,
@@ -276,7 +275,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 0,
       absY: 100,
-      dir: DOWN,
+      dir: "Down",
       deltaX: 0,
       deltaY: 100,
       velocity: 0.5,
@@ -301,7 +300,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -100,
       deltaY: 0,
       velocity: 0.5,
@@ -324,7 +323,7 @@ describe("useSwipe", () => {
     const verticalSwipe: SwipeEventData = {
       absX: 0,
       absY: 50,
-      dir: UP,
+      dir: "Up",
       deltaX: 0,
       deltaY: -50,
       velocity: 0.3,
@@ -347,7 +346,7 @@ describe("useSwipe", () => {
     const horizontalSwipe: SwipeEventData = {
       absX: 50,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -50,
       deltaY: 0,
       velocity: 0.3,
@@ -370,7 +369,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 50,
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -50,
       deltaY: 0,
       velocity: 0.3,
@@ -403,7 +402,7 @@ describe("useSwipe", () => {
     const swipingData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: RIGHT,
+      dir: "Right",
       deltaX: 100,
       deltaY: 0,
       velocity: 0.5,
@@ -420,7 +419,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 100,
       absY: 0,
-      dir: RIGHT,
+      dir: "Right",
       deltaX: 100,
       deltaY: 0,
       velocity: 0.5,
@@ -446,7 +445,7 @@ describe("useSwipe", () => {
     const swipeData: SwipeEventData = {
       absX: 200, // More than gallery width
       absY: 0,
-      dir: LEFT,
+      dir: "Left",
       deltaX: -200,
       deltaY: 0,
       velocity: 0.5,

@@ -107,7 +107,6 @@
     "react": "^19.0.0",
     "react-dom": "^19.0.0",
     "react-fast-compare": "^3.2.2",
-    "react-swipeable": "7.0.2",
     "remove-files-webpack-plugin": "^1.5.0",
     "style-loader": "^4.0.0",
     "ts-jest": "^29.4.6",

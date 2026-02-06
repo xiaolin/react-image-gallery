@@ -1,6 +1,6 @@
 import React from "react";
-import { useSwipeable } from "react-swipeable";
-import type { SwipeEventData } from "react-swipeable";
+import { useSwipeHandlers } from "src/components/hooks/useSwipeHandlers";
+import type { SwipeEventData } from "src/types";
 
 interface SwipeWrapperProps {
   children: React.ReactNode;
@@ -22,13 +22,13 @@ const SwipeWrapper: React.FC<SwipeWrapperProps> = (props) => {
     ...defaultProps,
     ...props,
   };
-  const swipeHandlers = useSwipeable({
+  const { ref } = useSwipeHandlers({
     delta,
     onSwiping,
     onSwiped,
   });
   return (
-    <div {...swipeHandlers} className={className}>
+    <div ref={ref} className={className}>
       {children}
     </div>
   );
