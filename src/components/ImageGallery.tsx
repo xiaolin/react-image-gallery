@@ -740,27 +740,64 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     const handleImageLoaded = useCallback(
       (event: React.SyntheticEvent<HTMLImageElement>, original: string) => {
         const imageExists = loadedImagesRef.current[original];
-        if (!imageExists && onImageLoad) {
+        if (!imageExists) {
           loadedImagesRef.current[original] = true;
-          onImageLoad(event);
+          if (onImageLoad) {
+            onImageLoad(event);
+          }
+          // In vertical mode, recalculate height once the image's natural
+          // dimensions become available so the slide container sizes correctly.
+          if (slideVertically) {
+            handleResizeRef.current?.();
+          }
         }
       },
-      [onImageLoad]
+      [onImageLoad, slideVertically]
     );
 
     // ============= Resize Handling =============
     const handleResize = useCallback(() => {
       if (!imageGalleryRef.current) return;
 
-      setGalleryWidth(imageGalleryRef.current.offsetWidth);
+      const galleryW = imageGalleryRef.current.offsetWidth;
+      setGalleryWidth(galleryW);
       setGalleryHeight(imageGalleryRef.current.offsetHeight);
 
       if (imageGallerySlideWrapperRef.current) {
-        setGallerySlideWrapperHeight(
-          imageGallerySlideWrapperRef.current.offsetHeight
-        );
+        if (slideVertically) {
+          // In vertical mode, images have height:100%/width:auto, so the
+          // wrapper's natural offsetHeight may collapse to 0 or be stale.
+          // Instead, find the currently visible image and compute the slide
+          // height from its natural aspect ratio and the available width.
+          const wrapperWidth =
+            imageGallerySlideWrapperRef.current.offsetWidth || galleryW;
+          const img =
+            imageGallerySlideWrapperRef.current.querySelector<HTMLImageElement>(
+              ".image-gallery-center .image-gallery-image"
+            ) ??
+            imageGallerySlideWrapperRef.current.querySelector<HTMLImageElement>(
+              ".image-gallery-image"
+            );
+
+          if (img && img.naturalWidth > 0 && img.naturalHeight > 0) {
+            const aspectRatio = img.naturalHeight / img.naturalWidth;
+            const computedHeight = Math.round(wrapperWidth * aspectRatio);
+            // Respect the max-height constraint from CSS (100vh - 80px)
+            const maxHeight = window.innerHeight - 80;
+            setGallerySlideWrapperHeight(Math.min(computedHeight, maxHeight));
+          } else {
+            // Fallback: if no image loaded yet, use the wrapper's current height
+            setGallerySlideWrapperHeight(
+              imageGallerySlideWrapperRef.current.offsetHeight
+            );
+          }
+        } else {
+          setGallerySlideWrapperHeight(
+            imageGallerySlideWrapperRef.current.offsetHeight
+          );
+        }
       }
-    }, []);
+    }, [slideVertically]);
 
     const initSlideWrapperResizeObserver = useCallback(
       (element: RefObject<HTMLElement | null>) => {
@@ -1063,6 +1100,15 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       }
       handleResizeRef.current?.();
     }, [showThumbnails, thumbnailsWrapperRef]);
+
+    // Handle slideVertically changes - reinitialize observers and recalculate dimensions
+    useEffect(() => {
+      removeSlideWrapperResizeObserverRef.current?.();
+      removeThumbnailsResizeObserverRef.current?.();
+      initSlideWrapperResizeObserverRef.current?.(imageGallerySlideWrapperRef);
+      initThumbnailResizeObserverRef.current?.(thumbnailsWrapperRef);
+      handleResizeRef.current?.();
+    }, [slideVertically, thumbnailsWrapperRef]);
 
     // Handle items changes - reset lazyLoaded
     useEffect(() => {
