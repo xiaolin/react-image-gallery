@@ -7,11 +7,12 @@ import React, {
   useRef,
   useState,
 } from "react";
-import type { CSSProperties, ForwardedRef, RefObject } from "react";
+import type { ForwardedRef, RefObject } from "react";
 import clsx from "clsx";
 import Bullet from "src/components/Bullet";
 import BulletNav from "src/components/BulletNav";
 import {
+  DEFAULT_EASING,
   DEFAULT_FLICK_THRESHOLD,
   DEFAULT_SLIDE_DURATION,
   DEFAULT_SLIDE_INTERVAL,
@@ -35,6 +36,16 @@ import SwipeWrapper from "src/components/SwipeWrapper";
 import Thumbnail from "src/components/Thumbnail";
 import ThumbnailBar from "src/components/ThumbnailBar";
 import debounce from "src/components/utils/debounce";
+import {
+  calculateSwipeOffset,
+  computeSlideTarget,
+  computeTargetDisplayIndex,
+  computeVelocityDuration,
+  getSwipeDirection,
+  isFlickSwipe,
+  isSufficientSwipe,
+  shouldIgnoreSwipeDirection,
+} from "src/components/utils/swipe";
 import { calculateMomentum } from "src/components/utils/thumbnailMomentum";
 import type {
   GalleryItem,
@@ -175,8 +186,11 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     const [galleryHeight, setGalleryHeight] = useState(0);
     const [gallerySlideWrapperHeight, setGallerySlideWrapperHeight] =
       useState(0);
-    const [swipingUpDown, setSwipingUpDown] = useState(false);
-    const [swipingLeftRight, setSwipingLeftRight] = useState(false);
+    const swipingUpDownRef = useRef(false);
+    const swipingLeftRightRef = useRef(false);
+    const slideContainerRef = useRef<HTMLDivElement | null>(null);
+    const swipeOffsetRef = useRef(0);
+    const swipeRafRef = useRef<number | null>(null);
 
     const totalSlides = items.length;
     const canSlide = totalSlides >= 2;
@@ -184,8 +198,9 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     // ============= Use Gallery Navigation Hook =============
     const {
       currentIndex,
+      displayIndex,
       isTransitioning,
-      currentSlideOffset,
+      currentSlideOffset: _currentSlideOffset,
       canSlideLeft,
       canSlideRight,
       slideToIndex,
@@ -197,7 +212,9 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       getExtendedSlides,
       getAlignmentClass,
       setCurrentSlideOffset,
-      setSlideStyle,
+      setSlideStyle: _setSlideStyle,
+      setIsTransitioning,
+      totalDisplaySlides,
     } = useGalleryNavigation({
       items,
       startIndex,
@@ -268,31 +285,31 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
 
     // ============= Swipe Reset Helper =============
     const resetSwipingDirection = useCallback(() => {
-      if (swipingUpDown) setSwipingUpDown(false);
-      if (swipingLeftRight) setSwipingLeftRight(false);
-    }, [swipingUpDown, swipingLeftRight]);
+      swipingUpDownRef.current = false;
+      swipingLeftRightRef.current = false;
+    }, []);
 
     // ============= Slide Swipe Handlers =============
     const sufficientSwipe = useCallback(() => {
-      return Math.abs(currentSlideOffset) > swipeThreshold;
-    }, [currentSlideOffset, swipeThreshold]);
+      return isSufficientSwipe(swipeOffsetRef.current, swipeThreshold);
+    }, [swipeThreshold]);
 
     const handleSwiping = useCallback(
       ({ event, absX, absY, dir }: SwipeEventData) => {
         const direction = dir as SwipeDirection;
+        const isUpDown = swipingUpDownRef.current;
+        const isLeftRight = swipingLeftRightRef.current;
+
         if (
-          (direction === "Up" || direction === "Down" || swipingUpDown) &&
-          !swipingLeftRight
+          (direction === "Up" || direction === "Down" || isUpDown) &&
+          !isLeftRight
         ) {
-          if (!swipingUpDown) setSwipingUpDown(true);
+          if (!isUpDown) swipingUpDownRef.current = true;
           if (!slideVertically) return;
         }
 
-        if (
-          (direction === "Left" || direction === "Right") &&
-          !swipingLeftRight
-        ) {
-          setSwipingLeftRight(true);
+        if ((direction === "Left" || direction === "Right") && !isLeftRight) {
+          swipingLeftRightRef.current = true;
         }
 
         if (disableSwipe) return;
@@ -301,39 +318,57 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
           event.preventDefault();
         }
 
-        if (!isTransitioning) {
-          const isSwipeLeftOrRight =
-            direction === "Left" || direction === "Right";
-          const isSwipeTopOrDown = direction === "Up" || direction === "Down";
+        // If a transition is in progress but this is the first move of a
+        // new swipe gesture (both direction refs still false), interrupt the
+        // transition so the user's finger immediately takes control.
+        const isFirstMove = !isUpDown && !isLeftRight;
+        if (isTransitioning && !isFirstMove) {
+          // Mid-gesture moves while still transitioning – ignore
+          swipeOffsetRef.current = 0;
+          return;
+        }
 
-          if (isSwipeLeftOrRight && slideVertically) return;
-          if (isSwipeTopOrDown && !slideVertically) return;
+        if (isTransitioning && isFirstMove) {
+          // Cancel the running CSS transition
+          setIsTransitioning(false);
+        }
 
-          const sides: Record<SwipeDirection, number> = {
-            Left: -1,
-            Right: 1,
-            Up: -1,
-            Down: 1,
-          };
+        if (shouldIgnoreSwipeDirection(direction, slideVertically)) return;
 
-          const side = sides[direction];
-          let slideOffset = (absX / galleryWidth) * 100;
-          if (slideVertically) {
-            slideOffset = (absY / galleryHeight) * 100;
+        const offset = calculateSwipeOffset(
+          absX,
+          absY,
+          galleryWidth,
+          galleryHeight,
+          direction,
+          slideVertically
+        );
+        swipeOffsetRef.current = offset;
+
+        // Batch DOM writes to one per animation frame
+        const el = slideContainerRef.current;
+        if (el) {
+          if (isFirstMove) {
+            // Apply immediately so there's no transition on first move
+            el.style.transition = "none";
           }
-
-          if (Math.abs(slideOffset) >= 100) {
-            slideOffset = 100;
+          if (swipeRafRef.current !== null) {
+            cancelAnimationFrame(swipeRafRef.current);
           }
-
-          const swipingTransition: CSSProperties = {
-            transition: "none",
-          };
-
-          setCurrentSlideOffset(side * slideOffset);
-          setSlideStyle(swipingTransition);
-        } else {
-          setCurrentSlideOffset(0);
+          swipeRafRef.current = requestAnimationFrame(() => {
+            swipeRafRef.current = null;
+            const swipeOff = swipeOffsetRef.current * (isRTL ? -1 : 1);
+            const baseOff = displayIndex * 100;
+            const t = -(baseOff - swipeOff);
+            const transform = slideVertically
+              ? useTranslate3D
+                ? `translate3d(0, ${t}%, 0)`
+                : `translate(0, ${t}%)`
+              : useTranslate3D
+                ? `translate3d(${t}%, 0, 0)`
+                : `translate(${t}%, 0)`;
+            el.style.transform = transform;
+          });
         }
       },
       [
@@ -343,61 +378,93 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         galleryWidth,
         galleryHeight,
         slideVertically,
-        swipingUpDown,
-        swipingLeftRight,
-        setCurrentSlideOffset,
-        setSlideStyle,
+        displayIndex,
+        isRTL,
+        useTranslate3D,
+        setIsTransitioning,
       ]
     );
 
     const handleOnSwipedTo = useCallback(
       (swipeDirection: number, isFlick: boolean, velocity: number) => {
-        let slideTo = currentIndex;
-
-        if ((sufficientSwipe() || isFlick) && !isTransitioning) {
-          slideTo += swipeDirection;
+        // Cancel any pending rAF so it doesn't overwrite the transition
+        if (swipeRafRef.current !== null) {
+          cancelAnimationFrame(swipeRafRef.current);
+          swipeRafRef.current = null;
         }
 
-        if (
-          (swipeDirection === -1 && !canSlideLeft()) ||
-          (swipeDirection === 1 && !canSlideRight())
-        ) {
-          slideTo = currentIndex;
-        }
+        // Read offset from ref (was updated directly during swipe)
+        const finalOffset = swipeOffsetRef.current;
 
-        // Compute duration from swipe velocity so the animation continues
-        // at the same speed the user's finger was moving.
-        // velocity is in px/ms from the swipe library.
-        const swipedPercent = Math.abs(currentSlideOffset);
-        const remainingPercent =
-          slideTo !== currentIndex
-            ? 100 - swipedPercent // traveling to next/prev slide
-            : swipedPercent; // snapping back to current slide
+        const slideTo = computeSlideTarget(
+          currentIndex,
+          swipeDirection,
+          sufficientSwipe(),
+          isFlick,
+          isTransitioning,
+          canSlideLeft(),
+          canSlideRight()
+        );
+
         const dimension = slideVertically ? galleryHeight : galleryWidth;
-        const remainingPx = (remainingPercent / 100) * dimension;
-        // Clamp: at least 80ms (not jarring), at most slideDuration
-        const velocityDuration =
-          velocity > 0
-            ? Math.min(
-                slideDuration,
-                Math.max(80, Math.round(remainingPx / velocity))
-              )
-            : slideDuration;
+        const velocityDuration = computeVelocityDuration(
+          finalOffset,
+          slideTo,
+          currentIndex,
+          velocity,
+          slideDuration,
+          dimension
+        );
 
+        const targetDisplayIndex = computeTargetDisplayIndex(
+          slideTo,
+          totalSlides,
+          totalDisplaySlides,
+          infinite
+        );
+
+        // Apply transition + target transform directly to the DOM.
+        // React's reconciliation may skip the update if the computed
+        // style matches what it last rendered (e.g. snap-back to same slide).
+        const el = slideContainerRef.current;
+        if (el) {
+          // Force the browser to commit the current (swiped) position
+          el.getBoundingClientRect();
+          // Now apply the animated transition and target transform
+          el.style.transition = `transform ${velocityDuration}ms ${DEFAULT_EASING}`;
+          const targetTranslate = -(targetDisplayIndex * 100);
+          el.style.transform = slideVertically
+            ? useTranslate3D
+              ? `translate3d(0, ${targetTranslate}%, 0)`
+              : `translate(0, ${targetTranslate}%)`
+            : useTranslate3D
+              ? `translate3d(${targetTranslate}%, 0, 0)`
+              : `translate(${targetTranslate}%, 0)`;
+        }
+
+        // Still call slideToIndexCore for React state management
+        // (currentIndex, isTransitioning, clone jumps, callbacks, etc.)
+        setCurrentSlideOffset(finalOffset);
         slideToIndexCore(slideTo, undefined, false, velocityDuration);
+        // Reset swipe offset ref for next gesture
+        swipeOffsetRef.current = 0;
       },
       [
         currentIndex,
-        currentSlideOffset,
+        totalSlides,
+        totalDisplaySlides,
+        infinite,
         isTransitioning,
         slideDuration,
         slideVertically,
+        useTranslate3D,
         galleryWidth,
         galleryHeight,
         sufficientSwipe,
         canSlideLeft,
         canSlideRight,
         slideToIndexCore,
+        setCurrentSlideOffset,
       ]
     );
 
@@ -409,16 +476,17 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         resetSwipingDirection();
 
         const direction = dir as SwipeDirection;
-        let swipeDirection = (direction === "Left" ? 1 : -1) * (isRTL ? -1 : 1);
-        if (slideVertically) swipeDirection = direction === "Up" ? 1 : -1;
-
-        const isSwipeUpOrDown = direction === "Up" || direction === "Down";
-        const isSwipeLeftOrRight =
-          direction === "Left" || direction === "Right";
-        const isLeftRightFlick = velocity > flickThreshold && !isSwipeUpOrDown;
-        const isTopDownFlick = velocity > flickThreshold && !isSwipeLeftOrRight;
-
-        const isFlick = slideVertically ? isTopDownFlick : isLeftRightFlick;
+        const swipeDirection = getSwipeDirection(
+          direction,
+          isRTL,
+          slideVertically
+        );
+        const isFlick = isFlickSwipe(
+          velocity,
+          flickThreshold,
+          direction,
+          slideVertically
+        );
 
         handleOnSwipedTo(swipeDirection, isFlick, velocity);
       },
@@ -439,33 +507,30 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         const direction = dir as SwipeDirection;
         const isVertical = isThumbnailVertical();
         const emptySpaceMargin = 0;
+        const isUpDown = swipingUpDownRef.current;
+        const isLeftRight = swipingLeftRightRef.current;
 
         if (isVertical) {
           if (
-            (direction === "Left" ||
-              direction === "Right" ||
-              swipingLeftRight) &&
-            !swipingUpDown
+            (direction === "Left" || direction === "Right" || isLeftRight) &&
+            !isUpDown
           ) {
-            if (!swipingLeftRight) setSwipingLeftRight(true);
+            if (!isLeftRight) swipingLeftRightRef.current = true;
             return;
           }
-          if ((direction === "Up" || direction === "Down") && !swipingUpDown) {
-            setSwipingUpDown(true);
+          if ((direction === "Up" || direction === "Down") && !isUpDown) {
+            swipingUpDownRef.current = true;
           }
         } else {
           if (
-            (direction === "Up" || direction === "Down" || swipingUpDown) &&
-            !swipingLeftRight
+            (direction === "Up" || direction === "Down" || isUpDown) &&
+            !isLeftRight
           ) {
-            if (!swipingUpDown) setSwipingUpDown(true);
+            if (!isUpDown) swipingUpDownRef.current = true;
             return;
           }
-          if (
-            (direction === "Left" || direction === "Right") &&
-            !swipingLeftRight
-          ) {
-            setSwipingLeftRight(true);
+          if ((direction === "Left" || direction === "Right") && !isLeftRight) {
+            swipingLeftRightRef.current = true;
           }
         }
 
@@ -529,8 +594,6 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         thumbsSwipedTranslate,
         stopPropagation,
         isSwipingThumbnail,
-        swipingUpDown,
-        swipingLeftRight,
         thumbnailsRef,
         setThumbsTranslate,
         setThumbsStyle,
@@ -1190,6 +1253,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
                 }
               >
                 <div
+                  ref={slideContainerRef}
                   className={clsx("image-gallery-slides-container", {
                     vertical: slideVertically,
                   })}
@@ -1210,6 +1274,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
             }
           >
             <div
+              ref={slideContainerRef}
               className={clsx("image-gallery-slides-container", {
                 vertical: slideVertically,
               })}
