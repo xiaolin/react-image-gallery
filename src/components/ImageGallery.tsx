@@ -16,7 +16,6 @@ import {
   DEFAULT_SLIDE_DURATION,
   DEFAULT_SLIDE_INTERVAL,
   DEFAULT_SWIPE_THRESHOLD,
-  DEFAULT_SWIPING_TRANSITION_DURATION,
 } from "src/components/constants";
 import BottomNav from "src/components/controls/BottomNav";
 import Fullscreen from "src/components/controls/Fullscreen";
@@ -154,7 +153,6 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
       startIndex = 0,
       stopPropagation = false,
       swipeThreshold = DEFAULT_SWIPE_THRESHOLD,
-      swipingTransitionDuration = DEFAULT_SWIPING_TRANSITION_DURATION,
       thumbnailPosition = "bottom",
       useBrowserFullscreen = true,
       useTranslate3D = true,
@@ -329,7 +327,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
           }
 
           const swipingTransition: CSSProperties = {
-            transition: `transform ${swipingTransitionDuration}ms ease-out`,
+            transition: "none",
           };
 
           setCurrentSlideOffset(side * slideOffset);
@@ -345,7 +343,6 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
         galleryWidth,
         galleryHeight,
         slideVertically,
-        swipingTransitionDuration,
         swipingUpDown,
         swipingLeftRight,
         setCurrentSlideOffset,
@@ -354,7 +351,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     );
 
     const handleOnSwipedTo = useCallback(
-      (swipeDirection: number, isFlick: boolean) => {
+      (swipeDirection: number, isFlick: boolean, velocity: number) => {
         let slideTo = currentIndex;
 
         if ((sufficientSwipe() || isFlick) && !isTransitioning) {
@@ -368,11 +365,35 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
           slideTo = currentIndex;
         }
 
-        slideToIndexCore(slideTo);
+        // Compute duration from swipe velocity so the animation continues
+        // at the same speed the user's finger was moving.
+        // velocity is in px/ms from the swipe library.
+        const swipedPercent = Math.abs(currentSlideOffset);
+        const remainingPercent =
+          slideTo !== currentIndex
+            ? 100 - swipedPercent // traveling to next/prev slide
+            : swipedPercent; // snapping back to current slide
+        const dimension = slideVertically ? galleryHeight : galleryWidth;
+        const remainingPx = (remainingPercent / 100) * dimension;
+        // Clamp: at least 80ms (not jarring), at most slideDuration
+        const velocityDuration =
+          velocity > 0
+            ? Math.min(
+                slideDuration,
+                Math.max(80, Math.round(remainingPx / velocity))
+              )
+            : slideDuration;
+
+        slideToIndexCore(slideTo, undefined, false, velocityDuration);
       },
       [
         currentIndex,
+        currentSlideOffset,
         isTransitioning,
+        slideDuration,
+        slideVertically,
+        galleryWidth,
+        galleryHeight,
         sufficientSwipe,
         canSlideLeft,
         canSlideRight,
@@ -399,7 +420,7 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
 
         const isFlick = slideVertically ? isTopDownFlick : isLeftRightFlick;
 
-        handleOnSwipedTo(swipeDirection, isFlick);
+        handleOnSwipedTo(swipeDirection, isFlick, velocity);
       },
       [
         disableSwipe,

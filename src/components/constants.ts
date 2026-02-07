@@ -6,9 +6,6 @@
 // Animation & Timing
 export const DEFAULT_SLIDE_DURATION = 550;
 export const DEFAULT_SLIDE_INTERVAL = 3000;
-// Must be 0 for responsive finger tracking - the swipe offset is updated continuously
-// by the swipe library, so any transition would cause the image to lag behind the finger
-export const DEFAULT_SWIPING_TRANSITION_DURATION = 0;
 
 // Thresholds
 export const DEFAULT_FLICK_THRESHOLD = 0.4;

@@ -48,7 +48,8 @@ interface UseGalleryNavigationReturn {
   slideToIndexCore: (
     index: number,
     event?: React.SyntheticEvent | Event,
-    isPlayPause?: boolean
+    isPlayPause?: boolean,
+    customDuration?: number
   ) => void;
   slideToIndexWithStyleReset: (
     nextIndex: number,
@@ -193,10 +194,12 @@ export function useGalleryNavigation({
     (
       index: number,
       _event?: React.SyntheticEvent | Event,
-      isPlayPause = false
+      isPlayPause = false,
+      customDuration?: number
     ): void => {
       if ((isTransitioning || isJumpingRef.current) && !isPlayPause) return;
 
+      const duration = customDuration ?? slideDuration;
       const slideCount = totalSlides - 1;
       let nextIndex = index;
       let nextDisplayIndex: number;
@@ -238,7 +241,7 @@ export function useGalleryNavigation({
       setIsTransitioning(nextIndex !== currentIndex || willWrap);
       setCurrentSlideOffset(0);
       setSlideStyle({
-        transition: `transform ${slideDuration}ms ${DEFAULT_EASING}`,
+        transition: `transform ${duration}ms ${DEFAULT_EASING}`,
       });
 
       // Schedule clone jump if we're wrapping in infinite mode
@@ -251,7 +254,7 @@ export function useGalleryNavigation({
           // Jump to the real slide after animation completes
           const realDisplayIndex = realToDisplayIndex(nextIndex);
           handleCloneJump(nextIndex, realDisplayIndex);
-        }, slideDuration + 20);
+        }, duration + 20);
       }
     },
     [
