@@ -82,6 +82,8 @@ const jsEsOutput = Object.assign({}, config, {
   externals: {
     react: "react",
     "react-dom": "react-dom",
+    "react/jsx-runtime": "react/jsx-runtime",
+    "react/jsx-dev-runtime": "react/jsx-dev-runtime",
   },
 });
 
@@ -132,6 +134,18 @@ const jsOutput = Object.assign({}, config, {
       commonjs2: "react-dom",
       amd: "react-dom",
       root: "ReactDOM",
+    },
+    "react/jsx-runtime": {
+      commonjs: "react/jsx-runtime",
+      commonjs2: "react/jsx-runtime",
+      amd: "react/jsx-runtime",
+      root: "ReactJSXRuntime",
+    },
+    "react/jsx-dev-runtime": {
+      commonjs: "react/jsx-dev-runtime",
+      commonjs2: "react/jsx-dev-runtime",
+      amd: "react/jsx-dev-runtime",
+      root: "ReactJSXDevRuntime",
     },
   },
 });
