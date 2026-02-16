@@ -1,5 +1,4 @@
 const path = require("path");
-const webpack = require("webpack");
 
 module.exports = {
   entry: ["./example/App.jsx", "./example/app.css"],
@@ -32,12 +31,6 @@ module.exports = {
       },
     ],
   },
-  plugins: [
-    // In dev mode, CSS is loaded via style-loader, so we don't need to inject
-    new webpack.DefinePlugin({
-      __GALLERY_CSS__: JSON.stringify(""),
-    }),
-  ],
   devServer: {
     host: "0.0.0.0",
     port: 8001,

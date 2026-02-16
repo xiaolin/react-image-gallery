@@ -183,6 +183,11 @@ const jsDemoOutput = Object.assign({}, config, {
         test: /\.(js|jsx)$/,
         loader: "babel-loader",
       },
+      {
+        // CSS is handled by cssDemoOutput; discard CSS imports here
+        test: /\.css$/i,
+        type: "asset/source",
+      },
     ],
   },
   plugins: [
