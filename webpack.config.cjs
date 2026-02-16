@@ -2,11 +2,7 @@ const path = require("path");
 const webpack = require("webpack");
 
 module.exports = {
-  entry: [
-    "./example/App.jsx",
-    "./example/app.css",
-    "./styles/image-gallery.css",
-  ],
+  entry: ["./example/App.jsx", "./example/app.css"],
   output: {
     path: path.resolve(__dirname, "example"),
     filename: "example.js",
