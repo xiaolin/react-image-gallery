@@ -1,23 +1,8 @@
 const path = require("path");
-const fs = require("fs");
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const TerserPlugin = require("terser-webpack-plugin");
 const RemovePlugin = require("remove-files-webpack-plugin");
-const webpack = require("webpack");
-
-// Read CSS file and prepare for bundling
-function getCSSContent() {
-  try {
-    const cssPath = path.resolve(__dirname, "styles/image-gallery.css");
-    const css = fs.readFileSync(cssPath, "utf8");
-    // Escape backticks and backslashes for template literal
-    return css.replace(/\\/g, "\\\\").replace(/`/g, "\\`");
-  } catch (e) {
-    console.warn("Warning: Could not read CSS file for bundling:", e.message);
-    return "";
-  }
-}
 
 const config = {
   mode: "production",
@@ -74,11 +59,6 @@ const jsEsOutput = Object.assign({}, config, {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      __GALLERY_CSS__: JSON.stringify(getCSSContent()),
-    }),
-  ],
   externals: {
     react: "react",
     "react-dom": "react-dom",
@@ -116,11 +96,6 @@ const jsOutput = Object.assign({}, config, {
       },
     ],
   },
-  plugins: [
-    new webpack.DefinePlugin({
-      __GALLERY_CSS__: JSON.stringify(getCSSContent()),
-    }),
-  ],
   externals: {
     // Don't bundle react or react-dom
     react: {

@@ -95,7 +95,7 @@ node test-cjs.cjs
 # Test CSS imports exist
 echo -e "${YELLOW}🧪 Testing CSS file availability...${NC}"
 cat > test-css.mjs << 'EOF'
-import { existsSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 import { dirname, join } from 'path';
 import { fileURLToPath } from 'url';
 import { createRequire } from 'module';
@@ -123,9 +123,59 @@ for (const file of cssFiles) {
 if (!allExist) {
   process.exit(1);
 }
+
+// Verify CSS export resolves via package.json "exports" field
+const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8'));
+const cssExports = [
+  './styles/image-gallery.css',
+  './build/image-gallery.css'
+];
+for (const exp of cssExports) {
+  if (!pkg.exports || !pkg.exports[exp]) {
+    console.error(`❌ Missing export entry for "${exp}"`);
+    process.exit(1);
+  }
+  const target = pkg.exports[exp];
+  const resolvedPath = join(pkgDir, target);
+  if (existsSync(resolvedPath)) {
+    console.log(`✅ Export "${exp}" resolves to existing file`);
+  } else {
+    console.error(`❌ Export "${exp}" target does not exist: ${target}`);
+    process.exit(1);
+  }
+}
 EOF
 
 node test-css.mjs
+
+# Test CSS import resolves correctly at runtime
+echo -e "${YELLOW}🧪 Testing CSS import resolution...${NC}"
+cat > test-css-import.mjs << 'EOF'
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+
+// Verify the CSS can be resolved via the exports map
+try {
+  const resolved = require.resolve('react-image-gallery/styles/image-gallery.css');
+  console.log(`✅ CSS import resolves: ${resolved}`);
+} catch (e) {
+  console.error('❌ CSS import "react-image-gallery/styles/image-gallery.css" failed to resolve');
+  console.error(e.message);
+  process.exit(1);
+}
+
+try {
+  const resolved = require.resolve('react-image-gallery/build/image-gallery.css');
+  console.log(`✅ CSS import resolves: ${resolved}`);
+} catch (e) {
+  console.error('❌ CSS import "react-image-gallery/build/image-gallery.css" failed to resolve');
+  console.error(e.message);
+  process.exit(1);
+}
+EOF
+
+node test-css-import.mjs
 
 # Test TypeScript types exist
 echo -e "${YELLOW}🧪 Testing TypeScript types availability...${NC}"
@@ -240,6 +290,34 @@ else
   echo -e "${RED}❌ TypeScript compilation (node16) failed${NC}"
   exit 1
 fi
+
+# Test that JS bundles do NOT contain embedded CSS (no auto-injection)
+echo -e "${YELLOW}🧪 Testing JS bundles do not contain embedded CSS...${NC}"
+cat > test-no-inject.mjs << 'EOF'
+import { readFileSync } from 'fs';
+import { dirname, join } from 'path';
+import { createRequire } from 'module';
+
+const require = createRequire(import.meta.url);
+const pkgDir = dirname(require.resolve('react-image-gallery/package.json'));
+
+const bundles = [
+  'build/image-gallery.es.js',
+  'build/image-gallery.cjs'
+];
+
+for (const bundle of bundles) {
+  const content = readFileSync(join(pkgDir, bundle), 'utf-8');
+  // CSS selectors like ".image-gallery " should not be embedded in the JS
+  if (content.includes('.image-gallery-slides') || content.includes('.image-gallery-thumbnail')) {
+    console.error(`❌ ${bundle} contains embedded CSS — style injection should be removed`);
+    process.exit(1);
+  }
+  console.log(`✅ ${bundle} does not contain embedded CSS`);
+}
+EOF
+
+node test-no-inject.mjs
 
 # Cleanup
 echo -e "${YELLOW}🧹 Cleaning up...${NC}"

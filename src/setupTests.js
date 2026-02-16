@@ -1,12 +1,6 @@
 // Jest DOM setup
 import "@testing-library/jest-dom";
 
-// Mock the styleInjector to prevent actual DOM manipulation in tests
-jest.mock("src/components/styleInjector", () => ({
-  injectStyles: jest.fn(),
-  resetStylesInjected: jest.fn(),
-}));
-
 // Mock ResizeObserver
 globalThis.ResizeObserver = class ResizeObserver {
   constructor(callback) {

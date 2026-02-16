@@ -31,7 +31,6 @@ import { useThumbnails } from "src/components/hooks/useThumbnails";
 import IndexIndicator from "src/components/IndexIndicator";
 import Item from "src/components/Item";
 import Slide from "src/components/Slide";
-import { injectStyles } from "src/components/styleInjector";
 import SwipeWrapper from "src/components/SwipeWrapper";
 import Thumbnail from "src/components/Thumbnail";
 import ThumbnailBar from "src/components/ThumbnailBar";
@@ -55,9 +54,6 @@ import type {
   SwipeEventData,
   ThumbnailPosition,
 } from "src/types";
-
-// Auto-inject styles when module loads
-injectStyles();
 
 // ============= Constants =============
 const screenChangeEvents = [
