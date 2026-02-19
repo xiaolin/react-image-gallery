@@ -15,7 +15,7 @@
   ],
   "scripts": {
     "//": "Release: run 'npm version patch|minor|major' to bump version, build, commit, tag, and push",
-    "test": "jest",
+    "test": "jest && npm run test:package",
     "test:package": "bash scripts/test-package.sh",
     "lint": "eslint src",
     "start": "webpack serve --hot --mode development --static ./example",
