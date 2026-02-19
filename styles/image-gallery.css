@@ -291,8 +291,6 @@
   backface-visibility: hidden;
   -webkit-transform: translateZ(0);
   transform: translateZ(0);
-  /* Prevent overscroll during swipe */
-  overscroll-behavior: contain;
   touch-action: pan-y pinch-zoom;
 }
 
@@ -303,13 +301,15 @@
 .image-gallery-slides {
   overflow: hidden;
   position: relative;
-  touch-action: none;
+  /* Allow vertical scroll and pinch-zoom; block horizontal pan so JS handles swipe.
+     The browser's built-in direction detection prevents vertical scroll during
+     horizontal swipes. On desktop, wheel/trackpad scroll passes through normally. */
+  touch-action: pan-y pinch-zoom;
   /* GPU acceleration for smooth swiping */
   -webkit-backface-visibility: hidden;
   backface-visibility: hidden;
   contain: layout style paint;
   isolation: isolate;
-  overscroll-behavior: none;
 }
 
 /* Flex container that holds all slides and gets transformed */

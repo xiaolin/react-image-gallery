@@ -310,6 +310,16 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
 
         if (disableSwipe) return;
 
+        // Once the swipe direction is locked to the gallery's slide axis,
+        // prevent the browser from scrolling the page during the gesture.
+        // Only affects touch devices (useSwipeHandlers listens to touch only).
+        if (
+          (!slideVertically && swipingLeftRightRef.current) ||
+          (slideVertically && swipingUpDownRef.current)
+        ) {
+          event.preventDefault();
+        }
+
         if (stopPropagation) {
           event.preventDefault();
         }
