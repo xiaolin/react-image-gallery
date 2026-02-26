@@ -2481,14 +2481,14 @@ describe("<ImageGallery />", () => {
       // after items have been populated.
       const ref = React.createRef<ImageGalleryRef>();
       const { rerender } = render(
-        <ImageGallery items={singleItem} ref={ref} />
+        <ImageGallery ref={ref} items={singleItem} />
       );
 
       // Cache the handle object (simulates storing ref.current in state)
       const cachedHandle = ref.current!;
 
       // Update items to a larger set
-      rerender(<ImageGallery items={defaultItems} ref={ref} />);
+      rerender(<ImageGallery ref={ref} items={defaultItems} />);
 
       // Use the CACHED handle to slide — this previously broke because
       // slideToIndexCore closed over totalSlides=1 from the first render.
@@ -2503,9 +2503,7 @@ describe("<ImageGallery />", () => {
 
     it("getCurrentIndex returns latest index from a cached handle", () => {
       const ref = React.createRef<ImageGalleryRef>();
-      const { rerender } = render(
-        <ImageGallery items={defaultItems} ref={ref} />
-      );
+      render(<ImageGallery ref={ref} items={defaultItems} />);
 
       const cachedHandle = ref.current!;
       expect(cachedHandle.getCurrentIndex()).toBe(0);
@@ -2527,8 +2525,8 @@ describe("<ImageGallery />", () => {
       const emptyItems: GalleryItem[] = [];
       const { rerender } = render(
         <ImageGallery
-          items={emptyItems}
           ref={ref}
+          items={emptyItems}
           useBrowserFullscreen={false}
         />
       );
@@ -2538,8 +2536,8 @@ describe("<ImageGallery />", () => {
       // Populate items
       rerender(
         <ImageGallery
-          items={defaultItems}
           ref={ref}
+          items={defaultItems}
           useBrowserFullscreen={false}
         />
       );
