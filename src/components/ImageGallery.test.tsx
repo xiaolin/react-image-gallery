@@ -2474,6 +2474,91 @@ describe("<ImageGallery />", () => {
       gallery = document.querySelector(".image-gallery");
       expect(gallery).not.toHaveClass("fullscreen-modal");
     });
+
+    it("slideToIndex works on a cached handle after items change", () => {
+      // Reproduces the bug where a consumer stores ref.current in state
+      // at mount time (with empty items), then later calls slideToIndex
+      // after items have been populated.
+      const ref = React.createRef<ImageGalleryRef>();
+      const { rerender } = render(
+        <ImageGallery items={singleItem} ref={ref} />
+      );
+
+      // Cache the handle object (simulates storing ref.current in state)
+      const cachedHandle = ref.current!;
+
+      // Update items to a larger set
+      rerender(<ImageGallery items={defaultItems} ref={ref} />);
+
+      // Use the CACHED handle to slide — this previously broke because
+      // slideToIndexCore closed over totalSlides=1 from the first render.
+      act(() => {
+        cachedHandle.slideToIndex(3);
+        jest.advanceTimersByTime(600);
+      });
+
+      const thumbnails = document.querySelectorAll(".image-gallery-thumbnail");
+      expect(thumbnails[3]).toHaveClass("active");
+    });
+
+    it("getCurrentIndex returns latest index from a cached handle", () => {
+      const ref = React.createRef<ImageGalleryRef>();
+      const { rerender } = render(
+        <ImageGallery items={defaultItems} ref={ref} />
+      );
+
+      const cachedHandle = ref.current!;
+      expect(cachedHandle.getCurrentIndex()).toBe(0);
+
+      // Navigate to index 2
+      act(() => {
+        ref.current!.slideToIndex(2);
+        jest.advanceTimersByTime(600);
+      });
+
+      // The cached handle should reflect the updated index
+      expect(cachedHandle.getCurrentIndex()).toBe(2);
+    });
+
+    it("cached handle methods stay current across re-renders", () => {
+      // Simulates the full user-reported pattern: mount with empty items,
+      // cache handle, update items, then slideToIndex + fullScreen.
+      const ref = React.createRef<ImageGalleryRef>();
+      const emptyItems: GalleryItem[] = [];
+      const { rerender } = render(
+        <ImageGallery
+          items={emptyItems}
+          ref={ref}
+          useBrowserFullscreen={false}
+        />
+      );
+
+      const cachedHandle = ref.current!;
+
+      // Populate items
+      rerender(
+        <ImageGallery
+          items={defaultItems}
+          ref={ref}
+          useBrowserFullscreen={false}
+        />
+      );
+
+      // slideToIndex then fullScreen via cached handle
+      act(() => {
+        cachedHandle.slideToIndex(4);
+        cachedHandle.fullScreen();
+        jest.advanceTimersByTime(600);
+      });
+
+      // Verify slide navigation worked
+      const thumbnails = document.querySelectorAll(".image-gallery-thumbnail");
+      expect(thumbnails[4]).toHaveClass("active");
+
+      // Verify fullscreen worked
+      const gallery = document.querySelector(".image-gallery");
+      expect(gallery).toHaveClass("fullscreen-modal");
+    });
   });
 
   // ===========================================

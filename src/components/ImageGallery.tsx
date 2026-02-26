@@ -1209,16 +1209,43 @@ const ImageGallery = forwardRef<ImageGalleryRef, ImageGalleryProps>(
     }, [items, lazyLoad]);
 
     // ============= Imperative Handle for Refs =============
-    useImperativeHandle(ref, () => ({
-      play,
-      pause,
-      togglePlay,
-      fullScreen,
-      exitFullScreen,
-      toggleFullScreen,
-      slideToIndex: slideToIndexCore,
-      getCurrentIndex: () => currentIndex,
-    }));
+    // Use refs so that even a cached handle object always delegates to
+    // the latest closures.  This prevents stale-closure bugs when
+    // consumers store ref.current in state or across async boundaries.
+    const playRef = useRef(play);
+    const pauseRef = useRef(pause);
+    const togglePlayRef = useRef(togglePlay);
+    const fullScreenRef = useRef(fullScreen);
+    const exitFullScreenRef = useRef(exitFullScreen);
+    const toggleFullScreenRef = useRef(toggleFullScreen);
+    const slideToIndexCoreRef = useRef(slideToIndexCore);
+    const currentIndexRef = useRef(currentIndex);
+
+    playRef.current = play;
+    pauseRef.current = pause;
+    togglePlayRef.current = togglePlay;
+    fullScreenRef.current = fullScreen;
+    exitFullScreenRef.current = exitFullScreen;
+    toggleFullScreenRef.current = toggleFullScreen;
+    slideToIndexCoreRef.current = slideToIndexCore;
+    currentIndexRef.current = currentIndex;
+
+    useImperativeHandle(
+      ref,
+      () => ({
+        play: (shouldCallOnPlay?: boolean) => playRef.current(shouldCallOnPlay),
+        pause: (shouldCallOnPause?: boolean) =>
+          pauseRef.current(shouldCallOnPause),
+        togglePlay: () => togglePlayRef.current(),
+        fullScreen: () => fullScreenRef.current(),
+        exitFullScreen: () => exitFullScreenRef.current(),
+        toggleFullScreen: () => toggleFullScreenRef.current(),
+        slideToIndex: (index: number, event?: React.SyntheticEvent | Event) =>
+          slideToIndexCoreRef.current(index, event),
+        getCurrentIndex: () => currentIndexRef.current,
+      }),
+      [] // stable — never recreates the handle object
+    );
 
     // ============= Render =============
     const { slides, thumbnails, bullets } = slideItems;
